@@ -21,7 +21,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/admin/upload/")
 public class UploadImageController {
-    @Value("${admin.images.uploadPath}")
+    //@Value("${admin.images.uploadPath}")
   private String uploadPath;
 /*
     @Resource

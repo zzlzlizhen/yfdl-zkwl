@@ -49,7 +49,7 @@
 	</select>
 	<!-- 查询用户的子用户信息 -->
 	<select id="queryChild" resultType="com.remote.modules.sys.entity.SysUserEntity">
-		select <include refid="columns"/> from sys_user where parent_id = #{parentId}
+		select <include refid="columns"/> from sys_user where parent_id = #{userId}
 	</select>
 	<!-- 查询用户的自身或者子用户信息 -->
 	<select id="queryAllChild" resultType="com.remote.modules.sys.entity.SysUserEntity">

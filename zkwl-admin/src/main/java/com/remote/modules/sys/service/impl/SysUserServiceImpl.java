@@ -142,11 +142,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 
 	@Override
 	public List<SysUserEntity> queryChild(SysUserEntity sysUserEntity) {
+		//List<SysUserEntity> list = this.baseMapper.selectList(new QueryWrapper<SysUserEntity>().eq("parent_id",sysUserEntity.getUserId()));
 		return sysUserDao.queryChild(sysUserEntity);
 	}
 
 	@Override
 	public List<SysUserEntity> queryAllChild(SysUserEntity sysUserEntity) {
+		//List<SysUserEntity> list = this.baseMapper.selectList(new QueryWrapper<SysUserEntity>().like("all_parent_id",sysUserEntity.getAllParentId()+",%").or().eq("user_id",sysUserEntity.getUserId()));
 		return sysUserDao.queryAllChild(sysUserEntity);
 	}
 

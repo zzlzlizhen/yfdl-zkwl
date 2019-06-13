@@ -71,8 +71,8 @@
 
     <!-- 使所有的日志文件和标准输出附加。默认情况下， 只有日志在级别信息和以上. -->
     <root level="INFO">
-        <appender-ref ref="FILE" />
-        <appender-ref ref="ERROR" />
+        <!--<appender-ref ref="FILE" />
+        <appender-ref ref="ERROR" />-->
         <appender-ref ref="STDOUT" />
     </root>
 </configuration>

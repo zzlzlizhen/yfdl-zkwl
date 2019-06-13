@@ -32,18 +32,17 @@ public class FeedbackServiceImpl extends ServiceImpl<FeedbackDao, FeedbackEntity
     FeedbackService feedbackService;
     @Override
     public PageUtils queryPage(Map<String, Object> params,SysUserEntity curUser) {
-       /* List<SysUserEntity> sysUserEntitys = sysUserService.queryChild(curUser);
-        List<FeedbackEntity> feedbackServices = new ArrayList<FeedbackEntity>();
+       List<SysUserEntity> sysUserEntitys = sysUserService.queryChild(curUser);
         List<Long> userIds = new ArrayList<Long>();
-        if(sysUserEntitys.isEmpty()){
+        if(CollectionUtils.isNotEmpty(sysUserEntitys)){
+            sysUserEntitys.add(curUser);
             for(SysUserEntity sysUserEntity : sysUserEntitys){
                 userIds.add(sysUserEntity.getUserId());
             }
-            feedbackServices = feedbackService.queryBackList(userIds);
-        }*/
+        }
         IPage<FeedbackEntity> page = this.page(
                 new Query<FeedbackEntity>().getPage(params),
-                new QueryWrapper<FeedbackEntity>()
+                new QueryWrapper<FeedbackEntity>().in("uid",userIds)
         );
         return new PageUtils(page);
     }
