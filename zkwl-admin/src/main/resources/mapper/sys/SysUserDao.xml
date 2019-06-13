@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.remote.modules.sys.dao.SysUserDao">
+
+	<sql id="columns" >
+    	user_id as userId,
+    	username as username,
+    	password as password,
+    	email as email,
+    	mobile as mobile,
+    	status as status,
+    	create_time as createTime,
+    	update_time as updateTime,
+    	dept_id as deptId,
+    	parent_id as parentId,
+    	all_parent_id as allParentId,
+    	device_count as deviceCount,
+    	project_count as projectCount,
+    	head_url as headUrl,
+    	update_user as updateUser,
+    	term_of_validity as termOfValidity
+    </sql>
+
+	<!-- 查询用户的所有权限 -->
+	<select id="queryAllPerms" resultType="string">
+		select m.perms from sys_user_role ur 
+			LEFT JOIN sys_role_menu rm on ur.role_id = rm.role_id 
+			LEFT JOIN sys_menu m on rm.menu_id = m.menu_id 
+		where ur.user_id = #{userId}
+	</select>
+	
+	<!-- 查询用户的所有菜单ID --> 
+	<select id="queryAllMenuId" resultType="long">
+		select distinct rm.menu_id from sys_user_role ur 
+			LEFT JOIN sys_role_menu rm on ur.role_id = rm.role_id 
+		where ur.user_id = #{userId}
+	</select>
+
+	<select id="queryAllLevel" resultType="com.remote.modules.sys.entity.SysUserEntity">
+		select <include refid="columns"/> from sys_user where 1=1 and ${where}
+	</select>
+	<select id="queryByEmail" resultType="com.remote.modules.sys.entity.SysUserEntity">
+		select <include refid="columns"/> from sys_user as su  where 1=1 and su.email = #{email}
+	</select>
+	
+	<select id="queryByUser" resultType="com.remote.modules.sys.entity.SysUserEntity">
+		select <include refid="columns"/> from sys_user where 1=1 and username = #{username}
+	</select>
+	<!-- 查询用户的子用户信息 -->
+	<select id="queryChild" resultType="com.remote.modules.sys.entity.SysUserEntity">
+		select <include refid="columns"/> from sys_user where parent_id = #{parentId}
+	</select>
+	<!-- 查询用户的自身或者子用户信息 -->
+	<select id="queryAllChild" resultType="com.remote.modules.sys.entity.SysUserEntity">
+		select <include refid="columns"/> from sys_user where all_parent_id like concat(#{allParentId},',%') or user_id = #{userId}
+	</select>
+
+</mapper>

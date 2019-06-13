@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.remote.modules.sys.dao.FeedbackDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.remote.modules.sys.entity.FeedbackEntity" id="feedbackMap">
+        <result property="backId" column="back_id"/>
+        <result property="uid" column="uid"/>
+        <result property="backContent" column="back_content"/>
+        <result property="backCreateTime" column="back_create_time"/>
+        <result property="answerContent" column="answer_content"/>
+        <result property="answerUser" column="answer_user"/>
+        <result property="answerCreateTime" column="answer_user"/>
+    </resultMap>
+    <sql id="feedBack" >
+        back_id,uid ,back_content, back_create_time, answer_content, answer_user,answer_user
+    </sql>
+    <!-- 查询用户的所有下级用户的反馈列表 -->
+    <select id="queryBackList" resultType="com.remote.modules.sys.entity.FeedbackEntity">
+       SELECT <include refid="feedBack"/> FROM feedback
+        WHERE uid in
+        <foreach collection="userIds" index="index"
+                 item="uid" open="(" separator="," close=")">
+           #{uid}
+        </foreach>
+    </select>
+
+</mapper>
+

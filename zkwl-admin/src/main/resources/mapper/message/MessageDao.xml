@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.remote.modules.message.dao.MessageDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.remote.modules.message.entity.MessageEntity" id="messageMap">
+        <result property="msgId" column="msg_id"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="publisher" column="publisher"/>
+        <result property="createDate" column="create_date"/>
+        <result property="type" column="type"/>
+        <result property="tip" column="tip"/>
+    </resultMap>
+
+
+</mapper>

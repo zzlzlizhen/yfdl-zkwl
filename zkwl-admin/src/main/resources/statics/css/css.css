@@ -1,0 +1,118 @@
+html,body{width:100% !important;height:100% !important;margin:0;padding:0;font-size:12px;}
+/*css功能样式*/
+.hear{width:100%;height:8%;float:left;border-bottom: 10px solid rgba(242, 242, 242, 1);text-indent: 25px;line-height:60px;font-size:18px;}
+.project_he{width:100%;height:11.5%;float:left;border-bottom: 10px solid rgba(242, 242, 242, 1);}
+.hear_w{width:auto;height:100%;float:left;line-height: 90px;margin-left:1%;}
+.form_input{  margin-bottom: 0px !important; padding: 0px !important;width:11% !important;;height:100%;margin-top:26px;}
+
+/*按钮样式*/
+.btn_m{ background: rgba(24, 144, 255, 1) !important; border:rgba(24, 144, 255, 1) !important;margin:26px 0px 0px 0.5%; padding:7px 8px !important;}
+
+/*表格*/
+.table_m{width:96%;height:61%;float:left;margin-left:2%; display: list-item !important;list-style:none !important;
+    margin-top:1.6%; overflow-x: hidden;overflow-y: scroll;border: 1px solid #ccc;}
+.table_m::-webkit-scrollbar {
+    display: none;
+}
+
+.table_m ul{width:100%;height:45px;float:left;border-top: 1px solid #ccc;list-style:none !important;margin:0;padding:0; background: rgba(250, 250, 250, 1);}
+.table_m ul li{width:11.111111%;height:100%;float:left;border:0px; border-right:1px solid #ccc;line-height: 40px;text-align: center;list-style:none !important;
+    font-size:15px; background: rgba(255, 255, 255, 0);font-weight: bold}
+
+.table_m table{width:100%;height:100%; border:0px;}
+.table_m table tr{width:100%;height:45px;float:left;border-top: 1px solid #ccc;}
+.table_m table tr td{width:11.111111%;height:100%;float:left;border:0px; border-right:1px solid #ccc;line-height: 40px;
+    text-align: center;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
+.table_m table tr td:last-child,.table_m ul li:last-child{border-right:0;}
+
+.table_m table tr td a{width:20%;height:100%;float:left;margin-left:3%;}
+/*账户分页*/
+.table_m_Z table tr td{width:8.3333%;}
+.table_m_Z table tr td a{width:35%;margin-left:10%;}
+/*设备分页*/
+.table_grouping table tr td,.table_grouping ul li{width:7.6%;}
+/*分页*/
+.box{width:100%;height:40px;text-align: center;float:left;}
+/*新增，总览*/
+.btn_m{ cursor: pointer;}
+/*弹窗*/
+.shade,.shade_delete,.shade_new,.shade_project,.shade_modifier{width:100%;height:100%;position: absolute; z-index:9999;top:0;display: none; }
+.shade_a,.shade_a_delete,.shade_a_new{width:100%;height:100%;background: #999; opacity: 0.5;float:left;}
+.shade_b,.shade_b_delete,.shade_b_new,.shade_b_project,.shade_b_modifier{width:600px;height:380px; position: absolute; z-index: 99999;top:50%;left:50%;margin:-190px 0px 0px -300px;background: #fff;display: none;}
+.shade_b_delete{width:400px;height:300px;margin:-150px 0px 0px -200px;}
+.Bian_j,.Bian_j_delete{width:100%;float:left;height:50px;text-indent: 20px;font-size:14px;line-height: 50px;border-bottom: 1px solid #ccc;color:#333;}
+.mistake{width:90%;height:30px;border-radius: 5px;border:1px solid red;float:left;margin:3% 0px 0px 5%;text-indent: 10px;line-height: 30px;}
+.cu_m{margin-right:2%;}
+.wrong{float:right;margin:1.6% 2% 0px 0px;}
+.sha_span{width:45%;height:35px;margin-top: 20px;float:left;margin-left:3%;}
+.sha_span p{width:35%;height:100%;float:left;line-height: 35px;text-align: right;margin-right:1.1%;color:#333;}
+.sha_span input{width:55%;float:left;height:85%;border-radius: 4px; border:1px solid #ccc;text-indent: 10px;margin-top:1%;}
+.sha_buttom,.sha_buttom_delete{width:100%;height:50px; position: absolute;bottom: 0;border-top:1px solid #ccc;}
+.sha_buttom input,.sha_buttom_delete input{width:55px;height:30px;border-radius: 5px;background: rgba(24, 144, 255, 1);color:#fff;line-height:30px;float:right;margin:1.7% 4% 0px 0px ;border:0;}
+.delete_sp{width:100%;height:35px;float:left;text-align: center;line-height:35px;font-size:16px;margin-top:15%}
+.delete_p{width:100%;height:35px;float:left;text-align: center;line-height:35px;font-size:16px;margin-top:1.5%}
+.guan_sha,.guan_shb,.guan_shc{float:right;margin:4% 5% 0px 0px; cursor: pointer;}
+.guan_shb,.guan_shc{margin:3% 3% 0px 0px;}
+
+#jqGrid tr,td,th{text-align: center !important;}
+thead>th{text-align: center !important;}
+.table_a{width:96%;height:550px;float:left;margin-left:2%;margin-top:1.6%;}
+#div{width:100%;height:auto;float:left;}
+
+/*滑動按鈕*/
+.switch{width: 50%;margin: 0px 0px 0 25%;}
+.btn_fath{margin-top: 8px;position: relative;border-radius: 20px;}
+.btn1{float: left;}
+.btn2{float: right;}
+.btnSwitch{height: 30px;width: 50%;border:none;color: #fff;line-height: 30px;font-size: 15px;text-align: center;z-index: 1;}
+.move{z-index: 100;width:50%;border-radius: 20px;height: 100%;position: absolute;cursor: pointer;border: 1px solid #828282;background-color: #f1eff0;
+    box-shadow: 1px 2px 2px 1px #fff inset,0 0 5px 1px #999;}
+.on .move{left: 50%;}
+.on.btn_fath{background-color: #5281cd;}
+.off.btn_fath{background-color: #828282;}
+
+
+
+/*分组*/
+.weather{height: 18%; position: relative;}
+.gl_fu{margin:4px 2px 0px 0px !important;}
+.gl_bt{padding:5.5px 8px !important;}
+.hear_weather{width:23%;height:100%;float:left;text-align: left}
+.hear_project{width:90%;height:40%;float:left;margin-left:10%;text-indent: 0;}
+.hear_city{width:90%;height:30%;float:left;margin-left:10%;text-indent: 0;line-height: 40px;font-size:12px;color:#999; font-weight: 500}
+.hear_city_a span ,.hear_city_b span{width:auto;height:100%;float:left;}
+.hear_city_a p,.hear_city_b p{width:32%;height:100%;float:left;}
+.hear_city_b p{width:70%;}
+.gross{width:12%;height:84%;float:left;border-radius:5px;overflow: hidden;margin:0.7% 0.5% 0px 0px;position: relative}
+.gross_a{background:rgba(134, 147, 243, 1);}
+.gross_b{background:rgba(188, 141, 238, 1);}
+.gross_c{background:rgba(255, 168, 151, 1);}
+.gross_d{background:rgba(137, 195, 248, 1)}
+.gross_alarm{width:25px;height:25px;float:left;margin:8% 0px 0px 7%;}
+.gross span{width:60%;height:20px;float:left;font-size:16px;text-indent:0px;line-height: 20px;color:#fff;margin:10% 0px 0px 0.5%;}
+.gross div{width:auto;height:24px;float:left;font-size:24px;text-indent: 0px;line-height:24px;margin:12% 0px 0px 2%;padding:0;color:#fff;font-weight: bold;}
+.gross_map{width:60%;height:60%;right:-2%;position: absolute;bottom: 0;}
+.hear_map{width:6%;height:30%;background:rgba(24, 144, 255, 1);text-align: center;line-height:45px;color:#fff;font-size:14px;float:left;text-indent: 0;margin-top:2.9%;}
+.status{width:80px;height:25px;position: absolute;right:0;top:0;background: rgba(26, 188, 156, 1);line-height:25px;
+    text-align: center;font-size:14px;text-indent: 0;color:#fff;border-radius:0px 0px 0px 10px;}
+.checkbox_in{margin-top:18px !important;}
+/*分组侧边抽屉*/
+.drawer{width:50%;height:76%;position: absolute;right:-48%;bottom:8%; transition: all 1.5s ease-in;}
+.drawer_hid{transition: all 1.5s ease-in;right: 0;}
+.drawer_right{width:5%;height:100%;float:left;}
+.drawer_img{width:20px;height:20px;margin-top:745%;float:left;cursor: pointer;}
+.drawer_left{width:95%;height:100%;float: left;background: #fff;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

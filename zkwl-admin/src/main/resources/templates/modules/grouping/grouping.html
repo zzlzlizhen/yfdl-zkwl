@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>分组</title>
+    <#include "/header.html">
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/css.css">
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/jquery_page.css">
+    <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+    <script src="${request.contextPath}/statics/js/modules/project/jquery_page.js"></script>
+</head>
+<body style="position: relative">
+    <!--分组天气-->
+    <div class="hear weather" >
+        <!--天气-->
+        <div class="hear_weather">
+           <div class="hear_project" id="hear_project"></div>
+           <div class="hear_city hear_city_a">
+               <span>所属城市：</span>
+               <p id="weather"></p>
+               <span>天气信息：</span>
+               <p id="T_an"></p>
+           </div>
+           <div class="hear_city hear_city_b">
+               <span>用户：</span>
+               <p id="hear_city_b"></p>
+           </div>
+        </div>
+        <!-- 总量-->
+        <div class="gross gross_a">
+            <img src="${request.contextPath}/statics/image/alarm.svg" class="gross_alarm"/>
+            <span>总装机数量</span>
+            <div>152</div>
+            <img src="${request.contextPath}/statics/image/map.svg" class="gross_map"/>
+        </div>
+        <div class="gross gross_b">
+            <img src="${request.contextPath}/statics/image/alarm.svg" class="gross_alarm"/>
+            <span>总装机数量</span>
+            <div>152</div>
+            <img src="${request.contextPath}/statics/image/map.svg" class="gross_map"/>
+        </div>
+        <div class="gross gross_c">
+            <img src="${request.contextPath}/statics/image/alarm.svg" class="gross_alarm"/>
+            <span>总装机数量</span>
+            <div>152</div>
+            <img src="${request.contextPath}/statics/image/map.svg" class="gross_map"/>
+        </div>
+        <div class="gross gross_d">
+            <img src="${request.contextPath}/statics/image/alarm.svg" class="gross_alarm"/>
+            <span>总装机数量</span>
+            <div>152</div>
+            <img src="${request.contextPath}/statics/image/map.svg" class="gross_map"/>
+        </div>
+
+        <div class="hear_map" style="margin-right: 0.5%;">地图</div>
+        <div class="hear_map" id="hear_control">控制面板</div>
+        <div class="status" id="status">运行正常</div>
+
+    </div>
+
+    <div class="project_he" >
+        <span class="hear_w">设备ID：</span>
+        <div class="form-group col-sm-2 form_input">
+            <input type="text" class="form-control"  placeholder=" ">
+        </div>
+        <span class="hear_w">设备名称：</span>
+        <div class="form-group col-sm-2 form_input">
+            <input type="text" class="form-control"  placeholder=" ">
+        </div>
+        <span class="hear_w">设备分组：</span>
+        <div class="form-group col-sm-2 form_input">
+            <select class="form-control">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+            </select>
+        </div>
+        <span class="hear_w">设备类型：</span>
+        <div class="form-group col-sm-2 form_input">
+            <select class="form-control">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+            </select>
+        </div>
+        <a class="btn btn-primary btn_m gl_bt"><i class="glyphicon glyphicon-search gl_fu"></i>搜索</a>
+        <a class="btn btn-primary btn_m" id="add_equipments">添加设备</a>
+        <a class="btn btn-primary btn_m gl_bt" id="refresh"><i class="glyphicon glyphicon-repeat gl_fu"></i>刷新</a>
+        <a class="btn btn-primary btn_m">分组管理</a>
+    </div>
+
+
+    <div class="table_m table_grouping" id="rrapp" style="height:60%">
+        <ul>
+            <li style="width:4%;"> <input type= "checkbox" class="checkbox_in"> </li>
+            <li>设备ID</li>
+            <li style="width:10%;">设备名称</li>
+            <li>所属分组</li>
+            <li>设备类型</li>
+            <li>光电池状态</li>
+            <li>蓄电池状态</li>
+            <li>负载状态</li>
+            <li>信号状态</li>
+            <li>运行状态</li>
+            <li>亮度</li>
+            <li>无线模块</li>
+            <li style="width:10%;">操作</li>
+        </ul>
+        <table border="1" id="div">
+
+        </table>
+    </div>
+
+    <!--分页-->
+    <div class="box">
+        <div id="pagination3" class="page fl"></div>
+    </div>
+    <!--侧边抽屉-->
+    <div class="drawer" id="drawer">
+        <div class="drawer_right">
+            <img src="${request.contextPath}/statics/image/alarm.svg" class="drawer_img" id="drawer_img"/>
+        </div>
+        <div class="drawer_left">
+           控制区域11111111111111111111111111111111111111111111111
+        </div>
+    </div>
+
+<!--新增设备-->
+    <div class="shade_project">
+        <div class="shade_a shade_add_project"></div>
+        <div class="shade_b_project">
+            <div class="Bian_j">新增项目<span class="glyphicon glyphicon-remove guan_shc shade_add_project" ></span></div>
+            <div class="mistake">
+                <span class="glyphicon glyphicon-pencil cu_m"></span>错误提示
+                <span class="glyphicon glyphicon-remove wrong"></span>
+            </div>
+            <span class="sha_span">
+                <p> <span  style="color: red">*</span>设备编号：</p>
+                <input type="text" placeholder="请填写" class="pro_name">
+            </span>
+            <span class="sha_span">
+                <p> <span  style="color: red">*</span>项目名称：</p>
+                <input type="text" placeholder="请填写" class="pro_s">
+            </span>
+            <span class="sha_span">
+                <p><span  style="color: red">*</span>设备分组：</p>
+                <div class="form-group col-sm-2 " style="width:55%;padding-left:0;padding-right:0;">
+                    <select class="form-control" id="select1" >
+
+                    </select>
+                </div>
+            </span>
+
+            <div class="sha_buttom">
+                <input type="button" value="确定" id="project_confirm">
+                <input type="button" value="取消" class="shade_add_project">
+            </div>
+        </div>
+    </div>
+
+<!--编辑-->
+    <div class="shade_modifier">
+        <div class="shade_a shade_modifier_project"></div>
+        <div class="shade_b_modifier">
+            <div class="Bian_j">编辑项目<span class="glyphicon glyphicon-remove guan_shc shade_modifier_project" ></span></div>
+            <div class="mistake">
+                <span class="glyphicon glyphicon-pencil cu_m"></span>错误提示
+                <span class="glyphicon glyphicon-remove wrong"></span>
+            </div>
+            <span class="sha_span">
+                <p> <span  style="color: red">*</span>设备编号：</p>
+                <input type="text" placeholder="请填写" class="pro_name_b">
+            </span>
+            <span class="sha_span">
+                <p> <span  style="color: red">*</span>项目描述：</p>
+                <input type="text" placeholder="请填写" class="pro_s_b">
+            </span>
+            <span class="sha_span">
+                <p><span  style="color: red">*</span>使用者：</p>
+                <div class="form-group col-sm-2 " style="width:55%;padding-left:0;padding-right:0;">
+                    <select class="form-control"  id="select1_b" >
+
+                    </select>
+                </div>
+            </span>
+
+            <div class="sha_buttom">
+                <input type="button" value="确定" id="confirm_x" >
+                <input type="button" value="取消" class="shade_modifier_project">
+            </div>
+        </div>
+    </div>
+
+
+</body>
+<script src="${request.contextPath}/statics/js/modules/grouping/grouping.js"></script>
+
+</html>

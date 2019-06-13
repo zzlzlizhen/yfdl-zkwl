@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.remote.modules.project.dao.ProjectMapper">
+    <resultMap id="BaseResultMap" type="com.remote.modules.project.entity.ProjectEntity" >
+        <id column="project_id" property="projectId" jdbcType="VARCHAR" />
+        <result column="project_code" property="projectCode" jdbcType="VARCHAR" />
+        <result column="project_name" property="projectName" jdbcType="VARCHAR" />
+        <result column="project_desc" property="projectDesc" jdbcType="TIMESTAMP" />
+        <result column="city_id" property="cityId" jdbcType="VARCHAR" />
+        <result column="exclusive_user" property="exclusiveUser" jdbcType="VARCHAR" />
+        <result column="run_status" property="runStatus" jdbcType="INTEGER" />
+        <result column="sum_count" property="sumCount" jdbcType="INTEGER" />
+        <result column="gateway_count" property="gatewayCount" jdbcType="INTEGER" />
+        <result column="fault_count" property="faultCount" jdbcType="INTEGER" />
+        <result column="call_police_count" property="callPoliceCount" jdbcType="INTEGER" />
+        <result column="create_user" property="createUser" jdbcType="BIGINT" />
+        <result column="create_name" property="createName" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_user" property="updateUser" jdbcType="BIGINT" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="project_status" property="projectStatus" jdbcType="INTEGER" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+    project_id, project_code, project_name, project_desc, city_id, exclusive_user,
+    run_status,sum_count,gateway_count,fault_count,call_police_count,create_user,
+    create_time,update_user,update_time,project_status
+    </sql>
+
+    <select id="queryProjectByUserIds" parameterType="com.remote.modules.project.entity.ProjectQuery" resultMap="BaseResultMap" >
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        fun_project
+        <where>
+            is_del = 0
+            <if test="projectQuery.userIds !=null and projectQuery.userIds.size()!= 0">
+                AND create_user in
+                <foreach collection="projectQuery.userIds" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="projectQuery.projectCode !=null and projectQuery.projectCode!=''">
+                AND project_code LIKE CONCAT('%', #{projectQuery.projectCode}, '%')
+            </if>
+            <if test="projectQuery.projectName !=null and projectQuery.projectName!=''">
+                AND project_name LIKE CONCAT('%', #{projectQuery.projectName}, '%')
+            </if>
+            <if test="projectQuery.userName !=null and projectQuery.userName!=''">
+                AND exclusive_user LIKE CONCAT('%', #{projectQuery.userName}, '%')
+            </if>
+        </where>
+    </select>
+
+
+    <update id="delProject">
+        update fun_project set is_del = 1,update_user = #{updateUser},update_time = #{updateTime}
+        <where>
+            <if test="projectList !=null and projectList.size()!= 0">
+                 and project_id in
+                <foreach collection="projectList" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </update>
+
+    <update id="updateProjectById" parameterType="com.remote.modules.project.entity.ProjectEntity">
+        update fun_project
+        <set>
+            <if test="projectName != null">
+                  project_name = #{projectName},
+            </if>
+            <if test="projectDesc != null">
+                project_desc = #{projectDesc},
+            </if>
+            <if test="exclusiveUser != null">
+                exclusive_user = #{exclusiveUser},
+            </if>
+            <if test="runStatus != null">
+                run_status = #{runStatus},
+            </if>
+            <if test="sumCount != null">
+                sum_count = #{sumCount},
+            </if>
+            <if test="gatewayCount != null">
+                gateway_count = #{gatewayCount},
+            </if>
+            <if test="faultCount != null">
+                fault_count = #{faultCount},
+            </if>
+            <if test="callPoliceCount != null">
+                call_police_count = #{callPoliceCount},
+            </if>
+            <if test="projectStatus != null">
+                project_status = #{projectStatus},
+            </if>
+            update_user = #{updateUser},
+            update_time = now()
+        </set>
+        where project_id = #{projectId}
+    </update>
+</mapper>

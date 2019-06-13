@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>賬戶管理</title>
+    <#include "/header.html">
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/css.css">
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/jquery_page.css">
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/bootstrap.min.css">
+    <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+    <script src="${request.contextPath}/statics/js/modules/project/jquery_page.js"></script>
+</head>
+<body>
+<div class="project_he" >
+    <span class="hear_w">账号ID：</span>
+    <div class="form-group col-sm-2 form_input">
+        <input type="text" class="form-control"  placeholder=" ">
+    </div>
+    <span class="hear_w">账号：</span>
+    <div class="form-group col-sm-2 form_input">
+        <input type="text" class="form-control"  placeholder=" ">
+    </div>
+    <span class="hear_w">用户：</span>
+    <div class="form-group col-sm-2 form_input">
+        <input type="text" class="form-control"  placeholder=" ">
+    </div>
+    <span class="hear_w">账号状态：</span>
+    <div class="form-group col-sm-2 form_input">
+        <select class="form-control">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+        </select>
+    </div>
+    <a class="btn btn-primary btn_m " ><i class="fa fa-plus"></i>&nbsp;新建</a>
+</div>
+
+<div class="table_m table_m_Z" style="height:620px;">
+    <table border="1"  id="div">
+        <tr>
+            <td>账号ID</td>
+            <td>账号</td>
+            <td>用户名</td>
+            <td>项目数</td>
+            <td>设备数</td>
+            <td>创建时间</td>
+            <td>有效期</td>
+            <td>账号状态</td>
+            <td>用户状态</td>
+            <td>绑定手机</td>
+            <td>绑定邮箱</td>
+            <td>操作</td>
+        </tr>
+
+    </table>
+</div>
+<div class="box">
+    <div id="pagination3" class="page fl"></div>
+</div>
+
+
+<!--新建账户-->
+<div class="shade_new">
+    <div class="shade_a_new" ></div>
+    <div class="shade_b_new">
+        <div class="Bian_j">新建账户<span class="glyphicon glyphicon-remove guan_shb" ></span></div>
+        <div class="mistake">
+            <span class="glyphicon glyphicon-pencil cu_m"></span>错误提示
+            <span class="glyphicon glyphicon-remove wrong"></span>
+        </div>
+        <span class="sha_span">
+            <p> <span  style="color: red">*</span>账号：</p>
+            <input type="text" placeholder="请填写" id="acc_number">
+        </span>
+        <span class="sha_span">
+            <p> <span  style="color: red">*</span>用户名：</p>
+            <input type="text" placeholder="请填写" id="acc_user">
+        </span>
+        <span class="sha_span">
+            <p><span  style="color: red">*</span>密码：</p>
+            <input type="text" placeholder="请填写" id="acc_password">
+        </span>
+        <span class="sha_span">
+            <p><span  style="color: red">*</span>有效期：</p>
+            <div class="form-group col-sm-2 " style="width:55%;padding-left:0;padding-right:0;">
+                <select class="form-control" id="acc_select">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+            </div>
+        </span><span class="sha_span">
+            <p><span  style="color: red">*</span>头像：</p>
+            <input type="text" placeholder="请填写">
+        </span>
+        <span class="sha_span">
+            <p><span  style="color: red">*</span>邮箱：</p>
+            <input type="text" placeholder="请填写" id="acc_mailbox">
+        </span>
+        <span class="sha_span">
+            <p><span  style="color: red">*</span>手机号：</p>
+            <input type="text" placeholder="请填写" id="acc_call">
+        </span>
+        <span class="sha_span">
+            <p><span  style="color: red">*</span>role：</p>
+            <div class="form-group col-sm-2 " style="width:55%;padding-left:0;padding-right:0;">
+                <select class="form-control" id="role">
+                    <option value="1">超级管理者</option>
+                    <option value="2">管理者</option>
+                    <option value="3">使用者</option>
+                </select>
+            </div>
+        </span>
+
+        <div class="sha_buttom">
+            <input type="button" value="确定" id="confirm_Z">
+            <input type="button" value="取消" class="sha_cancel_new">
+        </div>
+    </div>
+</div>
+<!--账户修改-->
+<div class="shade">
+    <div class="shade_a" id="shade_a"></div>
+    <div class="shade_b">
+        <div class="Bian_j">编辑账户<span class="glyphicon glyphicon-remove guan_shc" ></span></div>
+        <div class="mistake">
+            <span class="glyphicon glyphicon-pencil cu_m"></span>错误提示
+            <span class="glyphicon glyphicon-remove wrong"></span>
+        </div>
+        <span class="sha_span">
+            <p> <span  style="color: red">*</span>账号：</p>
+            <input type="text" placeholder="请填写" id="acc_number_b">
+        </span>
+        <span class="sha_span">
+            <p> <span  style="color: red">*</span>用户名：</p>
+            <input type="text" placeholder="请填写" id="acc_user_b">
+        </span>
+        <span class="sha_span">
+            <p><span  style="color: red">*</span>密码：</p>
+            <input type="text" placeholder="请填写" id="acc_password_b">
+        </span>
+        <span class="sha_span">
+            <p><span  style="color: red">*</span>有效期：</p>
+            <div class="form-group col-sm-2 " style="width:55%;padding-left:0;padding-right:0;">
+                <select class="form-control" id="acc_select_b">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+            </div>
+        </span>
+        <span class="sha_span">
+            <p><span  style="color: red">*</span>头像：</p>
+            <input type="text" placeholder="请填写">
+        </span>
+        <span class="sha_span">
+            <p><span  style="color: red">*</span>邮箱：</p>
+            <input type="text" placeholder="请填写" id="acc_mailbox_b">
+        </span>
+        <span class="sha_span">
+            <p><span  style="color: red">*</span>手机号：</p>
+            <input type="text" placeholder="请填写" id="acc_call_b">
+        </span>
+
+        <div class="sha_buttom">
+            <input type="button" value="确定" id="sha_que_can">
+            <input type="button" value="取消" class="sha_cancel">
+        </div>
+    </div>
+</div>
+
+<!--删除-->
+<div class="shade_delete">
+    <div class="shade_a_delete" ></div>
+    <div class="shade_b_delete">
+        <div class="Bian_j_delete">温馨提示<span class="glyphicon glyphicon-remove guan_sha" ></span></div>
+        <span class="delete_sp">删除用户*******</span>
+        <p class="delete_p">确定删除？</p>
+        <div class="sha_buttom_delete">
+            <input type="button" value="确定" class="sha_que_delete">
+            <input type="button" value="取消" class="sha_cancel_delete">
+        </div>
+    </div>
+</div>
+<script src="${request.contextPath}/statics/js/modules/account/account.js"></script>
+</body>
+</html>
