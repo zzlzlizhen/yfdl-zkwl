@@ -1,0 +1,64 @@
+# maven ignore
+target/
+bin/
+*.jar
+*.war
+*.zip
+*.tar
+*.tar.gz
+out
+.sonar
+sonaqube.bat.bak
+
+# eclipse ignore
+.settings/
+.project
+.classpath.
+
+# idea ignore
+.idea/
+*.ipr
+*.iml
+*.iws
+buildPoint.sh
+
+# temp ignore
+*.log
+*.cache
+*.diff
+*.patch
+*.tmp
+
+# system ignore
+.DS_Store
+Thumbs.db
+*.orig
+talkplatform_product_provider/.classpath
+*.classpath
+*.gitignore_BACKUP_6516
+*.gitignore_BASE_6516
+*.gitignore_LOCAL_6516
+*.gitignore_REMOTE_6516
+*.gitignore
+/mvn_package_point.bat
+
+
+##sona
+sonaqube.bat
+sonar-project.properties
+
+buildPoint.sh
+
+.metadata/
+
+*.disconf/
+
+*/disconf/
+
+*/${catalina.home}/
+*/maven_package.bat
+
+/.factorypath
+*.factorypath
+*maven_package.batdisconf
+${catalina.home}
