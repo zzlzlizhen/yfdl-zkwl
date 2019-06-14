@@ -32,24 +32,12 @@ public class DeviceController {
     @Autowired
     private DeviceService deviceService;
 
-    @RequestMapping(value = "/updateBefore", method= RequestMethod.POST)
-    public DeviceInfo updateDeviceBefore(@RequestBody DeviceInfo deviceInfo) {
-        Integer cmdID = deviceInfo.getCmdID();
-        if(cmdID.equals(new Integer(1))){
-            //1终端请求事件
-            DeviceInfo result = new DeviceInfo(2,3,deviceInfo.getDevKey(),deviceInfo.getDevType(),deviceInfo.getDevSN());
-            List<Integer> list = new ArrayList<>();
-            //Set<Map.Entry<Integer, String>> entries = mapKey.entrySet();
-        }else if(cmdID.equals(new Integer(3))){
-            //3终端发送需要上报的类型值
-        }
 
-
-
-        return deviceInfo;
+    @RequestMapping(value = "/query", method= RequestMethod.GET)
+    public DeviceEntity test(){
+        DeviceEntity deviceEntity = deviceService.queryDeviceByCode("359759002513931");
+        return deviceEntity;
     }
-
-
 
 
 }

@@ -34,6 +34,10 @@ public class DeviceEntity {
      */
     private String groupId;
     /**
+     * 分组名称
+     */
+    private String groupName;
+    /**
      * 设备类型
      */
     private String deviceType;

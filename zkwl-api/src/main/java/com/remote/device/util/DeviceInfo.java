@@ -33,12 +33,5 @@ public class DeviceInfo {
     private String devSN;//设备sn
     private List<Integer> key = new ArrayList<>();
     private List<Integer> value = new ArrayList<>();
-    public void wh(){
-        if(cmdID.equals(new Integer(1))){
-            //如果需要客户端再次请求,cmdId 返回2  nextCmdId 返回3
-        }
-        if(cmdID.equals(new Integer(3))){
 
-        }
-    }
 }

@@ -4,19 +4,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class emailTest {  
-    public static void main(String[] args) {  
-    	if(sendHtmlAttachmentMail())
-    		System.out.println("俩类邮件均发送成功");
-    }
+/*    public static void main(String[] args) {
+    *//*	if(sendHtmlAttachmentMail())
+    		System.out.println("俩类邮件均发送成功");*//*
+    }*/
     /**
      * 普通文本文件
      * @return true 发送成功。false 发送失败
      */
-    public static boolean sendCommonMail(){
+    public static boolean sendCommonMail(String to, String title, String content){
         MailInfo mailInfo = new MailInfo();
-        mailInfo.setToAddress("1648925727@qq.com");
-        mailInfo.setContent("测试普通文本文件");
-        mailInfo.setSubject("普通文本文件");
+        mailInfo.setToAddress(to);
+        mailInfo.setContent(content);
+        mailInfo.setSubject(title);
         return SimpleMail.sendTextMail(mailInfo);
     }
 

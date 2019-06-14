@@ -54,20 +54,18 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	@DataFilter(subDept = true, user = false)
 	public PageUtils queryPage(Map<String, Object> params,SysUserEntity currentUser) {
 		String username = (String)params.get("username");
-		String parentId = currentUser.getUserId().toString();
+		String realName = (String) params.get("realName");
+
+		String status = (String)params.get("status");
+		String uid = (String)params.get("userId");
+		String allParentId = currentUser.getAllParentId();
+		long userId = currentUser.getUserId();
 		IPage<SysUserEntity> page = this.page(
 			new Query<SysUserEntity>().getPage(params),
 			new QueryWrapper<SysUserEntity>()
-				.like(StringUtils.isNotBlank(username),"username", username).like("parent_id",parentId).or().like("parent_id",parentId+",%")
+				.like(StringUtils.isNotBlank(username),"username", username).like("all_parent_id",allParentId+",%").or().eq("user_id",userId)
 				.apply(params.get(Constant.SQL_FILTER) != null, (String)params.get(Constant.SQL_FILTER))
 		);
-		for(SysUserEntity sysUserEntity : page.getRecords()){
-			sysUserService.queryAllLevel(currentUser.getUserId());
-		}
-		/*for(SysUserEntity sysUserEntity : page.getRecords()){
-			SysDeptEntity sysDeptEntity = sysDeptService.getById(sysUserEntity.getDeptId());
-			sysUserEntity.setDeptName(sysDeptEntity.getName());
-		}*/
 
 		return new PageUtils(page);
 	}
@@ -150,6 +148,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	public List<SysUserEntity> queryAllChild(SysUserEntity sysUserEntity) {
 		//List<SysUserEntity> list = this.baseMapper.selectList(new QueryWrapper<SysUserEntity>().like("all_parent_id",sysUserEntity.getAllParentId()+",%").or().eq("user_id",sysUserEntity.getUserId()));
 		return sysUserDao.queryAllChild(sysUserEntity);
+	}
+
+	@Override
+	public SysUserEntity queryById(Long userId) {
+		return this.baseMapper.selectOne(new QueryWrapper<SysUserEntity>().eq("user_id",userId));
 	}
 
 

@@ -27,6 +27,16 @@
     create_time,update_user,update_time,project_status
     </sql>
 
+    <select id="queryProjectMap" resultMap="BaseResultMap" >
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        fun_project
+        <where>
+            is_del = 0 and project_id = #{projectId}
+        </where>
+    </select>
+
     <select id="queryProjectByUserIds" parameterType="com.remote.modules.project.entity.ProjectQuery" resultMap="BaseResultMap" >
         SELECT
         <include refid="Base_Column_List"/>

@@ -3,10 +3,58 @@
 <head>
     <title>控制面板</title>
     <#include "/header.html">
-    <link rel="stylesheet" href="${request.contextPath}/statics/css/css.css">
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/control.css">
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
+    <script src="${request.contextPath}/statics/js/jquery.min.js"></script>
 </head>
 <body>
-  控制面板
+    <div class="hear">
+        当前位置>项目管理>北方动力海淀>查看
+    </div>
+    <ul class="tab">
+        <li class="cur">历史数据</li>
+        <li >高级配置</li>
+    </ul>
+    <div class="option_a">
+        <div class="option on">
+            <div class="Shu_r">
+                <span class="hear_w">统计方式：</span>
+                <select class="form-control sele_con">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+                <span class="hear_w">选择日期：</span>
+                <select class="form-control sele_con">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+                <a class="btn btn-primary btn_m op_T">统计</a>
+                <a class="btn btn-primary btn_m op_T">打印报表</a>
+            </div>
+            <div class="Biao_g">
+                <div class="B_left" id="container"></div>
+                <div class="B_left" id="zhe_x"></div>
+                <div class="B_left" id="voltage"></div>
+                <div class="B_left" id="environment"></div>
+                <div class="B_left" id="induced"></div>
+                <div class="B_left"></div>
+            </div>
+        </div>
+        <div class="option">22</div>
+    </div>
 
 
 </body>

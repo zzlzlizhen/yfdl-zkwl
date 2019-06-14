@@ -49,22 +49,7 @@ public class FeedbackController extends AbstractController{
      * */
     @RequestMapping("/backList")
     public R backList(@RequestParam Map<String, Object> params){
-  /*      List<SysUserEntity> sysUserEntitys = sysUserService.queryChild(getUser());
-        List<FeedbackEntity> feedbackEntities = new ArrayList<FeedbackEntity>();
-        List<Long> userIds = new ArrayList<Long>();
 
-        if(sysUserEntitys.isEmpty()){
-            for(SysUserEntity sysUserEntity : sysUserEntitys){
-                userIds.add(sysUserEntity.getUserId());
-            }
-            feedbackEntities = feedbackService.queryBackList(userIds);
-            if(feedbackEntities.isEmpty()){
-                for(FeedbackEntity feedbackEntity: feedbackEntities){
-                    params.put("uid",feedbackEntity.getUid());
-                }
-
-            }
-        }*/
         PageUtils page = feedbackService.queryPage(params,getUser());
 
         return R.ok().put("page", page);

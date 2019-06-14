@@ -88,8 +88,8 @@
         </div>
         <a class="btn btn-primary btn_m gl_bt"><i class="glyphicon glyphicon-search gl_fu"></i>搜索</a>
         <a class="btn btn-primary btn_m" id="add_equipments">添加设备</a>
-        <a class="btn btn-primary btn_m gl_bt" id="refresh"><i class="glyphicon glyphicon-repeat gl_fu"></i>刷新</a>
-        <a class="btn btn-primary btn_m">分组管理</a>
+<!--        <a class="btn btn-primary btn_m gl_bt" id="refresh"><i class="glyphicon glyphicon-repeat gl_fu"></i>刷新</a>-->
+        <a class="btn btn-primary btn_m" id="grouping">分组管理</a>
     </div>
 
 
@@ -142,7 +142,7 @@
                 <input type="text" placeholder="请填写" class="pro_name">
             </span>
             <span class="sha_span">
-                <p> <span  style="color: red">*</span>项目名称：</p>
+                <p> <span  style="color: red">*</span>设备名称：</p>
                 <input type="text" placeholder="请填写" class="pro_s">
             </span>
             <span class="sha_span">
@@ -171,15 +171,11 @@
                 <span class="glyphicon glyphicon-remove wrong"></span>
             </div>
             <span class="sha_span">
-                <p> <span  style="color: red">*</span>设备编号：</p>
-                <input type="text" placeholder="请填写" class="pro_name_b">
-            </span>
-            <span class="sha_span">
-                <p> <span  style="color: red">*</span>项目描述：</p>
+                <p> <span  style="color: red">*</span>设备名称：</p>
                 <input type="text" placeholder="请填写" class="pro_s_b">
             </span>
             <span class="sha_span">
-                <p><span  style="color: red">*</span>使用者：</p>
+                <p><span  style="color: red">*</span>设备分组：</p>
                 <div class="form-group col-sm-2 " style="width:55%;padding-left:0;padding-right:0;">
                     <select class="form-control"  id="select1_b" >
 
@@ -194,8 +190,6 @@
         </div>
     </div>
 
-
+    <script src="${request.contextPath}/statics/js/modules/grouping/grouping.js"></script>
 </body>
-<script src="${request.contextPath}/statics/js/modules/grouping/grouping.js"></script>
-
 </html>

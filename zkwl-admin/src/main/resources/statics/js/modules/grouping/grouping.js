@@ -90,31 +90,32 @@ $(function(){
                 //编辑
                 var proid
                 $(".particulars").click(function(){
-                    console.log("编辑")
                     $(".shade_modifier,.shade_b_modifier").css("display","block");
                     proid=$(this).parent().attr('id');
-                    console.log(proid)
                     fen()
                 })
                 $("#confirm_x").click(function(){
-                    var pro_name_b= $(".pro_name_b").val()
-                    var pro_s_b= $(".pro_s_b").val()
-                    var select_b=$("#select1_b option:selected").text()
-                    // $.ajax({
-                    //     url:baseURL + 'fun/project/update',
-                    //     contentType: "application/json;charset=UTF-8",
-                    //     type:"POST",
-                    //     data:JSON.stringify({
-                    //         "projectName":pro_name_b,
-                    //         "projectId":proid,
-                    //         "projectDesc":pro_s_b,
-                    //         "exclusiveUser":select_b
-                    //     }),
-                    //     success: function(res){
-                    //         console.log(res)
-                    //         window.location.reload()
-                    //     }
-                    // });
+                    var pro_s_b= $(".pro_s_b").val();
+                    var select_b=$("#select1_b option:selected").attr("id");
+                    $.ajax({
+                        url:baseURL + 'fun/device/updateDevice',
+                        contentType: "application/json;charset=UTF-8",
+                        type:"POST",
+                        data:JSON.stringify({
+                            "projectId":Id,
+                            "groupId":select_b,
+                            "deviceName":pro_s_b,
+                            "deviceId":proid
+                        }),
+                        success: function(res){
+                            console.log("编辑")
+                            console.log(res)
+                            if(res.code == "200"){
+                                window.location.reload()
+                            }
+
+                        }
+                    });
                 })
 
 
@@ -139,7 +140,6 @@ $(function(){
             }
         })
     }
-
 
 
      //    添加
@@ -216,27 +216,46 @@ $(function(){
         location.href ='../control/control.html';
     })
 //刷新页面
-    $("#refresh").click(function(){
-        window.location.reload()
+//     $("#refresh").click(function(){
+//         window.location.reload()
+//     })
+//分组管理
+    $("#grouping").click(function(){
+        location.href ='../management/management.html';
     })
 //天气
+    //获取城市ajax
     $.ajax({
-        url:'http://wthrcdn.etouch.cn/weather_mini?city=北京',
-        data:"",
-        dataType:"jsonp",
-        success:function(data){
-            console.log("天气")
-            console.log(data);
-            console.log(data.data.forecast[0].type);
-            console.log(data.data.forecast[0].high);
-            console.log(data.data.forecast[0].low);
-            var str=data.data.forecast[0].high
-            var str_a=str.slice(-3)
-            var str_b=data.data.forecast[0].low
-            var str_bb=str_b.slice(-3)
+        url: 'http://api.map.baidu.com/location/ip?ak=ia6HfFL660Bvh43exmH9LrI6',
+        type: 'POST',
+        dataType: 'jsonp',
+        success:function(data) {
+            var Cheng_s=JSON.stringify(data.content.address_detail.province);
+            var cut_a=Cheng_s.substring(1);
+            var cut_b=cut_a.substring(0,cut_a.length-2)
+            $('#weather').html(cut_b)
+            //天气
+            $.ajax({
+                url:'http://wthrcdn.etouch.cn/weather_mini?city='+cut_b,
+                data:"",
+                dataType:"jsonp",
+                success:function(data){
+                    console.log("天气")
+                    console.log(data);
+                    var str=data.data.forecast[0].high
+                    var str_a=str.slice(-3)
+                    var str_b=data.data.forecast[0].low
+                    var str_bb=str_b.slice(-3)
 
-            var T_an=data.data.forecast[0].type+"-"+str_bb+"-"+str_a
-            $("#T_an").html(T_an)
+                    var T_an=data.data.forecast[0].type+" "+str_bb+"-"+str_a
+                    $("#T_an").html(T_an)
+                }
+            })
         }
-    })
+    });
+
+
+
+
+
 })

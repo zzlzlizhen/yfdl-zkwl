@@ -35,10 +35,8 @@ public class MessageController extends AbstractController {
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("sys:message:list")
     public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = messageService.queryPage(params);
-
+        PageUtils page = messageService.queryPage(params,getUser());
         return R.ok().put("page", page);
     }
 

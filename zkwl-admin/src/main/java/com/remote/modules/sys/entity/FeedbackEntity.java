@@ -49,4 +49,14 @@ public class FeedbackEntity implements Serializable {
 	 */
 	private String answerCreateTime;
 
+	/**
+	 * 反馈邮箱
+	 * */
+	private String email;
+
+	/**
+	 * 反馈手机号
+	 * */
+	private String mobile;
+
 }

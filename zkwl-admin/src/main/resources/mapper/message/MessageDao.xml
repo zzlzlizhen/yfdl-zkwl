@@ -10,6 +10,8 @@
         <result property="content" column="content"/>
         <result property="publisher" column="publisher"/>
         <result property="createDate" column="create_date"/>
+        <result property="deviceId" column="device_id"/>
+        <result property="userId" column="user_id"/>
         <result property="type" column="type"/>
         <result property="tip" column="tip"/>
     </resultMap>

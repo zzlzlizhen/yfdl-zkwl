@@ -14,7 +14,9 @@ import java.io.Serializable;
  */
 @Data
 @TableName("message")
-public class MessageEntity implements Serializable {
+public class
+
+MessageEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -46,5 +48,15 @@ public class MessageEntity implements Serializable {
 	 * 标签
 	 */
 	private String tip;
+
+	/**
+	 *设备id
+	 * */
+	private String deviceId;
+
+	/**
+	 * 用户id
+	 */
+	private Long userId;
 
 }

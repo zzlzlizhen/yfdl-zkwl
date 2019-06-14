@@ -64,7 +64,7 @@
         <if test="deviceQuery.groupId != null">
             group_id = #{deviceQuery.groupId},
         </if>
-        <if test="deviceQuery.groupId != null">
+        <if test="deviceQuery.isDel != null">
             is_del = #{deviceQuery.isDel},
         </if>
         update_user = #{deviceQuery.updateUser},update_time = #{deviceQuery.updateTime}

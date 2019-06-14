@@ -3,6 +3,7 @@ package com.remote.modules.message.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.remote.common.utils.PageUtils;
 import com.remote.modules.message.entity.MessageEntity;
+import com.remote.modules.sys.entity.SysUserEntity;
 
 import java.util.Map;
 
@@ -14,6 +15,6 @@ import java.util.Map;
  */
 public interface MessageService extends IService<MessageEntity> {
 
-    PageUtils queryPage(Map<String, Object> params);
+    PageUtils queryPage(Map<String, Object> params,SysUserEntity curUser);
 }
 

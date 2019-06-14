@@ -55,8 +55,6 @@ public class SysUserController extends AbstractController {
 		return R.ok().put("page", page);
 	}
 
-
-
 	/**
 	 * 获取登录的用户信息
 	 */
@@ -101,6 +99,7 @@ public class SysUserController extends AbstractController {
 		
 		return R.ok().put("user", user);
 	}
+
 
 	/**
 	 * 保存用户
@@ -160,5 +159,14 @@ public class SysUserController extends AbstractController {
 			return 	R.error("该邮箱不存在");
 		}
 		return R.ok();
+	}
+
+	/**
+	 * 通过当前用户id查询用户信息
+	 * */
+	@RequestMapping(value = "/queryUser",method = RequestMethod.GET)
+	public R queryUser(){
+		SysUserEntity user = sysUserService.queryById(getUserId());
+		return R.ok().put("user",user);
 	}
 }
