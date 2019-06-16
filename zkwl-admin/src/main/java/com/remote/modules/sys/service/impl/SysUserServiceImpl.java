@@ -10,12 +10,12 @@ import com.remote.common.utils.Constant;
 import com.remote.common.utils.PageUtils;
 import com.remote.common.utils.Query;
 import com.remote.modules.sys.dao.SysUserDao;
-import com.remote.modules.sys.entity.SysDeptEntity;
 import com.remote.modules.sys.entity.SysUserEntity;
 import com.remote.modules.sys.service.SysDeptService;
 import com.remote.modules.sys.service.SysUserRoleService;
 import com.remote.modules.sys.service.SysUserService;
 import com.remote.modules.sys.shiro.ShiroUtils;
+import javafx.animation.Interpolatable;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 
 /**
@@ -42,9 +43,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	@Autowired
 	private SysUserDao sysUserDao;
 
-	@Autowired
-	private SysUserService sysUserService;
-
 	@Override
 	public List<Long> queryAllMenuId(Long userId) {
 		return baseMapper.queryAllMenuId(userId);
@@ -55,18 +53,23 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	public PageUtils queryPage(Map<String, Object> params,SysUserEntity currentUser) {
 		String username = (String)params.get("username");
 		String realName = (String) params.get("realName");
-
 		String status = (String)params.get("status");
 		String uid = (String)params.get("userId");
 		String allParentId = currentUser.getAllParentId();
 		long userId = currentUser.getUserId();
 		IPage<SysUserEntity> page = this.page(
 			new Query<SysUserEntity>().getPage(params),
-			new QueryWrapper<SysUserEntity>()
-				.like(StringUtils.isNotBlank(username),"username", username).like("all_parent_id",allParentId+",%").or().eq("user_id",userId)
-				.apply(params.get(Constant.SQL_FILTER) != null, (String)params.get(Constant.SQL_FILTER))
+				new QueryWrapper<SysUserEntity>().like(StringUtils.isNotBlank(username),"username", username)
+						.like(StringUtils.isNotBlank(realName),"real_name", realName)
+						.eq(StringUtils.isNotBlank(status),"status",StringUtils.isNotBlank(status)?Integer.parseInt(status):null)
+						.eq(StringUtils.isNotBlank(uid),"user_id",uid)
+						.and(new Function<QueryWrapper<SysUserEntity>, QueryWrapper<SysUserEntity>>() {
+							@Override
+							public QueryWrapper<SysUserEntity> apply(QueryWrapper<SysUserEntity> sysUserEntityQueryWrapper) {
+								return sysUserEntityQueryWrapper.likeRight("all_parent_id",allParentId+",").or().eq("user_id",userId);
+							}
+						})
 		);
-
 		return new PageUtils(page);
 	}
 
