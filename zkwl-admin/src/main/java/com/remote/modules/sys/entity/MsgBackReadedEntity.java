@@ -28,7 +28,7 @@ public class MsgBackReadedEntity implements Serializable {
 	/**
 	 * 创建时间
 	 */
-	private String createTime;
+	private Date createTime;
 	/**
 	 * 类型
 	 */

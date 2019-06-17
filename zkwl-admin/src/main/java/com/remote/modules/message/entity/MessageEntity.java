@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 
@@ -39,12 +40,15 @@ MessageEntity implements Serializable {
 	/**
 	 * 发布时间
 	 */
-	private String createDate;
+	private Date createDate;
 	/**
 	 * 消息类型
 	 */
 	private Integer type;
 	/**
+	 *
+	 *
+	 *
 	 * 标签
 	 */
 	private String tip;

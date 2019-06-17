@@ -15,5 +15,6 @@ public class MapKey {
         mapKey.put(1,"batteryState");//蓄电池状态
         mapKey.put(19,"loadState");//负载状态
         mapKey.put(11,"photocellState");//光电池状态
+        mapKey.put(54,"onOff");
     }
 }

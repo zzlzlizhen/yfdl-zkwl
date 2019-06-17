@@ -29,14 +29,12 @@ import static com.remote.device.util.MapKey.mapKey;
 @RequestMapping("/fun/device")
 public class DeviceController {
 
-    @Autowired
-    private DeviceService deviceService;
+    public static StringBuffer sb = new StringBuffer();
 
+    @RequestMapping(value = "/change", method= RequestMethod.POST)
+    public DeviceEntity chage(String change){
 
-    @RequestMapping(value = "/query", method= RequestMethod.GET)
-    public DeviceEntity test(){
-        DeviceEntity deviceEntity = deviceService.queryDeviceByCode("359759002513931");
-        return deviceEntity;
+        return new DeviceEntity();
     }
 
 

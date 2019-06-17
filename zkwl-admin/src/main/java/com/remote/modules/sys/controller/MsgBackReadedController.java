@@ -1,6 +1,7 @@
 package com.remote.modules.sys.controller;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
@@ -63,6 +64,7 @@ public class MsgBackReadedController extends AbstractController{
     public R save(@RequestBody MsgBackReadedEntity msgBackReaded){
         msgBackReaded.setUid(this.getUserId());
         msgBackReaded.setMsgBackId(UUID.randomUUID().toString().replace("-", ""));
+        msgBackReaded.setCreateTime(new Date());
         msgBackReadedService.save(msgBackReaded);
 
         return R.ok();

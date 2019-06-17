@@ -31,6 +31,8 @@ html,body{width:100% !important;height:100% !important;margin:0;padding:0;font-s
 .table_m_Z table tr td a{width:35%;margin-left:10%;}
 /*设备分页*/
 .table_grouping table tr td,.table_grouping ul li{width:7.6%;}
+/*分组分页*/
+.table_grouping_z table tr td,.table_grouping_z ul li{width:17%;}
 /*分页*/
 .box{width:100%;height:40px;text-align: center;float:left;}
 /*新增，总览*/
@@ -98,10 +100,10 @@ thead>th{text-align: center !important;}
     text-align: center;font-size:14px;text-indent: 0;color:#fff;border-radius:0px 0px 0px 10px;}
 .checkbox_in{margin-top:18px !important;}
 /*分组侧边抽屉*/
-.drawer{width:50%;height:76%;position: absolute;right:-48%;bottom:8%; transition: all 1.5s ease-in;}
+.drawer{width:50%;height:76%;position: absolute;right:-48%;bottom:0%; transition: all 1.5s ease-in;z-index: 9;}
 .drawer_hid{transition: all 1.5s ease-in;right: 0;}
 .drawer_right{width:5%;height:100%;float:left;}
-.drawer_img{width:20px;height:20px;margin-top:745%;float:left;cursor: pointer;}
+.drawer_img{width:25px;height:45px;margin-top:745%;float:right;cursor: pointer;margin-right:10%;}
 .drawer_left{width:95%;height:100%;float: left;background: #fff;}
 
 

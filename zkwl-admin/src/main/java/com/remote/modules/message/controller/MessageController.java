@@ -83,8 +83,6 @@ public class MessageController extends AbstractController {
     @RequiresPermissions("sys:message:delete")
     public R delete(@RequestBody String[] msgIds){
         messageService.removeByIds(Arrays.asList(msgIds));
-
         return R.ok();
     }
-
 }

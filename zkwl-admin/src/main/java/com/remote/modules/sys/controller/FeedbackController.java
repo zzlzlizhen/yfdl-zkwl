@@ -75,20 +75,20 @@ public class FeedbackController extends AbstractController{
     public R save(FeedbackEntity feedback){
         feedback.setUid(this.getUserId());
         feedback.setBackId(IdGenerate.getUUIDString());
+        feedback.setBackCreateTime(new Date());
         feedbackService.save(feedback);
-
         return R.ok();
     }
 
     /**
-     * 修改
+     * 回复
      */
     @RequestMapping("/update")
     @RequiresPermissions("sys:feedback:update")
     public R update( FeedbackEntity feedback){
-        ValidatorUtils.validateEntity(feedback);
+        feedback.setAnswerUser(this.getUserId());
+        feedback.setAnswerCreateTime(new Date());
         feedbackService.updateById(feedback);
-        
         return R.ok();
     }
 

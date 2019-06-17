@@ -115,8 +115,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 		}else{
 			user.setRealName("");
 		}
-		this.updateById(user);
-
+		this.baseMapper.update(user,
+				new QueryWrapper<SysUserEntity>().eq("user_id", user.getUserId()));
 		//保存用户与角色关系
 		//sysUserRoleService.saveOrUpdate(user.getUserId(), user.getRoleIdList());
 	}

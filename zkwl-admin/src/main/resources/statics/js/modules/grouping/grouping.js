@@ -203,14 +203,6 @@ $(function(){
     $(".shade_modifier_project").click(function(){
         $(".shade_modifier,.shade_b_modifier").css("display","none")
     })
-//    抽屉
-    $("#drawer_img").click(function(){
-        if($("#drawer").attr("class") == "drawer"){
-            $("#drawer").addClass("drawer_hid")
-        }else{
-            $("#drawer").removeClass("drawer_hid")
-        }
-    })
 //控制面板
     $("#hear_control").click(function(){
         location.href ='../control/control.html';
@@ -221,7 +213,9 @@ $(function(){
 //     })
 //分组管理
     $("#grouping").click(function(){
-        location.href ='../management/management.html';
+        var proid=Id
+        var searchUrl=encodeURI('../management/management.html?projectId='+proid)
+        location.href =searchUrl;
     })
 //天气
     //获取城市ajax

@@ -35,7 +35,7 @@ public class FeedbackEntity implements Serializable {
 	/**
 	 * 时间
 	 */
-	private String backCreateTime;
+	private Date backCreateTime;
 	/**
 	 * 反馈解答内容
 	 */
@@ -43,11 +43,12 @@ public class FeedbackEntity implements Serializable {
 	/**
 	 * 反馈解答人
 	 */
-	private String answerUser;
+	private Long answerUser;
+
 	/**
 	 * 反馈解答时间
 	 */
-	private String answerCreateTime;
+	private Date answerCreateTime;
 
 	/**
 	 * 反馈邮箱

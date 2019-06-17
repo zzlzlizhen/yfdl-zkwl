@@ -35,5 +35,14 @@
     update_user,update_time,project_id
     </sql>
 
+    <select id="queryDeviceByCode"  resultMap="BaseResultMap" >
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        fun_device
+        <where>
+            is_del = 0 and device_code = #{deviceCode}
+        </where>
+    </select>
 
 </mapper>

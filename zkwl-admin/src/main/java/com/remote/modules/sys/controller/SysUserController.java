@@ -121,7 +121,6 @@ public class SysUserController extends AbstractController {
 	@RequiresPermissions("sys:user:update")
 	public R update(SysUserEntity user){
 		ValidatorUtils.validateEntity(user, UpdateGroup.class);
-
 		sysUserService.update(user);
 		
 		return R.ok();

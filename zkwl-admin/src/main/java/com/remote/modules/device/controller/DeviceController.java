@@ -1,6 +1,8 @@
 package com.remote.modules.device.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
+import com.remote.common.utils.DataUtils;
 import com.remote.common.utils.R;
 import com.remote.modules.device.entity.DeviceEntity;
 import com.remote.modules.device.entity.DeviceQuery;
@@ -8,15 +10,13 @@ import com.remote.modules.device.service.DeviceService;
 import com.remote.modules.sys.controller.AbstractController;
 import com.remote.modules.sys.entity.SysUserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsMessagingTemplate;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @Author zhangwenping
@@ -29,6 +29,8 @@ public class DeviceController extends AbstractController {
 
     @Autowired
     private DeviceService deviceService;
+    @Autowired
+    private JmsMessagingTemplate jmsMessagingTemplate;
 
     @RequestMapping(value = "/queryDevice", method= RequestMethod.POST)
     public R queryDevice(@RequestBody DeviceQuery deviceQuery){
@@ -38,7 +40,11 @@ public class DeviceController extends AbstractController {
         }
         return R.error(400,"查询设备失败");
     }
-
+    @RequestMapping(value = "/change", method= RequestMethod.POST)
+    public void change(@RequestBody DataUtils data){
+        String s = JSONObject.toJSONString(data);
+        jmsMessagingTemplate.convertAndSend("my_msg", s);
+    }
 
     @RequestMapping(value = "/add", method= RequestMethod.POST)
     public R queryDevice(@RequestBody DeviceEntity deviceEntity){

@@ -38,7 +38,7 @@ public class SecurityEntity implements Serializable {
 	/**
 	 * 创建时间
 	 */
-	private String createTime;
+	private Date createTime;
 	/**
 	 * 邮箱
 	 */

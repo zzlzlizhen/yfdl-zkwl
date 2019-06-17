@@ -11,12 +11,12 @@
         <result property="backCreateTime" column="back_create_time"/>
         <result property="answerContent" column="answer_content"/>
         <result property="answerUser" column="answer_user"/>
-        <result property="answerCreateTime" column="answer_user"/>
+        <result property="answerCreateTime" column="answer_create_time"/>
         <result property="mobile" column="mobile"/>
         <result property="email" column="email"/>
     </resultMap>
     <sql id="feedBack" >
-        back_id,uid ,back_content, back_create_time, answer_content, answer_user,answer_user
+        back_id,uid ,back_content, back_create_time, answer_content, answer_user,answer_create_time
     </sql>
     <!-- 查询用户的所有下级用户的反馈列表 -->
     <select id="queryBackList" resultType="com.remote.modules.sys.entity.FeedbackEntity">

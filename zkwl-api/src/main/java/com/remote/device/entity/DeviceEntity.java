@@ -101,4 +101,8 @@ public class DeviceEntity {
      * 修改时间
      */
     private Date updateTime;
+    /**
+     * 修改状态
+     */
+    private boolean change;
 }
