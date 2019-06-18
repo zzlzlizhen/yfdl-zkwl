@@ -40,13 +40,13 @@
 	<select id="queryAllLevel" resultType="com.remote.modules.sys.entity.SysUserEntity">
 		select <include refid="columns"/> from sys_user where 1=1 and ${where}
 	</select>
-	<select id="queryByEmail" resultType="com.remote.modules.sys.entity.SysUserEntity">
-		select <include refid="columns"/> from sys_user as su  where 1=1 and su.email = #{email}
+	<select id="queryByContact" resultType="com.remote.modules.sys.entity.SysUserEntity">
+		select <include refid="columns"/> from sys_user as su  where 1=1 and su.email = #{email} or su.mobile = #{mobile}
 	</select>
 	
-	<select id="queryByUser" resultType="com.remote.modules.sys.entity.SysUserEntity">
+<!--	<select id="queryByUser" resultType="com.remote.modules.sys.entity.SysUserEntity">
 		select <include refid="columns"/> from sys_user where 1=1 and username = #{username}
-	</select>
+	</select>-->
 	<!-- 查询用户的子用户信息 -->
 	<select id="queryChild" resultType="com.remote.modules.sys.entity.SysUserEntity">
 		select <include refid="columns"/> from sys_user where parent_id = #{userId}

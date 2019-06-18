@@ -13,7 +13,7 @@ import java.util.Map;
 public class TestUser {
 
     public static final String URL = "http://127.0.0.1:8080/remote-admin";
-    public static final String CURRENT_COOKIE = "JSESSIONID=2a71959f-704b-4efb-a770-110fa0ead7f2";
+    public static final String CURRENT_COOKIE = "JSESSIONID=c95ba6c4-9efd-4317-831b-7b74fbeca2d6";
     @Test
     public void infoTest(){
         String url = URL + "/sys/user/info";
@@ -43,9 +43,9 @@ public class TestUser {
     public void updateUserTest(){
         String url = URL + "/sys/user/update";
         Map<String,Object> map = new HashMap<String,Object>();
-        map.put("userId","33");
-        map.put("username","23245");
-        map.put("password","22236");
+        map.put("userId","30");
+        map.put("username","23456");
+        map.put("password","23456");
         map.put("status","1");
         String result4 = HttpRequest.post(url).header(Header.COOKIE,CURRENT_COOKIE).form(map).execute().body();
         System.out.println(result4);

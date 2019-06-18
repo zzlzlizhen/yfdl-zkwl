@@ -27,6 +27,8 @@
         <result property="createTime" column="create_time"/>
         <result property="updateUser" column="update_user"/>
         <result property="updateTime" column="update_time"/>
+        <result property="deviceStatus" column="device_status"/>
+        <result property="counts" column="counts"/>
     </resultMap>
 
     <sql id="Base_Column_List" >
@@ -137,5 +139,40 @@
         </set>
         where device_id = #{deviceId}
     </update>
+
+    <select id="queryDeviceByGroupCount" resultMap="BaseResultMap" >
+       select
+        <if test="groupIds !=null and groupIds.size()!= 0">
+          group_id,
+        </if>
+        <if test="projectIds !=null and projectIds.size()!= 0">
+            project_id,
+        </if>
+        count(1) as counts from fun_device
+        where
+        is_del = 0
+        <if test="groupIds !=null and groupIds.size()!= 0">
+            and group_id in
+            <foreach collection="groupIds" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="projectIds !=null and projectIds.size()!= 0">
+            and project_id in
+            <foreach collection="projectIds" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="deviceStatus != 0">
+            and device_status = #{deviceStatus}
+        </if>
+        <if test="projectIds !=null and projectIds.size()!= 0">
+            group by project_id
+        </if>
+        <if test="groupIds !=null and groupIds.size()!= 0">
+            group by group_id
+        </if>
+    </select>
+
 
 </mapper>

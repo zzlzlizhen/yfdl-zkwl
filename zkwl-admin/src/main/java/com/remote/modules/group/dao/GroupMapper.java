@@ -42,4 +42,12 @@ public interface GroupMapper extends BaseMapper<GroupEntity> {
      * @return boolean
      **/
     int updateGroup(@Param("groupEntity")GroupEntity groupEntity);
+    /*
+     * @Author zhangwenping
+     * @Description 删除分组信息
+     * @Date 14:34 2019/6/18
+     * @Param groupId
+     * @return int
+     **/
+    int deleteGroupById(@Param("groupId")String groupId);
 }

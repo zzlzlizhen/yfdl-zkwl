@@ -13,6 +13,7 @@ import com.remote.modules.sys.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,6 +80,11 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public List<DeviceEntity> queryDeviceNoPage(DeviceQuery deviceQuery) {
         return deviceMapper.queryDevice(deviceQuery);
+    }
+
+    @Override
+    public List<DeviceEntity> queryDeviceByGroupCount(List<String> groupIds,List<String> projectIds, Integer deviceStatus) {
+        return deviceMapper.queryDeviceByGroupCount(groupIds,projectIds,deviceStatus);
     }
 
 }

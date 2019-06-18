@@ -32,7 +32,7 @@ html,body{width:100% !important;height:100% !important;margin:0;padding:0;font-s
 /*设备分页*/
 .table_grouping table tr td,.table_grouping ul li{width:7.6%;}
 /*分组分页*/
-.table_grouping_z table tr td,.table_grouping_z ul li{width:17%;}
+.table_grouping_z table tr td,.table_grouping_z ul li{width:13.6%;}
 /*分页*/
 .box{width:100%;height:40px;text-align: center;float:left;}
 /*新增，总览*/
@@ -108,10 +108,11 @@ thead>th{text-align: center !important;}
 
 
 
-
-
-
-
+/*账户修改*/
+#preview {display: inline-block;width: 50px;height:50px;margin-right: 20px;background-image: url(img/iconfont-tianjia.png);background-repeat: no-repeat;background-size: cover;vertical-align:center;}
+#file {width: 80px;height: 32px;opacity: 0;position: absolute;left: 172px;top: 0;cursor: pointer;z-index: 5;}
+.sha_span i{font-style:normal; width: 80px; height: 32px;border:1px solid #ccc;line-height: 32px;text-align: center;border-radius: 4px;}
+.sha_span{position: relative; display:flex; align-items: center;}
 
 
 

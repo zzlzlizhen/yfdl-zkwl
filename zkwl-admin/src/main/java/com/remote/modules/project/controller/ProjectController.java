@@ -74,7 +74,7 @@ public class ProjectController  extends AbstractController {
             deviceQuery.setProjectId(projectList.get(0));
             List<DeviceEntity> deviceList = deviceService.queryDeviceNoPage(deviceQuery);
             if(CollectionUtils.isNotEmpty(deviceList)){
-                return R.error(201,"当前项目下有未删除项目，删除失败");
+                return R.error(201,"当前项目下有未删除设备，删除失败");
             }
             boolean flag = projectService.delProject(projectList,user.getUserId());
             if(!flag){
@@ -106,9 +106,9 @@ public class ProjectController  extends AbstractController {
     }
 
     @RequestMapping(value = "/queryProjectNoPage", method= RequestMethod.GET)
-    public R queryProjectNoPage(){
+    public R queryProjectNoPage(Integer deviceStatus){
         SysUserEntity user = getUser();
-        List<ProjectEntity> list = projectService.queryProjectNoPage(user.getUserId());
+        List<ProjectEntity> list = projectService.queryProjectNoPage(user.getUserId(),deviceStatus);
         if(list != null){
             return R.ok(list);
         }

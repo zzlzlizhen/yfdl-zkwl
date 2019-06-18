@@ -105,4 +105,9 @@ public class DeviceEntity {
      * 修改时间
      */
     private Date updateTime;
+    /**
+     * 设备状态  1 正常 2 报警 3 故障 4离线
+     */
+    private Integer deviceStatus;
+    private Integer counts;//统计数量
 }

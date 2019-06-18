@@ -20,6 +20,7 @@
         <input type="text" class="form-control"  placeholder=" ">
     </div>
     <span class="hear_w">用户：</span>
+
     <div class="form-group col-sm-2 form_input">
         <input type="text" class="form-control"  placeholder=" ">
     </div>
@@ -36,7 +37,7 @@
     <a class="btn btn-primary btn_m " ><i class="fa fa-plus"></i>&nbsp;新建</a>
 </div>
 
-<div class="table_m table_m_Z" style="height:620px;">
+<div class="table_m table_m_Z" style="height:527px;">
     <table border="1"  id="div">
         <tr>
             <td>账号ID</td>
@@ -146,17 +147,19 @@
             <p><span  style="color: red">*</span>有效期：</p>
             <div class="form-group col-sm-2 " style="width:55%;padding-left:0;padding-right:0;">
                 <select class="form-control" id="acc_select_b">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
+                    <option>1年</option>
+                    <option>2年</option>
+                    <option>3年</option>
+                    <option>4年</option>
+                    <option>5年</option>
                 </select>
             </div>
         </span>
-        <span class="sha_span">
-            <p><span  style="color: red">*</span>头像：</p>
-            <input type="text" placeholder="请填写">
+        <span class="sha_span preview">
+             <p><span  style="color: red">*</span>头像：</p>
+              <div id="preview"></div>
+              <input type="file" accept="image/*" id="file" value=""/>
+              <i>上传图片</i>
         </span>
         <span class="sha_span">
             <p><span  style="color: red">*</span>邮箱：</p>
@@ -166,7 +169,16 @@
             <p><span  style="color: red">*</span>手机号：</p>
             <input type="text" placeholder="请填写" id="acc_call_b">
         </span>
-
+        <span class="sha_span">
+            <p><span  style="color: red">*</span>role：</p>
+            <div class="form-group col-sm-2 " style="width:55%;padding-left:0;padding-right:0;">
+                <select class="form-control" id="r_Ad_mod">
+                    <option value="2">超级管理者</option>
+                    <option value="1">管理者</option>
+                    <option value="0">使用者</option>
+                </select>
+            </div>
+        </span>
         <div class="sha_buttom">
             <input type="button" value="确定" id="sha_que_can">
             <input type="button" value="取消" class="sha_cancel">
@@ -189,4 +201,5 @@
 </div>
 <script src="${request.contextPath}/statics/js/modules/account/account.js"></script>
 </body>
+
 </html>

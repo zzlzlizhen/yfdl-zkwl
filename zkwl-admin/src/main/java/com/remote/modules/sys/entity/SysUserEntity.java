@@ -33,7 +33,7 @@ public class SysUserEntity implements Serializable {
 	/**
 	 * 用户名
 	 */
-	@NotBlank(message="用户名不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	/*@NotBlank(message="用户名不能为空", groups = {AddGroup.class, UpdateGroup.class})*/
 	private String username;
 
 	/**
@@ -57,7 +57,7 @@ public class SysUserEntity implements Serializable {
 	/**
 	 * 手机号
 	 */
-	@NotBlank(message="手机号不能为空", groups = AddGroup.class)
+/*	@NotBlank(message="手机号不能为空", groups = AddGroup.class)*/
 	private String mobile;
 
 	/**

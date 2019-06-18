@@ -39,7 +39,7 @@ public interface SysUserDao extends BaseMapper<SysUserEntity> {
 	/**
 	 * 根据邮件查询对应用户信息
 	 * */
-	SysUserEntity queryByEmail(String email);
+	SysUserEntity queryByContact(String contact);
 
 	List<SysUserEntity> queryChild(SysUserEntity sysUserEntity);
 

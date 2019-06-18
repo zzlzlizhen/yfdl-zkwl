@@ -52,4 +52,9 @@
         </set>
         where group_id = #{groupEntity.groupId}
     </update>
+
+    <delete id="deleteGroupById">
+        delete from fun_group where group_id = #{groupId}
+    </delete>
+
 </mapper>

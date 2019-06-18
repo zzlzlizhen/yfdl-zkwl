@@ -16,7 +16,6 @@ $(function () {
             type:"POST",
             data:{"pageSize":pageSizea,"pageNum":pagesa},
             success: function(res){
-                console.log(res)
                 pages=res.data.pages;
                 pageSize=res.data.pageSize;
                 pageNum=res.data.pageNum

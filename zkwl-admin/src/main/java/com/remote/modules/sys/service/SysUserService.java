@@ -51,7 +51,7 @@ public interface SysUserService extends IService<SysUserEntity> {
 	 **/
 	List<SysUserEntity> queryAllLevel(Long userId);
 
-	SysUserEntity queryByEmail(String email);
+	SysUserEntity queryByEmail(String contactType);
 
 	List<SysUserEntity> queryChild(SysUserEntity sysUserEntity);
 

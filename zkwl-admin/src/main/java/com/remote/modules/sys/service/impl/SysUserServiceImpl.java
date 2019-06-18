@@ -137,8 +137,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	}
 
 	@Override
-	public SysUserEntity queryByEmail(String email){
-		return sysUserDao.queryByEmail(email);
+	public SysUserEntity queryByEmail(String contact){
+		return sysUserDao.queryByContact(contact);
 	}
 
 	@Override

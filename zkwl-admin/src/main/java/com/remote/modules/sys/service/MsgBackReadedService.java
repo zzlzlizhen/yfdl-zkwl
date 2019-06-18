@@ -5,6 +5,7 @@ import com.remote.common.utils.PageUtils;
 import com.remote.modules.sys.entity.MsgBackReadedEntity;
 import com.remote.modules.sys.entity.SysUserEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,5 +17,8 @@ import java.util.Map;
 public interface MsgBackReadedService extends IService<MsgBackReadedEntity> {
 
     PageUtils queryPage(Map<String, Object> params,SysUserEntity curUser);
+    void insert(MsgBackReadedEntity msgBackReadedEntity);
+    void delete(String backId);
+    List<MsgBackReadedEntity> queryBackIds(List<String> backIds, Long uid);
 }
 

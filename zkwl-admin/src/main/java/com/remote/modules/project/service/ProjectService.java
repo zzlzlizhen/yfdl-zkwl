@@ -51,10 +51,10 @@ public interface ProjectService {
      * @Author zhangwenping
      * @Description 查询项目不分页
      * @Date 10:27 2019/6/6
-     * @Param userId
+     * @Param userId deviceStatus
      * @return List<ProjectEntity>
      **/
-    List<ProjectEntity> queryProjectNoPage(Long userId);
+    List<ProjectEntity> queryProjectNoPage(Long userId,Integer deviceStatus);
     /*
      * @Author zhangwenping
      * @Description 在地图中查看信息

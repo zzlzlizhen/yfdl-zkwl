@@ -2,6 +2,7 @@ package com.remote.modules.group.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.remote.common.enums.DeviceEnum;
 import com.remote.modules.device.entity.DeviceEntity;
 import com.remote.modules.device.entity.DeviceQuery;
 import com.remote.modules.device.service.DeviceService;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @Author zhangwenping
@@ -40,11 +42,53 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public PageInfo<GroupEntity> queryGroupByName(GroupQuery groupQuery) {
+        Map<String,Integer> all = new HashMap<>();
+        Map<String,Integer> alarm = new HashMap<>();
+        Map<String,Integer> fault = new HashMap<>();
         PageHelper.startPage(groupQuery.getPageNum(),groupQuery.getPageSize());
         List<GroupEntity> list = groupMapper.queryGroupByName(groupQuery);
+        if(CollectionUtils.isNotEmpty(list)){
+            List<String> groupIds = list.parallelStream().map(groupEntity -> groupEntity.getGroupId()).collect(Collectors.toCollection(ArrayList::new));
+            dataManager(groupIds,all,alarm,fault);
+            for (GroupEntity groupEntity : list){
+                if(all.get(groupEntity.getGroupId()) != null){
+                    groupEntity.setDeviceCount(all.get(groupEntity.getGroupId()));
+                }
+                if(alarm.get(groupEntity.getGroupId()) != null){
+                    groupEntity.setCallPoliceCount(alarm.get(groupEntity.getGroupId()));
+                }
+                if(fault.get(groupEntity.getGroupId()) != null){
+                    groupEntity.setFaultCount(fault.get(groupEntity.getGroupId()));
+                }
+            }
+        }
         PageInfo<GroupEntity> pageInfo = new PageInfo<>(list);
         return pageInfo;
     }
+
+    public void dataManager(List<String> groupIds,Map<String,Integer> all,Map<String,Integer> alarm,Map<String,Integer> fault){
+        List<DeviceEntity> deviceEntities = deviceService.queryDeviceByGroupCount(groupIds,new ArrayList<String>(),DeviceEnum.NORMAL.getCode());//正常
+        if(CollectionUtils.isNotEmpty(deviceEntities)){
+            for(DeviceEntity deviceEntity : deviceEntities){
+                all.put(deviceEntity.getGroupId(),deviceEntity.getCounts());
+            }
+        }
+        List<DeviceEntity> deviceEntities1 = deviceService.queryDeviceByGroupCount(groupIds,new ArrayList<String>(),DeviceEnum.ALARM.getCode());//报警
+        if(CollectionUtils.isNotEmpty(deviceEntities1)){
+            for(DeviceEntity deviceEntity : deviceEntities1){
+                alarm.put(deviceEntity.getGroupId(),deviceEntity.getCounts());
+            }
+        }
+        List<DeviceEntity> deviceEntities2 = deviceService.queryDeviceByGroupCount(groupIds,new ArrayList<String>(),DeviceEnum.FAULT.getCode());//故障
+        if(CollectionUtils.isNotEmpty(deviceEntities2)){
+            for(DeviceEntity deviceEntity : deviceEntities2){
+                fault.put(deviceEntity.getGroupId(),deviceEntity.getCounts());
+            }
+        }
+    }
+
+
+
 
     @Override
     public String deleteGroup(List<String> groupList,String projectId) {
@@ -62,12 +106,16 @@ public class GroupServiceImpl implements GroupService {
         for(String groupId : groupList){
             //根据跟组id 查询下面设备
             DeviceQuery deviceQuery = new DeviceQuery();
+            deviceQuery.setPageNum(1);
+            deviceQuery.setPageSize(10);
             deviceQuery.setGroupId(groupId);
             PageInfo<DeviceEntity> pageInfo = deviceService.queryDevice(deviceQuery);
             if(CollectionUtils.isNotEmpty(pageInfo.getList())){
                 //查询出list 如果有把不可删除的分组名称追加到sb变量中
                 GroupEntity groupEntity = groupMapper.queryGroupById(groupId);
                 sb.append(groupEntity.getGroupName());
+            }else{
+                groupMapper.deleteGroupById(groupId);
             }
         }
         return sb.toString();
@@ -103,14 +151,31 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public List<GroupEntity> queryGroupIdNoPage(String projectId) {
+        Map<String,Integer> all = new HashMap<>();
         GroupQuery groupQuery = new GroupQuery();
         groupQuery.setProjectId(projectId);
-        return groupMapper.queryGroupByName(groupQuery);
+        List<GroupEntity> list = groupMapper.queryGroupByName(groupQuery);
+        if(CollectionUtils.isNotEmpty(list)){
+            List<String> groupIds = list.parallelStream().map(groupEntity -> groupEntity.getGroupId()).collect(Collectors.toCollection(ArrayList::new));
+            List<DeviceEntity> deviceEntities = deviceService.queryDeviceByGroupCount(groupIds,new ArrayList<String>(),DeviceEnum.ALL.getCode());//正常
+            if(CollectionUtils.isNotEmpty(deviceEntities)){
+                for(DeviceEntity deviceEntity : deviceEntities){
+                    all.put(deviceEntity.getGroupId(),deviceEntity.getCounts());
+                }
+            }
+            for (GroupEntity groupEntity : list){
+                if(all.get(groupEntity.getGroupId()) != null){
+                    groupEntity.setDeviceCount(all.get(groupEntity.getGroupId()));
+                }
+            }
+        }
+        return list;
     }
 
     @Override
     public boolean updateGroup(GroupEntity groupEntity) {
         return groupMapper.updateGroup(groupEntity) > 0 ? true : false;
     }
+
 
 }

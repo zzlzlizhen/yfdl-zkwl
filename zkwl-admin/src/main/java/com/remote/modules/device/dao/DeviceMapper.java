@@ -34,4 +34,12 @@ public interface DeviceMapper extends BaseMapper<DeviceEntity> {
      * @return int
      **/
     int updateById(DeviceEntity deviceEntity);
+    /*
+     * @Author zhagnwenping
+     * @Description 查询分组下设备各状态数量
+     * @Date 11:23 2019/6/18
+     * @Param groupIds deviceStatus projectIds
+     * @return List<DeviceEntity>
+     **/
+    List<DeviceEntity> queryDeviceByGroupCount(@Param("groupIds") List<String> groupIds,@Param("projectIds") List<String> projectIds,@Param("deviceStatus") Integer deviceStatus);
 }

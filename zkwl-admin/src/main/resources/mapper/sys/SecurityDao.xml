@@ -12,6 +12,7 @@
         <result property="createTime" column="create_time"/>
         <result property="email" column="email"/>
     </resultMap>
-
-
+    <select id="querySecurity" resultType="com.remote.modules.sys.entity.SecurityEntity">
+        select * from security where security_code=#{securityCode} and (phone = #{phone} or email = #{email})
+    </select>
 </mapper>

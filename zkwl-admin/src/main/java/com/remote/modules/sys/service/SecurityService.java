@@ -15,5 +15,6 @@ import java.util.Map;
 public interface SecurityService extends IService<SecurityEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+    SecurityEntity querySecurity(String contact,String checkCode);
 }
 

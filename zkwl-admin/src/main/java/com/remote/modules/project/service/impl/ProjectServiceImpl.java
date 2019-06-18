@@ -2,6 +2,7 @@ package com.remote.modules.project.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.remote.common.enums.DeviceEnum;
 import com.remote.modules.device.entity.DeviceEntity;
 import com.remote.modules.device.entity.DeviceQuery;
 import com.remote.modules.device.service.DeviceService;
@@ -19,10 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -60,6 +58,8 @@ public class ProjectServiceImpl implements ProjectService {
             projectQuery.setUserIds(transform);
             PageHelper.startPage(projectQuery.getPageNum(),projectQuery.getPageSize());
             List<ProjectEntity> list = projectMapper.queryProjectByUserIds(projectQuery);
+            //统计总装机/故障/报警数量
+            statisticsData(list);
             PageInfo<ProjectEntity> proPage = new PageInfo<>(list);
             return proPage;
         }
@@ -77,7 +77,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<ProjectEntity> queryProjectNoPage(Long userId) {
+    public List<ProjectEntity> queryProjectNoPage(Long userId,Integer deviceStatus) {
         List<SysUserEntity> userList = sysUserService.queryAllLevel(userId);
         if(CollectionUtils.isNotEmpty(userList)){
             List<Long> transform = userList.parallelStream().map(sysUserEntity -> sysUserEntity.getUserId()).collect(Collectors.toCollection(ArrayList::new));
@@ -112,10 +112,105 @@ public class ProjectServiceImpl implements ProjectService {
                     projectEntity.setLongitude(longitudeSum.toString());
                     projectEntity.setLatitude(latitudeSum.toString());
                 }
+                //统计总装机/故障/报警数量
+                statisticsData(list,deviceStatus);
             }
             return list;
         }
         return null;
+    }
+
+
+    private void statisticsData(List<ProjectEntity> list,Integer deviceStaus) {
+        //总装机数量
+        Map<String,Integer> all = new HashMap<>();
+        List<String> projectIds = list.parallelStream().map(projectEntity -> projectEntity.getProjectId()).collect(Collectors.toCollection(ArrayList::new));
+
+        List<DeviceEntity> deviceEntities1 = deviceService.queryDeviceByGroupCount(new ArrayList<String>(),projectIds,deviceStaus);
+        if(CollectionUtils.isNotEmpty(deviceEntities1)){
+            for(DeviceEntity deviceEntity : deviceEntities1){
+                all.put(deviceEntity.getProjectId(),deviceEntity.getCounts());
+            }
+        }
+        for (ProjectEntity projectEntity : list){
+            if(all.get(projectEntity.getProjectId()) != null) {
+                projectEntity.setSumCount(all.get(projectEntity.getProjectId()));
+            }
+            if(projectEntity.getSumCount() == null){
+                projectEntity.setSumCount(0);
+            }
+        }
+    }
+
+    private void statisticsData(List<ProjectEntity> list) {
+        //总装机数量
+        Map<String,Integer> all = new HashMap<>();
+        //故障数量
+        Map<String,Integer> alarm = new HashMap<>();
+        //报警数量
+        Map<String,Integer> fault = new HashMap<>();
+        //正常数量
+        Map<String,Integer> normal = new HashMap<>();
+        //离线数量
+        Map<String,Integer> offline = new HashMap<>();
+        List<String> projectIds = list.parallelStream().map(projectEntity -> projectEntity.getProjectId()).collect(Collectors.toCollection(ArrayList::new));
+
+        List<DeviceEntity> deviceEntities1 = deviceService.queryDeviceByGroupCount(new ArrayList<String>(),projectIds,DeviceEnum.ALARM.getCode());//报警
+        if(CollectionUtils.isNotEmpty(deviceEntities1)){
+            for(DeviceEntity deviceEntity : deviceEntities1){
+                alarm.put(deviceEntity.getProjectId(),deviceEntity.getCounts());
+            }
+        }
+        List<DeviceEntity> deviceEntities2 = deviceService.queryDeviceByGroupCount(new ArrayList<String>(),projectIds,DeviceEnum.FAULT.getCode());//故障
+        if(CollectionUtils.isNotEmpty(deviceEntities2)){
+            for(DeviceEntity deviceEntity : deviceEntities2){
+                fault.put(deviceEntity.getProjectId(),deviceEntity.getCounts());
+            }
+        }
+        List<DeviceEntity> deviceEntities3 = deviceService.queryDeviceByGroupCount(new ArrayList<String>(),projectIds,DeviceEnum.NORMAL.getCode());//正常
+        if(CollectionUtils.isNotEmpty(deviceEntities3)){
+            for(DeviceEntity deviceEntity : deviceEntities3){
+                normal.put(deviceEntity.getProjectId(),deviceEntity.getCounts());
+            }
+        }
+        List<DeviceEntity> deviceEntities4 = deviceService.queryDeviceByGroupCount(new ArrayList<String>(),projectIds,DeviceEnum.OFFLINE.getCode());//离线
+        if(CollectionUtils.isNotEmpty(deviceEntities4)){
+            for(DeviceEntity deviceEntity : deviceEntities4){
+                offline.put(deviceEntity.getProjectId(),deviceEntity.getCounts());
+            }
+        }
+        for (ProjectEntity projectEntity : list){
+            Integer sumCount = 0;
+            if(alarm.get(projectEntity.getProjectId()) != null) {
+                projectEntity.setCallPoliceCount(alarm.get(projectEntity.getProjectId()));
+                sumCount += alarm.get(projectEntity.getProjectId());
+            }
+            if(fault.get(projectEntity.getProjectId()) != null) {
+                projectEntity.setFaultCount(fault.get(projectEntity.getProjectId()));
+                sumCount += fault.get(projectEntity.getProjectId());
+            }
+            if(normal.get(projectEntity.getProjectId()) != null) {
+                projectEntity.setNormalCount(normal.get(projectEntity.getProjectId()));
+                sumCount += normal.get(projectEntity.getProjectId());
+            }
+            if(offline.get(projectEntity.getProjectId()) != null) {
+                projectEntity.setOfflineCount(offline.get(projectEntity.getProjectId()));
+                sumCount += offline.get(projectEntity.getProjectId());
+            }
+            projectEntity.setGatewayCount(nullData(projectEntity.getGatewayCount()));
+            projectEntity.setCallPoliceCount(nullData(projectEntity.getCallPoliceCount()));
+            projectEntity.setFaultCount(nullData(projectEntity.getFaultCount()));
+            projectEntity.setNormalCount(nullData(projectEntity.getNormalCount()));
+            projectEntity.setOfflineCount(nullData(projectEntity.getOfflineCount()));
+            projectEntity.setSumCount(sumCount);
+        }
+    }
+
+    public Integer nullData(Integer data){
+        if(data == null){
+            return 0;
+        }
+        return data;
     }
 
     @Override

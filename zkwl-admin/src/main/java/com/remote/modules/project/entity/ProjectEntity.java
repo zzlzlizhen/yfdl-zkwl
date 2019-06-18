@@ -23,6 +23,8 @@ public class ProjectEntity {
     private Integer runStatus;// 运行状态',
     private Integer sumCount;// 总装机数量',
     private Integer gatewayCount;// 网管数量',
+    private Integer offlineCount;//离线数量
+    private Integer normalCount;//正常数量
     private Integer faultCount;// 故障数量',
     private Integer callPoliceCount;// 报警数量',
     private Integer isDel;//  删除状态  1 删除 0未删除

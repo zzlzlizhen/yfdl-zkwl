@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class TestFeedBack {
     private static final String baseURL="127.0.0.1:8080/remote-admin";
-    private static final String CURRENT_COOKIE = "JSESSIONID=47e0b6d1-1c0c-437f-a3ca-4dc14a0f01a5";
+    private static final String CURRENT_COOKIE = "JSESSIONID=88946cc0-c16f-48fd-a34c-244e912bde46";
     @Test
     public void testFeedBackSave(){
         String url = baseURL + "/sys/feedback/save";
@@ -27,14 +27,21 @@ public class TestFeedBack {
     }
     @Test
     public void testFeedBackDelete(){
-
+   /*     String url = baseURL + "/sys/feedback/delete";
+        Map<String,Object> map= new HashMap<String,Object>();
+        //map.put("ids","21,22,23");
+        String result3= HttpRequest.post(url)
+                .header(Header.COOKIE, CURRENT_COOKIE)
+                .form(map)
+                .execute().body();
+        System.out.println(result3);*/
     }
     @Test
     public void testFeedBackUpdate(){
         String url = baseURL + "/sys/feedback/update";
         Map<String,Object> map = new HashMap<String,Object>();
-        map.put("backId","43f3ba14cea04181a77bc8898b3b36bb");
-        map.put("answerContent","zsmtest1");
+        map.put("backId","19527ae805ff459d9f173169fe927d91");
+        map.put("answerContent","zsmtest333");
         String result4 = HttpRequest.post(url).header(Header.COOKIE,CURRENT_COOKIE).form(map).execute().body();
         System.out.println(result4);
     }

@@ -5,16 +5,15 @@ import java.util.*;
 import com.remote.common.utils.IdGenerate;
 import com.remote.common.utils.PageUtils;
 import com.remote.common.utils.R;
-import com.remote.common.validator.ValidatorUtils;
 import com.remote.modules.sys.entity.FeedbackEntity;
-import com.remote.modules.sys.entity.SysUserEntity;
+import com.remote.modules.sys.entity.MsgBackReadedEntity;
 import com.remote.modules.sys.service.FeedbackService;
+import com.remote.modules.sys.service.MsgBackReadedService;
 import com.remote.modules.sys.service.SysUserService;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,6 +31,8 @@ public class FeedbackController extends AbstractController{
     private FeedbackService feedbackService;
     @Autowired
     private SysUserService sysUserService;
+    @Autowired
+    private MsgBackReadedService msgBackReadedService;
 
     /**
      * 列表
@@ -39,8 +40,18 @@ public class FeedbackController extends AbstractController{
     @RequestMapping("/list")
     @RequiresPermissions("sys:feedback:list")
     public R list(@RequestParam Map<String, Object> params){
+     /*   Integer status = 0;*/
         PageUtils page = feedbackService.queryPage(params,getUser());
-
+        /* List<FeedbackEntity> feedbackEntityList = (List<FeedbackEntity>) page.getList();
+         List<String> backIdList = new ArrayList<String>();
+         for (FeedbackEntity feedbackEntity:feedbackEntityList){
+             backIdList.add(feedbackEntity.getBackId());
+         }
+         List<MsgBackReadedEntity> msgBackReadedEntities = msgBackReadedService.queryBackIds(backIdList,getUserId());
+        List<String> msgBackIds = new ArrayList<String>();
+        for(MsgBackReadedEntity msgBackReadedEntity:msgBackReadedEntities){
+            msgBackIds.add(msgBackReadedEntity.getMsgBackId());
+        }*/
         return R.ok().put("page", page);
     }
 
@@ -63,6 +74,9 @@ public class FeedbackController extends AbstractController{
     @RequiresPermissions("sys:feedback:info")
     public R info(@PathVariable("backId") String backId){
         FeedbackEntity feedback = feedbackService.getById(backId);
+        if(feedback != null){
+            insert(feedback.getBackId());
+        }
 
         return R.ok().put("feedback", feedback);
     }
@@ -76,19 +90,30 @@ public class FeedbackController extends AbstractController{
         feedback.setUid(this.getUserId());
         feedback.setBackId(IdGenerate.getUUIDString());
         feedback.setBackCreateTime(new Date());
-        feedbackService.save(feedback);
+        boolean flag =  feedbackService.save(feedback);
+        if(!flag){
+            return R.error("反馈消息保存失败");
+        }
+        insert(feedback.getBackId());
+
         return R.ok();
     }
 
     /**
-     * 回复
+     * 新增反馈回复
      */
     @RequestMapping("/update")
     @RequiresPermissions("sys:feedback:update")
     public R update( FeedbackEntity feedback){
         feedback.setAnswerUser(this.getUserId());
         feedback.setAnswerCreateTime(new Date());
-        feedbackService.updateById(feedback);
+        boolean flag = feedbackService.updateById(feedback);
+        if(!flag){
+            return R.error("反馈回复失败");
+        }
+        msgBackReadedService.delete(feedback.getBackId());
+        insert(feedback.getBackId());
+
         return R.ok();
     }
 
@@ -110,4 +135,16 @@ public class FeedbackController extends AbstractController{
         return R.ok();
     }
 
+    /**
+     * 增加信息到已读表
+     * */
+    public void insert(String backId){
+        MsgBackReadedEntity msgBackReadedEntity = new MsgBackReadedEntity();
+        msgBackReadedEntity.setUid(getUserId());
+        msgBackReadedEntity.setMsgBackId(backId);
+        msgBackReadedEntity.setType(1);
+        msgBackReadedEntity.setCreateTime(new Date());
+        msgBackReadedEntity.setDeviceId("");
+        msgBackReadedService.insert(msgBackReadedEntity);
+    }
 }
