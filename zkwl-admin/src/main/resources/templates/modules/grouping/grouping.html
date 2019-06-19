@@ -16,7 +16,7 @@
            <div class="hear_project" id="hear_project"></div>
            <div class="hear_city hear_city_a">
                <span>所属城市：</span>
-               <p id="weather"></p>
+               <p id="weather" style="margin-right:5%"></p>
                <span>天气信息：</span>
                <p id="T_an"></p>
            </div>
@@ -29,25 +29,25 @@
         <div class="gross gross_a">
             <img src="${request.contextPath}/statics/image/alarm.svg" class="gross_alarm"/>
             <span>总装机数量</span>
-            <div>152</div>
+            <div id="sumCount">0</div>
             <img src="${request.contextPath}/statics/image/map.svg" class="gross_map"/>
         </div>
         <div class="gross gross_b">
             <img src="${request.contextPath}/statics/image/alarm.svg" class="gross_alarm"/>
-            <span>总装机数量</span>
-            <div>152</div>
+            <span>网关数量</span>
+            <div id="gatewayCount">0</div>
             <img src="${request.contextPath}/statics/image/map.svg" class="gross_map"/>
         </div>
         <div class="gross gross_c">
             <img src="${request.contextPath}/statics/image/alarm.svg" class="gross_alarm"/>
-            <span>总装机数量</span>
-            <div>152</div>
+            <span>故障数量</span>
+            <div id="faultCount">0</div>
             <img src="${request.contextPath}/statics/image/map.svg" class="gross_map"/>
         </div>
         <div class="gross gross_d">
             <img src="${request.contextPath}/statics/image/alarm.svg" class="gross_alarm"/>
-            <span>总装机数量</span>
-            <div>152</div>
+            <span>报警数量</span>
+            <div id="callPoliceCount">0</div>
             <img src="${request.contextPath}/statics/image/map.svg" class="gross_map"/>
         </div>
 
@@ -93,7 +93,7 @@
     </div>
 
 
-    <div class="table_m table_grouping" id="rrapp" style="height:55%">
+    <div class="table_m table_grouping" id="rrapp" style="max-height:55%;height:auto;">
         <ul>
             <li style="width:4%;"> <input type= "checkbox" class="checkbox_in" name="all" id="checkbox"> </li>
             <li>设备编号</li>
@@ -116,7 +116,10 @@
 
     <!-- 移动分组-->
     <div class="move_a">
-
+        <div>已选择</div>
+        <span id="mo_sp"></span>
+        <input type="button" class="deleteAll" value="删除">
+        <input type="button" class="mobile_pac" value="移动分组" >
     </div>
     <!--分页-->
     <div class="box">
@@ -184,7 +187,21 @@
             </div>
         </div>
     </div>
+<!--移动设备-->
+    <div class="shade_Yi">
+        <div class="shade_a shade_modifier_yi"></div>
+        <div class="shade_b_yi">
+            <div class="Bian_j">移动分组<span class="glyphicon glyphicon-remove guan_shc shade_modifier_yi" ></span></div>
+            <div class="Bian_sou">
+                <input type="type" placeholder="请输入">
+            </div>
 
+            <div class="sha_buttom">
+                <input type="button" value="确定" id="" >
+                <input type="button" value="取消" class="shade_modifier_yi">
+            </div>
+        </div>
+    </div>
     <script src="${request.contextPath}/statics/js/modules/grouping/grouping.js"></script>
 </body>
 </html>

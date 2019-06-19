@@ -18,7 +18,7 @@ public class DeviceInfo {
 
     public DeviceInfo(){};
 
-    public DeviceInfo(Integer cmdID, Integer nextCmdID,String devKey,Integer devType,String devSN){
+    public DeviceInfo(Integer cmdID, Integer nextCmdID,String devKey,String devType,String devSN){
         this.cmdID = cmdID;
         this.nextCmdID = nextCmdID;
         this.devKey = devKey;
@@ -29,7 +29,7 @@ public class DeviceInfo {
     private Integer cmdID; //读写数据标识  1终端请求事件 2服务器返回需要上报的类型长度 3终端发送需要上报的类型值 4服务器返回需要修改的配置参数
     private Integer nextCmdID; //没有请求 返回0
     private String devKey;//加密的sn
-    private Integer devType;//类型  不做处理
+    private String devType;//类型  不做处理
     private String devSN;//设备sn
     private List<Integer> key = new ArrayList<>();
     private List<Integer> value = new ArrayList<>();

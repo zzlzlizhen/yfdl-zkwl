@@ -40,9 +40,9 @@ html,body{width:100% !important;height:100% !important;margin:0;padding:0;font-s
 /*新增，总览*/
 .btn_m{ cursor: pointer;}
 /*弹窗*/
-.shade,.shade_delete,.shade_new,.shade_project,.shade_modifier{width:100%;height:100%;position: absolute; z-index:9999;top:0;display: none; }
+.shade,.shade_delete,.shade_new,.shade_project,.shade_modifier,.shade_Yi{width:100%;height:100%;position: absolute; z-index:9999;top:0;display: none; }
 .shade_a,.shade_a_delete,.shade_a_new{width:100%;height:100%;background: #999; opacity: 0.5;float:left;}
-.shade_b,.shade_b_delete,.shade_b_new,.shade_b_project,.shade_b_modifier{width:600px;height:380px; position: absolute; z-index: 99999;top:50%;left:50%;margin:-190px 0px 0px -300px;background: #fff;display: none;}
+.shade_b,.shade_b_delete,.shade_b_new,.shade_b_project,.shade_b_modifier,.shade_b_yi{width:600px;height:380px; position: absolute; z-index: 99999;top:50%;left:50%;margin:-190px 0px 0px -300px;background: #fff;display: none;}
 .shade_b_delete{width:400px;height:300px;margin:-150px 0px 0px -200px;}
 .Bian_j,.Bian_j_delete{width:100%;float:left;height:50px;text-indent: 20px;font-size:14px;line-height: 50px;border-bottom: 1px solid #ccc;color:#333;}
 .mistake{width:90%;height:30px;border-radius: 5px;border:1px solid red;float:left;margin:3% 0px 0px 5%;text-indent: 10px;line-height: 30px;}
@@ -57,6 +57,9 @@ html,body{width:100% !important;height:100% !important;margin:0;padding:0;font-s
 .delete_p{width:100%;height:35px;float:left;text-align: center;line-height:35px;font-size:16px;margin-top:1.5%}
 .guan_sha,.guan_shb,.guan_shc{float:right;margin:4% 5% 0px 0px; cursor: pointer;}
 .guan_shb,.guan_shc{margin:3% 3% 0px 0px;}
+.Bian_sou{width: 60%;height:35px;float:left;margin-left:20%;margin-top:2%;border:1px solid #ccc;border-radius: 4px;overflow: hidden;}
+.Bian_sou input{width:80%;height:100%;float:left;background: 0;border: 0px;text-indent: 10px}
+
 
 #jqGrid tr,td,th{text-align: center !important;}
 thead>th{text-align: center !important;}
@@ -93,8 +96,8 @@ thead>th{text-align: center !important;}
 .gross_c{background:rgba(255, 168, 151, 1);}
 .gross_d{background:rgba(137, 195, 248, 1)}
 .gross_alarm{width:25px;height:25px;float:left;margin:8% 0px 0px 7%;}
-.gross span{width:60%;height:20px;float:left;font-size:16px;text-indent:0px;line-height: 20px;color:#fff;margin:10% 0px 0px 0.5%;}
-.gross div{width:auto;height:24px;float:left;font-size:24px;text-indent: 0px;line-height:24px;margin:12% 0px 0px 2%;padding:0;color:#fff;font-weight: bold;}
+.gross span{width:70%;height:20px;float:left;font-size:16px;text-indent:0px;line-height: 20px;color:#fff;margin:10% 0px 0px 0.5%;}
+.gross div{width:auto;height:auto;font-size:32px;text-indent: 0px;color:#fff;font-weight: bold;position: absolute;top:40%;left:20%;}
 .gross_map{width:60%;height:60%;right:-2%;position: absolute;bottom: 0;}
 .hear_map{width:6%;height:30%;background:rgba(24, 144, 255, 1);text-align: center;line-height:45px;color:#fff;font-size:14px;float:left;
     text-indent: 0;margin-top:2.9%;cursor: pointer}
@@ -102,7 +105,10 @@ thead>th{text-align: center !important;}
     text-align: center;font-size:14px;text-indent: 0;color:#fff;border-radius:0px 0px 0px 10px;}
 .checkbox_in{margin-top:18px !important;}
 /*移动分组*/
-.move_a{width:90%;height:5%;float:left;border-radius: 5px;border:1px solid #ccc;}
+.move_a{width:96%;height:5%;float:left;border-radius: 5px;border:1px solid rgba(24, 144, 255, 1);margin:0.5% 0px 3px 2%;display: none}
+.move_a div{width:auto;height:auto;float:left;margin:1% 0px 0px 2%}
+.move_a input{width:5%;height:70%;float:left;border-radius: 4px;border:1px solid rgba(24, 144, 255, 1);margin:0.5% 0px 0px 1%;background: 0;color:rgba(24, 144, 255, 1)}
+.move_a span{width: auto;height:auto;float:left;margin:1% 0px 0px 0px;color:rgba(24, 144, 255, 1)}
 
 /*分组侧边抽屉*/
 .drawer{width:50%;height:76%;position: absolute;right:-48%;bottom:0%; transition: all 1.5s ease-in;z-index: 9;}

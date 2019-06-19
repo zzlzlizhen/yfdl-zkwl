@@ -21,6 +21,18 @@ $(function(){
     //用户名称
     var exclusiveUser=href['exclusiveUser'];
     $("#hear_city_b").html(exclusiveUser)
+    //总装机数
+    var sumCount=href['sumCount'];
+    $("#sumCount").html(sumCount)
+    //网关数
+    var gatewayCount=href['gatewayCount'];
+    $("#gatewayCount").html(gatewayCount)
+    //故障数
+    var faultCount=href['faultCount'];
+    $("#faultCount").html(faultCount)
+    //报警数
+    var callPoliceCount=href['callPoliceCount'];
+    $("#callPoliceCount").html(callPoliceCount)
     //项目id
     var  Id=href['projectId'];
     var pages
@@ -63,7 +75,7 @@ $(function(){
                 var html
                 for (var i = 0; i < res.data.list.length; i++) {
                     html += "<tr>\n" +
-                        "<td style=\"width:4%;\"> <input type= \"checkbox\" class=\"checkbox_in\"> </td>\n" +
+                        "<td id="+res.data.list[i].deviceId+" style=\"width:4%;\"> <input type= \"checkbox\" class=\"checkbox_in  checkbox_i\"> </td>\n" +
                         "<td>"+res.data.list[i].deviceCode+"</td>\n" +
                         "<td style=\"width:10%;\">"+res.data.list[i].deviceName+"</td>\n" +
                         "<td>"+res.data.list[i].groupName+"</td>\n" +
@@ -83,23 +95,68 @@ $(function(){
                         "</tr>"
                 }
                 $("#div").append(html);
-                //移动分组
-                $(".checkbox_in").click(function () {
-                    var che_c=$(this).prop('checked')
+                //移动分组删除
+                var arr=[]
+                $(".checkbox_i").click(function () {
+                    var che_c=$(this).prop('checked');
                     if(che_c == true){
                         $("#checkbox[name=all]:checkbox").prop('checked', true);
+                        var devId=$(this).parent().attr('id')
+                        arr.push(devId)
+                        var len=arr.length;
+                        $("#mo_sp").html(len+"项")
+                        $(".move_a").show()
                     }
                     else if(che_c == false){
-                        $("#checkbox[name=all]:checkbox").prop('checked', false);
+                        if($(".checkbox_i").prop('checked') == true){
+                            $("#checkbox[name=all]:checkbox").prop('checked', true);
+                            $(".move_a").show()
+                        }else{
+                            $("#checkbox[name=all]:checkbox").prop('checked', false);
+                            $(".move_a").hide()
+                        }
+                        var devId=$(this).parent().attr('id');
+                        var index = arr.indexOf(devId);
+                        arr.splice(index, 1);
+                        var len=arr.length;
+                        $("#mo_sp").html(len+"项")
                     }
-
-
                 })
 
+                // 批量删除
+                $(".deleteAll").click(function(){
+                    if(arr.length <=0 ){
+                        alert("请选择删除的设备!");
+                        return;
+                    }
+                    var ids = "";
+                    for(var i = 0 ;i< arr.length;i++){
+                        ids = ids + arr[i] + ",";
+                    }
+                    ids = ids.substr(0,ids.length - 1);
+                    $.ajax({
+                        url:baseURL + 'fun/device/delete?deviceIds='+ids,
+                        contentType:"application/json;charset=UTF-8",
+                        type:"get",
+                        data:{},
+                        success: function(res) {
+                            console.log("删除")
+                            console.log(res)
+                            if(res.code == "200"){
+                                window.location.reload()
+                            }else{
+                                alert("删除失败")
+                            }
+                        }
+                    })
+                })
+                //移动分组
+                $(".mobile_pac").click(function(){
+                    $(".shade_Yi,.shade_b_yi").css("display","block");
+                })
                 //   删除
                 $(".deleteq").click(function(){
                     var Dele_id=$(this).parent().attr('id');
-                    console.log(Dele_id)
                     $.ajax({
                         url:baseURL + 'fun/device/delete?deviceIds='+Dele_id,
                         contentType:"application/json;charset=UTF-8",
@@ -197,6 +254,7 @@ $(function(){
         $(".shade_project,.shade_b_project").css("display","none")
     })
 
+
     //确认添加
     $("#project_confirm").click(function(){
         var pro_name= $(".pro_name").val();
@@ -242,6 +300,10 @@ $(function(){
         var proid=Id
         var searchUrl=encodeURI('../management/management.html?projectId='+proid+"&character="+character)
         location.href =searchUrl;
+    })
+//移动分组弹窗
+    $(".shade_modifier_yi").click(function(){
+        $(".shade_Yi,.shade_b_yi").css("display","none")
     })
 //天气
     //获取城市ajax

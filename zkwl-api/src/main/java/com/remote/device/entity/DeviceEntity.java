@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Author zhangwenping
@@ -105,4 +106,24 @@ public class DeviceEntity {
      * 修改状态
      */
     private boolean change;
+    //设备编号
+    private List<String> deviceCodes;
+    //开关灯  自动
+    private List<Integer> onOffs;
+    //蓄电池余量
+    private String batteryMargin;
+    //蓄电池电压
+    private String batteryVoltage;
+    //光电池电压
+    private String photovoltaicCellVoltage;
+    //充电电流
+    private String chargingCurrent;
+    //充电功率
+    private String chargingPower;
+    //负载电压
+    private String loadVoltage;
+    //负载功率
+    private String loadPower;
+    //负载电流
+    private String loadCurrent;
 }

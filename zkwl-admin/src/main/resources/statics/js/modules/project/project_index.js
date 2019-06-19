@@ -3,7 +3,6 @@ $(function () {
     var pageSize //每页条数
     var pageNum //数据返回第几页
 
-
     var serial_a=""
     var pro_name_a=""
     var select_a=""
@@ -25,7 +24,7 @@ $(function () {
             for( var i=0 ;i<=res.realName.length;i++){
                 html+="<option>"+res.realName[i]+"</option>"
             }
-            $("#realName").append(html)
+            $("#realName,#select1").append(html)
         }
     })
     //搜索
@@ -47,8 +46,8 @@ $(function () {
             url:baseURL + 'fun/project/queryProject',
             type:"POST",
             data:{
-                "projectName":serial, //项目名称
-                "projectCode": pro_name,//项目编号
+                "projectName":pro_name, //项目名称
+                "projectCode": serial,//项目编号
                 "userName": select,//用户
                 "pageSize":pageSizea,
                 "pageNum":pagesa
@@ -65,10 +64,10 @@ $(function () {
                      "<td>"+res.data.list[i].projectCode+"</td>\n" +
                      "<td class='Na_me'>"+res.data.list[i].projectName+"</td>\n" +
                      "<td class='exclusiveUser'>"+res.data.list[i].exclusiveUser+"</td>\n" +
-                     "<td>"+res.data.list[i].sumCount+"</td>\n" +
-                     "<td>"+res.data.list[i].gatewayCount+"</td>\n" +
-                     "<td>"+res.data.list[i].faultCount+"</td>\n" +
-                     "<td>"+res.data.list[i].callPoliceCount+"</td>\n" +
+                     "<td class='sumCount'>"+res.data.list[i].sumCount+"</td>\n" +
+                     "<td class='gatewayCount'>"+res.data.list[i].gatewayCount+"</td>\n" +
+                     "<td class='faultCount'>"+res.data.list[i].faultCount+"</td>\n" +
+                     "<td class='callPoliceCount'>"+res.data.list[i].callPoliceCount+"</td>\n" +
                      "<td>"+res.data.list[i].projectDesc+"</td>\n" +
                      "<td id="+res.data.list[i].projectId+">\n" +
                      "<a href=\"#\" class='modifier'><span class=\"glyphicon glyphicon-pencil\"></span></a>\n" +
@@ -128,7 +127,12 @@ $(function () {
                     proid=$(this).parent().attr('id');
                     var Na_me=$(this).parent().siblings(".Na_me").html();
                     var exclusiveUser=$(this).parent().siblings(".exclusiveUser").html();
-                    var searchUrl=encodeURI('../grouping/grouping.html?projectId='+proid+"&Na_me="+Na_me+"&exclusiveUser="+exclusiveUser)
+                    var sumCount=$(this).parent().siblings(".sumCount").html();
+                    var gatewayCount=$(this).parent().siblings(".gatewayCount").html();
+                    var faultCount=$(this).parent().siblings(".faultCount").html();
+                    var callPoliceCount=$(this).parent().siblings(".callPoliceCount").html();
+
+                    var searchUrl=encodeURI('../grouping/grouping.html?projectId='+proid+"&Na_me="+Na_me+"&exclusiveUser="+exclusiveUser+"&sumCount="+sumCount+"&gatewayCount="+gatewayCount+"&faultCount="+faultCount+"&callPoliceCount="+callPoliceCount)
                     location.href =searchUrl;
                 })
 
