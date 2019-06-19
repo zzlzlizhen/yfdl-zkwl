@@ -27,14 +27,30 @@ $(function(){
     var pageSize
     var pageNum
 
+    //搜索
+    $("#proje_search").click(function(){
+       var Se_id=$("#Se_id").val();
+       var Se_name=$("#Se_name").val();
+       var select=$("#se_for option:selected").text()
+       var selecta=$("#se_fora option:selected").text()
+        $("#div").html("");
+       console.log(Se_id+Se_name+select+selecta+pageSize+pageNum)
+        form(pageSize,pageNum,Se_id,Se_name,select,selecta)
+    })
+
     //渲染表格
-    form(10,1)
-    function form(pageSizea,pagesa){
+    form(10,1,"","","","")
+    function form(pageSizea,pagesa,deviceCode,deviceName,groupId,deviceType){
         $.ajax({
             url: baseURL + 'fun/device/queryDevice',
             contentType: "application/json;charset=UTF-8",
             type: "POST",
             data: JSON.stringify({
+                "deviceCode":deviceCode,//设备编号
+                "deviceName":deviceName,//设备名称
+                "groupId":groupId,//分组id
+                "deviceType":deviceType,//设备类型
+
                 "projectId":Id,
                 "pageSize":pageSizea,
                 "pageNum":pagesa
@@ -67,6 +83,19 @@ $(function(){
                         "</tr>"
                 }
                 $("#div").append(html);
+                //移动分组
+                $(".checkbox_in").click(function () {
+                    var che_c=$(this).prop('checked')
+                    if(che_c == true){
+                        $("#checkbox[name=all]:checkbox").prop('checked', true);
+                    }
+                    else if(che_c == false){
+                        $("#checkbox[name=all]:checkbox").prop('checked', false);
+                    }
+
+
+                })
+
                 //   删除
                 $(".deleteq").click(function(){
                     var Dele_id=$(this).parent().attr('id');
@@ -87,6 +116,7 @@ $(function(){
                         }
                     })
                 })
+
                 //编辑
                 var proid
                 $(".particulars").click(function(){
@@ -207,14 +237,10 @@ $(function(){
     $("#hear_control").click(function(){
         location.href ='../control/control.html';
     })
-//刷新页面
-//     $("#refresh").click(function(){
-//         window.location.reload()
-//     })
 //分组管理
     $("#grouping").click(function(){
         var proid=Id
-        var searchUrl=encodeURI('../management/management.html?projectId='+proid)
+        var searchUrl=encodeURI('../management/management.html?projectId='+proid+"&character="+character)
         location.href =searchUrl;
     })
 //天气

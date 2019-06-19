@@ -27,7 +27,7 @@ $(function () {
                 for (var i = 0; i < res.page.list.length; i++) {
                     html += " <tr class='r_pw'>\n" +
                         " <td>" + res.page.list[i].userId + "</td>\n" +
-                        "<td class='acn'>" + res.page.list[i].username + "</td>\n" +
+                        "<td class='username'>" + res.page.list[i].username + "</td>\n" +
                         " <td class='r_user'>" + res.page.list[i].realName + "</td>\n" +
                         "<td>" + res.page.list[i].projectCount + "</td>\n" +
                         "<td>" + res.page.list[i].deviceCount + "</td>\n" +
@@ -53,36 +53,49 @@ $(function () {
                 $("#div").append(html)
                 //滑動按鈕
                 $(".toogle").click(function () {
+                    var username = $(this).parent().parent().siblings(".username").html();
                     var ele = $(this).children(".move");
                     if (ele.attr("data-state") == "1") {
                         ele.animate({left: "0"}, 300, function () {
                             ele.attr("data-state", "0");
-                            // var a=0
-                            // aaa(a)
-                            alert("关！");
+                            var state=0
+                            aaa(state,username)
+
                         });
                         $(this).removeClass("on").addClass("off");
                     } else if (ele.attr("data-state") == "0") {
                         ele.animate({left: '50%'}, 300, function () {
                             $(this).attr("data-state", "1");
-                            // var a=0
-                            // aaa(a)
-                            alert("开！");
+                            var state=1
+                            aaa(state,username)
+
                         });
                         $(this).removeClass("off").addClass("on");
                     }
                 })
-                // function aaa(b){
-                //     b
-                //
-                // }
+                function aaa(state,username){
+                    console.log("111111111111111111111111")
+                    console.log(username)
+                    console.log(state)
+                   $.ajax({
+                       url: baseURL + '/sys/user/userList',
+                       type: "get",
+                       data: {
+                           "username": username,
+                           "status": state,
+                       },
+                       success: function (res) {
+                           console.log(res)
+                       }
+                   })
+
+                }
                 //編輯
                 $(".compile").click(function () {
                     $(".shade,.shade_b").css("display", "block")
                     //id
                     Id_a = $(this).parent().attr('id');
-
-                    var na_ma = $(this).parent().siblings(".acn").html();
+                    var na_ma = $(this).parent().siblings(".username").html();
                     $("#acc_number_b").val(na_ma);
                     var r_user = $(this).parent().siblings(".r_user").html();
                     $("#acc_user_b").val(r_user);
@@ -121,37 +134,8 @@ $(function () {
                         form(pageSize, pagesb)
                     }
                 });
-
-            //  修改管理员
-                var but=$("#move").data-state();
-                console.log(but)
-                var r_Ad_mod=$("#r_Ad_mod").val();
-            $(".move").click(function(){
-                $.ajax({
-                    type: "POST",
-                    url: baseURL + "sys/user/update",
-                    data: "&mobile="+acc_call+
-                          "&roleId="+roleId,
-                    success: function(r){
-                        console.log(JSON.stringify(r));
-                        if(r.code == 200){
-                            alert('操作成功', function(){
-                                window.location.reload()
-                            });
-                        }else{
-                            alert(r.msg);
-                        }
-                    }
-                });
-
-            })
-
-
-
             }
-
         })
-
     }
     // $("#getPage").on("click", function() {
     //     var info = $("#pagination3").pagination("getPage");
@@ -249,7 +233,8 @@ $(function () {
         var acc_number=$("#acc_number").val()
         var acc_user=$("#acc_user").val()
         var acc_password=$("#acc_password").val()
-
+        //图片
+        var r_src_mod=$('#preview').css('backgroundImage');
         var acc_select=$("#acc_select option:selected").text()
         var acc_mailbox=$("#acc_mailbox").val()
         var acc_call=$("#acc_call").val();
@@ -263,6 +248,7 @@ $(function () {
                 //contentType: "application/json;charset=UTF-8",
                 type: "POST",
                 data:
+                "&headUrl="+""+
                 "username="+acc_number+
                 "&realName="+acc_user+
                 "&password="+acc_password+
@@ -297,7 +283,7 @@ $(function () {
         var r_termof_mod=$("#acc_select_b option:selected").text();
         var termOfValidity = r_termof_mod.substr(r_termof_mod.length-2,1)
         //图片
-        var r_src_mod=$('#preview').css('backgroundImage');
+        var r_src_mod=$('#previewr').css('backgroundImage');
         //邮箱
         var r_emal_mod=$("#acc_mailbox_b").val();
         //手机
@@ -307,33 +293,40 @@ $(function () {
         console.log(Id_a+na_ma_mod+r_emal_mod+r_typ_mod+r_src_mod+r_user_mod+r_termof_mod+r_Ad_mod);
         console.log("111111111111111111111111111111")
         console.log(r_src_mod)
-        $.ajax({
-            url: baseURL + 'sys/user/update',
-            //contentType: "application/json;charset=UTF-8",
-            type: "POST",
-            data:
-                "userId="+Id_a+
-                "&username="+na_ma_mod+
-                "&email="+r_emal_mod+
-                "&mobile="+r_typ_mod+
-                "&headUrl="+""+
-                "&realName="+r_user_mod+
-                "&termOfValidity="+termOfValidity+
-                "&type="+r_Ad_mod,
-            success: function (res) {
-                console.log(JSON.stringify(res));
-                if(res.code == "200"){
-                    alert('修改成功', function(){
-                        window.location.reload()
-                    });
-                }else{
-                    alert(res.msg);
+
+        if(na_ma_mod == "" || r_user_mod=="" || r_pw_mod=="" || r_termof_mod=="" || r_emal_mod==""|| r_typ_mod=="" || r_Ad_mod==""){
+            alert("輸入不能為空")
+        }else {
+            $.ajax({
+                url: baseURL + 'sys/user/update',
+                //contentType: "application/json;charset=UTF-8",
+                type: "POST",
+                data:
+                "userId=" + Id_a +
+                "&username=" + na_ma_mod +
+                "&email=" + r_emal_mod +
+                "&mobile=" + r_typ_mod +
+                "&headUrl=" + "" +
+                "&realName=" + r_user_mod +
+                "&termOfValidity=" + termOfValidity +
+                "&type=" + r_Ad_mod,
+                success: function (res) {
+                    console.log(JSON.stringify(res));
+                    if (res.code == "200") {
+                        alert('修改成功', function () {
+                            window.location.reload()
+                            console.log(na_ma_mod)
+                            console.log(r_user_mod)
+                        });
+                    } else {
+                        alert(res.msg);
+                    }
                 }
-            }
-        })
+            })
+        }
     })
 //账户修改  选择图片
-    var preview = document.querySelector('#preview');
+    var preview = document.querySelector('#previewr');
     var eleFile = document.querySelector('#file');
     eleFile.addEventListener('change', function() {
         var file = this.files[0];

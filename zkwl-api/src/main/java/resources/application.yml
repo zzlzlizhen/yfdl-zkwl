@@ -7,7 +7,8 @@ server:
   port: 8081
   servlet:
     context-path: /remote-api
-
+netty:
+  port: 11111
 spring:
   activemq:
     broker-url: tcp://0.0.0.0:61616

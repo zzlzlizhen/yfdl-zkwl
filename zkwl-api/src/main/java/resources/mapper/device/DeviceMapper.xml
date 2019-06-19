@@ -45,4 +45,60 @@
         </where>
     </select>
 
+
+    <update id="updateDeviceByCode" parameterType="com.remote.device.entity.DeviceEntity">
+        update fun_device
+        <set>
+            <if test="deviceName != null">
+                device_name = #{deviceName},
+            </if>
+            <if test="projectId != null">
+                project_id = #{projectId},
+            </if>
+            <if test="groupId != null">
+                group_id = #{groupId},
+            </if>
+            <if test="deviceType != null">
+                device_type = #{deviceType},
+            </if>
+            <if test="photocellState != null">
+                gateway_count = #{photocellState},
+            </if>
+            <if test="photocellState != null">
+                photocell_state = #{photocellState},
+            </if>
+            <if test="batteryState != null">
+                battery_state = #{batteryState},
+            </if>
+            <if test="loadState != null">
+                load_state = #{loadState},
+            </if>
+            <if test="signalState != null">
+                signal_state = #{signalState},
+            </if>
+            <if test="runState != null">
+                run_state = #{runState},
+            </if>
+            <if test="light != null">
+                light = #{light},
+            </if>
+            <if test="communicationType != null">
+                communication_type = #{communicationType},
+            </if>
+            <if test="onOff != null">
+                on_off = #{onOff},
+            </if>
+            <if test="longitude != null">
+                longitude = #{longitude},
+            </if>
+            <if test="latitude != null">
+                latitude = #{latitude},
+            </if>
+            <if test="isDel != null">
+                is_del = #{isDel},
+            </if>
+            update_time = now()
+        </set>
+        where device_code = #{deviceCode}
+    </update>
 </mapper>

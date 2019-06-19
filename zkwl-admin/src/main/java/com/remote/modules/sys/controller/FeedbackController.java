@@ -42,16 +42,6 @@ public class FeedbackController extends AbstractController{
     public R list(@RequestParam Map<String, Object> params){
      /*   Integer status = 0;*/
         PageUtils page = feedbackService.queryPage(params,getUser());
-        /* List<FeedbackEntity> feedbackEntityList = (List<FeedbackEntity>) page.getList();
-         List<String> backIdList = new ArrayList<String>();
-         for (FeedbackEntity feedbackEntity:feedbackEntityList){
-             backIdList.add(feedbackEntity.getBackId());
-         }
-         List<MsgBackReadedEntity> msgBackReadedEntities = msgBackReadedService.queryBackIds(backIdList,getUserId());
-        List<String> msgBackIds = new ArrayList<String>();
-        for(MsgBackReadedEntity msgBackReadedEntity:msgBackReadedEntities){
-            msgBackIds.add(msgBackReadedEntity.getMsgBackId());
-        }*/
         return R.ok().put("page", page);
     }
 
@@ -74,13 +64,32 @@ public class FeedbackController extends AbstractController{
     @RequiresPermissions("sys:feedback:info")
     public R info(@PathVariable("backId") String backId){
         FeedbackEntity feedback = feedbackService.getById(backId);
-        if(feedback != null){
-            insert(feedback.getBackId());
+        MsgBackReadedEntity msgBackReadedEntity = msgBackReadedService.queryBackIdAndUid(backId,getUserId(),getUser());
+        if(msgBackReadedEntity != null){
+            //如果反馈不为空
+            if(feedback != null){
+                insert(feedback.getBackId());
+            }
         }
 
         return R.ok().put("feedback", feedback);
     }
-
+    /**
+     * 详细信息
+     */
+    @RequestMapping("/detailInfo")
+    @RequiresPermissions("sys:feedback:info")
+    public R detailInfo(String backId){
+        FeedbackEntity feedback = feedbackService.getById(backId);
+        MsgBackReadedEntity msgBackReadedEntity = msgBackReadedService.queryBackIdAndUid(backId,getUserId(),getUser());
+        if(msgBackReadedEntity == null){
+            //如果反馈不为空
+            if(feedback != null){
+                insert(feedback.getBackId());
+            }
+        }
+        return R.ok().put("feedback", feedback);
+    }
     /**
      * 保存
      */
@@ -91,6 +100,7 @@ public class FeedbackController extends AbstractController{
         feedback.setBackId(IdGenerate.getUUIDString());
         feedback.setBackCreateTime(new Date());
         boolean flag =  feedbackService.save(feedback);
+
         if(!flag){
             return R.error("反馈消息保存失败");
         }

@@ -150,10 +150,11 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public List<GroupEntity> queryGroupIdNoPage(String projectId) {
+    public List<GroupEntity> queryGroupIdNoPage(String projectId,String groupName) {
         Map<String,Integer> all = new HashMap<>();
         GroupQuery groupQuery = new GroupQuery();
         groupQuery.setProjectId(projectId);
+        groupQuery.setGroupName(groupName);
         List<GroupEntity> list = groupMapper.queryGroupByName(groupQuery);
         if(CollectionUtils.isNotEmpty(list)){
             List<String> groupIds = list.parallelStream().map(groupEntity -> groupEntity.getGroupId()).collect(Collectors.toCollection(ArrayList::new));

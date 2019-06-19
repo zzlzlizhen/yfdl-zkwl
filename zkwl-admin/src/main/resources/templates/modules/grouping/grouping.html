@@ -58,18 +58,18 @@
     </div>
 
     <div class="project_he" >
-        <span class="hear_w">设备ID：</span>
+        <span class="hear_w">设备编号：</span>
         <div class="form-group col-sm-2 form_input">
-            <input type="text" class="form-control"  placeholder=" ">
+            <input type="text" class="form-control" id="Se_id"  placeholder=" ">
         </div>
         <span class="hear_w">设备名称：</span>
         <div class="form-group col-sm-2 form_input">
-            <input type="text" class="form-control"  placeholder=" ">
+            <input type="text" class="form-control" id="Se_name"  placeholder=" ">
         </div>
         <span class="hear_w">设备分组：</span>
         <div class="form-group col-sm-2 form_input">
-            <select class="form-control">
-                <option>1</option>
+            <select class="form-control" id="se_for">
+                <option></option>
                 <option>2</option>
                 <option>3</option>
                 <option>4</option>
@@ -78,25 +78,25 @@
         </div>
         <span class="hear_w">设备类型：</span>
         <div class="form-group col-sm-2 form_input">
-            <select class="form-control">
-                <option>1</option>
+            <select class="form-control"  id="se_fora">
+                <option></option>
                 <option>2</option>
                 <option>3</option>
                 <option>4</option>
                 <option>5</option>
             </select>
         </div>
-        <a class="btn btn-primary btn_m gl_bt"><i class="glyphicon glyphicon-search gl_fu"></i>搜索</a>
+        <a class="btn btn-primary btn_m gl_bt" id="proje_search"><i class="glyphicon glyphicon-search gl_fu"></i>搜索</a>
         <a class="btn btn-primary btn_m" id="add_equipments">添加设备</a>
 <!--        <a class="btn btn-primary btn_m gl_bt" id="refresh"><i class="glyphicon glyphicon-repeat gl_fu"></i>刷新</a>-->
         <a class="btn btn-primary btn_m" id="grouping">分组管理</a>
     </div>
 
 
-    <div class="table_m table_grouping" id="rrapp" style="height:60%">
+    <div class="table_m table_grouping" id="rrapp" style="height:55%">
         <ul>
-            <li style="width:4%;"> <input type= "checkbox" class="checkbox_in"> </li>
-            <li>设备ID</li>
+            <li style="width:4%;"> <input type= "checkbox" class="checkbox_in" name="all" id="checkbox"> </li>
+            <li>设备编号</li>
             <li style="width:10%;">设备名称</li>
             <li>所属分组</li>
             <li>设备类型</li>
@@ -114,6 +114,10 @@
         </table>
     </div>
 
+    <!-- 移动分组-->
+    <div class="move_a">
+
+    </div>
     <!--分页-->
     <div class="box">
         <div id="pagination3" class="page fl"></div>

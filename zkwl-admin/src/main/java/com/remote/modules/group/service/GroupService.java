@@ -52,10 +52,10 @@ public interface GroupService {
      * @Author zhangwenping
      * @Description 设备管理查询分组  不分页
      * @Date 15:14 2019/6/6
-     * @Param projectId
+     * @Param projectId groupName
      * @return List<GroupEntity>
      **/
-    List<GroupEntity> queryGroupIdNoPage(String projectId);
+    List<GroupEntity> queryGroupIdNoPage(String projectId,String groupName);
     /*
      * @Author zhangwenping
      * @Description 修改分组信息

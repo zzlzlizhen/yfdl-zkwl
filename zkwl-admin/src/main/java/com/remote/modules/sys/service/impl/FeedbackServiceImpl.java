@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -35,7 +37,6 @@ public class FeedbackServiceImpl extends ServiceImpl<FeedbackDao, FeedbackEntity
        List<SysUserEntity> sysUserEntitys = sysUserService.queryChild(curUser);
         List<Long> userIds = new ArrayList<Long>();
         if(CollectionUtils.isNotEmpty(sysUserEntitys)){
-            sysUserEntitys.add(curUser);
             for(SysUserEntity sysUserEntity : sysUserEntitys){
                 userIds.add(sysUserEntity.getUserId());
             }
@@ -73,4 +74,11 @@ public class FeedbackServiceImpl extends ServiceImpl<FeedbackDao, FeedbackEntity
     public List<FeedbackEntity> queryBackList(List<Long> userIds) {
         return feedbackDao.queryBackList(userIds);
     }
+
+    @Override
+    public FeedbackEntity queryDetailInfo(String backId) {
+        return this.baseMapper.selectOne(new QueryWrapper<FeedbackEntity>().eq("back_id",backId));
+    }
+
+
 }

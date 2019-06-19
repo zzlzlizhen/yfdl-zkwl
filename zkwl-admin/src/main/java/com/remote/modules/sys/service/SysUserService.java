@@ -57,6 +57,7 @@ public interface SysUserService extends IService<SysUserEntity> {
 
 	List<SysUserEntity> queryAllChild(SysUserEntity sysUserEntity);
 
+	List<SysUserEntity> queryUserList(Map<String, Object> params,SysUserEntity currentUser);
 	/**
 	 * 通过当前用户id查询当前用户的手机号和邮箱
 	 * */

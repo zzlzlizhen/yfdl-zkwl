@@ -22,6 +22,7 @@ public interface FeedbackService extends IService<FeedbackEntity> {
      * 通过当前用户的下级用户id找到当前用户要展示的反馈列表
      * */
     List<FeedbackEntity> queryBackList(List<Long> userIds);
+    FeedbackEntity queryDetailInfo(String backId);
 
     PageInfo<FeedbackEntity> queryBackList(List<Long> userIds, SysUserEntity curUser);
 }

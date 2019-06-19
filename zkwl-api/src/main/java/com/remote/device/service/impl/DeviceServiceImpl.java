@@ -21,4 +21,9 @@ public class DeviceServiceImpl implements DeviceService {
     public DeviceEntity queryDeviceByCode(String deviceCode) {
         return deviceMapper.queryDeviceByCode(deviceCode);
     }
+
+    @Override
+    public int updateDeviceByCode(DeviceEntity deviceEntity) {
+        return deviceMapper.updateDeviceByCode(deviceEntity);
+    }
 }

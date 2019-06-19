@@ -64,4 +64,13 @@ public interface DeviceService {
      * @return  List<DeviceEntity>
      **/
     List<DeviceEntity> queryDeviceByGroupCount(List<String> groupIds,List<String> projectIds,Integer deviceStatus);
+
+    /*
+     * @Author zhangwenping
+     * @Description 查询分组详情
+     * @Date 17:26 2019/6/19
+     * @Param deviceId
+     * @return DeviceEntity
+     **/
+    DeviceEntity queryDeviceByDeviceId(String deviceId);
 }

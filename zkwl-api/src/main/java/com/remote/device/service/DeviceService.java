@@ -11,4 +11,12 @@ public interface DeviceService {
      * @return DeviceEntity
      **/
     DeviceEntity queryDeviceByCode(String deviceCode);
+    /*
+     * @Author zhangwenping
+     * @Description 根据设备编号修改设备信息
+     * @Date 13:28 2019/6/19
+     * @Param deviceEntity
+     * @return int
+     **/
+    int updateDeviceByCode(DeviceEntity deviceEntity);
 }

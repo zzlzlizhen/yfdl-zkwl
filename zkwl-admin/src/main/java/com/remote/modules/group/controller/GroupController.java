@@ -82,8 +82,8 @@ public class GroupController extends AbstractController {
     }
 
     @RequestMapping(value = "/queryGroupIdNoPage", method= RequestMethod.GET)
-    public R queryGroupIdNoPage(String projectId){
-        return R.ok(groupService.queryGroupIdNoPage(projectId));
+    public R queryGroupIdNoPage(String projectId,String groupName){
+        return R.ok(groupService.queryGroupIdNoPage(projectId,groupName));
     }
 
 

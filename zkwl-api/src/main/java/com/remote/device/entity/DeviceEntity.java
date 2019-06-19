@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.Date;
 
 /**
- * @Author EDZ
+ * @Author zhangwenping
  * @Date 2019/6/11 9:24
  * @Version 1.0
  **/

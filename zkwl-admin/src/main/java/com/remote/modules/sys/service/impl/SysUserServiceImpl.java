@@ -118,7 +118,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 		this.baseMapper.update(user,
 				new QueryWrapper<SysUserEntity>().eq("user_id", user.getUserId()));
 		//保存用户与角色关系
-		//sysUserRoleService.saveOrUpdate(user.getUserId(), user.getRoleIdList());
+		sysUserRoleService.saveOrUpdate(user.getUserId(), user.getRoleIdList());
 	}
 
 
@@ -141,16 +141,36 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 		return sysUserDao.queryByContact(contact);
 	}
 
+   /*
+   * 通过用户id查询所有的子用户
+   * */
 	@Override
 	public List<SysUserEntity> queryChild(SysUserEntity sysUserEntity) {
 		//List<SysUserEntity> list = this.baseMapper.selectList(new QueryWrapper<SysUserEntity>().eq("parent_id",sysUserEntity.getUserId()));
 		return sysUserDao.queryChild(sysUserEntity);
 	}
 
+	/*
+	* 通过用户id查询所有自身和子孙用户
+	* */
 	@Override
 	public List<SysUserEntity> queryAllChild(SysUserEntity sysUserEntity) {
 		//List<SysUserEntity> list = this.baseMapper.selectList(new QueryWrapper<SysUserEntity>().like("all_parent_id",sysUserEntity.getAllParentId()+",%").or().eq("user_id",sysUserEntity.getUserId()));
 		return sysUserDao.queryAllChild(sysUserEntity);
+	}
+
+	@Override
+	public List<SysUserEntity> queryUserList(Map<String, Object> params,SysUserEntity currentUser) {
+		String allParentId = currentUser.getAllParentId();
+		long userId = currentUser.getUserId();
+		String realName = (String)params.get("realName");
+		return this.baseMapper.selectList(new QueryWrapper<SysUserEntity>().like(StringUtils.isNotBlank(realName),"real_name", realName).and(new Function<QueryWrapper<SysUserEntity>, QueryWrapper<SysUserEntity>>() {
+					@Override
+					public QueryWrapper<SysUserEntity> apply(QueryWrapper<SysUserEntity> sysUserEntityQueryWrapper) {
+						return sysUserEntityQueryWrapper.likeRight("all_parent_id",allParentId+",").or().eq("user_id",userId);
+					}
+				})
+		);
 	}
 
 	@Override

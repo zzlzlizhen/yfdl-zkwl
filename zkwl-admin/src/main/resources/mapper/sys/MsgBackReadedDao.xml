@@ -12,6 +12,9 @@
         <result property="msgBackId" column="msg_back_id"/>
         <result property="deviceId" column="device_id"/>
     </resultMap>
-
+<!--   <select id="queryBackIdAndUid" resultType="com.remote.modules.sys.entity.MsgBackReadedEntity">
+       SELECT * FROM msg_back_readed mbr
+       WHERE mbr.msg_back_id = #{msgBackId} and mbr.uid == #{uid}
+   </select>-->
 
 </mapper>

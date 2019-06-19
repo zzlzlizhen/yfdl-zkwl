@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class TestFeedBack {
     private static final String baseURL="127.0.0.1:8080/remote-admin";
-    private static final String CURRENT_COOKIE = "JSESSIONID=88946cc0-c16f-48fd-a34c-244e912bde46";
+    private static final String CURRENT_COOKIE = "JSESSIONID=4898559c-c0f9-41dc-b315-51465ae53817";
     @Test
     public void testFeedBackSave(){
         String url = baseURL + "/sys/feedback/save";
@@ -40,8 +40,9 @@ public class TestFeedBack {
     public void testFeedBackUpdate(){
         String url = baseURL + "/sys/feedback/update";
         Map<String,Object> map = new HashMap<String,Object>();
-        map.put("backId","19527ae805ff459d9f173169fe927d91");
-        map.put("answerContent","zsmtest333");
+        map.put("backId","160e1830480f477bb4c04c27731da811");
+        map.put("userId",1);
+        map.put("answerContent","zsmtest3111133");
         String result4 = HttpRequest.post(url).header(Header.COOKIE,CURRENT_COOKIE).form(map).execute().body();
         System.out.println(result4);
     }

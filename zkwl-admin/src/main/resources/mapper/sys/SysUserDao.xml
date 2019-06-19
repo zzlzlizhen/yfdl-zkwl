@@ -47,9 +47,9 @@
 <!--	<select id="queryByUser" resultType="com.remote.modules.sys.entity.SysUserEntity">
 		select <include refid="columns"/> from sys_user where 1=1 and username = #{username}
 	</select>-->
-	<!-- 查询用户的子用户信息 -->
+	<!-- 查询用户自身和子用户信息 -->
 	<select id="queryChild" resultType="com.remote.modules.sys.entity.SysUserEntity">
-		select <include refid="columns"/> from sys_user where parent_id = #{userId}
+		select <include refid="columns"/> from sys_user where parent_id = #{userId} or user_id = #{userId}
 	</select>
 	<!-- 查询用户的自身或者子用户信息 -->
 	<select id="queryAllChild" resultType="com.remote.modules.sys.entity.SysUserEntity">

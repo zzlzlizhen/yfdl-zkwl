@@ -98,6 +98,7 @@ public class DeviceController extends AbstractController {
         SysUserEntity user = getUser();
         deviceEntity.setUpdateUser(user.getUserId());
         deviceEntity.setUpdateTime(new Date());
+        deviceEntity.setUpdateUserName(user.getUsername());
         boolean flag = deviceService.updateById(deviceEntity);
         if(!flag){
             return R.error(400,"修改设备失败");
@@ -110,5 +111,10 @@ public class DeviceController extends AbstractController {
         DeviceQuery deviceQuery = new DeviceQuery();
         deviceQuery.setGroupId(groupId);
         return R.ok(deviceService.queryDeviceNoPage(deviceQuery));
+    }
+
+    @RequestMapping(value = "/getDeviceById", method= RequestMethod.GET)
+    public R getDeviceById(String deviceId){
+        return R.ok(deviceService.queryDeviceByDeviceId(deviceId));
     }
 }

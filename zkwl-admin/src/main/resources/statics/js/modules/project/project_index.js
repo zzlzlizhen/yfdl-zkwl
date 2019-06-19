@@ -1,21 +1,61 @@
 $(function () {
     var pages
-    var pageSize
-    var pageNum
+    var pageSize //每页条数
+    var pageNum //数据返回第几页
+
+
+    var serial_a=""
+    var pro_name_a=""
+    var select_a=""
     //总览
     $("#pandect").click(function () {
         window.open("../pandect/pandect.html")
     })
 
-    //渲染
-    form(10,1)
 
-    function form(pageSizea,pagesa){
+    //用户信息
+    $.ajax({
+        url:baseURL + 'sys/user/nameList',
+        type:"get",
+        data:{},
+        success: function(res) {
+            console.log("用户名")
+            console.log(res)
+            var html
+            for( var i=0 ;i<=res.realName.length;i++){
+                html+="<option>"+res.realName[i]+"</option>"
+            }
+            $("#realName").append(html)
+        }
+    })
+    //搜索
+    $("#proje_search").click(function(){
+       var serial=$("#serial").val();
+       var pro_name=$("#pro_name").val();
+       var select=$("#realName option:selected").text()
+       console.log("搜索")
+       console.log(pageSize+pageNum+serial+pro_name+select)
+        $("#div").html("")
+       form(pageSize,pageNum,serial,pro_name,select)
+    })
+
+    //渲染表格
+    form(10,1,"","","")
+
+    function form(pageSizea,pagesa,serial,pro_name,select){
         $.ajax({
             url:baseURL + 'fun/project/queryProject',
             type:"POST",
-            data:{"pageSize":pageSizea,"pageNum":pagesa},
+            data:{
+                "projectName":serial, //项目名称
+                "projectCode": pro_name,//项目编号
+                "userName": select,//用户
+                "pageSize":pageSizea,
+                "pageNum":pagesa
+            },
             success: function(res){
+                console.log("数据")
+                console.log(res)
                 pages=res.data.pages;
                 pageSize=res.data.pageSize;
                 pageNum=res.data.pageNum
@@ -104,11 +144,12 @@ $(function () {
                     nextPageText: "下一页",
                     callback: function (current) {
                         //当前页数current
-                        var pagesb = current
+                     var  pagesb = current
                         $("#div").html("")
                         form(pageSize, pagesb)
                     }
                 });
+
 
             }
         });

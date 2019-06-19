@@ -35,6 +35,7 @@
         </select>
     </div>
     <a class="btn btn-primary btn_m " ><i class="fa fa-plus"></i>&nbsp;新建</a>
+    <a class="btn btn-primary" href="../control/control.html"><i class="fa fa-plus"></i>&nbsp;链接</a>
 </div>
 
 <div class="table_m table_m_Z" style="height:527px;">
@@ -93,9 +94,12 @@
                     <option>5</option>
                 </select>
             </div>
-        </span><span class="sha_span">
-            <p><span  style="color: red">*</span>头像：</p>
-            <input type="text" placeholder="请填写">
+        </span>
+        <span class="sha_span preview">
+             <p><span  style="color: red">*</span>头像：</p>
+              <div id="preview"></div>
+              <input type="file" accept="image/*" id="file" value=""/>
+              <i>上传图片</i>
         </span>
         <span class="sha_span">
             <p><span  style="color: red">*</span>邮箱：</p>
@@ -157,8 +161,8 @@
         </span>
         <span class="sha_span preview">
              <p><span  style="color: red">*</span>头像：</p>
-              <div id="preview"></div>
-              <input type="file" accept="image/*" id="file" value=""/>
+              <div id="previewr"></div>
+              <input type="file" accept="image/*" id="filer" value=""/>
               <i>上传图片</i>
         </span>
         <span class="sha_span">

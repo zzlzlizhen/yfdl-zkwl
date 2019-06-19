@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -37,14 +38,19 @@ public class SysUserController extends AbstractController {
 	private SysUserRoleService sysUserRoleService;
 	
 	/**
-	 * 所有用户列表
-	 */
-	@RequestMapping("/list")
-	@RequiresPermissions("sys:user:list")
+     * 获取所有的用户名
+     * */
+	@RequestMapping("/nameList")
 	public R list(@RequestParam Map<String, Object> params){
-		PageUtils page = sysUserService.queryPage(params,getUser());
-
-		return R.ok().put("page", page);
+		List<SysUserEntity> sysUserEntities = sysUserService.queryUserList(params,getUser());
+		List<String> realName = new ArrayList<String>();
+		if(sysUserEntities.isEmpty()){
+            return R.ok().put("realName","");
+        }
+        for(SysUserEntity sysUserEntity:sysUserEntities){
+            realName.add(sysUserEntity.getRealName());
+        }
+        return R.ok().put("realName",realName);
 	}
 	/**
 	 * 当前用户跟下级用户

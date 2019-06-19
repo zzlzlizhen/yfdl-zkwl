@@ -15,22 +15,19 @@
   <div class="project_he" >
       <span class="hear_w">项目编号：</span>
       <div class="form-group col-sm-2 form_input">
-          <input type="text" class="form-control"  placeholder=" ">
+          <input type="text" class="form-control" id="serial"  placeholder=" ">
       </div>
       <span class="hear_w">项目名称：</span>
       <div class="form-group col-sm-2 form_input">
-          <input type="text" class="form-control"  placeholder=" ">
+          <input type="text" class="form-control" id="pro_name"  placeholder=" ">
       </div>
       <span class="hear_w">用户：</span>
       <div class="form-group col-sm-2 form_input">
-          <select class="form-control">
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
+          <select class="form-control" id="realName">
+              <option></option>
           </select>
       </div>
+      <a class="btn btn-primary btn_m" id="proje_search">搜索</a>
       <a class="btn btn-primary btn_m" id="proje_add" ><i class="fa fa-plus"></i>&nbsp;新增</a>
       <a class="btn btn-primary btn_m" id="pandect" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;总览</a>
   </div>
@@ -39,7 +36,7 @@
   <div class="table_m" id="rrapp">
       <ul>
           <li>项目编号</li>
-          <li>设备名称</li>
+          <li>项目名称</li>
           <li>用户</li>
           <li>总装机数量</li>
           <li>网关数量</li>
