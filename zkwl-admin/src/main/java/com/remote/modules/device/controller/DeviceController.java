@@ -4,11 +4,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.remote.common.utils.DataUtils;
 import com.remote.common.utils.R;
+import com.remote.common.utils.mapUtils;
 import com.remote.modules.device.entity.DeviceEntity;
 import com.remote.modules.device.entity.DeviceQuery;
 import com.remote.modules.device.service.DeviceService;
 import com.remote.modules.sys.controller.AbstractController;
 import com.remote.modules.sys.entity.SysUserEntity;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsMessagingTemplate;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,6 +44,12 @@ public class DeviceController extends AbstractController {
     }
     @RequestMapping(value = "/change", method= RequestMethod.POST)
     public void change(@RequestBody DataUtils data){
+        List<Integer> key = new ArrayList<>();
+        if(CollectionUtils.isNotEmpty(data.getQaKey())){
+            for(String str : data.getQaKey()){
+                key.add(mapUtils.map.get(str));
+            }
+        }
         String s = JSONObject.toJSONString(data);
         jmsMessagingTemplate.convertAndSend("my_msg", s);
     }
@@ -59,6 +67,12 @@ public class DeviceController extends AbstractController {
             return R.error(400,"添加设备失败");
         }
         return R.ok();
+    }
+
+    @RequestMapping(value = "/queryCountGroupByCity", method= RequestMethod.GET)
+    public R queryCountGroupByCity(){
+        SysUserEntity user = getUser();
+        return R.ok(deviceService.queryCountGroupByCity(user.getUserId()));
     }
 
     @RequestMapping(value = "/delete", method= RequestMethod.GET)

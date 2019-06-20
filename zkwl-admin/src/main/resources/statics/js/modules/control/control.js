@@ -270,4 +270,9 @@ $(function(){
     if (option_r && typeof option_r === "object") {
         myChart_r.setOption(option_r, true);
     }
+
+
+
+
+
 })

@@ -81,16 +81,22 @@ public class SysUserController extends AbstractController {
 		password = ShiroUtils.sha256(password, getUser().getSalt());
 		//新密码
 		newPassword = ShiroUtils.sha256(newPassword, getUser().getSalt());
-				
+
 		//更新密码
 		boolean flag = sysUserService.updatePassword(getUserId(), password, newPassword);
 		if(!flag){
 			return R.error("原密码不正确");
 		}
-		
+
 		return R.ok();
 	}
-	
+	/**
+	 * 修改用户状态
+	 * */
+	@RequestMapping("/status")
+	public R status(String userId, String status){
+		return R.ok();
+	}
 	/**
 	 * 用户信息
 	 */
@@ -128,7 +134,6 @@ public class SysUserController extends AbstractController {
 	public R update(SysUserEntity user){
 		ValidatorUtils.validateEntity(user, UpdateGroup.class);
 		sysUserService.update(user);
-		
 		return R.ok();
 	}
 	

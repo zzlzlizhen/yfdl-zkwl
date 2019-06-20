@@ -12,6 +12,11 @@ import com.remote.modules.faultlog.service.FaultlogService;
 import com.remote.modules.group.dao.GroupMapper;
 import com.remote.modules.group.entity.GroupEntity;
 import com.remote.modules.group.entity.GroupQuery;
+import com.remote.modules.project.dao.ProjectMapper;
+import com.remote.modules.project.entity.ProjectEntity;
+import com.remote.modules.project.entity.ProjectQuery;
+import com.remote.modules.project.service.ProjectService;
+import com.remote.modules.sys.entity.SysUserEntity;
 import com.remote.modules.sys.service.SysUserService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -19,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @Author zhangwenping
@@ -39,6 +45,9 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Autowired
     private FaultlogService faultlogService;
+
+    @Autowired
+    private ProjectMapper projectMapper;
 
     @Override
     public PageInfo<DeviceEntity> queryDevice(DeviceQuery deviceQuery) {
@@ -97,7 +106,7 @@ public class DeviceServiceImpl implements DeviceService {
         if(deviceEntity.getOnOff() != null){
             sb.append("开关,");
         }
-        if(!"".equals(sb)){
+        if(!"".equals(sb.toString())){
             FaultlogEntity faultlogEntity = new FaultlogEntity();
             faultlogEntity.setProjectId(deviceEntity.getProjectId());
             faultlogEntity.setFaultLogId(UUID.randomUUID().toString());
@@ -125,6 +134,22 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public DeviceEntity queryDeviceByDeviceId(String deviceId) {
         return deviceMapper.queryDeviceByDeviceId(deviceId);
+    }
+
+    @Override
+    public List<DeviceEntity> queryCountGroupByCity(Long userId) {
+        List<SysUserEntity> userList = sysUserService.queryAllLevel(userId);
+        if(CollectionUtils.isNotEmpty(userList)){
+            List<Long> userIds = userList.parallelStream().map(sysUserEntity -> sysUserEntity.getUserId()).collect(Collectors.toCollection(ArrayList::new));
+            ProjectQuery projectQuery = new ProjectQuery();
+            projectQuery.setUserIds(userIds);
+            List<ProjectEntity> list = projectMapper.queryProjectByUserIds(projectQuery);
+            if(CollectionUtils.isNotEmpty(list)){
+                List<String> projectIds = list.parallelStream().map(projectEntity -> projectEntity.getProjectId()).collect(Collectors.toCollection(ArrayList::new));
+
+            }
+        }
+        return null;
     }
 
 }

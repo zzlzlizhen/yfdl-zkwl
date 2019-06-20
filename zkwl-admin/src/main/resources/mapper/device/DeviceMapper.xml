@@ -39,7 +39,7 @@
         <result property="loadCurrent" column="load_current"/>
         <result property="lightingDuration" column="lighting_duration"/>
         <result property="morningHours" column="morning_hours"/>
-
+        <result property="cityName" column="city_name"/>
 
 
     </resultMap>
@@ -48,7 +48,7 @@
     device_id, device_code,device_name, group_id, device_type, photocell_state, battery_state,load_state,signal_state,
     run_state,light,communication_type,on_off,longitude,latitude,is_del,create_user,create_name,create_time,
     update_user,update_time,project_id,battery_margin,battery_voltage,photovoltaic_cell_voltage,charging_current,
-    charging_power,load_voltage,load_power,load_current,lighting_duration,morning_hours
+    charging_power,load_voltage,load_power,load_current,lighting_duration,morning_hours,city_name
     </sql>
     <select id="queryDevice" parameterType="com.remote.modules.device.entity.DeviceQuery" resultMap="BaseResultMap" >
         SELECT
@@ -83,6 +83,22 @@
         <where>
             is_del = 0
             AND device_id =#{deviceId}
+        </where>
+    </select>
+
+    <select id="queryDeviceGroupByCity" resultMap="BaseResultMap" >
+        SELECT
+        city_name,count(1) as counts
+        FROM
+        fun_device
+        <where>
+            is_del = 0
+            <if test="projectIds !=null and projectIds.size()!= 0">
+                and project_id in
+                <foreach collection="projectIds" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
         </where>
     </select>
 

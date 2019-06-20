@@ -113,7 +113,7 @@ public class GroupServiceImpl implements GroupService {
             if(CollectionUtils.isNotEmpty(pageInfo.getList())){
                 //查询出list 如果有把不可删除的分组名称追加到sb变量中
                 GroupEntity groupEntity = groupMapper.queryGroupById(groupId);
-                sb.append(groupEntity.getGroupName());
+                sb.append(groupEntity.getGroupName()).append(",");
             }else{
                 groupMapper.deleteGroupById(groupId);
             }

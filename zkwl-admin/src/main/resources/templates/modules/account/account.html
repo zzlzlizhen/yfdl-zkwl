@@ -13,47 +13,45 @@
 <div class="project_he" >
     <span class="hear_w">账号ID：</span>
     <div class="form-group col-sm-2 form_input">
-        <input type="text" class="form-control"  placeholder=" ">
+        <input type="text" class="form-control" id="acc_id"  placeholder=" ">
     </div>
     <span class="hear_w">账号：</span>
     <div class="form-group col-sm-2 form_input">
-        <input type="text" class="form-control"  placeholder=" ">
+        <input type="text" class="form-control" id="acc_hao"  placeholder=" ">
     </div>
     <span class="hear_w">用户：</span>
-
     <div class="form-group col-sm-2 form_input">
-        <input type="text" class="form-control"  placeholder=" ">
+        <input type="text" class="form-control"  id="acc_name"  placeholder=" ">
     </div>
     <span class="hear_w">账号状态：</span>
     <div class="form-group col-sm-2 form_input">
-        <select class="form-control">
+        <select class="form-control" id="sele_ht">
+            <option></option>
+            <option>0</option>
             <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
         </select>
     </div>
-    <a class="btn btn-primary btn_m " ><i class="fa fa-plus"></i>&nbsp;新建</a>
+    <a class="btn btn-primary btn_m gl_bt" id="proje_search"><i class="glyphicon glyphicon-search gl_fu"></i>搜索</a>
+    <a class="btn btn-primary btn_m btn_m_new" ><i class="fa fa-plus"></i>&nbsp;新建</a>
     <a class="btn btn-primary" href="../control/control.html"><i class="fa fa-plus"></i>&nbsp;链接</a>
 </div>
 
-<div class="table_m table_m_Z" style="height:527px;">
+<div class="table_m table_m_Z" style="height:auto;max-height:75%;">
+    <ul>
+        <li>账号ID</li>
+        <li>账号</li>
+        <li>用户名</li>
+        <li>项目数</li>
+        <li>设备数</li>
+        <li>创建时间</li>
+        <li>有效期</li>
+        <li>账号状态</li>
+        <li>用户状态</li>
+        <li>绑定手机</li>
+        <li>绑定邮箱</li>
+        <li>操作</li>
+    </ul>
     <table border="1"  id="div">
-        <tr>
-            <td>账号ID</td>
-            <td>账号</td>
-            <td>用户名</td>
-            <td>项目数</td>
-            <td>设备数</td>
-            <td>创建时间</td>
-            <td>有效期</td>
-            <td>账号状态</td>
-            <td>用户状态</td>
-            <td>绑定手机</td>
-            <td>绑定邮箱</td>
-            <td>操作</td>
-        </tr>
 
     </table>
 </div>
@@ -80,7 +78,7 @@
             <input type="text" placeholder="请填写" id="acc_user">
         </span>
         <span class="sha_span">
-            <p><span  style="color: red">*</span>密码：</p>
+            <p><span  style="color: red" >*</span>密码：</p>
             <input type="text" placeholder="请填写" id="acc_password">
         </span>
         <span class="sha_span">
@@ -144,7 +142,7 @@
             <input type="text" placeholder="请填写" id="acc_user_b">
         </span>
         <span class="sha_span">
-            <p><span  style="color: red">*</span>密码：</p>
+            <p ><span  style="color: red" >*</span>密码：</p>
             <input type="text" placeholder="请填写" id="acc_password_b">
         </span>
         <span class="sha_span">

@@ -9,7 +9,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
-@SpringBootApplication(exclude = {MultipartAutoConfiguration.class})
+@SpringBootApplication
+@EnableAutoConfiguration(exclude = {MultipartAutoConfiguration.class})
 public class AdminApplication {
 
 	public static void main(String[] args) {

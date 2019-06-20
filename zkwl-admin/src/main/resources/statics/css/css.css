@@ -9,7 +9,7 @@ html,body{width:100% !important;height:100% !important;margin:0;padding:0;font-s
 .btn_m{ background: rgba(24, 144, 255, 1) !important; border:rgba(24, 144, 255, 1) !important;margin:26px 0px 0px 0.5%; padding:7px 8px !important;}
 
 /*表格*/
-.table_m{width:96%;height:61%;float:left;margin-left:2%; display: list-item !important;list-style:none !important;
+.table_m{width:96%;height:auto;max-height:61%;float:left;margin-left:2%; display: list-item !important;list-style:none !important;
     margin-top:1.6%; overflow-x: hidden;overflow-y: scroll;border: 1px solid #ccc;}
 .table_m::-webkit-scrollbar {
     display: none;
@@ -27,7 +27,7 @@ html,body{width:100% !important;height:100% !important;margin:0;padding:0;font-s
 
 .table_m table tr td a{width:20%;height:100%;float:left;margin-left:3%;}
 /*账户分页*/
-.table_m_Z table tr td{width:8.3333%;}
+.table_m_Z table tr td ,.table_m_Z ul li{width:8.3333% !important;}
 .table_m_Z table tr td a{width:35%;margin-left:10%;}
 /*设备分页*/
 .table_grouping table tr td,.table_grouping ul li{width:7.6%;}
@@ -109,8 +109,16 @@ thead>th{text-align: center !important;}
 .move_a div{width:auto;height:auto;float:left;margin:1% 0px 0px 2%}
 .move_a input{width:5%;height:70%;float:left;border-radius: 4px;border:1px solid rgba(24, 144, 255, 1);margin:0.5% 0px 0px 1%;background: 0;color:rgba(24, 144, 255, 1)}
 .move_a span{width: auto;height:auto;float:left;margin:1% 0px 0px 0px;color:rgba(24, 144, 255, 1)}
+.Dan_x{width:90%;height:50%;float:left;margin:5px 0px 0px 5%;overflow-x: hidden;overflow-y: scroll; }
+.Dan_x::-webkit-scrollbar {
+    display: none;
+}
+.Dan_x span{width:100%;height:35px;float:left;border-bottom: 1px solid #ccc}
+.Dan_x input{float:left;margin:11px 5% 0px 5% !important;; }
+.Dan_x p{width:50%;height:100%;float: left;line-height: 35px;}
 
-/*分组侧边抽屉*/
+
+    /*分组侧边抽屉*/
 .drawer{width:50%;height:76%;position: absolute;right:-48%;bottom:0%; transition: all 1.5s ease-in;z-index: 9;}
 .drawer_hid{transition: all 1.5s ease-in;right: 0;}
 .drawer_right{width:5%;height:100%;float:left;}
@@ -127,6 +135,8 @@ thead>th{text-align: center !important;}
 .sha_span i{font-style:normal; width: 80px; height: 32px;border:1px solid #ccc;line-height: 32px;text-align: center;border-radius: 4px;}
 .sha_span{position: relative; display:flex; align-items: center;}
 
+#previewr {display: inline-block;width: 50px;height:50px;margin-right: 20px;background-image: url(img/iconfont-tianjia.png);background-repeat: no-repeat;background-size: cover;vertical-align:center;}
+#filer {width: 80px;height: 32px;opacity: 0;position: absolute;left: 172px;top: 0;cursor: pointer;z-index: 5;}
 
 
 

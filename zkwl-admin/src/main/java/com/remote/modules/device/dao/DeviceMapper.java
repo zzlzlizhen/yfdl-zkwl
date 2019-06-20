@@ -50,4 +50,13 @@ public interface DeviceMapper extends BaseMapper<DeviceEntity> {
      * @return DeviceEntity
      **/
     DeviceEntity queryDeviceByDeviceId(@Param("deviceId")String deviceId);
+
+    /*
+     * @Author zhangwenping
+     * @Description 根据城市统计项目下设备的数量
+     * @Date 14:40 2019/6/20
+     * @Param projectIds
+     * @return List<DeviceEntity>
+     **/
+    List<DeviceEntity> queryDeviceGroupByCity(@Param("projectIds") List<String> projectIds);
 }

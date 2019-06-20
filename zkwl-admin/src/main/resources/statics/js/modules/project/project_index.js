@@ -82,7 +82,6 @@ $(function () {
             //   删除
                 $(".deleteq").click(function(){
                     var id=$(this).parent().attr('id');
-                    console.log(id)
                     $.ajax({
                         url:baseURL + 'fun/project/delete?projectIds='+id,
                         contentType: "application/json;charset=UTF-8",
@@ -98,7 +97,6 @@ $(function () {
             // 编辑
                 var proid
                 $(".modifier").click(function(){
-                    console.log("编辑")
                     $(".shade_modifier,.shade_b_modifier").css("display","block");
                      proid=$(this).parent().attr('id');
                 })
@@ -117,7 +115,6 @@ $(function () {
                             "exclusiveUser":select_b
                         }),
                         success: function(res){
-                            console.log(res)
                             window.location.reload()
                         }
                     });
@@ -182,7 +179,6 @@ $(function () {
                 "exclusiveUser":select
             }),
             success: function(res){
-                console.log(res)
                 window.location.reload()
             }
         });

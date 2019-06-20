@@ -134,14 +134,20 @@ $(function(){
                         ids = ids + arr[i] + ",";
                     }
                     ids = ids.substr(0,ids.length - 1);
+                    dele(ids);
+                })
+                //   删除
+                $(".deleteq").click(function(){
+                    var Dele_id=$(this).parent().attr('id');
+                    dele(Dele_id);
+                })
+                function dele(Dele_id){
                     $.ajax({
-                        url:baseURL + 'fun/device/delete?deviceIds='+ids,
+                        url:baseURL + 'fun/device/delete?deviceIds='+Dele_id,
                         contentType:"application/json;charset=UTF-8",
                         type:"get",
                         data:{},
                         success: function(res) {
-                            console.log("删除")
-                            console.log(res)
                             if(res.code == "200"){
                                 window.location.reload()
                             }else{
@@ -149,26 +155,70 @@ $(function(){
                             }
                         }
                     })
-                })
+                }
+
                 //移动分组
                 $(".mobile_pac").click(function(){
                     $(".shade_Yi,.shade_b_yi").css("display","block");
                 })
-                //   删除
-                $(".deleteq").click(function(){
-                    var Dele_id=$(this).parent().attr('id');
+                //移动搜索
+                $(".sousuo_i").click(function(){
+                     var Input_v=$(".sousuo_input").val();
+                      $("#Dan_x").html("");
+                      pro_gro(Input_v)
+                })
+
+                var gr_Id
+                pro_gro("")
+                function pro_gro(groupName){
                     $.ajax({
-                        url:baseURL + 'fun/device/delete?deviceIds='+Dele_id,
+                        url:baseURL + 'fun/group/queryGroupIdNoPage?projectId='+Id+"&groupName="+groupName,
                         contentType:"application/json;charset=UTF-8",
                         type:"get",
                         data:{},
                         success: function(res) {
-                            console.log("删除")
+                            console.log("移动")
                             console.log(res)
-                            if(res.code == "200"){
+                            var html
+                            for (var i = 0; i < res.data.length; i++) {
+                                html += "<span id="+res.data[i].groupId+">\n" +
+                                    "<input type= \"checkbox\" class=\"checkbox_in che_i\" name=\"alla\">\n" +
+                                    "<p>"+res.data[i].groupName+"</p>\n" +
+                                    "</span>"
+                            }
+                            $("#Dan_x").append(html);
+
+                            $(".che_i").click(function(){
+                                var che_c=$(this).prop('checked');
+                                console.log(che_c)
+                                if(che_c == true){
+                                    $(this).parent().siblings().children(".che_i[name=alla]:checkbox").prop('checked', false);
+                                    gr_Id=$(this).parent().attr('id')
+                                }
+
+                            })
+                        }
+                    })
+                }
+
+                //确认移动
+                $("#que_yi").click(function(){
+                    var ids = "";
+                    for(var i = 0 ;i< arr.length;i++){
+                        ids = ids + arr[i] + ",";
+                    }
+                    ids = ids.substr(0,ids.length - 1);
+                    console.log(gr_Id)
+                    console.log(ids)
+                    $.ajax({
+                        url:baseURL + 'fun/device/moveGroup?deviceIds='+ids+"&groupId="+gr_Id,
+                        contentType:"application/json;charset=UTF-8",
+                        type:"get",
+                        data:{},
+                        success: function(res) {
+                            if(res.code== "200"){
+                                alert("移动分组成功")
                                 window.location.reload()
-                            }else{
-                                alert("删除失败")
                             }
                         }
                     })
@@ -195,8 +245,6 @@ $(function(){
                             "deviceId":proid
                         }),
                         success: function(res){
-                            console.log("编辑")
-                            console.log(res)
                             if(res.code == "200"){
                                 window.location.reload()
                             }
@@ -275,8 +323,6 @@ $(function(){
                     "deviceCode":pro_name
                 }),
                 success: function(res) {
-                    console.log("确认")
-                    console.log(res)
                     if(res.code == "200"){
                         window.location.reload()
                     }else{

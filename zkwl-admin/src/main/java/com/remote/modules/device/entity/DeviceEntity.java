@@ -132,4 +132,6 @@ public class DeviceEntity {
     private String  morningHours;
 
     private String updateUserName;
+
+    private String cityName;
 }

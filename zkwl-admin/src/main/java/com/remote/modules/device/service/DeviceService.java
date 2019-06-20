@@ -5,6 +5,7 @@ import com.remote.modules.device.entity.DeviceEntity;
 import com.remote.modules.device.entity.DeviceQuery;
 
 import java.util.List;
+import java.util.Map;
 
 public interface DeviceService {
     /*
@@ -73,4 +74,12 @@ public interface DeviceService {
      * @return DeviceEntity
      **/
     DeviceEntity queryDeviceByDeviceId(String deviceId);
+    /*
+     * @Author zhangwenping
+     * @Description 按照城市统计安装路灯数量
+     * @Date 14:33 2019/6/20
+     * @Param userId
+     * @return  List<DeviceEntity>
+     **/
+    List<DeviceEntity> queryCountGroupByCity(Long userId);
 }

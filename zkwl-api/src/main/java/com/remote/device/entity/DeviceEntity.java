@@ -108,8 +108,6 @@ public class DeviceEntity {
     private boolean change;
     //设备编号
     private List<String> deviceCodes;
-    //开关灯  自动
-    private List<Integer> onOffs;
     //蓄电池余量
     private String batteryMargin;
     //蓄电池电压
@@ -126,4 +124,8 @@ public class DeviceEntity {
     private String loadPower;
     //负载电流
     private String loadCurrent;
+
+    private List<Integer> key;
+
+    private List<Integer> value;
 }

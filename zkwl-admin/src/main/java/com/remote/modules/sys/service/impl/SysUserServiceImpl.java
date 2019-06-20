@@ -121,6 +121,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 		sysUserRoleService.saveOrUpdate(user.getUserId(), user.getRoleIdList());
 	}
 
+	@Override
+	public boolean updateStatus(Long userId,String status){
+		SysUserEntity userEntity = new SysUserEntity();
+		userEntity.setPassword(status);
+		return this.update(userEntity,
+				new QueryWrapper<SysUserEntity>().eq("user_id", userId).eq("status", status));
+	}
 
 	@Override
 	public boolean updatePassword(Long userId, String password, String newPassword) {

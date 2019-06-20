@@ -66,6 +66,8 @@ public class GroupController extends AbstractController {
         if("".equals(msg)){
             return  R.ok();
         }
+        msg = msg.substring(0,msg.length() - 1);
+        msg = "分组"+msg+"下有设备，不允许删除。";
         return R.error(msg);
     }
     /*

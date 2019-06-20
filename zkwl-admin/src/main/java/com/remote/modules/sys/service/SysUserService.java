@@ -62,4 +62,8 @@ public interface SysUserService extends IService<SysUserEntity> {
 	 * 通过当前用户id查询当前用户的手机号和邮箱
 	 * */
 	SysUserEntity queryById(Long userId);
+	/**
+	 * 更新用户状态
+	 * */
+	boolean updateStatus(Long userId,String status);
 }
