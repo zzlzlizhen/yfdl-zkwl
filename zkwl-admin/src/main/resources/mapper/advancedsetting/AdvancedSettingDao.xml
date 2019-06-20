@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.remote.modules.message.dao.AdvancedSettingDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.remote.modules.advancedsetting.entity.AdvancedSettingEntity" id="advancedSettingMap">
+        <result property="id" column="id"/>
+        <result property="loadWorkMode" column="load_work_mode"/>
+        <result property="powerLoad" column="power_load"/>
+        <result property="timeTurnOn" column="time_turn_on"/>
+        <result property="timeTurnOff" column="time_turn_off"/>
+        <result property="time1" column="time1"/>
+        <result property="time2" column="time2"/>
+        <result property="time3" column="time3"/>
+        <result property="time4" column="time4"/>
+        <result property="time5" column="time5"/>
+        <result property="timeDown" column="time_down"/>
+        <result property="powerPeople1" column="power_people1"/>
+        <result property="powerPeople2" column="power_people2"/>
+        <result property="powerPeople3" column="power_people3"/>
+        <result property="powerPeople4" column="power_people4"/>
+        <result property="powerPeople5" column="power_people5"/>
+        <result property="powerDawnPeople" column="power_dawn_people"/>
+        <result property="powerSensor1" column="power_sensor1"/>
+        <result property="powerSensor2" column="power_sensor2"/>
+        <result property="powerSensor3" column="power_sensor3"/>
+        <result property="powerSensor4" column="power_sensor4"/>
+        <result property="powerSensor5" column="power_sensor5"/>
+        <result property="powerSensorDown" column="power_sensor_down"/>
+        <result property="savingSwitch" column="saving_switch"/>
+        <result property="autoSleepTime" column="auto_sleep_time"/>
+        <result property="vpv" column="VPV"/>
+        <result property="ligntOnDuration" column="lignt_on_duration"/>
+        <result property="pvSwitch" column="pv_switch"/>
+        <result property="batType" column="bat_type"/>
+        <result property="batStringNum" column="bat_string_num"/>
+        <result property="volOverDisCharge" column="vol_over_dis_charge"/>
+        <result property="volCharge" column="vol_charge"/>
+        <result property="iCharge" column="i_charge"/>
+        <result property="tempCharge" column="temp_charge"/>
+        <result property="tempDisCharge" column="temp_dis_charge"/>
+        <result property="inspectionTime" column="inspection_time"/>
+        <result property="inductionSwitch" column="induction_switch"/>
+        <result property="inductionLightOnDelay" column="Induction_light_on_delay"/>
+        <result property="projectId" column="pro_group_id"/>
+        <result property="groupId" column="group_id"/>
+        <result property="uid" column="uid"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="firDownPower" column="fir_down_power"/>
+        <result property="twoDownPower" column="two_down_power"/>
+        <result property="threeDownPower" column="three_down_power"/>
+        <result property="firReducAmplitude" column="fir_reduc_amplitude"/>
+        <result property="twoReducAmplitude" column="two_reduc_amplitude"/>
+        <result property="threeDownPower" column="three_reduc_amplitude"/>
+    </resultMap>
+</mapper>

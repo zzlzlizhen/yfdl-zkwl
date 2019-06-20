@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.remote.modules.faultlog.dao.FaultlogMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.remote.modules.faultlog.entity.FaultlogEntity" id="BaseResultMap">
+        <result property="faultLogId" column="fault_log_id"/>
+        <result property="createUserId" column="create_user"/>
+        <result property="faultLogName" column="fault_log_name"/>
+        <result property="projectId" column="project_id"/>
+        <result property="deviceId" column="device_id"/>
+        <result property="logStatus" column="log_status"/>
+        <result property="faultLogDesc" column="fault_log_desc"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+    fault_log_id,create_user,fault_log_name,project_id,device_id,log_status,fault_log_desc,create_time
+    </sql>
+
+    <select id="queryDevice" parameterType="com.remote.modules.device.entity.DeviceQuery" resultMap="BaseResultMap" >
+        SELECT
+        fault_log_desc,create_time,device_id
+        FROM
+        fun_fault_log
+        <where>
+            device_id = #{deviceId} and log_status = #{logStatus}
+        </where>
+        order by create_time desc
+    </select>
+
+</mapper>

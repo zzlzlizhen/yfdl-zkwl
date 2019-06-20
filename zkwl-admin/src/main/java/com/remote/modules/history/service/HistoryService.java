@@ -1,0 +1,31 @@
+package com.remote.modules.history.service;
+
+import com.remote.modules.history.entity.QueryHistory;
+
+
+public interface HistoryService {
+    /*
+     * @Author zhangwenping
+     * @Description 按小时统计历史数据
+     * @Date 14:44 2019/6/14
+     * @Param time
+     * @return QueryHistory
+     **/
+    QueryHistory queryHistoryDay(String deviceCode,String time);
+    /*
+     * @Author zhangwenping
+     * @Description 按照天数统计历史数据
+     * @Date 17:56 2019/6/14
+     * @Param deviceCode year month
+     * @return QueryHistory
+     **/
+    QueryHistory queryHistoryMouth(String deviceCode,String year,String month);
+    /*
+     * @Author zhangwenping
+     * @Description 按照年统计历史数据
+     * @Date 18:07 2019/6/14
+     * @Param deviceCode year
+     * @return QueryHistory
+     **/
+    QueryHistory queryHistoryYear(String deviceCode, String year);
+}

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>分组管理</title>
+    <#include "/header.html">
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/css.css">
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/jquery_page.css">
+    <script src="${request.contextPath}/statics/js/jquery.min.js"></script>
+    <script src="${request.contextPath}/statics/js/modules/project/jquery_page.js"></script>
+</head>
+<body>
+    <div class="hear">
+        <p>当前位置>项目管理></p><p class="p" id="p_a"></p><p class="p" id="p_b">分组管理</p>
+    </div>
+    <div class="project_he" >
+        <span class="hear_w">组名：</span>
+        <div class="form-group col-sm-2 form_input">
+            <select class="form-control" id="form-control">
+                <option></option>
+                <option>马振超</option>
+                <option>ttttt</option>
+                <option>默认分组</option>
+                <option>aaaaa</option>
+                <option>5</option>
+            </select>
+        </div>
+        <a class="btn btn-primary btn_m gl_bt" id="proje_search"><i class="glyphicon glyphicon-search gl_fu"></i>搜索</a>
+        <a class="btn btn-primary btn_m" id="add_grouping">新增分组</a>
+    </div>
+<!--    表格-->
+    <div class="table_m table_grouping_z" id="rrapp" style="max-height:60%;height:auto;">
+        <ul>
+            <li style="width:4%;"> <input type= "checkbox" class="checkbox_in" name="all" id="checkbox"> </li>
+            <li>组名</li>
+            <li>设备类型</li>
+            <li>设备数量</li>
+            <li>更新时间</li>
+            <li>报警数</li>
+            <li>故障数</li>
+            <li>操作</li>
+        </ul>
+        <table border="1" id="div">
+
+        </table>
+    </div>
+
+    <!-- 批量删除-->
+    <div class="move_a">
+        <div>已选择</div>
+        <span id="mo_sp"></span>
+        <input type="button" class="deleteAll" value="删除">
+    </div>
+    <!--分页-->
+    <div class="box">
+        <div id="pagination3" class="page fl"></div>
+    </div>
+
+    <!--新增设备-->
+    <div class="shade_project">
+        <div class="shade_a shade_add_project"></div>
+        <div class="shade_b_project">
+            <div class="Bian_j">新增项目<span class="glyphicon glyphicon-remove guan_shc shade_add_project" ></span></div>
+            <div class="mistake">
+                <span class="glyphicon glyphicon-pencil cu_m"></span>错误提示
+                <span class="glyphicon glyphicon-remove wrong"></span>
+            </div>
+            <span class="sha_span">
+                <p> <span  style="color: red">*</span>分组名称：</p>
+                <input type="text" placeholder="请填写" class="pro_name">
+            </span>
+            <div class="sha_buttom">
+                <input type="button" value="确定" id="add_queD">
+                <input type="button" value="取消" class="shade_add_project">
+            </div>
+        </div>
+    </div>
+
+    <!--编辑-->
+    <div class="shade_modifier">
+        <div class="shade_a shade_modifier_project"></div>
+        <div class="shade_b_modifier">
+            <div class="Bian_j">编辑项目<span class="glyphicon glyphicon-remove guan_shc shade_modifier_project" ></span></div>
+            <div class="mistake">
+                <span class="glyphicon glyphicon-pencil cu_m"></span>错误提示
+                <span class="glyphicon glyphicon-remove wrong"></span>
+            </div>
+            <span class="sha_span">
+                <p> <span  style="color: red">*</span>分组名称：</p>
+                <input type="text" placeholder="请填写" class="pro_s_b">
+            </span>
+
+            <div class="sha_buttom">
+                <input type="button" value="确定" id="confirm_man" >
+                <input type="button" value="取消" class="shade_modifier_project">
+            </div>
+        </div>
+    </div>
+</body>
+<script src="${request.contextPath}/statics/js/modules/management/management.js"></script>
+</html>

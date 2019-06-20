@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <#include "/header.html">
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/css.css">
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/jquery_page.css">
+    <script src="${request.contextPath}/statics/js/jquery.min.js"></script>
+    <script src="${request.contextPath}/statics/js/modules/project/jquery_page.js"></script>
+</head>
+<body>
+<div class="hear">
+    <p>当前位置>项目管理></p><p class="p" id="pa"></p><p class="p" id="pb"></p>
+</div>
+<div class="project_he" >
+    <span class="hear_w">设备编号：</span>
+    <div class="form-group col-sm-2 form_input">
+        <input type="text" class="form-control" id="sing_id"  placeholder=" ">
+    </div>
+    <span class="hear_w">设备名称：</span>
+    <div class="form-group col-sm-2 form_input">
+        <input type="text" class="form-control" id="sing_name"  placeholder=" ">
+    </div>
+    <span class="hear_w">设备类型：</span>
+    <div class="form-group col-sm-2 form_input">
+        <select class="form-control" id="sing_se">
+            <option></option>
+            <option>null</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+        </select>
+    </div>
+    <a class="btn btn-primary btn_m gl_bt" id="proje_search"><i class="glyphicon glyphicon-search gl_fu"></i>搜索</a>
+    <a class="btn btn-primary btn_m" id="add_single">新增设备</a>
+</div>
+<!--    表格-->
+<div class="table_m table_grouping_d" id="rrapp" style="height:auto;max-height: 60%;">
+    <ul>
+        <li style="width:4%;"> <input type= "checkbox" class="checkbox_in" name="all" id="checkbox"> </li>
+        <li>设备编号</li>
+        <li>设备名称</li>
+        <li>设备类型</li>
+        <li>光电池状态</li>
+        <li>蓄电池状态</li>
+        <li>负载状态</li>
+        <li>信号状态</li>
+        <li>运行状态</li>
+        <li>亮度</li>
+        <li>无线模块</li>
+        <li>开关</li>
+        <li>更新时间</li>
+        <li>操作</li>
+    </ul>
+    <table border="1" id="div">
+
+    </table>
+</div>
+
+<!-- 移动分组-->
+<div class="move_a">
+    <div>已选择</div>
+    <span id="mo_sp"></span>
+    <input type="button" class="deleteAll" value="删除">
+    <input type="button" class="mobile_pac" value="移动分组" >
+</div>
+<!--分页-->
+<div class="box">
+    <div id="pagination3" class="page fl"></div>
+</div>
+
+
+<!--新增设备-->
+<div class="shade_project">
+    <div class="shade_a shade_add_project"></div>
+    <div class="shade_b_project">
+        <div class="Bian_j">新增项目<span class="glyphicon glyphicon-remove guan_shc shade_add_project" ></span></div>
+        <div class="mistake">
+            <span class="glyphicon glyphicon-pencil cu_m"></span>错误提示
+            <span class="glyphicon glyphicon-remove wrong"></span>
+        </div>
+        <span class="sha_span">
+                <p> <span  style="color: red">*</span>设备编号：</p>
+                <input type="text" placeholder="请填写" class="pro_name">
+            </span>
+        <span class="sha_span">
+                <p> <span  style="color: red">*</span>设备名称：</p>
+                <input type="text" placeholder="请填写" class="pro_s">
+            </span>
+        <span class="sha_span">
+                <p><span  style="color: red">*</span>设备分组：</p>
+                <div class="form-group col-sm-2 " style="width:55%;padding-left:0;padding-right:0;">
+                    <select class="form-control" id="select1" >
+
+                    </select>
+                </div>
+            </span>
+
+        <div class="sha_buttom">
+            <input type="button" value="确定" id="project_confirm">
+            <input type="button" value="取消" class="shade_add_project">
+        </div>
+    </div>
+</div>
+
+<!--编辑-->
+<div class="shade_modifier">
+    <div class="shade_a shade_modifier_project"></div>
+    <div class="shade_b_modifier">
+        <div class="Bian_j">编辑项目<span class="glyphicon glyphicon-remove guan_shc shade_modifier_project" ></span></div>
+        <div class="mistake">
+            <span class="glyphicon glyphicon-pencil cu_m"></span>错误提示
+            <span class="glyphicon glyphicon-remove wrong"></span>
+        </div>
+        <span class="sha_span">
+                <p> <span  style="color: red">*</span>设备名称：</p>
+                <input type="text" placeholder="请填写" class="pro_s_b">
+            </span>
+        <span class="sha_span">
+                <p><span  style="color: red">*</span>设备分组：</p>
+                <div class="form-group col-sm-2 " style="width:55%;padding-left:0;padding-right:0;">
+                    <select class="form-control"  id="select1_b" >
+
+                    </select>
+                </div>
+            </span>
+
+        <div class="sha_buttom">
+            <input type="button" value="确定" id="confirm_x" >
+            <input type="button" value="取消" class="shade_modifier_project">
+        </div>
+    </div>
+</div>
+<!--移动分组-->
+<div class="shade_Yi">
+    <div class="shade_a shade_modifier_yi"></div>
+    <div class="shade_b_yi">
+        <div class="Bian_j">移动分组<span class="glyphicon glyphicon-remove guan_shc shade_modifier_yi" ></span></div>
+        <div class="Bian_sou">
+            <input type="type" placeholder="请输入" class="sousuo_input">
+            <img src="${request.contextPath}/statics/image/sousuo.svg" class="sousuo_i">
+        </div>
+        <div class="Dan_x" id="Dan_x">
+
+        </div>
+
+        <div class="sha_buttom">
+            <input type="button" value="确定" id="que_yi" >
+            <input type="button" value="取消" class="shade_modifier_yi">
+        </div>
+    </div>
+</div>
+</body>
+<script src="${request.contextPath}/statics/js/modules/single/single.js"></script>
+</html>
