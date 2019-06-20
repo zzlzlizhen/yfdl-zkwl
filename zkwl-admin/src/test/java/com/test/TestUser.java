@@ -5,6 +5,7 @@ import cn.hutool.http.Header;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import com.sun.xml.internal.ws.client.sei.ResponseBuilder;
+import io.swagger.models.auth.In;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -13,7 +14,7 @@ import java.util.Map;
 public class TestUser {
 
     public static final String URL = "http://127.0.0.1:8080/remote-admin";
-    public static final String CURRENT_COOKIE = "JSESSIONID=30f8314f-c1c7-4441-90f5-50802b6a3a28";
+    public static final String CURRENT_COOKIE = "JSESSIONID=247e7316-d1db-4e5d-9ef5-8a32382ec147";
     @Test
     public void infoTest(){
         String url = URL + "/sys/user/info";
@@ -48,7 +49,17 @@ public class TestUser {
       /*  map.put("username","zsm11");*/
         map.put("password","111");
         map.put("roleId",1);
-        map.put("status","1");
+        map.put("status",1);
+        String result4 = HttpRequest.post(url).header(Header.COOKIE,CURRENT_COOKIE).form(map).execute().body();
+        System.out.println(result4);
+    }
+    @Test
+    public void updateStatus(){
+        String url = URL + "/sys/user/status";
+        Map<String,Object> map = new HashMap<String,Object>();
+
+        map.put("userId",44);
+        map.put("status",0);
         String result4 = HttpRequest.post(url).header(Header.COOKIE,CURRENT_COOKIE).form(map).execute().body();
         System.out.println(result4);
     }

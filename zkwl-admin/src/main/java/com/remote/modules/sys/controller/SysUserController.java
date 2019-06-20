@@ -44,11 +44,12 @@ public class SysUserController extends AbstractController {
 	public R list(@RequestParam Map<String, Object> params){
 		List<SysUserEntity> sysUserEntities = sysUserService.queryUserList(params,getUser());
 		List<String> realName = new ArrayList<String>();
-		if(sysUserEntities.isEmpty()){
-            return R.ok().put("realName","");
-        }
         for(SysUserEntity sysUserEntity:sysUserEntities){
-            realName.add(sysUserEntity.getRealName());
+        	if(sysUserEntity.getRealName().equals("")){
+        		realName.add("");
+			}else{
+				realName.add(sysUserEntity.getRealName());
+			}
         }
         return R.ok().put("realName",realName);
 	}
@@ -94,7 +95,11 @@ public class SysUserController extends AbstractController {
 	 * 修改用户状态
 	 * */
 	@RequestMapping("/status")
-	public R status(String userId, String status){
+	public R status(Long userId, Integer status){
+		boolean falg = sysUserService.updateStatus(userId,status);
+		if(!falg){
+			R.error("修改失败");
+		}
 		return R.ok();
 	}
 	/**
@@ -121,6 +126,7 @@ public class SysUserController extends AbstractController {
 	@RequiresPermissions("sys:user:save")
 	public R save(SysUserEntity user){
 		ValidatorUtils.validateEntity(user, AddGroup.class);
+		user.setFlag(1);
 		sysUserService.saveUser(user,this.getUser());
 		return R.ok();
 	}
@@ -133,6 +139,7 @@ public class SysUserController extends AbstractController {
 	@RequiresPermissions("sys:user:update")
 	public R update(SysUserEntity user){
 		ValidatorUtils.validateEntity(user, UpdateGroup.class);
+		user.setFlag(1);
 		sysUserService.update(user);
 		return R.ok();
 	}
@@ -156,7 +163,7 @@ public class SysUserController extends AbstractController {
 			return R.error("当前用户不能删除");
 		}
 		for(Long id:userIds){
-			sysUserService.removeById(id);
+			sysUserService.removeUser(id);
 		}
 		//sysUserService.removeByIds(Arrays.asList(userIds));
 		

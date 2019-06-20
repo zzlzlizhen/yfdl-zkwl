@@ -71,6 +71,9 @@ public class SysUserEntity implements Serializable {
 	@TableField(exist=false)
 	private List<Long> roleIdList;
 
+	/**
+	 * 用户类型 0使用者  1  管理者  2 超级管理员
+	 * */
 	@TableField(exist=false)
 	private Long roleId;
 
@@ -111,9 +114,12 @@ public class SysUserEntity implements Serializable {
 	 * 有效期 0：半年  1： 一年 2：俩年  3：三年  4：永久
 	 * */
 	private Integer termOfValidity;
-	/**
-	 * 用户类型 0使用者  1  管理者  2 超级管理员
-	 * */
+
 	private Integer type;
+
+	/**
+	 * 是否删除
+	 * */
+	private Integer flag;
 
 }

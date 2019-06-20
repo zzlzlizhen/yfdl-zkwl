@@ -65,5 +65,7 @@ public interface SysUserService extends IService<SysUserEntity> {
 	/**
 	 * 更新用户状态
 	 * */
-	boolean updateStatus(Long userId,String status);
+	boolean updateStatus(Long userId,Integer status);
+
+	int removeUser(Long id);
 }

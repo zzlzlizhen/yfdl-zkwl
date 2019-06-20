@@ -51,8 +51,8 @@ public class MsgBackReadedServiceImpl extends ServiceImpl<MsgBackReadedDao, MsgB
     }
 
     @Override
-    public MsgBackReadedEntity queryBackIdAndUid(String backId, Long uid,SysUserEntity cur) {
-         return this.baseMapper.selectOne(new QueryWrapper<MsgBackReadedEntity>().eq("msg_back_id",backId));
+    public MsgBackReadedEntity queryBackIdAndUid(String backId, Long uid) {
+         return this.baseMapper.selectOne(new QueryWrapper<MsgBackReadedEntity>().eq("msg_back_id",backId).eq("uid",uid));
         //return msgBackReadedDao.queryBackIdAndUid(backId,uid,cur);
     }
 

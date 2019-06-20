@@ -38,15 +38,16 @@
           <a href="#" class="sidebar-toggle navbar_m" data-toggle="offcanvas" role="button">
             <span class="sr-only">Toggle navigation</span>
           </a>
-          <div class="navbar-custom-menu">
+          <div class="navbar-custom-menu" style="margin-top:7px;">
             <ul class="nav navbar-nav">
-                <li>
-                    <button type="button" class="btn btn-success navbar_m" style="border:0;margin-top:8%" title="Popover title"
-                            data-container="body" data-toggle="popover" data-placement="bottom" data-content="底部的 Popover 中的一些内容">
-                        <i class="glyphicon glyphicon-user"></i>admin</a>
-                    </button>
+                <li id="nav_a">
+                    <a href="javascript:;"  class="navbar_m"><i class="glyphicon glyphicon-user"></i>admin</a>
+                    <div class="setting">
+                        <span id="set_p" style="border-bottom: 1px solid #ccc">基本设置</span>
+                        <span id="feedback">我要反馈</span>
+                    </div>
                 </li>
-                <li><a href="javascript:;" @click="updatePassword"  class="navbar_m"><i class="glyphicon glyphicon-bell"></i></a></li>
+                <li><a href="system/system.html" @click="updatePassword"  class="navbar_m"><i class="glyphicon glyphicon-bell"></i></a></li>
                 <li><a href="logout"  class="navbar_m"><i class="glyphicon glyphicon-off"></i></a></li>
             </ul>
           </div>
@@ -121,8 +122,80 @@
             </div>
             </form>
         </div>
-    </div>
 
+      <!-- 基本设置-->
+      <div class="JI_b">
+          <div class="shade"></div>
+          <div class="nei_r">
+              <div class="J_fan">基本设置<span class="glyphicon glyphicon-remove wrong_a"></span></div>
+              <img src="${request.contextPath}/statics/image/blue.png" >
+              <div class="import">
+                  <div>
+                      <span>账户Id</span>
+                      <input type="text" placeholder="">
+                  </div>
+                  <div>
+                      <span>账户类型</span>
+                      <input type="text" placeholder="">
+                  </div>
+                  <div>
+                      <span>账号</span>
+                      <input type="text" placeholder="">
+                  </div>
+                  <div>
+                      <span>用户名</span>
+                      <input type="text" placeholder="">
+                  </div>
+                  <div>
+                      <span>邮箱</span>
+                      <input type="text" class="ea_b" placeholder="">
+                      <input type="button" class="ea_a" value="绑定邮箱">
+                  </div>
+                  <div>
+                      <span>手机号</span>
+                      <input type="text" class="ea_b" placeholder="">
+                      <input type="button" class="ea_a" value="绑定手机号">
+                  </div>
+              </div>
+              <div class="confirm">
+                  <input type="button"  value="修改密码">
+                  <input type="button"  value="更新信息">
+              </div>
+          </div>
+      </div>
+<!--        反馈-->
+        <div class="JI_b_a">
+            <div class="shade_a"></div>
+            <div class="nei_r_a">
+                <div class="J_fan">反馈<span class="glyphicon glyphicon-remove wrong"></span></div>
+
+                <div class="import import_a">
+                    <div>
+                        <span>标题</span>
+                        <input type="text" placeholder="请填写标题">
+                    </div>
+                    <div>
+                        <span>邮箱</span>
+                        <input type="text" placeholder="请填写邮箱">
+                    </div>
+                    <div>
+                        <span>手机号</span>
+                        <input type="text" placeholder="请填写手机号">
+                    </div>
+                    <div>
+                        <span>内容</span>
+                        <textarea rows="7" cols="56">
+
+                        </textarea>
+                    </div>
+                </div>
+                <div class="confirm">
+                    <input type="button"  value="提交">
+                </div>
+            </div>
+        </div>
+
+    </div>
     <script src="${request.contextPath}/statics/libs/jquery.min.js"></script>
     <script src="${request.contextPath}/statics/libs/vue.min.js"></script>
     <script src="${request.contextPath}/statics/libs/router.js"></script>
@@ -132,8 +205,19 @@
     <script src="${request.contextPath}/statics/js/index.js"></script>
 </body>
 <script>
-    $(function () {
-        $("[data-toggle='popover']").popover();
-    });
+    $(function(){
+       $("#set_p").click(function(){
+           $(".JI_b,.nei_r").show()
+       })
+       $(".shade,.wrong_a").click(function(){
+            $(".JI_b,.nei_r").hide()
+       })
+       $("#feedback").click(function(){
+            $(".JI_b_a,.nei_r_a").show()
+       })
+       $(".shade_a,.wrong").click(function(){
+           $(".JI_b_a,.nei_r_a").hide()
+       })
+    })
 </script>
 </html>

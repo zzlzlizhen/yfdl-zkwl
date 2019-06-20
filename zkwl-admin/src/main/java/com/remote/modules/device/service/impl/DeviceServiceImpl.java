@@ -74,9 +74,8 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public boolean addDevice(DeviceEntity deviceEntity) {
         String deviceCode = deviceEntity.getDeviceCode();
-        //此处省略根据设备编号自动选择设备类型代码  后期补充start
-
-        //此处省略根据设备编号自动选择设备类型代码  后期补充end
+        String deviceType = deviceCode.substring(0, 4);
+        deviceEntity.setDeviceType(deviceType);
         return deviceMapper.insert(deviceEntity) > 0 ? true : false;
     }
 

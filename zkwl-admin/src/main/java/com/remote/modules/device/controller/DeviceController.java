@@ -11,8 +11,8 @@ import com.remote.modules.device.service.DeviceService;
 import com.remote.modules.sys.controller.AbstractController;
 import com.remote.modules.sys.entity.SysUserEntity;
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jms.core.JmsMessagingTemplate;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,8 +31,9 @@ public class DeviceController extends AbstractController {
 
     @Autowired
     private DeviceService deviceService;
+
     @Autowired
-    private JmsMessagingTemplate jmsMessagingTemplate;
+    private RabbitTemplate template;
 
     @RequestMapping(value = "/queryDevice", method= RequestMethod.POST)
     public R queryDevice(@RequestBody DeviceQuery deviceQuery){
@@ -42,6 +43,7 @@ public class DeviceController extends AbstractController {
         }
         return R.error(400,"查询设备失败");
     }
+
     @RequestMapping(value = "/change", method= RequestMethod.POST)
     public void change(@RequestBody DataUtils data){
         List<Integer> key = new ArrayList<>();
@@ -51,8 +53,9 @@ public class DeviceController extends AbstractController {
             }
         }
         String s = JSONObject.toJSONString(data);
-        jmsMessagingTemplate.convertAndSend("my_msg", s);
+        template.convertAndSend("CalonDirectExchange", "CalonDirectRouting", s);
     }
+
 
     @RequestMapping(value = "/add", method= RequestMethod.POST)
     public R queryDevice(@RequestBody DeviceEntity deviceEntity){

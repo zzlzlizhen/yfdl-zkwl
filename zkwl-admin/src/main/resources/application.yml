@@ -9,6 +9,13 @@ server:
     context-path: /remote-admin
 
 spring:
+  rabbitmq:
+    host : 127.0.0.1
+    post : 5672
+    username: guest
+    password: guest
+  thymeleaf:
+    prefix: classpath:/templates/
   profiles:
     active: dev
   jackson:
@@ -78,7 +85,7 @@ mybatis-plus:
     cache-enabled: false
     call-setters-on-nulls: true
     jdbc-type-for-null: 'null'
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #打印sql语句,调试用
+
   pagehelper:
     helperDialect: mysql
     reasonable: true

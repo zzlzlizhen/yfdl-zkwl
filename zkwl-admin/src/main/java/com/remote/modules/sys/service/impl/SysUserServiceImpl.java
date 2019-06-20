@@ -2,6 +2,7 @@
 package com.remote.modules.sys.service.impl;
 
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -62,7 +63,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 				new QueryWrapper<SysUserEntity>().like(StringUtils.isNotBlank(username),"username", username)
 						.like(StringUtils.isNotBlank(realName),"real_name", realName)
 						.eq(StringUtils.isNotBlank(status),"status",StringUtils.isNotBlank(status)?Integer.parseInt(status):null)
-						.eq(StringUtils.isNotBlank(uid),"user_id",uid)
+						.eq(StringUtils.isNotBlank(uid),"user_id",uid).eq("flag",1)
 						.and(new Function<QueryWrapper<SysUserEntity>, QueryWrapper<SysUserEntity>>() {
 							@Override
 							public QueryWrapper<SysUserEntity> apply(QueryWrapper<SysUserEntity> sysUserEntityQueryWrapper) {
@@ -121,12 +122,26 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 		sysUserRoleService.saveOrUpdate(user.getUserId(), user.getRoleIdList());
 	}
 
+	/**
+     * 更新用户状态 通过用户id更用户状态
+     * */
 	@Override
-	public boolean updateStatus(Long userId,String status){
+	public boolean updateStatus(Long userId,Integer status){
 		SysUserEntity userEntity = new SysUserEntity();
-		userEntity.setPassword(status);
+		userEntity.setStatus(status);
 		return this.update(userEntity,
-				new QueryWrapper<SysUserEntity>().eq("user_id", userId).eq("status", status));
+				new QueryWrapper<SysUserEntity>().eq("user_id", userId));
+	}
+
+	/**
+     * 通过用户id 删除用户
+     * */
+	@Override
+	public int removeUser(Long uid) {
+		SysUserEntity userEntity = new SysUserEntity();
+		userEntity.setFlag(0);
+		return this.baseMapper.update(userEntity,
+				new QueryWrapper<SysUserEntity>().eq("user_id", uid));
 	}
 
 	@Override
@@ -139,8 +154,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 
 	@Override
 	public List<SysUserEntity> queryAllLevel(Long userId) {
-		String where = "parent_id='"+userId+"' or parent_id like '%,"+userId+"' or parent_id like '%,"+userId+",%' or parent_id like '"+userId+",%'";
-		return sysUserDao.queryAllLevel(where);
+	    SysUserEntity sysUserEntity = this.baseMapper.selectOne(new QueryWrapper<SysUserEntity>().eq("user_id",userId));
+
+		//String where = "parent_id='"+userId+"' or parent_id like '%,"+userId+"' or parent_id like '%,"+userId+",%' or parent_id like '"+userId+",%'";
+		//return sysUserDao.queryAllLevel(where);
+        return sysUserDao.queryAllChild(sysUserEntity);
 	}
 
 	@Override
@@ -166,17 +184,21 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 		return sysUserDao.queryAllChild(sysUserEntity);
 	}
 
+	/**
+     * 查询用户名列表
+     * */
 	@Override
 	public List<SysUserEntity> queryUserList(Map<String, Object> params,SysUserEntity currentUser) {
 		String allParentId = currentUser.getAllParentId();
 		long userId = currentUser.getUserId();
 		String realName = (String)params.get("realName");
-		return this.baseMapper.selectList(new QueryWrapper<SysUserEntity>().like(StringUtils.isNotBlank(realName),"real_name", realName).and(new Function<QueryWrapper<SysUserEntity>, QueryWrapper<SysUserEntity>>() {
+		return this.baseMapper.selectList(new QueryWrapper<SysUserEntity>().eq("flag",1)
+                .and(new Function<QueryWrapper<SysUserEntity>, QueryWrapper<SysUserEntity>>() {
 					@Override
 					public QueryWrapper<SysUserEntity> apply(QueryWrapper<SysUserEntity> sysUserEntityQueryWrapper) {
 						return sysUserEntityQueryWrapper.likeRight("all_parent_id",allParentId+",").or().eq("user_id",userId);
 					}
-				})
+				}).like(StringUtils.isNotBlank(realName),"real_name", realName)
 		);
 	}
 

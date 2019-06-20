@@ -68,7 +68,7 @@ $(function () {
                 $(".toogle").click(function () {
                     var username = $(this).parent().parent().siblings(".username").html();
                     var ele = $(this).children(".move");
-                    Id_a = $(this).parent().attr('id');
+                    Id_a = 46;
                     if (ele.attr("data-state") == "1") {
                         ele.animate({left: "0"}, 300, function () {
                             ele.attr("data-state", "0");
@@ -87,10 +87,10 @@ $(function () {
                 })
                 function aaa(state,username,Id_a){
                    $.ajax({
-                       url: baseURL + '/sys/user/update',
+                       url: baseURL + '/sys/user/status',
                        type: "POST",
                        data:
-                           "&username="+username+
+                           "&userId="+Id_a+
                            "&status="+state,
                        success: function (res) {
                            console.log(res)

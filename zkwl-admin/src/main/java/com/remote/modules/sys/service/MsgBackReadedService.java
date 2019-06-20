@@ -20,6 +20,6 @@ public interface MsgBackReadedService extends IService<MsgBackReadedEntity> {
     void insert(MsgBackReadedEntity msgBackReadedEntity);
     void delete(String backId);
     List<MsgBackReadedEntity> queryBackIds(List<String> backIds, Long uid);
-    MsgBackReadedEntity queryBackIdAndUid(String backId,Long uid,SysUserEntity cur);
+    MsgBackReadedEntity queryBackIdAndUid(String backId,Long uid);
 }
 
