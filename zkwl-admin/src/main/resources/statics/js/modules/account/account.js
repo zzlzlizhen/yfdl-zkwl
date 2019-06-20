@@ -36,7 +36,13 @@ $(function () {
                 pageNum = res.page.totalPage;  //总页数
                 console.log(pages+"==="+pageSize+"==="+pageNum)
                 var html
+                var offClass = "";
                 for (var i = 0; i < res.page.list.length; i++) {
+                    if(res.page.list[i].status == 0){
+                        offClass = "btn_fath clearfix  toogle off";
+                    }else{
+                        offClass = "btn_fath clearfix  toogle on";
+                    }
                     html += " <tr class='r_pw'>\n" +
                         " <td>" + res.page.list[i].userId + "</td>\n" +
                         "<td class='username'>" + res.page.list[i].username + "</td>\n" +
@@ -47,9 +53,9 @@ $(function () {
                         "<td class='r_termof'>" + res.page.list[i].termOfValidity + "年</td>\n" +
                         "<td></td>\n" +
                         "<td>" +
-                        "<div class=\"switch\"> \n" +
-                        "<div class=\"btn_fath clearfix on toogle\" id=" + res.page.list[i].userId + " > \n" +
-                        "<div class=\"move\" data-state=" + res.page.list[i].status + "></div> \n" +
+                        "<div class=\"switch\" > \n" +
+                        "<div class='"+offClass+"'  id="+res.page.list[i].userId+"> \n" +
+                        "<div class=\"move\"  data-state="+ res.page.list[i].status + "></div> \n" +
                         "<div class=\"btnSwitch btn1\">ON</div> \n" +
                         "<div class=\"btnSwitch btn2 \">OFF</div> \n" +
                         "</div> " +
@@ -61,14 +67,16 @@ $(function () {
                         " <a href=\"#\" class='Delete'><span class=\"glyphicon glyphicon-trash \"></span></a>\n" +
                         "</td>\n" +
                         "</tr>"
+
                 }
+
                 $("#div").append(html)
                 //滑動按鈕
                 var Id_a
                 $(".toogle").click(function () {
                     var username = $(this).parent().parent().siblings(".username").html();
                     var ele = $(this).children(".move");
-                    Id_a = 46;
+                     Id_a = $(this).attr("id");
                     if (ele.attr("data-state") == "1") {
                         ele.animate({left: "0"}, 300, function () {
                             ele.attr("data-state", "0");
@@ -76,9 +84,10 @@ $(function () {
                             aaa(state,username,Id_a)
                         });
                         $(this).removeClass("on").addClass("off");
+                        return
                     } else if (ele.attr("data-state") == "0") {
                         ele.animate({left: '50%'}, 300, function () {
-                            $(this).attr("data-state", "1");
+                            ele.attr("data-state", "1");
                             var state=1
                             aaa(state,username,Id_a)
                         });
@@ -320,17 +329,17 @@ $(function () {
 
 
 //手机号
-    var reg =/^0?(13[0-9]|15[012356789]|18[0236789]|14[57])[0-9]{8}$/;
-    if(reg!=r_typ_mod){
-        console.log('手机号不正确');
-    }
+//     var reg =/^0?(13[0-9]|15[012356789]|18[0236789]|14[57])[0-9]{8}$/;
+//     if(reg!=r_typ_mod){
+//         console.log('手机号不正确');
+//     }
 //邮箱
 
-    var rem = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/g;
-    if(rem!=r_emal_mod){
-        console.log('邮箱不正确');
-        console.log(r_emal_mod)
-    }
+    // var rem = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/g;
+    // if(rem!=r_emal_mod){
+    //     console.log('邮箱不正确');
+    //     console.log(r_emal_mod)
+    // }
 //分页
     $(".ui-pagination-container").pagination({
         currentPage: pageNum,

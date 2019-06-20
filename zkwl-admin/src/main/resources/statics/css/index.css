@@ -28,7 +28,7 @@
 .import{width:85%;height:auto;float:left;margin:15% 0px 0px 6%;}
 .import div{width:45%;height:60px;float:left;margin:3% 0px 0px 5%;}
 .import div span{width:100%;height:27px;float:left; font-weight: 500;color:#000 !important;}
-.import div input{width:95%;height:28px;border-radius: 4px;overflow: hidden;background: 0;border:1px solid #ccc;float:left;text-indent: 5px;}
+.import div input,.import div select{width:95%;height:28px;border-radius: 4px;overflow: hidden;background: 0;border:1px solid #ccc;float:left;text-indent: 5px;}
 .ea_b{width: 57% !important;}
 .ea_a{width:35% !important; border:1px solid #1890FF !important;color:#1890FF;margin-left:3%;}
 .confirm{width:100%;height:60px; position: absolute;bottom: 0;border-top:1px solid #ccc;}
