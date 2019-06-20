@@ -41,6 +41,7 @@
         <swagger.version>2.7.0</swagger.version>
         <mail.version>2.1.2.RELEASE</mail.version>
         <hutool.version>4.5.10</hutool.version>
+        <aliyun-java-sdk-core.version>4.0.3</aliyun-java-sdk-core.version>
     </properties>
 
     <dependencies>
@@ -174,6 +175,11 @@
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
             <version>${hutool.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-core</artifactId>
+            <version>${aliyun-java-sdk-core.version}</version>
         </dependency>
     </dependencies>
 
