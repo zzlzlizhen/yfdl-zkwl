@@ -212,7 +212,7 @@ $(function () {
                 if(res.code == "200"){
                     window.location.reload()
                 }else{
-                    alert("添加失败")
+                    $(".mistake").css("display","block")
                 }
             }
         })

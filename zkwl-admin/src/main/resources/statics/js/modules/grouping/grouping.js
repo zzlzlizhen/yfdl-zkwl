@@ -236,7 +236,7 @@ $(function(){
                     var select_b=$("#select1_b option:selected").attr("id");
                     //正则  丸子
                     if(pro_s_b == ""||select_b == ""){
-                        alert("輸入不能為空")
+                        $(".mistake").css("display","block")
                     }else{
                         $.ajax({
                             url:baseURL + 'fun/device/updateDevice',
@@ -315,8 +315,7 @@ $(function(){
         var pro_s= $(".pro_s").val();
         var select_op=$("#select1 option:selected").attr("id");
         if(pro_s =="" || pro_name==""){
-            alert("输入不能为空")
-            return
+            $(".mistake").css("display","block")
         }else{
             $.ajax({
                 url:baseURL + 'fun/device/add',

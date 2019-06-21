@@ -236,7 +236,7 @@ $(function(){
                 $("#confirm_x").click(function(){
                     var pro_s_b=$(".pro_s_b").val()
                     if(pro_s_b == ""){
-                        alert("设备名称不能为空")
+                        $(".mistake").css("display","block")
                         return
                     }else{
                         $.ajax({
@@ -296,7 +296,7 @@ $(function(){
         var pro_name=$(".pro_name").val()
         var pro_s=$(".pro_s").val()
         if(pro_name =="" || pro_s==""){
-            alert("输入不能为空")
+            $(".mistake").css("display","block")
             return
         }else{
             $.ajax({

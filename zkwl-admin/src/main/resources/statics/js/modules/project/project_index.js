@@ -106,7 +106,7 @@ $(function () {
                     var select_b=$("#select1_b option:selected").text()
                     //正则  丸子
                     if(pro_name_b == ""||pro_s_b == ""||select_b == ""){
-                        alert("輸入不能為空")
+                        $(".mistake").css("display","block")
                     }else{
                         $.ajax({
                             url:baseURL + 'fun/project/update',
@@ -178,7 +178,7 @@ $(function () {
        var select=$("#select1 option:selected").text()
         //正则  丸子
         if(pro_name ==""||pro_s==""||select=="" ) {
-            alert("輸入不能為空")
+            $(".mistake").css("display","block")
         }else{
             $.ajax({
                 url:baseURL + 'fun/project/add',

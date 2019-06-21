@@ -156,9 +156,6 @@ $(function () {
 
                     regular(r_typ_mod,r_emal_mod,na_ma_mod,r_user_mod,r_pw_mod)
 
-
-
-
                     lay()
 
                     if (na_ma_mod == "" || r_user_mod == "" || r_pw_mod == "" || r_termof_mod == "" || r_emal_mod == "" || r_typ_mod == "" || r_Ad_mod == "") {
