@@ -15,6 +15,10 @@ import java.util.Map;
 public interface SecurityService extends IService<SecurityEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
-    SecurityEntity querySecurity(String contact,String checkCode);
+    SecurityEntity querySecurity(String email,String checkCode,Long userId);
+    /**
+     * 通过手机号验证码用户id查询用户信息
+     * */
+    SecurityEntity querySmsSecurity(String mobile , String securityCode, Long userId );
 }
 

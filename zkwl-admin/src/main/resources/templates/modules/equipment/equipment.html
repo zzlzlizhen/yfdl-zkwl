@@ -13,7 +13,32 @@
     </style>
 </head>
 <body>
-    <div id="allmap"></div>
+<!--地图-->
+    <div id="allmap">地图</div>
+<!--单选-->
+    <div class="radio">
+       <div class="radio_a"></div>
+       <div class="radio_b">
+           <div class="ra_div" style="margin-left:4%;"><p class=" p" id="0"></p></div>
+           <span>全部</span>
+           <div class="zheng ra_div"><p class="clicka p" id="1"></p></div>
+           <span class="zheng_a ">正常</span>
+           <div class="bao ra_div"><p class="clicka p" id="2"></p></div>
+           <span class="bao_a">报警</span>
+           <div class="gu ra_div"><p class="clicka p" id="3"></p></div>
+           <span class="gu_a">故障</span>
+           <div class="li ra_div"><p class="clicka p" id="4"></p></div>
+           <span class="li_a">离线</span>
+           <a class="btn btn-primary btn_m pan_m" id="pandect" ><i class="glyphicon glyphicon-eye-open"></i>总览</a>
+       </div>
+    </div>
+
+<!--    侧边栏-->
+   <div class="navigation">
+      <div class="nav_t"></div>
+      <div class="nav_n"></div>
+
+   </div>
 
     <!--侧边抽屉-->
     <div class="drawer" id="drawer">
@@ -28,78 +53,5 @@
 <script src="${request.contextPath}/statics/js/modules/equipment/equipment.js"></script>
 <script src="${request.contextPath}/statics/js/mapa.js"></script>
 <script src="${request.contextPath}/statics/js/textb.js"></script>
-<script type="text/javascript">
-    // 百度地图API功能
-    var map = new BMap.Map("allmap");    // 创建Map实例
-    map.centerAndZoom(new BMap.Point(118.871327,32.151263), 12);  // 初始化地图,设置中心点坐标和地图级别
-    // map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
-    map.addControl(new BMap.NavigationControl({enableGeolocation:true}));
-    map.addControl(new BMap.OverviewMapControl());
-    map.setCurrentCity("南京");          // 设置地图显示的城市 此项是必须设置的
-    map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
 
-    //===================
-    var xy = [
-        {'x':118.777882,'y':32.059839},
-        {'x':118.777882,'y':32.059839},
-        {'x':118.457882,'y':32.049839},
-        {'x':118.62882,'y':32.039839},
-        {'x':118.3882,'y':32.029839},
-        {'x':118.6666,'y':32.019839},
-        {'x':118.577882,'y':32.051839},
-        {'x':118.377882,'y':32.052839},
-        {'x':118.277882,'y':32.053839},
-        {'x':118.177882,'y':32.054839},
-        {'x':118.077882,'y':31.055839},
-        {'x':118.795394,'y':32.027002}
-    ];
-    var markers = [];
-    var pt = null;
-    for (var i in xy) {
-        pt = new BMap.Point(xy[i].x , xy[i].y);
-        markers.push(new BMap.Marker(pt));
-    }
-    //最简单的用法，生成一个marker数组，然后调用markerClusterer类即可。
-    var markerClusterer = new BMapLib.MarkerClusterer(map,
-        {
-            markers:markers,
-            girdSize : 100,
-            styles : [{
-                url:'${request.contextPath}/statics/image/red.png',
-                size: new BMap.Size(92, 92),
-                backgroundColor : '#E64B4E'
-            }],
-        });
-    markerClusterer.setMaxZoom(13);
-    markerClusterer.setGridSize(100);
-    //================================================
-    var xy1 = [	{'x':118.85952,'y':32.0711},
-        {'x':118.651976,'y':32.047353},
-        {'x':118.735051,'y':32.059839},
-        {'x':118.777882,'y':32.054019},
-        {'x':118.677882,'y':32.059839},
-        {'x':118.787882,'y':32.079839},
-        {'x':118.777982,'y':32.069839}];
-    var markers1 = [];
-    var pt = null;
-    for (var i in xy1) {
-        pt = new BMap.Point(xy1[i].x , xy1[i].y);
-        markers1.push(new BMap.Marker(pt));
-    }
-    //最简单的用法，生成一个marker数组，然后调用markerClusterer类即可。
-    var markerClusterer1 = new BMapLib.MarkerClusterer(map,
-        {
-            markers:markers1,
-            girdSize : 100,
-            styles : [{
-                url:'${request.contextPath}/statics/image/blue.png',
-                size: new BMap.Size(92, 92),
-                backgroundColor : '#4783E7'
-            }],
-        });
-    markerClusterer1.setMaxZoom(13);
-    markerClusterer1.setGridSize(100);
-    console.log(markerClusterer1);
-    console.log(markerClusterer);
-</script>
 </html>

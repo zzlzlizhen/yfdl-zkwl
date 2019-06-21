@@ -3,6 +3,7 @@ package com.remote.modules.sys.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.remote.common.utils.PageUtils;
+import com.remote.modules.sys.entity.SecurityEntity;
 import com.remote.modules.sys.entity.SysUserEntity;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,7 +52,10 @@ public interface SysUserService extends IService<SysUserEntity> {
 	 **/
 	List<SysUserEntity> queryAllLevel(Long userId);
 
-	SysUserEntity queryByEmail(String contactType);
+	/**
+	 * 通过当前用户邮箱跟用户id查询用户
+	 * */
+	SysUserEntity queryByEmailAndUid(String email,Long userId);
 
 	List<SysUserEntity> queryChild(SysUserEntity sysUserEntity);
 
@@ -59,13 +63,25 @@ public interface SysUserService extends IService<SysUserEntity> {
 
 	List<SysUserEntity> queryUserList(Map<String, Object> params,SysUserEntity currentUser);
 	/**
-	 * 通过当前用户id查询当前用户的手机号和邮箱
+	 * 通过用户id查询用户
 	 * */
 	SysUserEntity queryById(Long userId);
+	/**
+	 *通过当前用户手机号跟用户id查询用户是否存在
+	 */
+	SysUserEntity queryBySmsAndUid(String mobile,Long userId);
 	/**
 	 * 更新用户状态
 	 * */
 	boolean updateStatus(Long userId,Integer status);
 
+	/**
+	 * 通过用户id更新邮箱
+	 * */
+	boolean updateEmail(String email,Long userId);
+	/**
+	 * 通过用户id更新手机号
+	 * */
+	boolean updateMobile(String mobile,Long userId);
 	int removeUser(Long id);
 }

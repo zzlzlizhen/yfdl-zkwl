@@ -11,8 +11,13 @@
         <result property="type" column="type"/>
         <result property="createTime" column="create_time"/>
         <result property="email" column="email"/>
+        <result property="content" column="content"/>
+        <result property="userId" column="user_id"/>
     </resultMap>
     <select id="querySecurity" resultType="com.remote.modules.sys.entity.SecurityEntity">
-        select * from security where security_code=#{securityCode} and (phone = #{phone} or email = #{email})
+        select * from security where security_code=#{securityCode} and email = #{email} and user_id = #{userId} and (create_time&gt;date_add(now(),INTERVAL -5 MINUTE))
+    </select>
+    <select id="querySmsSecurity" resultType="com.remote.modules.sys.entity.SecurityEntity">
+        select * from security where security_code=#{securityCode} and phone = #{mobile} and user_id = #{userId} and (create_time&gt;date_add(now(),INTERVAL -5 MINUTE))
     </select>
 </mapper>

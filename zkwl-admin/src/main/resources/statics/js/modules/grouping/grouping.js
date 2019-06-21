@@ -234,23 +234,29 @@ $(function(){
                 $("#confirm_x").click(function(){
                     var pro_s_b= $(".pro_s_b").val();
                     var select_b=$("#select1_b option:selected").attr("id");
-                    $.ajax({
-                        url:baseURL + 'fun/device/updateDevice',
-                        contentType: "application/json;charset=UTF-8",
-                        type:"POST",
-                        data:JSON.stringify({
-                            "projectId":Id,
-                            "groupId":select_b,
-                            "deviceName":pro_s_b,
-                            "deviceId":proid
-                        }),
-                        success: function(res){
-                            if(res.code == "200"){
-                                window.location.reload()
-                            }
+                    //正则  丸子
+                    if(pro_s_b == ""||select_b == ""){
+                        alert("輸入不能為空")
+                    }else{
+                        $.ajax({
+                            url:baseURL + 'fun/device/updateDevice',
+                            contentType: "application/json;charset=UTF-8",
+                            type:"POST",
+                            data:JSON.stringify({
+                                "projectId":Id,
+                                "groupId":select_b,
+                                "deviceName":pro_s_b,
+                                "deviceId":proid
+                            }),
+                            success: function(res){
+                                if(res.code == "200"){
+                                    window.location.reload()
+                                }
 
-                        }
-                    });
+                            }
+                        });
+                    }
+
                 })
 
 

@@ -134,4 +134,11 @@ public class DeviceController extends AbstractController {
     public R getDeviceById(String deviceId){
         return R.ok(deviceService.queryDeviceByDeviceId(deviceId));
     }
+
+    @RequestMapping(value = "/getDeviceByProjectIdNoPage", method= RequestMethod.GET)
+    public R getDeviceByProjectIdNoPage(String projectId){
+        DeviceQuery deviceQuery = new DeviceQuery();
+        deviceQuery.setGroupId(projectId);
+        return R.ok(deviceService.queryDeviceNoPage(deviceQuery));
+    }
 }

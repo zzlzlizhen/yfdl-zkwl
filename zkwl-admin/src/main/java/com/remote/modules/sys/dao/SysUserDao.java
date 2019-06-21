@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.remote.modules.sys.entity.SysUserEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import sun.rmi.runtime.Log;
 
 import java.io.Serializable;
 import java.util.List;
@@ -39,8 +40,12 @@ public interface SysUserDao extends BaseMapper<SysUserEntity> {
 	/**
 	 * 根据邮件查询对应用户信息
 	 * */
-	SysUserEntity queryByContact(String contact);
+	SysUserEntity queryByEmailAndUid(@Param("email")String email,@Param("userId")Long userId);
 
+	/**
+	 * 根据手机号查询对应的用户
+	 * */
+	SysUserEntity queryBySmsAndUid(@Param("mobile")String mobile, @Param("userId")Long userId);
 	List<SysUserEntity> queryChild(SysUserEntity sysUserEntity);
 
 	List<SysUserEntity> queryAllChild(SysUserEntity sysUserEntity);

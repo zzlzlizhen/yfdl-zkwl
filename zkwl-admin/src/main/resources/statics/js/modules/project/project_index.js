@@ -104,20 +104,25 @@ $(function () {
                     var pro_name_b= $(".pro_name_b").val()
                     var pro_s_b= $(".pro_s_b").val()
                     var select_b=$("#select1_b option:selected").text()
-                    $.ajax({
-                        url:baseURL + 'fun/project/update',
-                        contentType: "application/json;charset=UTF-8",
-                        type:"POST",
-                        data:JSON.stringify({
-                            "projectName":pro_name_b,
-                            "projectId":proid,
-                            "projectDesc":pro_s_b,
-                            "exclusiveUser":select_b
-                        }),
-                        success: function(res){
-                            window.location.reload()
-                        }
-                    });
+                    //正则  丸子
+                    if(pro_name_b == ""||pro_s_b == ""||select_b == ""){
+                        alert("輸入不能為空")
+                    }else{
+                        $.ajax({
+                            url:baseURL + 'fun/project/update',
+                            contentType: "application/json;charset=UTF-8",
+                            type:"POST",
+                            data:JSON.stringify({
+                                "projectName":pro_name_b,
+                                "projectId":proid,
+                                "projectDesc":pro_s_b,
+                                "exclusiveUser":select_b
+                            }),
+                            success: function(res){
+                                window.location.reload()
+                            }
+                        });
+                    }
                 })
             // 分組
                 $(".particulars").click(function(){
@@ -165,23 +170,33 @@ $(function () {
     $(".shade_add_project").click(function(){
         $(".shade_project,.shade_b_project").css("display","none")
     })
+
+
     $("#project_confirm").click(function(){
        var pro_name= $(".pro_name").val()
        var pro_s= $(".pro_s").val()
        var select=$("#select1 option:selected").text()
-        $.ajax({
-            url:baseURL + 'fun/project/add',
-            contentType: "application/json;charset=UTF-8",
-            type:"POST",
-            data:JSON.stringify({
-                "projectName":pro_name,
-                "projectDesc":pro_s,
-                "exclusiveUser":select
-            }),
-            success: function(res){
-                window.location.reload()
-            }
-        });
+        //正则  丸子
+        if(pro_name ==""||pro_s==""||select=="" ) {
+            alert("輸入不能為空")
+        }else{
+            $.ajax({
+                url:baseURL + 'fun/project/add',
+                contentType: "application/json;charset=UTF-8",
+                type:"POST",
+                data:JSON.stringify({
+                    "projectName":pro_name,
+                    "projectDesc":pro_s,
+                    "exclusiveUser":select
+                }),
+                success: function(res){
+                    window.location.reload()
+                }
+            });
+
+        }
+
+
     })
     //编辑去弹窗/////////////////////////////////
      $(".shade_modifier_project").click(function(){

@@ -35,6 +35,8 @@
         order by create_time
 
     </select>
-    
 
+    <delete id="deleteBatchMonth">
+        delete from history_mouth where create_time &lt; date_add(curdate(),INTERVAL -1 year )
+    </delete>
 </mapper>

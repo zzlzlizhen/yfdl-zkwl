@@ -92,4 +92,19 @@ public class HistoryServiceImpl implements HistoryService {
         }
         return queryHistory;
     }
+
+    @Override
+    public int deleteBatchDay() {
+        return historyDayMapper.deleteBatchDay();
+    }
+
+    @Override
+    public int deleteBatchMonth() {
+        return historyMouthMapper.deleteBatchMouth();
+    }
+
+    @Override
+    public int deleteBatchYear() {
+        return historyYearMapper.deleteBatchYear();
+    }
 }

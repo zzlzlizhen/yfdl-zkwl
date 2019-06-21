@@ -274,5 +274,89 @@ $(function(){
 
 
 
+    //取值
+    $("#confirm_x").click(function () {
+
+         var r_btn_l = $("#r_btn_l input[type='radio']:checked").val();
+        var r_btne_l = $("#r_btne_l input[type='radio']:checked").val();
+         var r_l_p = $("#r_Load_power").val();
+         var r_teml = $("#d414").val();
+        var r_teml_t = $(".rda").val();
+        var r_one_teml = $("#r_one_teml").val();
+        var r_teml_tw = $("#r_teml_tw").val();
+        var  r_teml_th = $("#r_teml_th").val();
+        var r_teml_for = $("#r_teml_for").val();
+        var r_teml_fif = $("#r_teml_fif").val();
+        var r_teml_six = $("#r_teml_six").val();
+        var r_Load_power = $("#r_Load_power").val();
+        var r_teml_sv =$("#r_teml_sv").val();
+        var r_teml_eg = $("#r_teml_eg").val();
+        var r_teml_ng = $("#r_teml_ng").val();
+        var r_teml_te = $("#r_teml_te").val();
+        var r_teml_el = $("#r_teml_el").val();
+        var r_teml_egl = $("#r_teml_egl").val();
+        var r_teml_tgl = $("#r_teml_tgl").val();
+        var r_btl_th = $("#r_btl_th input[type='radio']:checked").val();
+        var r_jin_on = $("#r_jin_on").width();
+        var r_jin_tw = $("#r_jin_tw").width();
+        var r_teml_forl = $("#r_teml_forl").val()
+        var r_inpl_one = $("#r_inpl_one").val()
+        var r_inpl_tw = $("#r_inpl_tw").val()
+        var r_jinl_th =$("#r_jinl_th").width()
+        var r_teml_thgl=$("#r_teml_thgl").val()
+        var r_teml_thel =$("#r_teml_thel").val()
+        var r_select_b=$("#r_select_b option:selected").text();
+        var r_wunl = $("#r_wunl").width();
+        var r_wen1 = $("#r_wen1").width();
+        var r_wen2 = $("#r_wen2").width();
+        var r_wen3 = $("#r_wen3").width();
+        var r_wen4 = $("#r_wen4").width();
+        var r_wen5 = $("#r_wen5").width();
+        var r_wen6 = $("#r_wen6").width();
+        var r_wen7 = $("#r_wen7").width();
+        var r_wen8 = $("#r_wen8").width();
+        var r_wen9 = $("#r_wen9").width();
+        var r_wen10 = $("#r_wen10").width();
+        var r_wen11 = $("#r_wen11").width();
+        var r_wen12 = $("#r_wen12").width();
+        var rc_select_b=$("#rc_select_b option:selected").text();
+        var r_jin_z = $("#r_jin_z").width();
+
+
+
+
+
+
+
+        console.log(r_jin_z )
+
+
+    })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 })

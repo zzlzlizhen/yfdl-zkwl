@@ -43,5 +43,13 @@ public class SecurityEntity implements Serializable {
 	 * 邮箱
 	 */
 	private String email;
+	/**
+	 * 内容
+	 * */
+	private String content;
+	/**
+	 * 发送人id
+	 * */
+	private Long userId;
 
 }

@@ -162,10 +162,10 @@ public class EchoServerNoBlock implements Runnable {
         try{
             if(!"".equals(msg)){
                 System.out.println(msg);
-                //JSONObject jsonObject = JSONObject.parseObject(msg);
-                //DeviceEntity deviceEntity = JSONObject.toJavaObject(jsonObject, DeviceEntity.class);
+                JSONObject jsonObject = JSONObject.parseObject(msg);
+                DeviceEntity deviceEntity = JSONObject.toJavaObject(jsonObject, DeviceEntity.class);
                 //代表操作设备
-                //onWhile(list,value,deviceEntity);
+                onWhile(list,value,deviceEntity);
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -286,7 +286,6 @@ public class EchoServerNoBlock implements Runnable {
         //不论什么数据，首先修改设备信息
         deviceService.updateDeviceByCode(deviceEntity);
         //所有设备属性都映射到公共的类中，需要哪些信息，自行转换 end
-
         //判断公共类属于历史数据，还是设备信息
         //判断是否时历史数据
         if(common.getDischargeCapacity() != null && common.getChargingCapacity() != null){
@@ -294,7 +293,6 @@ public class EchoServerNoBlock implements Runnable {
             BeanUtils.copyProperties(common, historyMouth);
             historyService.insertHistoryData(historyMouth);
         }
-
     }
 
 }

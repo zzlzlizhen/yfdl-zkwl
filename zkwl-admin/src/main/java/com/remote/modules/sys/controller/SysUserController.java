@@ -169,14 +169,6 @@ public class SysUserController extends AbstractController {
 		
 		return R.ok();
 	}
-	//判断输入的账号是否有效
-	public R backPassword(@RequestParam("email") String email){
-		SysUserEntity userEntity = sysUserService.queryByEmail(email);
-		if(null == userEntity){
-			return 	R.error("该邮箱不存在");
-		}
-		return R.ok();
-	}
 
 	/**
 	 * 通过当前用户id查询用户信息

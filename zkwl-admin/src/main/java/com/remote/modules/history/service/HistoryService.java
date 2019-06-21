@@ -28,4 +28,25 @@ public interface HistoryService {
      * @return QueryHistory
      **/
     QueryHistory queryHistoryYear(String deviceCode, String year);
+    /*
+     * @Author zhagnwenping
+     * @Description 删除一个月前的数据
+     * @Date 14:31 2019/6/21
+     * @return int
+     **/
+    int deleteBatchDay();
+    /*
+     * @Author zhagnwenping
+     * @Description 删除一年前的数据
+     * @Date 14:31 2019/6/21
+     * @return int
+     **/
+    int deleteBatchMonth();
+    /*
+     * @Author zhagnwenping
+     * @Description 删除5年前的数据
+     * @Date 14:31 2019/6/21
+     * @return int
+     **/
+    int deleteBatchYear();
 }

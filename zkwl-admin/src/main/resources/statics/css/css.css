@@ -47,7 +47,20 @@ html,body{width:100% !important;height:100% !important;margin:0;padding:0;font-s
 .shade_b,.shade_b_delete,.shade_b_new,.shade_b_project,.shade_b_modifier,.shade_b_yi{width:600px;height:380px; position: absolute; z-index: 99999;top:50%;left:50%;margin:-190px 0px 0px -300px;background: #fff;display: none;}
 .shade_b_delete{width:400px;height:300px;margin:-150px 0px 0px -200px;}
 .Bian_j,.Bian_j_delete{width:100%;float:left;height:50px;text-indent: 20px;font-size:14px;line-height: 50px;border-bottom: 1px solid #ccc;color:#333;}
-.mistake{width:90%;height:30px;border-radius: 5px;border:1px solid red;float:left;margin:3% 0px 0px 5%;text-indent: 10px;line-height: 30px;}
+.mistake{width:90%;height:30px;border-radius: 5px;border:1px solid red;float:left;margin:3% 0px 0px 5%;text-indent: 10px;line-height: 30px;display: none;}
+.mistake span:first-child{
+    display: inline-block;
+    float: left;
+    margin-top: 7px;}
+.mistake span:last-child{
+    display: inline-block;
+    float: right;
+    margin-top: 7px;}
+.mistake p{
+    display: inline-block;
+    float: left;
+    width:300px;
+    line-height:30px}
 .cu_m{margin-right:2%;}
 .wrong{float:right;margin:1.6% 2% 0px 0px;}
 .sha_span{width:45%;height:35px;margin-top: 20px;float:left;margin-left:3%;}
@@ -120,7 +133,32 @@ thead>th{text-align: center !important;}
 .Dan_x p{width:50%;height:100%;float: left;line-height: 35px;}
 
 
-    /*分组侧边抽屉*/
+/*地图*/
+.radio{width: 550px;height:70px;position: absolute;top:2%; right:1.5%}
+.radio_a{width:100%;height:100%;float:left;background: #fff; opacity: 0.7;}
+.radio_b{width:100%;height:100%;position: absolute;z-index: 2;}
+.radio_b div{width:30px;height:30px;border-radius: 50%;border:1px solid rgba(24, 144, 255, 1);text-align: center;line-height: 30px;margin:4% 0px 0px 3%;float:left;}
+.radio_b p{width:15px ;height:15px;background: rgba(24, 144, 255, 1);border-radius: 50%;display: block;margin:6.1px 0px 0px 6.1px;}
+.radio_b span{width:auto;height:100%;float:left;line-height: 70px;font-size:16px;text-indent: 7px;color:rgba(24, 144, 255, 1)}
+.pan_m{padding: 6px 14px !important;float:right;margin:3% 4% 0px 0px !important;}
+.zheng{border:1px solid rgba(26, 188, 156, 1) !important;}
+.zheng>p{background: rgba(26, 188, 156, 1)}
+.zheng_a{color:rgba(26, 188, 156, 1) !important;}
+.bao{border:1px solid #FF9933 !important;}
+.bao>p{background: #FF9933}
+.bao_a{color:#FF9933 !important;}
+.gu{border:1px solid #FF3300 !important;}
+.gu>p{background: #FF3300}
+.gu_a{color:#FF3300 !important;}
+.li{border:1px solid #333333 !important;}
+.li>p{background: #333333}
+.li_a{color:#333333 !important;}
+.clicka{background: 0 !important;}
+
+.navigation{width:300px;height:70%; position: absolute;top:25%;border:1px solid #000;left:2%;}
+.nav_t{width:100%;height:15%; background: #fff; opacity: 0.8;float:left;}
+.nav_n{width:100%;height:80%;background: #fff; opacity: 0.8;float:left;margin-top:5%;}
+/*地图侧边抽屉*/
 .drawer{width:50%;height:76%;position: absolute;right:-48%;bottom:0%; transition: all 1.5s ease-in;z-index: 9;}
 .drawer_hid{transition: all 1.5s ease-in;right: 0;}
 .drawer_right{width:5%;height:100%;float:left;}
@@ -131,17 +169,19 @@ thead>th{text-align: center !important;}
 /*项目管理顶部*/
 .hear p{width: auto;height:100%;float: left;}
 .p{margin:0;text-indent: 0;}
-/*账户修改*/
-#preview {display: inline-block;width: 50px;height:50px;margin-right: 20px;background-image: url(img/iconfont-tianjia.png);background-repeat: no-repeat;background-size: cover;vertical-align:center;}
+
+
+/*账户修改----任美玲*/
+#preview {display: inline-block;width: 50px;height:50px;margin-right: 20px;background-repeat: no-repeat;background-size: cover;vertical-align:center;}
 #file {width: 80px;height: 32px;opacity: 0;position: absolute;left: 172px;top: 0;cursor: pointer;z-index: 5;}
 .sha_span i{font-style:normal; width: 80px; height: 32px;border:1px solid #ccc;line-height: 32px;text-align: center;border-radius: 4px;}
 .sha_span{position: relative; display:flex; align-items: center;}
 
-#previewr {display: inline-block;width: 50px;height:50px;margin-right: 20px;background-image: url(img/iconfont-tianjia.png);background-repeat: no-repeat;background-size: cover;vertical-align:center;}
+#previewr {display: inline-block;width: 50px;height:50px;margin-right: 20px;background-repeat: no-repeat;background-size: cover;vertical-align:center;}
 #filer {width: 80px;height: 32px;opacity: 0;position: absolute;left: 172px;top: 0;cursor: pointer;z-index: 5;}
 
 
-
+/**/
 
 
 

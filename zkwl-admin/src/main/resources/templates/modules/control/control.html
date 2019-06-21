@@ -7,522 +7,588 @@
     <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
     <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
     <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
-    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+    <script type="text/javascript"
+            src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
     <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
     <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
-    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+    <script type="text/javascript"
+            src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
     <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
     <script src="${request.contextPath}/statics/js/jquery.min.js"></script>
 </head>
 <body>
-    <div class="hear">
-        当前位置>项目管理>北方动力海淀>查看
+<div class="hear">
+    当前位置>项目管理>北方动力海淀>查看
+</div>
+
+<ul class="tab">
+    <li class="cur">历史数据</li>
+    <li>高级配置</li>
+</ul>
+<div class="option_a">
+
+    <div class="option on">
+        <div class="Shu_r">
+            <span class="hear_w">统计方式：</span>
+            <select class="form-control sele_con">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+            </select>
+            <span class="hear_w">选择日期：</span>
+            <select class="form-control sele_con">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+            </select>
+            <a class="btn btn-primary btn_m op_T">统计</a>
+            <a class="btn btn-primary btn_m op_T">打印报表</a>
+        </div>
+        <div class="Biao_g">
+            <div class="B_left" id="container"></div>
+            <div class="B_left" id="zhe_x"></div>
+            <div class="B_left" id="voltage"></div>
+            <div class="B_left" id="environment"></div>
+            <div class="B_left" id="induced"></div>
+            <div class="B_left"></div>
+        </div>
     </div>
-    <ul class="tab">
-        <li class="cur">历史数据</li>
-        <li >高级配置</li>
-    </ul>
-    <div class="option_a">
-        <div class="option on">
-            <div class="Shu_r">
-                <span class="hear_w">统计方式：</span>
-                <select class="form-control sele_con">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                </select>
-                <span class="hear_w">选择日期：</span>
-                <select class="form-control sele_con">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                </select>
-                <a class="btn btn-primary btn_m op_T">统计</a>
-                <a class="btn btn-primary btn_m op_T">打印报表</a>
-            </div>
-            <div class="Biao_g">
-                <div class="B_left" id="container"></div>
-                <div class="B_left" id="zhe_x"></div>
-                <div class="B_left" id="voltage"></div>
-                <div class="B_left" id="environment"></div>
-                <div class="B_left" id="induced"></div>
-                <div class="B_left"></div>
+
+    <div class="option">
+        <!--11111-->
+        <div class="r-load">
+            <div class="r-heade">负载</div>
+            <div class="r-content">
+                <div class="le-con">
+                    <p class="r-bt" id="r_btn_l" style="margin: 0;">
+                        <span>*</span>
+                        负载工作模式：
+                        <input name="sex" type="radio" value="0" checked="checked"/>定时模式
+                        <input name="sex" type="radio" value="1"/>光控模式
+                    </p>
+                    <div>
+                        <span>*</span>
+                        开灯时刻：
+                        <input type="text" class="Wdate" id="d414"
+                               onclick="WdatePicker({dateFmt:'H:mm:ss',minDate:'8:00:00',maxDate:'11:30:00'})" style=" display: inline-block;
+                                       width: 184px; height: 35px; border: 1px solid #ccc; border-radius: 4px; margin-left: 52px;"/>
+                    </div>
+
+                    <div>
+                        <span>*</span>
+                        1时段时长：
+                        <div class="container">
+                            <div class="input-group spinner">
+                                <input type="text" class="form-control" value="42" id="r_one_teml">
+                                <div class="input-group-btn-vertical">
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i>
+                                    </button>
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        小时
+                        <div class="container r-container">
+                            <div class="input-group spinner">
+                                <input type="text" class="form-control" value="42" id="r_teml_tw">
+                                <div class="input-group-btn-vertical">
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i>
+                                    </button>
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        分钟
+                    </div>
+
+                    <div>
+                        <span>*</span>
+                        3时段时长：
+                        <div class="container">
+                            <div class="input-group spinner">
+                                <input type="text" class="form-control" value="42" id="r_teml_th">
+                                <div class="input-group-btn-vertical">
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i>
+                                    </button>
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        小时
+                        <div class="container r-container">
+                            <div class="input-group spinner">
+                                <input type="text" class="form-control" value="42" id="r_teml_for">
+                                <div class="input-group-btn-vertical">
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i>
+                                    </button>
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        分钟
+                    </div>
+
+                    <div>
+                        <span>*</span>
+                        5时段时长：
+                        <div class="container">
+                            <div class="input-group spinner">
+                                <input type="text" class="form-control" value="42" id="r_teml_fif">
+                                <div class="input-group-btn-vertical">
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i>
+                                    </button>
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        小时
+                        <div class="container r-container">
+                            <div class="input-group spinner">
+                                <input type="text" class="form-control" value="42" id="r_teml_six">
+                                <div class="input-group-btn-vertical">
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i>
+                                    </button>
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        分钟
+                    </div>
+                </div>
+                <div class="rg-con">
+                    <p class="r-bt" id="r_btne_l" style="margin: 0;">
+                        <span>*</span>
+                        负载工作模式：
+                        <input name="sex" type="radio" value="0" checked="checked"/>定时模式
+                        <input name="sex" type="radio" value="1"/>光控模式
+                    </p>
+                    <div class="r-bt">
+                        <span>*</span>
+                        负载功率：
+                        <div class="container">
+                            <div class="input-group spinner">
+                                <input type="text" class="form-control" value="42" id="r_Load_power">
+                                <div class="input-group-btn-vertical">
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i>
+                                    </button>
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        小时
+                    </div>
+                    <!--id="d414" 报错-->
+                    <div>
+                        <span>*</span>
+                        关灯时刻：
+                        <input type="text" class="Wdate rda"
+                               onclick="WdatePicker({dateFmt:'H:mm:ss',minDate:'8:00:00',maxDate:'11:30:00'})" style=" display: inline-block;
+                                       width: 184px; height: 35px; border: 1px solid #ccc; border-radius: 4px; margin-left: 42px;"/>
+                    </div>
+                    <div>
+                        <span>*</span>
+                        2时段时长：
+                        <div class="container">
+                            <div class="input-group spinner">
+                                <input type="text" class="form-control" value="42" id="r_teml_sv">
+                                <div class="input-group-btn-vertical">
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i>
+                                    </button>
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        小时
+                        <div class="container r-container">
+                            <div class="input-group spinner">
+                                <input type="text" class="form-control" value="42" id="r_teml_eg">
+                                <div class="input-group-btn-vertical">
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i>
+                                    </button>
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        分钟
+                    </div>
+
+                    <div>
+                        <span>*</span>
+                        4时段时长：
+                        <div class="container">
+                            <div class="input-group spinner">
+                                <input type="text" class="form-control" value="42" id="r_teml_ng">
+                                <div class="input-group-btn-vertical">
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i>
+                                    </button>
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        小时
+                        <div class="container r-container">
+                            <div class="input-group spinner">
+                                <input type="text" class="form-control" value="42" id="r_teml_te">
+                                <div class="input-group-btn-vertical">
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i>
+                                    </button>
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        分钟
+                    </div>
+
+                    <div>
+                        <span>*</span>
+                        晨亮时段时长：
+                        <div class="container">
+                            <div class="input-group spinner">
+                                <input type="text" class="form-control" value="42" id="r_teml_el">
+                                <div class="input-group-btn-vertical">
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i>
+                                    </button>
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        小时
+                        <div class="container r-container">
+                            <div class="input-group spinner">
+                                <input type="text" class="form-control" value="42" id="r_teml_egl">
+                                <div class="input-group-btn-vertical">
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i>
+                                    </button>
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        分钟
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="option">
-            <div class="r-load">
-                <div class="r-heade">负载</div>
-                    <div class="r-content">
-                        <div class="le-con">
-                            <p class="r-bt">
-                                <span>*</span>
-                                负载工作模式：
-                                <input name="sex" type="radio" checked="checked"/>定时模式
-                                <input name="sex" type="radio" />光控模式
-                            </p>
+    <!--22222-->
 
-                            <div>
-                                <span>*</span>
-                                开灯时刻：
-                                <input type="text" class="Wdate" id="d414" onclick="WdatePicker({dateFmt:'H:mm:ss',minDate:'8:00:00',maxDate:'11:30:00'})" style=" display: inline-block;
-                                       width: 184px; height: 35px; border: 1px solid #ccc; border-radius: 4px; margin-left: 52px;"/>
-                            </div>
-
-                            <div>
-                                <span>*</span>
-                                1时段时长：
-                                <div class="container">
-                                    <div class="input-group spinner">
-                                        <input type="text" class="form-control" value="42">
-                                        <div class="input-group-btn-vertical">
-                                            <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
-                                            <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                                小时
-                                <div class="container r-container">
-                                    <div class="input-group spinner">
-                                        <input type="text" class="form-control" value="42">
-                                        <div class="input-group-btn-vertical">
-                                            <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
-                                            <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                                分钟
-                            </div>
-
-                            <div>
-                                <span>*</span>
-                                3时段时长：
-                                <div class="container">
-                                    <div class="input-group spinner">
-                                        <input type="text" class="form-control" value="42">
-                                        <div class="input-group-btn-vertical">
-                                            <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
-                                            <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                                小时
-                                <div class="container r-container">
-                                    <div class="input-group spinner">
-                                        <input type="text" class="form-control" value="42">
-                                        <div class="input-group-btn-vertical">
-                                            <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
-                                            <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                                分钟
-                            </div>
-
-                            <div>
-                                <span>*</span>
-                                5时段时长：
-                                <div class="container">
-                                    <div class="input-group spinner">
-                                        <input type="text" class="form-control" value="42">
-                                        <div class="input-group-btn-vertical">
-                                            <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
-                                            <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                                小时
-                                <div class="container r-container">
-                                    <div class="input-group spinner">
-                                        <input type="text" class="form-control" value="42">
-                                        <div class="input-group-btn-vertical">
-                                            <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
-                                            <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                                分钟
-                            </div>
-                        </div>
-                    <div class="rg-con">
-                            <div class="r-bt">
-                                <span>*</span>
-                                负载功率：
-                                <div class="container">
-                                    <div class="input-group spinner">
-                                        <input type="text" class="form-control" value="42">
-                                        <div class="input-group-btn-vertical">
-                                            <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
-                                            <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                                小时
-                            </div>
-
-                            <div>
-                                <span>*</span>
-                                关灯时刻：
-                                <input type="text" class="Wdate" id="d414" onclick="WdatePicker({dateFmt:'H:mm:ss',minDate:'8:00:00',maxDate:'11:30:00'})"style=" display: inline-block;
-                                       width: 184px; height: 35px; border: 1px solid #ccc; border-radius: 4px; margin-left: 42px;"/>
-                            </div>
-                            <div>
-                                <span>*</span>
-                                2时段时长：
-                                <div class="container">
-                                    <div class="input-group spinner">
-                                        <input type="text" class="form-control" value="42">
-                                        <div class="input-group-btn-vertical">
-                                            <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
-                                            <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                                小时
-                                <div class="container r-container">
-                                    <div class="input-group spinner">
-                                        <input type="text" class="form-control" value="42">
-                                        <div class="input-group-btn-vertical">
-                                            <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
-                                            <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                                分钟
-                            </div>
-
-                            <div>
-                                <span>*</span>
-                                4时段时长：
-                                <div class="container">
-                                    <div class="input-group spinner">
-                                        <input type="text" class="form-control" value="42">
-                                        <div class="input-group-btn-vertical">
-                                            <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
-                                            <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                                小时
-                                <div class="container r-container">
-                                    <div class="input-group spinner">
-                                        <input type="text" class="form-control" value="42">
-                                        <div class="input-group-btn-vertical">
-                                            <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
-                                            <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                                分钟
-                            </div>
-
-                            <div>
-                                <span>*</span>
-                                晨亮时段时长：
-                                <div class="container">
-                                    <div class="input-group spinner">
-                                        <input type="text" class="form-control" value="42">
-                                        <div class="input-group-btn-vertical">
-                                            <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
-                                            <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                                小时
-                                <div class="container r-container">
-                                    <div class="input-group spinner">
-                                        <input type="text" class="form-control" value="42">
-                                        <div class="input-group-btn-vertical">
-                                            <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
-                                            <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                                分钟
-                            </div>
-                        </div>
-                    </div>
-                    </div>
-            <div class="r-Battery">
-                        <div class="r-heade">光电池</div>
-                        <div class="r-content">
-                            <div class="r-Battery-lef">
-                                <div>
-                                    <span>*</span>
-                                    光控电压：
-                                    <div class="container">
-                                        <div class="input-group spinner">
-                                            <input type="text" class="form-control" value="42">
-                                            <div class="input-group-btn-vertical">
-                                                <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
-                                                <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <span>*</span>
-                                    开灯延时(min)
-                                    <div class="progress">
-                                        <div class="progress-bar" role="progressbar" aria-valuenow="60"
-                                             aria-valuemin="0" aria-valuemax="100" style="width: 40%;">
-                                            <span class="sr-only">40% 完成</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div class="r-Battery-reg">
-                                <p class="r-bt">
-                                    <span>*</span>
-                                    光控关灯开关：
-                                    <input name="sex" type="radio" checked="checked"/>开
-                                    <input name="sex" type="radio" />关
-                                </p>
-                               <div>
-                                   <span>*</span>
-                                   负载功率：
-                                   <div class="progress">
-                                       <div class="progress-bar" role="progressbar" aria-valuenow="60"
-                                            aria-valuemin="0" aria-valuemax="100" style="width: 40%;">
-                                           <span class="sr-only">40% 完成</span>
-                                       </div>
-                                   </div>
-                               </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-                    <div class="r-Lamp">
-                        <div class="r-Lamp-head">
-                            <span class="r-lights">关灯时段</span>
-                            <span class="r-Someone">有人功率</span>
-                            <span class="r-Unmanned">无人功率</span>
-                        </div>
-                        <div class="r-Lamp-Progress">
-                            <div>
-                                <span> <i>*</i>灯亮时段1：</span>
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="60"
-                                         aria-valuemin="0" aria-valuemax="100" style="width: 40%;">
-                                        <span class="sr-only">40% 完成</span>
-                                    </div>
-                                </div>
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="60"
-                                         aria-valuemin="0" aria-valuemax="100" style="width: 40%;">
-                                        <span class="sr-only">40% 完成</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <span> <i>*</i>灯亮时段2：</span>
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="60"
-                                         aria-valuemin="0" aria-valuemax="100" style="width: 40%;">
-                                        <span class="sr-only">40% 完成</span>
-                                    </div>
-                                </div>
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="60"
-                                         aria-valuemin="0" aria-valuemax="100" style="width: 40%;">
-                                        <span class="sr-only">40% 完成</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <span> <i>*</i>灯亮时段3：</span>
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="60"
-                                         aria-valuemin="0" aria-valuemax="100" style="width: 40%;">
-                                        <span class="sr-only">40% 完成</span>
-                                    </div>
-                                </div>
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="60"
-                                         aria-valuemin="0" aria-valuemax="100" style="width: 40%;">
-                                        <span class="sr-only">40% 完成</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <span> <i>*</i>灯亮时段4：</span>
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="60"
-                                         aria-valuemin="0" aria-valuemax="100" style="width: 40%;">
-                                        <span class="sr-only">40% 完成</span>
-                                    </div>
-                                </div>
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="60"
-                                         aria-valuemin="0" aria-valuemax="100" style="width: 40%;">
-                                        <span class="sr-only">40% 完成</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <span> <i>*</i>灯亮时段5：</span>
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="60"
-                                         aria-valuemin="0" aria-valuemax="100" style="width: 40%;">
-                                        <span class="sr-only">40% 完成</span>
-                                    </div>
-                                </div>
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="60"
-                                         aria-valuemin="0" aria-valuemax="100" style="width: 40%;">
-                                        <span class="sr-only">40% 完成</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <span> <i>*</i>晨亮时段：</span>
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="60"
-                                         aria-valuemin="0" aria-valuemax="100" style="width: 40%;">
-                                        <span class="sr-only">40% 完成</span>
-                                    </div>
-                                </div>
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="60"
-                                         aria-valuemin="0" aria-valuemax="100" style="width: 40%;">
-                                        <span class="sr-only">40% 完成</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div style="position: relative;display: flex;  align-items: center;padding-left: 30px">
-                            <span style="float: left"> <i>*</i>节能智能开关：</span>
-                            <div class="form-group col-sm-2 " style="width:40%;padding-left:0;padding-right:0;">
-                                <select class="form-control" id="acc_select_b" style="width: 65%;margin-top: 13px;">
-                                    <option>1年</option>
-                                    <option>2年</option>
-                                    <option>3年</option>
-                                    <option>4年</option>
-                                    <option>5年</option>
-                                </select>
-                            </div>
-                            <div style=" width: 42%;">
-                                <span> <i style="">*</i>自动休眠时间：</span>
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="60"
-                                         aria-valuemin="0" aria-valuemax="100" style="width: 40%;">
-                                        <span class="sr-only">40% 完成</span>
-                                    </div>
+        <div class="r-Battery">
+            <div class="r-heade">光电池</div>
+            <div class="r-content">
+                <div class="r-Battery-lef">
+                    <div>
+                        <span><i>*</i></span>
+                        光控电压：
+                        <div class="container">
+                            <div class="input-group spinner">
+                                <input type="text" class="form-control" value="42" id="r_teml_tgl">
+                                <div class="input-group-btn-vertical">
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div>
+                        <span><i>*</i>开灯延时(min)</span>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="60"
+                                 aria-valuemin="0" aria-valuemax="100" style="width: 40%;" id="r_jin_on">
+                                <span class="sr-only">40% 完成</span>
+                            </div>
+                        </div>
+                        <p>40% 完成</p>
+                    </div>
 
-
-            <!--蓄电池-->
-                <div class="r-Battery">
-                    <div class="r-heade">蓄电池</div>
-                    <div class="r-Battery-lef">
-                        <div>
-                            <span> *</span>电池串数：
-                            <div class="container">
-                                <div class="input-group spinner">
-                                    <input type="text" class="form-control" value="42">
-                                    <div class="input-group-btn-vertical">
-                                        <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
-                                        <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
-                                    </div>
-                                </div>
+                </div>
+                <div class="r-Battery-reg">
+                    <p class="r-bt" id="r_btl_th">
+                        <span><i>*</i></span>
+                        光控关灯开关：
+                        <input name="sex" type="radio" checked="checked" value="0"/>开
+                        <input name="sex" type="radio" value="1"/>关
+                    </p>
+                    <div>
+                        <span><i>*</i> 负载功率：</span>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 40%;" id="r_jin_tw">
+                                <span class="sr-only">40% 完成</span>
                             </div>
                         </div>
-                        <div>
-                            <span> *</span>过放电压(V)：<input type="">X8
-                        </div>
-                        <div>
-                            <span> *</span>充电电流(A)：<input type="">
-                        </div>
-                        <div>
-                            <span> *</span>充电温度范围：
-                            <div class="progress">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="60"
-                                     aria-valuemin="0" aria-valuemax="100" style="width: 40%;">
-                                    <span class="sr-only">40% 完成</span>
+                        <p>40% 完成</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--333333-->
+        <!--蓄电池-->
+        <div class="r-Battery-tw">
+            <div class="r-heade">蓄电池</div>
+            <div class="r-Battery-tw-con">
+                <div class="r-Battery-lef">
+                    <div>
+                        <span> <i>*</i></span>电池串数：
+                        <div class="container">
+                            <div class="input-group spinner">
+                                <input type="text" class="form-control" value="42" id="r_teml_forl">
+                                <div class="input-group-btn-vertical">
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
                                 </div>
                             </div>
-                        </div>
-                        <div>
-                            <span>*</span>巡检时间：
-                            <div class="container">
-                                <div class="input-group spinner">
-                                    <input type="text" class="form-control" value="42">
-                                    <div class="input-group-btn-vertical">
-                                        <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
-                                        <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-                            小时
-                            <div class="container r-container">
-                                <div class="input-group spinner">
-                                    <input type="text" class="form-control" value="42">
-                                    <div class="input-group-btn-vertical">
-                                        <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
-                                        <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-                            分钟
                         </div>
                     </div>
-                    <div class="r-Battery-rge">
-                        <div>
-                            <span>*</span>电池类型：
-                            <div class="form-group col-sm-2 " style="width:40%;padding-left:0;padding-right:0;">
-                                <select class="form-control" id="acc_select_b" style="width: 65%;margin-top: 13px;">
-                                    <option>三元锂</option>
-                                    <option>2年</option>
-                                    <option>3年</option>
-                                    <option>4年</option>
-                                    <option>5年</option>
-                                </select>
+                    <div>
+                        <span> <i>*</i></span>过放电压(V)：<input type="" value="000" id="r_inpl_one">X8
+                    </div>
+                    <div>
+                        <span> <i>*</i></span>充电电流(A)：<input type="" value="1111" id="r_inpl_tw">
+                    </div>
+                    <div>
+                        <span> <i>*</i>充电温度范围：</span>
+                        <p>40% 完成</p>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 40%;" id="r_jinl_th">
+                                <span class="sr-only">40% 完成</span>
                             </div>
                         </div>
-
-
-
+                    </div>
+                    <div style="line-height: 34px">
+                        <span><i>*</i>巡检时间：</span>
+                        <div class="container" style="float:left;">
+                            <div class="input-group spinner">
+                                <input type="text" class="form-control" value="42" id="r_teml_thgl">
+                                <div class="input-group-btn-vertical">
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <p style="float:left;">小时</p>
+                        <div class="container r-container" style="float:left;">
+                            <div class="input-group spinner">
+                                <input type="text" class="form-control" value="42" id="r_teml_thel">
+                                <div class="input-group-btn-vertical">
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <p style="float:left;">分钟</p>
                     </div>
                 </div>
 
-       </div>
-
-                <div class="r-bom-btn">
-                    <!--<div>-->
-                        <!--<button style="margin-right: 20px">取消</button>-->
-                        <!--<button>保存</button>-->
-                    <!--</div>-->
-                    <div class="sha_buttom">
-                        <input type="button" value="确定" id="confirm_x">
-                        <input type="button" value="取消" class="shade_modifier_project">
+                <div class="r-Battery-rge">
+                    <div>
+                        <span><i>*</i></span>电池类型：
+                        <div class="form-group col-sm-2 " style="width:40%;padding-left:0;padding-right:0;float: right;">
+                            <select class="form-control" id="r_select_b" style="width: 65%;">
+                                <option>三元锂</option>
+                                <option>2年</option>
+                                <option>3年</option>
+                                <option>4年</option>
+                                <option>5年</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <span style="float: left;"> <i>*</i>充电电压(V)：</span><input type="" style="float: left;">X8
+                    </div>
+                    <div>
+                        <span> <i>*</i>放电温度范围(C)：</span>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="60"
+                                 aria-valuemin="0" aria-valuemax="100" style="width: 40%;" id="r_wunl">
+                                <span class="sr-only">40% 完成</span>
+                            </div>
+                        </div>
+                        <p>40% 完成</p>
                     </div>
                 </div>
 
+            </div>
+        </div>
+        <!--4444444-->
+        <div class="r-Lamp">
+            <div class="r-Lamp-head">
+                <span class="r-lights">关灯时段</span>
+                <span class="r-Someone">有人功率</span>
+                <span class="r-Unmanned">无人功率</span>
+            </div>
+            <div class="r-Lamp-Progress">
+                <div>
+                    <span> <i>*</i>灯亮时段1：</span>
 
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="60"
+                             aria-valuemin="0" aria-valuemax="100" style="width: 40%;" id="r_wen1">
+                            <span class="sr-only">40% 完成</span>
+                        </div>
+                    </div>
+                    <p>40% 完成</p>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="60"
+                             aria-valuemin="0" aria-valuemax="100" style="width: 40%;" id="r_wen2">
+                            <span class="sr-only">40% 完成</span>
+                        </div>
+                    </div>
+                    <p>40% 完成</p>
                 </div>
+                <div>
+                    <span> <i>*</i>灯亮时段2：</span>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="60"
+                             aria-valuemin="0" aria-valuemax="100" style="width: 40%;" id="r_wen3">
+                            <span class="sr-only">40% 完成</span>
+                        </div>
+                    </div>
+                    <p>40% 完成</p>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="60"
+                             aria-valuemin="0" aria-valuemax="100" style="width: 40%;" id="r_wen4">
+                            <span class="sr-only">40% 完成</span>
+                        </div>
+                    </div>
+                    <p>40% 完成</p>
+                </div>
+                <div>
+                    <span> <i>*</i>灯亮时段3：</span>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="60"
+                             aria-valuemin="0" aria-valuemax="100" style="width: 40%;" id="r_wen5">
+                            <span class="sr-only">40% 完成</span>
+                        </div>
+                    </div>
+                    <p>40% 完成</p>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="60"
+                             aria-valuemin="0" aria-valuemax="100" style="width: 40%;" id="r_wen6">
+                            <span class="sr-only">40% 完成</span>
+                        </div>
+                    </div>
+                    <p>40% 完成</p>
+                </div>
+                <div>
+                    <span> <i>*</i>灯亮时段4：</span>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="60"
+                             aria-valuemin="0" aria-valuemax="100" style="width: 40%;" id="r_wen7">
+                            <span class="sr-only">40% 完成</span>
+                        </div>
+                    </div>
+                    <p>40% 完成</p>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="60"
+                             aria-valuemin="0" aria-valuemax="100" style="width: 40%;" id="r_wen8">
+                            <span class="sr-only">40% 完成</span>
+                        </div>
+                    </div>
+                    <p>40% 完成</p>
+                </div>
+                <div>
+                    <span> <i>*</i>灯亮时段5：</span>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="60"
+                             aria-valuemin="0" aria-valuemax="100" style="width: 40%;" id="r_wen9">
+                            <span class="sr-only">40% 完成</span>
+                        </div>
+                    </div>
+                    <p>40% 完成</p>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="60"
+                             aria-valuemin="0" aria-valuemax="100" style="width: 40%;" id="r_wen10">
+                            <span class="sr-only">40% 完成</span>
+                        </div>
+                    </div>
+                    <p>40% 完成</p>
+                </div>
+                <div>
+                    <span> <i>*</i>晨亮时段：</span>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="60"
+                             aria-valuemin="0" aria-valuemax="100" style="width: 40%;" id="r_wen11">
+                            <span class="sr-only">40% 完成</span>
+                        </div>
+                    </div>
+                    <p>40% 完成</p>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="60"
+                             aria-valuemin="0" aria-valuemax="100" style="width: 40%;" id="r_wen12">
+                            <span class="sr-only">40% 完成</span>
+                        </div>
+                    </div>
+                    <p>40% 完成</p>
+                </div>
+            </div>
 
+            <div style="padding-left: 30px">
+                <span style="float: left"> <i>*</i>节能智能开关：</span>
+                <div class="form-group col-sm-2 " style="width:40%;padding-left:0;padding-right:0;margin-top: -20px;">
+                    <select class="form-control" id="rc_select_b" style="width: 65%;margin-top: 13px;">
+                        <option>1年</option>
+                        <option>2年</option>
+                        <option>3年</option>
+                        <option>4年</option>
+                        <option>5年</option>
+                    </select>
+                </div>
+                <div style=" width: 46%;float: right;">
+                    <span style="float: left;"> <i style="">*</i>自动休眠时间：</span>
+
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="60"
+                             aria-valuemin="0" aria-valuemax="100" style="width: 40%;" id="r_jin_z">
+                            <span class="sr-only">40% 完成</span>
+                        </div>
+                    </div>
+                    <p style="float:left;">40% 完成</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="r-bom-btn">
+            <div>
+                <span style="margin-right: 20px">取消</span>
+                <span>保存</span>
+            </div>
+        </div>
+
+        <!--设置结束-->
+    </div>
+
+    <!--彻底结束-->
+</div>
 
 
 </body>
 <script src="${request.contextPath}/statics/js/modules/control/control.js"></script>
 <script src="${request.contextPath}/statics/js/modules/control/My97DatePicker/WdatePicker.js"></script>
+
 <script>
     //    数值增殖期
     (function ($) {
-        $('.spinner .btn:first-of-type').on('click', function() {
-            $('.spinner input').val( parseInt($('.spinner input').val(), 10) + 1);
+        $('.spinner .btn:first-of-type').on('click', function () {
+            // console.log( $(this).parent().siblings(".form-control").val() )
+            $(this).parent().siblings(".form-control").val(parseInt($(this).parent().siblings(".form-control").val(), 0) + 1);
         });
-        $('.spinner .btn:last-of-type').on('click', function() {
-            $('.spinner input').val( parseInt($('.spinner input').val(), 10) - 1);
+        $('.spinner .btn:last-of-type').on('click', function () {
+            // $('.spinner input').val( parseInt($('.spinner input').val(), 10) - 1);
+            $(this).parent().siblings(".form-control").val(parseInt($(this).parent().siblings(".form-control").val(), 0) - 1);
         });
     })(jQuery);
 </script>

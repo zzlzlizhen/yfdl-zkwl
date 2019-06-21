@@ -6,8 +6,12 @@ html,body{width:100% !important;height:100% !important;margin:0;padding:0;font-s
 .form_input{  margin-bottom: 0px !important; padding: 0px !important;width:11% !important;;height:100%;margin-top:26px;}
 
 /*选项卡*/
-.option_a{width:100%;height:82%;float:left;}
-.option{width:100%;height:100%;display:none;float:left;}
+.option_a{width:100%;height:80%;float:left;}
+
+.option{width:100%;height:82%;display:none;float:left; overflow-x: hidden;overflow-y: scroll;}
+.option::-webkit-scrollbar {
+    display: none;
+}
 .tab {width:100%;height:10%;float:left;margin:0;padding:0;list-style:none;overflow:hidden;border-bottom: 10px solid rgba(242, 242, 242, 1);}
 .tab li {float:left;width:6%;height:50%;color:#666;font-size:14px;text-align:center;line-height:30px;cursor:pointer;margin:1.1% 0px 0px 2%;}
 .on {display:block;}
@@ -28,7 +32,7 @@ html,body{width:100% !important;height:100% !important;margin:0;padding:0;font-s
 /*负载*/
 .r-load{
     width: 49.5%;
-    height: 360px;
+    height: 395px;
     float: left;
     background: #fff; ;
 
@@ -53,6 +57,7 @@ html,body{width:100% !important;height:100% !important;margin:0;padding:0;font-s
     width: 100%;
     display: inline-block;
     height: 50px;
+    line-height: 50px;
 }
 .le-con > div{
     display: flex;
@@ -67,7 +72,7 @@ html,body{width:100% !important;height:100% !important;margin:0;padding:0;font-s
 }
 
 .rg-con{
-    width:46%;
+    width:47%;
     font-size: 14px;
     float: right;
     background: #fff;
@@ -75,13 +80,14 @@ html,body{width:100% !important;height:100% !important;margin:0;padding:0;font-s
 .r-Lamp{
     width:49.5%;
     font-size: 14px;
-    float: right;
+    float: left;
     background: #fff;
 }
 .rg-con > p{
     width: 100%;
     display: inline-block;
     height: 50px;
+    line-height: 50px;
 }
 .rg-con > div{
     display: flex;
@@ -151,18 +157,34 @@ spinner {
 }
 
 
+
+/*蓄电池*/
+
+.r-Battery-tw{
+    width: 49.5%;
+    height: 420px;
+    float: right;
+    background: #fff; ;
+
+}
+.r-Battery-tw-con{
+    padding: 30px;
+}
+
+
+
 /*光电池*/
 
 .r-Battery{
     width: 49.5%;
-    height: 213px;
+    height: 394px;
     float: right;
     background: #fff; ;
 
 }
 
 .r-Battery-lef{
-    width:43%;
+    width:46%;
     font-size: 14px;
     float: left;
 }
@@ -181,7 +203,7 @@ spinner {
     display: inline-block;
 }
 .r-Battery-lef span{
-    color: red;
+
 }
 
 .r-Battery-reg{
@@ -203,8 +225,60 @@ spinner {
     display: inline-block;
 }
 .r-Battery-reg span{
-    color: red;
+
+    float: left;
 }
+
+.r-Battery-rge > p{
+    width: 100%;
+    display: inline-block;
+
+}
+.r-Battery-rge > div{
+    /*display: flex;*/
+    /*align-items: center;*/
+    height: 50px;
+    margin-top: 7px;
+}
+.r-bt > input{
+    display: inline-block;
+}
+
+
+.r-Battery-rge{
+    width:49.5%;
+    font-size: 14px;
+    float: right;
+}
+.r-Battery-rge > p{
+    width: 100%;
+    display: inline-block;
+    height: 50px;
+}
+.r-Battery-rge > div{
+    /*display: flex;*/
+    /*align-items: center;*/
+    height: 50px;
+}
+.r-bt > input{
+    display: inline-block;
+}
+.r-Battery-rge span{
+    float: left;
+}
+.r-Battery-rge span>i{
+color: red;
+}
+
+
+
+
+
+
+
+
+
+
 
 /*进度条内容*/
 .r-Lamp-head>span{
@@ -240,8 +314,8 @@ spinner {
 /*进度条*/
 
 .progress{
-    float: right;
-    width: 32%;
+    float: left;
+    width: 25%;
     height: 8px;
     margin-top: 5px;
     margin-left: 30px;
@@ -251,21 +325,25 @@ spinner {
 
 
 
-
-
-
-
 /*底部按钮*/
 .r-bom-btn{
     width: 100%;
     height: 94px;
     background: #ffffff;
-    float: left;
     clear: both;
+    position: absolute;
+    bottom: 0;
 }
-.r-bom-btn button{
+.r-bom-btn span{
+    display: inline-block;
     width:82px ;
     height: 34px;
+    border-radius: 4px;
+    background: #00acd6;
+    line-height: 34px;
+    text-align: center;
+    color: #ffffff;
+
 
 }
 .r-bom-btn div{
@@ -274,3 +352,48 @@ spinner {
     margin-right: 100px;
     margin-top: 35px;
 }
+
+
+.r-Battery-lef>div >p{
+    float: right;
+    font-size: 12px;
+    margin-left: 10px;
+}
+
+/*.sha_buttom,.sha_buttom_delete{width:100%;height:50px; position: absolute;bottom: 0;border-top:1px solid #ccc;}*/
+/*.sha_buttom input,.sha_buttom_delete input{width:55px;height:30px;border-radius: 5px;background: rgba(24, 144, 255, 1);color:#fff;line-height:30px;float:right;margin:1.7% 4% 0px 0px ;border:0;}*/
+
+
+
+/*进度条*/
+
+.r-Lamp-Progress div p{
+    width: 12%;
+    float: left;
+    margin-left: 11px;
+}
+
+
+.r-Lamp-Progress div>span{
+    float: left;
+}
+
+
+.r-Lamp-Progress div>.progress{
+    float: left;
+    margin-top: 19px;
+}
+
+
+
+
+.r-Battery-lef div span{
+    float: left;
+}
+
+.r-Battery-lef span>i,.r-Battery-reg i{
+    color:red;
+}
+
+
+

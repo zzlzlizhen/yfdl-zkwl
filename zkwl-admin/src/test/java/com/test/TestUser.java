@@ -14,7 +14,7 @@ import java.util.Map;
 public class TestUser {
 
     public static final String URL = "http://127.0.0.1:8080/remote-admin";
-    public static final String CURRENT_COOKIE = "JSESSIONID=247e7316-d1db-4e5d-9ef5-8a32382ec147";
+    public static final String CURRENT_COOKIE = "JSESSIONID=2ea5a2f0-ff8b-4e53-82a2-2c0b38714d57";
     @Test
     public void infoTest(){
         String url = URL + "/sys/user/info";

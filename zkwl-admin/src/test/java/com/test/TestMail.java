@@ -6,13 +6,37 @@ import org.junit.Test;
 
 public class TestMail {
     private static final String baseURL="127.0.0.1:8080/remote-admin";
-    private static final String CURRENT_COOKIE = "JSESSIONID=24a01f57-a439-4d29-9735-0796563b97b2";
+    private static final String CURRENT_COOKIE = "JSESSIONID=0157ccd9-70f0-452b-8992-c221da5d6778";
     @Test
-    public void testMail(){
-        String url = baseURL + "/mail/getCheckCode?email=1648925727@qq.com";
+    public void testSendBindEmail(){
+        String url = baseURL + "/mail/sendBindEmail?email=1648925727@qq.com";
         String result3= HttpRequest.get(url)
                 .header(Header.COOKIE, CURRENT_COOKIE)
                 .execute().body();
         System.out.println(result3);
+    }
+    @Test
+    public void testScurityCode(){
+        String url = baseURL + "/mail/checkScurityCode?email=1648925727@qq.com&scurityCode=990801";
+        String result4= HttpRequest.get(url)
+                .header(Header.COOKIE, CURRENT_COOKIE)
+                .execute().body();
+        System.out.println(result4);
+    }
+    @Test
+    public void testSendBindSms(){
+        String url = baseURL + "/sms/sendBindSms?mobile=15810669164";
+        String result3= HttpRequest.get(url)
+                .header(Header.COOKIE, CURRENT_COOKIE)
+                .execute().body();
+        System.out.println(result3);
+    }
+    @Test
+    public void testSmsScurityCode(){
+        String url = baseURL + "/sms/checkScurityCode?mobile=15810669164&securityCode=196395";
+        String result4= HttpRequest.get(url)
+                .header(Header.COOKIE, CURRENT_COOKIE)
+                .execute().body();
+        System.out.println(result4);
     }
 }

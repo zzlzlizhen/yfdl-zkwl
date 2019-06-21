@@ -58,13 +58,13 @@ public class TestServiceMethod {
 
     @Test
     public void testSendBindEmail(){
-        R r = sendEmailService.send(sendEmailMsgProperties.getPhoneFrom(),"1648925727@qq.com",sendEmailMsgProperties.getTitleEmailBind(),sendEmailMsgProperties.getContentEmailBindTemplate(StringUtils.getSecurityCode(6)));
+        R r = sendEmailService.send(sendEmailMsgProperties.getEmailFrom(),"1648925727@qq.com",sendEmailMsgProperties.getTitleEmailBind(),sendEmailMsgProperties.getContentEmailBindTemplate(StringUtils.getSecurityCode(6)));
         System.out.println(JSON.toJSONString(r));
     }
 
     @Test
     public void testSendForgotPasswordEmail(){
-        R r = sendEmailService.send(sendEmailMsgProperties.getPhoneFrom(),"1648925727@qq.com",sendEmailMsgProperties.getTitleEmailForgotPassword(),sendEmailMsgProperties.getContentEmailForgotPasswordTemplate(StringUtils.getSecurityCode(6)));
+        R r = sendEmailService.send(sendEmailMsgProperties.getEmailFrom(),"1648925727@qq.com",sendEmailMsgProperties.getTitleEmailForgotPassword(),sendEmailMsgProperties.getContentEmailForgotPasswordTemplate(StringUtils.getSecurityCode(6)));
         System.out.println(JSON.toJSONString(r));
     }
 

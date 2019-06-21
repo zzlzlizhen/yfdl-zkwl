@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @PropertySource(value = {"classpath:mail-info.properties"},encoding = "utf-8")
 public class SendEmailMsgProperties {
 
-    private String phoneFrom;
+    private String emailFrom;
 
     private String titleEmailBind;
 
@@ -24,12 +24,12 @@ public class SendEmailMsgProperties {
 
     private String contentEmailForgotPasswordTemplate;
 
-    public String getPhoneFrom() {
-        return phoneFrom;
+    public String getEmailFrom() {
+        return emailFrom;
     }
 
-    public void setPhoneFrom(String phoneFrom) {
-        this.phoneFrom = phoneFrom;
+    public void setEmailFrom(String emailFrom) {
+        this.emailFrom = emailFrom;
     }
 
     public String getTitleEmailBind() {

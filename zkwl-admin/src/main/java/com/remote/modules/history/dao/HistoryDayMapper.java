@@ -17,4 +17,11 @@ public interface HistoryDayMapper extends BaseMapper<HistoryDay> {
      * @return List<HistoryDay>
      **/
     List<HistoryDay> queryHistoryDay(@Param("deviceCode") String deviceCode, @Param("time")String time);
+    /*
+     * @Author zhagnwenping
+     * @Description 删除一个月前的数据
+     * @Date 14:31 2019/6/21
+     * @return int
+     **/
+    int deleteBatchDay();
 }

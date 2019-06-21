@@ -134,6 +134,27 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	}
 
 	/**
+	 *通过用户id更新邮箱
+	 * */
+	@Override
+	public boolean updateEmail(String email,Long userId) {
+		SysUserEntity userEntity = new SysUserEntity();
+		userEntity.setEmail(email);
+		return this.update(userEntity,
+				new QueryWrapper<SysUserEntity>().eq("user_id", userId));
+	}
+
+	/**
+	 *通过用户id更新手机号
+	 * */
+	@Override
+	public boolean updateMobile(String mobile,Long userId) {
+		SysUserEntity userEntity = new SysUserEntity();
+		userEntity.setMobile(mobile);
+		return this.update(userEntity,
+				new QueryWrapper<SysUserEntity>().eq("user_id", userId));
+	}
+	/**
      * 通过用户id 删除用户
      * */
 	@Override
@@ -161,11 +182,20 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
         return sysUserDao.queryAllChild(sysUserEntity);
 	}
 
+	/**
+	 *根据邮箱验证用户
+	 * */
 	@Override
-	public SysUserEntity queryByEmail(String contact){
-		return sysUserDao.queryByContact(contact);
+	public SysUserEntity queryByEmailAndUid(String email,Long userId){
+		return sysUserDao.queryByEmailAndUid(email,userId);
 	}
-
+	/**
+	 *根据手机号验证用户
+	 * */
+	@Override
+	public SysUserEntity queryBySmsAndUid(String mobile,Long userId){
+		return sysUserDao.queryBySmsAndUid(mobile,userId);
+	}
    /*
    * 通过用户id查询所有的子用户
    * */

@@ -41,10 +41,14 @@
 	<select id="queryAllLevel" resultType="com.remote.modules.sys.entity.SysUserEntity">
 		select <include refid="columns"/> from sys_user where ${where}
 	</select>
-	<select id="queryByContact" resultType="com.remote.modules.sys.entity.SysUserEntity">
-		select <include refid="columns"/> from sys_user as su  where flag = 1 and su.email = #{email} or su.mobile = #{mobile}
+	<!--通过用户id跟邮箱查询该用户是否已经绑定邮箱-->
+	<select id="queryByEmailAndUid" resultType="com.remote.modules.sys.entity.SysUserEntity">
+		select <include refid="columns"/> from sys_user as su  where su.flag = 1 and su.type =1 and su.user_id = #{userId} and su.email = #{email}
 	</select>
-	
+	<!--通过用户id跟手机查询该手机号是否已绑定-->
+	<select id="queryBySmsAndUid" resultType="com.remote.modules.sys.entity.SysUserEntity">
+		SELECT <include refid="columns"/> from sys_user as su where su.flag = 1 and su.type = 1 and su.user_id = #{userId} and su.mobile = #{mobile}
+	</select>
 <!--	<select id="queryByUser" resultType="com.remote.modules.sys.entity.SysUserEntity">
 		select <include refid="columns"/> from sys_user where 1=1 and username = #{username}
 	</select>-->

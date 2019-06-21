@@ -2,6 +2,7 @@ package com.remote.modules.sys.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.remote.modules.sys.entity.SecurityEntity;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 
@@ -11,5 +12,6 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface SecurityDao extends BaseMapper<SecurityEntity> {
-    SecurityEntity querySecurity(String contact ,String checkCode );
+    SecurityEntity querySecurity(@Param("email") String email ,@Param("securityCode") String securityCode, @Param("userId")Long userId );
+    SecurityEntity querySmsSecurity(@Param("mobile") String mobile, @Param("securityCode")String securityCode,@Param("userId")Long userId);
 }

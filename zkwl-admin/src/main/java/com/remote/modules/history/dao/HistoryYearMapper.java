@@ -18,4 +18,11 @@ public interface HistoryYearMapper extends BaseMapper<HistoryYear> {
      * @return List<HistoryYear>
      **/
     List<HistoryYear> queryHistoryYear(@Param("deviceCode") String deviceCode, @Param("year")String year);
+    /*
+     * @Author zhagnwenping
+     * @Description 删除5年前的数据
+     * @Date 14:31 2019/6/21
+     * @return int
+     **/
+    int deleteBatchYear();
 }

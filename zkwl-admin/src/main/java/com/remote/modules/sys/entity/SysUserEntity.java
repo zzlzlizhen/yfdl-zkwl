@@ -115,6 +115,9 @@ public class SysUserEntity implements Serializable {
 	 * */
 	private Integer termOfValidity;
 
+	/**
+	 * 邮箱绑定状态 0未绑定 1已绑定
+	 * */
 	private Integer type;
 
 	/**

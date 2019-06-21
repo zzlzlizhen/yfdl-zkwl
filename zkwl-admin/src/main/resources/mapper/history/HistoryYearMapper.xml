@@ -33,6 +33,8 @@
         GROUP BY
         create_time
     </select>
-    
 
+    <delete id="deleteBatchMonth">
+        delete from history_year where create_time &lt; date_add(curdate(),INTERVAL -5 year )
+    </delete>
 </mapper>

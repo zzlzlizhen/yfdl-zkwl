@@ -29,8 +29,11 @@ public class SecurityServiceImpl extends ServiceImpl<SecurityDao, SecurityEntity
     }
 
     @Override
-    public SecurityEntity querySecurity(String contact ,String checkCode ) {
-        return securityDao.querySecurity(contact,checkCode);
+    public SecurityEntity querySecurity(String email ,String securityCode,Long userId ) {
+        return securityDao.querySecurity(email,securityCode,userId);
     }
-
+    @Override
+    public SecurityEntity querySmsSecurity(String mobile ,String securityCode,Long userId ) {
+        return securityDao.querySmsSecurity(mobile,securityCode,userId);
+    }
 }

@@ -19,7 +19,7 @@ public class DeviceEntity {
      */
     private String deviceId;
     /**
-     * 设备编号
+     * 设备编号f
      */
     private String deviceCode;
     /**
@@ -111,11 +111,11 @@ public class DeviceEntity {
     //蓄电池余量
     private String batteryMargin;
     //蓄电池电压
-    private String batteryVoltage;
+    private Double batteryVoltage;
     //光电池电压
     private String photovoltaicCellVoltage;
     //充电电流
-    private String chargingCurrent;
+    private Double chargingCurrent;
     //充电功率
     private String chargingPower;
     //负载电压

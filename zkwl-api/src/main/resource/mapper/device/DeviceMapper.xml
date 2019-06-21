@@ -27,12 +27,24 @@
         <result property="createTime" column="create_time"/>
         <result property="updateUser" column="update_user"/>
         <result property="updateTime" column="update_time"/>
+
+        <result property="batteryMargin" column="battery_margin"/>
+        <result property="batteryVoltage" column="battery_voltage"/>
+        <result property="photovoltaicCellVoltage" column="photovoltaic_cell_voltage"/>
+        <result property="chargingCurrent" column="charging_current"/>
+        <result property="chargingPower" column="charging_power"/>
+        <result property="loadVoltage" column="load_voltage"/>
+        <result property="loadPower" column="load_power"/>
+        <result property="loadCurrent" column="load_current"/>
+        <result property="lightingDuration" column="lighting_duration"/>
+        <result property="morningHours" column="morning_hours"/>
     </resultMap>
 
     <sql id="Base_Column_List" >
     device_id, device_code,device_name, group_id, device_type, photocell_state, battery_state,load_state,signal_state,
     run_state,light,communication_type,on_off,longitude,latitude,is_del,create_user,create_name,create_time
-    update_user,update_time,project_id
+    update_user,update_time,project_id,battery_margin,battery_voltage,photovoltaic_cell_voltage,charging_current,
+    charging_power,load_voltage,load_power,load_current,lighting_duration,morning_hours
     </sql>
 
     <select id="queryDeviceByCode"  resultMap="BaseResultMap" >
@@ -96,6 +108,36 @@
             </if>
             <if test="isDel != null">
                 is_del = #{isDel},
+            </if>
+            <if test="batteryMargin != null">
+                battery_margin = #{batteryMargin},
+            </if>
+            <if test="batteryVoltage != null">
+                battery_voltage = #{batteryVoltage},
+            </if>
+            <if test="photovoltaicCellVoltage != null">
+                photovoltaic_cell_voltage = #{photovoltaicCellVoltage},
+            </if>
+            <if test="chargingCurrent != null">
+                charging_current = #{chargingCurrent},
+            </if>
+            <if test="chargingPower != null">
+                charging_power = #{chargingPower},
+            </if>
+            <if test="loadVoltage != null">
+                load_voltage = #{loadVoltage},
+            </if>
+            <if test="loadPower != null">
+                load_power = #{loadPower},
+            </if>
+            <if test="loadCurrent != null">
+                load_current = #{loadCurrent},
+            </if>
+            <if test="lightingDuration != null">
+                lighting_duration = #{lightingDuration},
+            </if>
+            <if test="morningHours != null">
+                morning_hours = #{morningHours},
             </if>
             update_time = now()
         </set>

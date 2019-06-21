@@ -28,7 +28,7 @@ public class FaultlogController extends AbstractController {
     private FaultlogService faultlogService;
 
     @RequestMapping(value = "/queryFaultlog", method= RequestMethod.GET)
-    public R add(String deviceId,Integer status){
+    public R queryFaultlog(String deviceId,Integer status){
         //1 故障日志  2 操作日志
         return R.ok(faultlogService.queryFaultlogByDeviceId(deviceId,status));
     }
