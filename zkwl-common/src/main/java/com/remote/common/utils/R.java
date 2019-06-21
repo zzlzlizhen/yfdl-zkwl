@@ -60,4 +60,18 @@ public class R extends HashMap<String, Object> {
 		super.put(key, value);
 		return this;
 	}
+
+	public boolean isOK(){
+		try {
+			Integer code = (Integer)this.get("code");
+			if(code == 200){
+				return true;
+			}else{
+				return false;
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+			return false;
+		}
+	}
 }
