@@ -121,7 +121,17 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 		//保存用户与角色关系
 		sysUserRoleService.saveOrUpdate(user.getUserId(), user.getRoleIdList());
 	}
-
+    /**
+	 * 更新用户基本信息
+	 * */
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public void updatebaseInfo(SysUserEntity user) {
+		this.baseMapper.update(user,
+				new QueryWrapper<SysUserEntity>().eq("user_id", user.getUserId()));
+		//保存用户与角色关系
+		sysUserRoleService.saveOrUpdate(user.getUserId(), user.getRoleIdList());
+	}
 	/**
      * 更新用户状态 通过用户id更用户状态
      * */

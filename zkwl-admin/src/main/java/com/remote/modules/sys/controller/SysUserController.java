@@ -178,4 +178,44 @@ public class SysUserController extends AbstractController {
 		SysUserEntity user = sysUserService.queryById(getUserId());
 		return R.ok().put("user",user);
 	}
+
+	/**
+	 * 修改用户
+	 */
+	@SysLog("修改用户基本信息")
+	@RequestMapping(value = "/updateBaseInfo",method = RequestMethod.POST)
+	@RequiresPermissions("sys:user:update")
+	public R updateBaseInfo(SysUserEntity user){
+		SysUserEntity email = sysUserService.queryByEmailAndUid(user.getEmail(),user.getUserId());
+		SysUserEntity mobile = sysUserService.queryBySmsAndUid(user.getMobile(),user.getUserId());
+		if(email != null){
+			if(!StringUtils.isBlank(user.getEmail())){
+				if(!user.getEmail().equals(email.getEmail())){
+					return R.error("此邮箱跟绑定邮箱不一致");
+				}
+			}
+		}else if(mobile == null){
+			if(!StringUtils.isBlank(user.getMobile())){
+				if(!user.getMobile().equals(mobile.getMobile())){
+					return R.error("此手机号跟绑定手机号不一致");
+				}
+			}
+		}
+		sysUserService.updatebaseInfo(user);
+		return R.ok();
+	}
+
+	/**
+	 * 用户信息
+	 */
+	@RequestMapping("/baseInfo")
+	@RequiresPermissions("sys:user:info")
+	public R baseInfo(){
+		SysUserEntity user = sysUserService.getById(getUserId());
+		//获取用户所属的角色列表
+		List<Long> roleIdList = sysUserRoleService.queryRoleIdList(getUserId());
+		user.setRoleIdList(roleIdList);
+		return R.ok().put("user", user);
+	}
+
 }

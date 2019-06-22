@@ -84,4 +84,5 @@ public interface SysUserService extends IService<SysUserEntity> {
 	 * */
 	boolean updateMobile(String mobile,Long userId);
 	int removeUser(Long id);
+	void updatebaseInfo(SysUserEntity user);
 }
