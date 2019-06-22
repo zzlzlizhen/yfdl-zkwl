@@ -21770,7 +21770,7 @@ window.SwaggerUi = Backbone.Router.extend({
     // Create view to handle the header inputs
     this.headerView = new SwaggerUi.Views.HeaderView({el: $('#header')});
 
-    // Event handler for when the baseUrl/apiKey is entered by user
+    // Event handler for when the code == 200/apiKey is entered by user
     this.headerView.on('update-swagger-ui', function(data) {
       return that.updateSwaggerUi(data);
     });
@@ -22689,7 +22689,7 @@ SwaggerUi.Views.HeaderView = Backbone.View.extend({
     'click #show-pet-store-icon'    : 'showPetStore',
     'click #explore'                : 'showCustom',
     'submit #api_selector'          : 'showCustom',
-    'keyup #input_baseUrl'          : 'showCustomOnKeyup',
+    'keyup #input_code == 200'          : 'showCustomOnKeyup',
     'keyup #input_apiKey'           : 'showCustomOnKeyup'
   },
 
@@ -22713,7 +22713,7 @@ SwaggerUi.Views.HeaderView = Backbone.View.extend({
     }
 
     this.trigger('update-swagger-ui', {
-      url: $('#input_baseUrl').val()
+      url: $('#input_code == 200').val()
     });
   },
 
@@ -22722,7 +22722,7 @@ SwaggerUi.Views.HeaderView = Backbone.View.extend({
       trigger = false;
     }
 
-    $('#input_baseUrl').val(url);
+    $('#input_code == 200').val(url);
 
     if (trigger) {
       this.trigger('update-swagger-ui', {url:url});

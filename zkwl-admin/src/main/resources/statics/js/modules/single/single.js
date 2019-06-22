@@ -311,6 +311,8 @@ $(function(){
                 }),
                 success: function(res) {
                     if(res.code == "200"){
+                       $(".pro_name").val("")
+                       $(".pro_s").val("")
                         window.location.reload()
                     }else{
                         alert("添加失败")

@@ -177,7 +177,8 @@ $(function () {
                                 console.log(JSON.stringify(res));
                                 if (res.code == "200") {
                                     alert('修改成功')
-                                         window.location.reload()
+                                     window.location.reload()
+
                                 } else {
                                     alert(res.msg);
                                 }
@@ -244,33 +245,7 @@ $(function () {
     $("#shade_a,.sha_cancel,.guan_shc").click(function () {
         $(".shade,.shade_b").css("display", "none")
     })
-    // $("#sha_que_can").click(function () {
-    //     var acc_number = $("#acc_number_b").val()
-    //     var acc_user = $("#acc_user_b").val()
-    //     var acc_password = $("#acc_password_b").val()
-    //
-    //     var acc_select = $("#acc_select_b option:selected").text()
-    //     var acc_mailbox = $("#acc_mailbox_b").val()
-    //     var acc_call = $("#acc_call_b").val()
-    //     console.log(acc_number + acc_user + acc_password + acc_select + acc_mailbox + acc_call)
-    //
-    //     $.ajax({
-    //         url: baseURL + 'sys/user/update',
-    //         type: "POST",
-    //         data: JSON.stringify({
-    //             "userId": Id_a,
-    //             "username": acc_number,
-    //             "realName": acc_user,
-    //             "termOfValidity": acc_select,
-    //             "email": acc_mailbox,
-    //             "mobile": acc_call,
-    //         }),
-    //         success: function (res) {
-    //             console.log(res)
-    //             // window.location.reload()
-    //         }
-    //     })
-    // })
+
 
     //删除彈窗/////////////////////
     $(".shade_a_delete,.sha_cancel_delete,.guan_sha").click(function () {
@@ -314,6 +289,13 @@ $(function () {
                 success: function (res) {
                     console.log(JSON.stringify(res));
                     if (res.code == 200) {
+                        $("#acc_number").val("")
+                        $("#acc_user").val("")
+                        $("#acc_password").val("")
+                        $("#acc_select option:selected").text("")
+                        $("#acc_mailbox").val("")
+                        $("#acc_call").val("");
+                        $("#role").val("");
                         alert('保存成功', function () {
                              window.location.reload()
                         });

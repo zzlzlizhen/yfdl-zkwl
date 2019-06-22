@@ -47,7 +47,7 @@
                         <span id="feedback">我要反馈</span>
                     </div>
                 </li>
-                <li><a href="system/system.html" @click="updatePassword"  class="navbar_m"><i class="glyphicon glyphicon-bell"></i></a></li>
+                <li><a href="http://localhost:8080/remote-admin/modules/system/system.html" @click="updatePassword"  class="navbar_m"><i class="glyphicon glyphicon-bell"></i></a></li>
                 <li><a href="logout"  class="navbar_m"><i class="glyphicon glyphicon-off"></i></a></li>
             </ul>
           </div>
@@ -176,25 +176,25 @@
                 <div class="import import_a">
                     <div>
                         <span>标题</span>
-                        <input type="text" placeholder="请填写标题">
+                        <input type="text" placeholder="请填写标题" id="rTitle">
                     </div>
                     <div>
                         <span>邮箱</span>
-                        <input type="text" placeholder="请填写邮箱">
+                        <input type="text" placeholder="请填写邮箱" id="r_eml_fan">
                     </div>
                     <div>
                         <span>手机号</span>
-                        <input type="text" placeholder="请填写手机号">
+                        <input type="text" placeholder="请填写手机号" id="r_ph_fan">
                     </div>
                     <div>
                         <span>内容</span>
-                        <textarea rows="7" cols="56">
+                        <textarea rows="7" cols="56" id="r_wen_fan">
 
                         </textarea>
                     </div>
                 </div>
                 <div class="confirm">
-                    <input type="button"  value="提交">
+                    <input type="button"  value="提交" id="r-btn-las">
                 </div>
             </div>
         </div>
@@ -207,21 +207,10 @@
     <script src="${request.contextPath}/statics/libs/app.js"></script>
     <script src="${request.contextPath}/statics/plugins/layer/layer.js"></script>
     <script src="${request.contextPath}/statics/js/index.js"></script>
+    <script src="${request.contextPath}/statics/js/rindex.js"></script>
+    <script src="${request.contextPath}/statics/js/regular.js"></script>
 </body>
 <script>
-    $(function(){
-       $("#set_p").click(function(){
-           $(".JI_b,.nei_r").show()
-       })
-       $(".shade,.wrong_a").click(function(){
-            $(".JI_b,.nei_r").hide()
-       })
-       $("#feedback").click(function(){
-            $(".JI_b_a,.nei_r_a").show()
-       })
-       $(".shade_a,.wrong").click(function(){
-           $(".JI_b_a,.nei_r_a").hide()
-       })
-    })
+
 </script>
 </html>

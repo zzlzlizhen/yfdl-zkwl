@@ -174,10 +174,10 @@ $(function () {
 
     $("#project_confirm").click(function(){
        var pro_name= $(".pro_name").val()
-       var pro_s= $(".pro_s").val()
+       var pro_s_b= $(".pro_s").val()
        var select=$("#select1 option:selected").text()
         //正则  丸子
-        if(pro_name ==""||pro_s==""||select=="" ) {
+        if(pro_name ==""||pro_s_b==""||select=="" ) {
             $(".mistake").css("display","block")
         }else{
             $.ajax({
@@ -186,10 +186,13 @@ $(function () {
                 type:"POST",
                 data:JSON.stringify({
                     "projectName":pro_name,
-                    "projectDesc":pro_s,
+                    "projectDesc":pro_s_b,
                     "exclusiveUser":select
                 }),
                 success: function(res){
+                 $(".pro_name").val("")
+                 $("#select1").val("")
+                  $(".pro_s_b").val("")
                     window.location.reload()
                 }
             });

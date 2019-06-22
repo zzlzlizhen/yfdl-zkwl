@@ -329,6 +329,8 @@ $(function(){
                 }),
                 success: function(res) {
                     if(res.code == "200"){
+                        $(".pro_name").val("");
+                        $(".pro_s").val("");
                         window.location.reload()
                     }else{
                         alert("添加失败")
@@ -394,12 +396,14 @@ $(function(){
 
                     if(data.data.forecast[0].type== "多云"){
                         $("#img").attr("src","${request.contextPath}/statics/image/duoyun.svg")
+
                     }else if(data.data.forecast[0].type== "晴"){
                         $("#img").attr("src","${request.contextPath}/statics/image/qing.svg")
                     }else if(data.data.forecast[0].type== "雨"){
                         $("#img").attr("src","${request.contextPath}/statics/image/yu.svg")
                     }
-
+                    console.log(  $("#img").attr("src",url))
+                    console.log("555555555555555555555555")
                     // $("#T_an").html(T_an)
 
                 }

@@ -1,6 +1,6 @@
 $(function () {
     $("#jqGrid").jqGrid({
-        url: baseURL + 'sys/user/list',
+        url: code == 200 + 'sys/user/list',
         datatype: "json",
         colModel: [			
 			{ label: '用户ID', name: 'userId', index: "user_id", width: 45, key: true },
@@ -89,7 +89,7 @@ var vm = new Vue({
         },
         getDept: function(){
             //加载部门树
-            $.get(baseURL + "sys/dept/list", function(r){
+            $.get(code == 200 + "sys/dept/list", function(r){
                 ztree = $.fn.zTree.init($("#deptTree"), setting, r);
                 var node = ztree.getNodeByParam("deptId", vm.user.deptId);
                 if(node != null){
@@ -118,7 +118,7 @@ var vm = new Vue({
                 return ;
             }
 
-            window.location.href=baseURL+"sys/permissions/index/"+userId;
+            window.location.href=code == 200+"sys/permissions/index/"+userId;
         },
         del: function () {
             var userIds = getSelectedRows();
@@ -129,7 +129,7 @@ var vm = new Vue({
             confirm('确定要删除选中的记录？', function(){
                 $.ajax({
                     type: "POST",
-                    url: baseURL + "sys/user/delete",
+                    url: code == 200 + "sys/user/delete",
                     contentType: "application/json",
                     data: JSON.stringify(userIds),
                     success: function(r){
@@ -148,7 +148,7 @@ var vm = new Vue({
             var url = vm.user.userId == null ? "sys/user/save" : "sys/user/update";
             $.ajax({
                 type: "POST",
-                url: baseURL + url,
+                url: code == 200 + url,
                 contentType: "application/json",
                 data: JSON.stringify(vm.user),
                 success: function(r){
