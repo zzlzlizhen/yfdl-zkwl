@@ -14,6 +14,7 @@
         <result property="answerCreateTime" column="answer_create_time"/>
         <result property="mobile" column="mobile"/>
         <result property="email" column="email"/>
+        <result property="title" column="title"/>
     </resultMap>
     <sql id="feedBack" >
         back_id,uid ,back_content, back_create_time, answer_content, answer_user,answer_create_time

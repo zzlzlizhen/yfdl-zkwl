@@ -367,6 +367,8 @@ $(function(){
             var cut_a=Cheng_s.substring(1);
             var cut_b=cut_a.substring(0,cut_a.length-2)
             $('#weather').html(cut_b)
+            console.log("城市")
+            console.log(data)
             //天气
             $.ajax({
                 url:'http://wthrcdn.etouch.cn/weather_mini?city='+cut_b,
@@ -379,9 +381,27 @@ $(function(){
                     var str_a=str.slice(-3)
                     var str_b=data.data.forecast[0].low
                     var str_bb=str_b.slice(-3)
+                    // if(type == "多云"){
+                    //     var lujing=$("#img").attr("src");
+                    //     lujing='天气.png'
+                    // }else if(){
+                    //
+                    // }else if(){
+                    //
+                    // }
 
-                    var T_an=data.data.forecast[0].type+" "+str_bb+"-"+str_a
-                    $("#T_an").html(T_an)
+                    var T_an=data.data.forecast[0].type+" "+str_bb+"-"+str_a;
+
+                    if(data.data.forecast[0].type== "多云"){
+                        $("#img").attr("src","${request.contextPath}/statics/image/duoyun.svg")
+                    }else if(data.data.forecast[0].type== "晴"){
+                        $("#img").attr("src","${request.contextPath}/statics/image/qing.svg")
+                    }else if(data.data.forecast[0].type== "雨"){
+                        $("#img").attr("src","${request.contextPath}/statics/image/yu.svg")
+                    }
+
+                    // $("#T_an").html(T_an)
+
                 }
             })
         }

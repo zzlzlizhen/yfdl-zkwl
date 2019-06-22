@@ -59,5 +59,8 @@ public class FeedbackEntity implements Serializable {
 	 * 反馈手机号
 	 * */
 	private String mobile;
-
+	/**
+	 * 反馈标题
+	 * */
+	private String title;
 }

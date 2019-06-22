@@ -6,34 +6,58 @@ import org.junit.Test;
 
 public class TestMail {
     private static final String baseURL="127.0.0.1:8080/remote-admin";
-    private static final String CURRENT_COOKIE = "JSESSIONID=0157ccd9-70f0-452b-8992-c221da5d6778";
+    private static final String CURRENT_COOKIE = "JSESSIONID=4ba504fc-4397-4a1e-b4dd-e5938747c38e";
     @Test
     public void testSendBindEmail(){
-        String url = baseURL + "/mail/sendBindEmail?email=1648925727@qq.com";
+        String url = baseURL + "/contact/sendBindEmail?email=1648925727@qq.com";
         String result3= HttpRequest.get(url)
                 .header(Header.COOKIE, CURRENT_COOKIE)
                 .execute().body();
         System.out.println(result3);
     }
     @Test
-    public void testScurityCode(){
-        String url = baseURL + "/mail/checkScurityCode?email=1648925727@qq.com&scurityCode=990801";
+    public void checkBindEmail(){
+        String url = baseURL + "/contact/checkBindEmail?email=1648925727@qq.com&securityCode=85847";
         String result4= HttpRequest.get(url)
                 .header(Header.COOKIE, CURRENT_COOKIE)
                 .execute().body();
         System.out.println(result4);
     }
     @Test
-    public void testSendBindSms(){
-        String url = baseURL + "/sms/sendBindSms?mobile=15810669164";
+    public void checkRePwdEmail(){
+        String url = baseURL + "/contact/checkRePwdEmail?email=1648925727@qq.com&securityCode=236881";
+        String result4= HttpRequest.get(url)
+                .header(Header.COOKIE, CURRENT_COOKIE)
+                .execute().body();
+        System.out.println(result4);
+    }
+    @Test
+    public void sendBindMobile(){
+        String url = baseURL + "/contact/sendBindMobile?mobile=15810669164";
         String result3= HttpRequest.get(url)
                 .header(Header.COOKIE, CURRENT_COOKIE)
                 .execute().body();
         System.out.println(result3);
     }
     @Test
-    public void testSmsScurityCode(){
-        String url = baseURL + "/sms/checkScurityCode?mobile=15810669164&securityCode=196395";
+    public void checkBindMobile(){
+        String url = baseURL + "/contact/checkBindMobile?mobile=15810669164&securityCode=642813";
+        String result4= HttpRequest.get(url)
+                .header(Header.COOKIE, CURRENT_COOKIE)
+                .execute().body();
+        System.out.println(result4);
+    }
+    @Test
+    public void checkRePwdMobile(){
+        String url = baseURL + "/contact/checkRePwdMobile?mobile=15810669164&securityCode=642813";
+        String result4= HttpRequest.get(url)
+                .header(Header.COOKIE, CURRENT_COOKIE)
+                .execute().body();
+        System.out.println(result4);
+    }
+    @Test
+    public void testSendForPwd(){
+        String url = baseURL + "/contact/sendForPwd?contact=1648925727@qq.com&fPwdType=isEmail";
         String result4= HttpRequest.get(url)
                 .header(Header.COOKIE, CURRENT_COOKIE)
                 .execute().body();

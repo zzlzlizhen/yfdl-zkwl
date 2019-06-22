@@ -20,7 +20,8 @@
     	head_url as headUrl,
     	update_user as updateUser,
     	term_of_validity as termOfValidity,
-    	flag as flag
+    	flag as flag,
+    	is_bind_mtype as isBindMtype
     </sql>
 
 	<!-- 查询用户的所有权限 -->
@@ -47,7 +48,7 @@
 	</select>
 	<!--通过用户id跟手机查询该手机号是否已绑定-->
 	<select id="queryBySmsAndUid" resultType="com.remote.modules.sys.entity.SysUserEntity">
-		SELECT <include refid="columns"/> from sys_user as su where su.flag = 1 and su.type = 1 and su.user_id = #{userId} and su.mobile = #{mobile}
+		SELECT <include refid="columns"/> from sys_user as su where su.flag = 1 and su.is_bind_mtype = 1 and su.user_id = #{userId} and su.mobile = #{mobile}
 	</select>
 <!--	<select id="queryByUser" resultType="com.remote.modules.sys.entity.SysUserEntity">
 		select <include refid="columns"/> from sys_user where 1=1 and username = #{username}

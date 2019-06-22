@@ -61,7 +61,7 @@ public class MsgBackReadedController extends AbstractController{
      */
     @RequestMapping("/save")
     @RequiresPermissions("sys:msgbackreaded:save")
-    public R save(@RequestBody MsgBackReadedEntity msgBackReaded){
+    public R save(MsgBackReadedEntity msgBackReaded){
         msgBackReaded.setUid(this.getUserId());
         msgBackReaded.setMsgBackId(UUID.randomUUID().toString().replace("-", ""));
         msgBackReaded.setCreateTime(new Date());
@@ -75,7 +75,7 @@ public class MsgBackReadedController extends AbstractController{
      */
     @RequestMapping("/update")
     @RequiresPermissions("sys:msgbackreaded:update")
-    public R update(@RequestBody MsgBackReadedEntity msgBackReaded){
+    public R update(MsgBackReadedEntity msgBackReaded){
         ValidatorUtils.validateEntity(msgBackReaded);
         msgBackReadedService.updateById(msgBackReaded);
         

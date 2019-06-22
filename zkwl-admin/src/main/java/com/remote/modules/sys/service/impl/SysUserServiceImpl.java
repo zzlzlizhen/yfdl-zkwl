@@ -140,6 +140,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	public boolean updateEmail(String email,Long userId) {
 		SysUserEntity userEntity = new SysUserEntity();
 		userEntity.setEmail(email);
+		userEntity.setType(1);
 		return this.update(userEntity,
 				new QueryWrapper<SysUserEntity>().eq("user_id", userId));
 	}
@@ -151,6 +152,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	public boolean updateMobile(String mobile,Long userId) {
 		SysUserEntity userEntity = new SysUserEntity();
 		userEntity.setMobile(mobile);
+		userEntity.setIsBindMtype(1);
 		return this.update(userEntity,
 				new QueryWrapper<SysUserEntity>().eq("user_id", userId));
 	}
