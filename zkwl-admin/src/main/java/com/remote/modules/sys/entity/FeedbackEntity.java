@@ -74,5 +74,5 @@ public class FeedbackEntity implements Serializable {
 	 * 用户名
 	 * */
 	@TableField(exist=false)
-	private String userName;
+	private String username;
 }

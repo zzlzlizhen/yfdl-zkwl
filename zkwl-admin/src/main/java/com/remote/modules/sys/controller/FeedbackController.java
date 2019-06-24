@@ -67,7 +67,7 @@ public class FeedbackController extends AbstractController{
     public R info(@PathVariable("backId") String backId){
         FeedbackEntity feedback = feedbackService.getById(backId);
         SysUserEntity sysUserEntity = sysUserService.queryById(feedback.getUid());
-        feedback.setUserName(sysUserEntity.getUsername());
+        feedback.setUsername(sysUserEntity.getUsername());
         feedback.setHeadUrl(sysUserEntity.getHeadUrl());
         MsgBackReadedEntity msgBackReadedEntity = msgBackReadedService.queryBackIdAndUid(backId,getUserId());
         if(msgBackReadedEntity == null){
