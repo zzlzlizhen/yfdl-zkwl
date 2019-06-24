@@ -248,6 +248,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	public SysUserEntity queryById(Long userId) {
 		return this.baseMapper.selectOne(new QueryWrapper<SysUserEntity>().eq("user_id",userId));
 	}
-
+	@Override
+	public SysUserEntity queryByIdEAndM(Long userId) {
+		return this.baseMapper.selectOne(new QueryWrapper<SysUserEntity>().eq("user_id",userId).eq("type",1).or().eq("is_bind_mtype",1));
+	}
 
 }

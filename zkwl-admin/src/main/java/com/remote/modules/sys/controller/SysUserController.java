@@ -186,17 +186,16 @@ public class SysUserController extends AbstractController {
 	@RequestMapping(value = "/updateBaseInfo",method = RequestMethod.POST)
 	@RequiresPermissions("sys:user:update")
 	public R updateBaseInfo(SysUserEntity user){
-		SysUserEntity email = sysUserService.queryByEmailAndUid(user.getEmail(),user.getUserId());
-		SysUserEntity mobile = sysUserService.queryBySmsAndUid(user.getMobile(),user.getUserId());
-		if(email != null){
-			if(!StringUtils.isBlank(user.getEmail())){
-				if(!user.getEmail().equals(email.getEmail())){
+		SysUserEntity sysUserEntity = sysUserService.queryByIdEAndM(user.getUserId());
+
+		if(sysUserEntity != null){
+			if(!StringUtils.isBlank(user.getEmail())&&!StringUtils.isBlank(sysUserEntity.getEmail())){
+				if(!user.getEmail().equals(sysUserEntity.getEmail())){
 					return R.error("此邮箱跟绑定邮箱不一致");
 				}
 			}
-		}else if(mobile == null){
-			if(!StringUtils.isBlank(user.getMobile())){
-				if(!user.getMobile().equals(mobile.getMobile())){
+			if(!StringUtils.isBlank(user.getMobile())&&!StringUtils.isBlank(sysUserEntity.getMobile())){
+				if(!user.getMobile().equals(sysUserEntity.getMobile())){
 					return R.error("此手机号跟绑定手机号不一致");
 				}
 			}

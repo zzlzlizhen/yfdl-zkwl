@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -60,10 +61,53 @@ public class ProjectServiceImpl implements ProjectService {
             List<ProjectEntity> list = projectMapper.queryProjectByUserIds(projectQuery);
             //统计总装机/故障/报警数量
             statisticsData(list);
+            //封装经纬度
+            toDataLongitude(list);
             PageInfo<ProjectEntity> proPage = new PageInfo<>(list);
             return proPage;
         }
         return null;
+    }
+
+    private void toDataLongitude(List<ProjectEntity> list) {
+        if(CollectionUtils.isNotEmpty(list)){
+            for(ProjectEntity projectEntity : list){
+                DeviceQuery deviceQuery = new DeviceQuery();
+                deviceQuery.setProjectId(projectEntity.getProjectId());
+                //查询出项目下所有设备
+                List<DeviceEntity> deviceList = deviceService.queryDeviceNoPage(deviceQuery);
+                //定义经度总和
+                BigDecimal longitudeSum = new BigDecimal(0);
+                //定义纬度总和
+                BigDecimal latitudeSum = new BigDecimal(0);
+                if(CollectionUtils.isNotEmpty(deviceList)){
+                    //如果设备太多，只取前100条
+                    int size = deviceList.size() > 99 ? 99 : deviceList.size();
+                    for(int i = 0; i < size;i++ ){
+                        if(StringUtils.isNotEmpty(deviceList.get(i).getLongitude())){
+                            BigDecimal decimal = new BigDecimal(deviceList.get(i).getLongitude()).setScale(4,BigDecimal.ROUND_HALF_DOWN);
+                            longitudeSum = longitudeSum.add(decimal);
+                        }
+                        if(StringUtils.isNotEmpty(deviceList.get(i).getLatitude())){
+                            BigDecimal decimal = new BigDecimal(deviceList.get(i).getLatitude()).setScale(4,BigDecimal.ROUND_HALF_DOWN);
+                            latitudeSum = latitudeSum.add(decimal);
+                        }
+                    }
+                }
+                //保存项目经度和纬度
+                if(longitudeSum.compareTo(new BigDecimal(0)) == 1){ //判断是否大于0
+                    projectEntity.setLongitude(longitudeSum.divide(BigDecimal.valueOf(list.size()),4,BigDecimal.ROUND_HALF_UP).toString());
+                }else{
+                    projectEntity.setLongitude(longitudeSum.toString());
+                }
+                if(latitudeSum.compareTo(new BigDecimal(0)) == 1){
+                    projectEntity.setLatitude(latitudeSum.divide(BigDecimal.valueOf(list.size()),4,BigDecimal.ROUND_HALF_UP).toString());
+                }else{
+                    projectEntity.setLatitude(latitudeSum.toString());
+                }
+
+            }
+        }
     }
 
     @Override
@@ -84,37 +128,9 @@ public class ProjectServiceImpl implements ProjectService {
             ProjectQuery projectQuery = new ProjectQuery();
             projectQuery.setUserIds(transform);
             List<ProjectEntity> list = projectMapper.queryProjectByUserIds(projectQuery);
-            if(CollectionUtils.isNotEmpty(list)){
-                for(ProjectEntity projectEntity : list){
-                    DeviceQuery deviceQuery = new DeviceQuery();
-                    deviceQuery.setProjectId(projectEntity.getProjectId());
-                    //查询出项目下所有设备
-                    List<DeviceEntity> deviceList = deviceService.queryDeviceNoPage(deviceQuery);
-                    //定义经度总和
-                    BigDecimal longitudeSum = new BigDecimal(0);
-                    //定义纬度总和
-                    BigDecimal latitudeSum = new BigDecimal(0);
-                    if(CollectionUtils.isNotEmpty(deviceList)){
-                        //如果设备太多，只取前100条
-                        int size = deviceList.size() > 99 ? 99 : deviceList.size();
-                        for(int i = 0; i < size;i++ ){
-                            if(StringUtils.isNotEmpty(deviceList.get(i).getLongitude())){
-                                BigDecimal decimal = new BigDecimal(deviceList.get(i).getLongitude()).setScale(4,BigDecimal.ROUND_HALF_DOWN);
-                                longitudeSum = longitudeSum.add(decimal);
-                            }
-                            if(StringUtils.isNotEmpty(deviceList.get(i).getLatitude())){
-                                BigDecimal decimal = new BigDecimal(deviceList.get(i).getLatitude()).setScale(4,BigDecimal.ROUND_HALF_DOWN);
-                                latitudeSum = latitudeSum.add(decimal);
-                            }
-                        }
-                    }
-                    //保存项目经度和纬度
-                    projectEntity.setLongitude(longitudeSum.toString());
-                    projectEntity.setLatitude(latitudeSum.toString());
-                }
-                //统计总装机/故障/报警数量
-                statisticsData(list,deviceStatus);
-            }
+            toDataLongitude(list);
+            //统计总装机/故障/报警数量
+            statisticsData(list,deviceStatus);
             return list;
         }
         return null;
