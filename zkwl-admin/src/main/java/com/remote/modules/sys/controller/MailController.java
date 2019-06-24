@@ -154,19 +154,17 @@ public class MailController extends AbstractController{
     /**
      *保存验证码
      */
-    public void saveSecurity(String contact,String securityCode,String sendSecurityType){
+    public void saveSecurity(String contact,String sendSecurityType,String securityCode){
         SecurityEntity securityEntity = new SecurityEntity();
         String content="";
         if("bindEmail".equals(sendSecurityType)){//绑定邮箱
             securityEntity.setType("bindEmail");
             securityEntity.setEmail(contact);
             content = getUser().getUsername() + "绑定邮箱";
-
         }else if("rePwdEmail".equals(sendSecurityType)){//邮箱找回密码
             securityEntity.setType("rePwdEmail");
             securityEntity.setEmail(contact);
             content = getUser().getUsername() + "邮箱找回密码";
-
         }else if("bindMobile".equals(sendSecurityType)){//绑定手机
             securityEntity.setType("bindMobile");
             content = getUser().getUsername() + "绑定手机";
