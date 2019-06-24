@@ -36,9 +36,11 @@ public class FeedbackServiceImpl extends ServiceImpl<FeedbackDao, FeedbackEntity
     public PageUtils queryPage(Map<String, Object> params,SysUserEntity curUser) {
        List<SysUserEntity> sysUserEntitys = sysUserService.queryChild(curUser);
         List<Long> userIds = new ArrayList<Long>();
+        FeedbackEntity feedbackEntity = new FeedbackEntity();
         if(CollectionUtils.isNotEmpty(sysUserEntitys)){
             for(SysUserEntity sysUserEntity : sysUserEntitys){
                 userIds.add(sysUserEntity.getUserId());
+                feedbackEntity.setUserName(sysUserEntity.getUsername());
             }
         }
         IPage<FeedbackEntity> page = this.page(
@@ -51,7 +53,6 @@ public class FeedbackServiceImpl extends ServiceImpl<FeedbackDao, FeedbackEntity
     @Override
     public PageInfo<FeedbackEntity> queryBackList(List<Long> userIds,SysUserEntity curUser) {
         List<SysUserEntity> sysUserEntitys = sysUserService.queryChild(curUser);
-
         if(CollectionUtils.isNotEmpty(sysUserEntitys)){
             if(sysUserEntitys.isEmpty()){
                 for(SysUserEntity sysUserEntity : sysUserEntitys){
@@ -60,7 +61,7 @@ public class FeedbackServiceImpl extends ServiceImpl<FeedbackDao, FeedbackEntity
             }
             PageHelper.startPage(1,10);
             List<FeedbackEntity> list = feedbackService.queryBackList(userIds);;
-            PageInfo<FeedbackEntity> proPage = new PageInfo<>(list);
+            PageInfo<FeedbackEntity> proPage = new PageInfo<FeedbackEntity>(list);
             return proPage;
         }
         return null;

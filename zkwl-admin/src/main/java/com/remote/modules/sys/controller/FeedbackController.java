@@ -7,9 +7,11 @@ import com.remote.common.utils.PageUtils;
 import com.remote.common.utils.R;
 import com.remote.modules.sys.entity.FeedbackEntity;
 import com.remote.modules.sys.entity.MsgBackReadedEntity;
+import com.remote.modules.sys.entity.SysUserEntity;
 import com.remote.modules.sys.service.FeedbackService;
 import com.remote.modules.sys.service.MsgBackReadedService;
 import com.remote.modules.sys.service.SysUserService;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +43,12 @@ public class FeedbackController extends AbstractController{
     @RequiresPermissions("sys:feedback:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = feedbackService.queryPage(params,getUser());
-
+        List<FeedbackEntity> feedbackEntities = (List<FeedbackEntity>) page.getList();
+        for(FeedbackEntity feedbackEntity:feedbackEntities){
+           SysUserEntity sysUserEntity = sysUserService.queryById(feedbackEntity.getUid());
+           feedbackEntity.setHeadUrl(sysUserEntity.getHeadUrl());
+           feedbackEntity.setUserName(sysUserEntity.getUsername());
+        }
         return R.ok().put("page", page);
     }
 
@@ -64,6 +71,9 @@ public class FeedbackController extends AbstractController{
     @RequiresPermissions("sys:feedback:info")
     public R info(@PathVariable("backId") String backId){
         FeedbackEntity feedback = feedbackService.getById(backId);
+        SysUserEntity sysUserEntity = sysUserService.queryById(feedback.getUid());
+        feedback.setUserName(sysUserEntity.getUsername());
+        feedback.setHeadUrl(sysUserEntity.getHeadUrl());
         MsgBackReadedEntity msgBackReadedEntity = msgBackReadedService.queryBackIdAndUid(backId,getUserId());
         if(msgBackReadedEntity == null){
             //如果反馈不为空

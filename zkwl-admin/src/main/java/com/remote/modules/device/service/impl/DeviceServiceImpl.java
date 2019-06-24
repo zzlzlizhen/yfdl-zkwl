@@ -154,4 +154,27 @@ public class DeviceServiceImpl implements DeviceService {
         return null;
     }
 
+    @Override
+    public int updateOnOffByIds(DeviceQuery deviceQuery) {
+        List<DeviceEntity> deviceEntityList = deviceMapper.queryDevice(deviceQuery);
+        List<String> deviceList = new ArrayList<>();
+        String userName = deviceQuery.getUpdateUserName();
+        if(CollectionUtils.isNotEmpty(deviceEntityList)){
+            for (DeviceEntity device : deviceEntityList){
+                deviceList.add(device.getDeviceId());
+                FaultlogEntity faultlogEntity = new FaultlogEntity();
+                faultlogEntity.setProjectId(device.getProjectId());
+                faultlogEntity.setFaultLogId(UUID.randomUUID().toString());
+                faultlogEntity.setDeviceId(device.getDeviceId());
+                faultlogEntity.setCreateTime(new Date());
+                faultlogEntity.setCreateUserId(deviceQuery.getUpdateUser());
+                faultlogEntity.setLogStatus(FaultlogEnum.OPERATIONALLOG.getCode());
+                faultlogEntity.setFaultLogDesc(userName+"操作了路灯开关");
+                faultlogService.addFaultlog(faultlogEntity);
+            }
+        }
+        deviceQuery.setDeviceList(deviceList);
+        return deviceMapper.updateOnOffByIds(deviceQuery);
+    }
+
 }

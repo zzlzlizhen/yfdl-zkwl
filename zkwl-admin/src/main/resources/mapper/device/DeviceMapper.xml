@@ -121,6 +121,22 @@
         </where>
     </update>
 
+
+    <update id="updateOnOffByIds" parameterType="com.remote.modules.device.entity.DeviceQuery">
+        update fun_device set
+        on_off = #{deviceQuery.onOff},
+        update_user = #{deviceQuery.updateUser},update_time = #{deviceQuery.updateTime}
+        <where>
+            <if test="deviceQuery.deviceList !=null and deviceQuery.deviceList.size()!= 0">
+                and device_id in
+                <foreach collection="deviceQuery.deviceList" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </update>
+
+
     <update id="updateById" parameterType="com.remote.modules.device.entity.DeviceEntity">
       update fun_device
         <set>

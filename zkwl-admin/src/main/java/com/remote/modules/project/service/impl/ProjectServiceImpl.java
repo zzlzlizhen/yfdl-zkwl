@@ -93,18 +93,20 @@ public class ProjectServiceImpl implements ProjectService {
                             latitudeSum = latitudeSum.add(decimal);
                         }
                     }
+                    //保存项目经度和纬度
+                    if(longitudeSum.compareTo(new BigDecimal(0)) == 1){ //判断是否大于0
+                        projectEntity.setLongitude(longitudeSum.divide(BigDecimal.valueOf(size),4,BigDecimal.ROUND_HALF_UP).toString());
+                    }else{
+                        projectEntity.setLongitude(latitudeSum.toString());
+                    }
+                    if(latitudeSum.compareTo(new BigDecimal(0)) == 1){
+                        projectEntity.setLatitude(latitudeSum.divide(BigDecimal.valueOf(size),4,BigDecimal.ROUND_HALF_UP).toString());
+                    }else{
+                        projectEntity.setLatitude(latitudeSum.toString());
+                    }
+
                 }
-                //保存项目经度和纬度
-                if(longitudeSum.compareTo(new BigDecimal(0)) == 1){ //判断是否大于0
-                    projectEntity.setLongitude(longitudeSum.divide(BigDecimal.valueOf(list.size()),4,BigDecimal.ROUND_HALF_UP).toString());
-                }else{
-                    projectEntity.setLongitude(longitudeSum.toString());
-                }
-                if(latitudeSum.compareTo(new BigDecimal(0)) == 1){
-                    projectEntity.setLatitude(latitudeSum.divide(BigDecimal.valueOf(list.size()),4,BigDecimal.ROUND_HALF_UP).toString());
-                }else{
-                    projectEntity.setLatitude(latitudeSum.toString());
-                }
+
 
             }
         }

@@ -3,6 +3,7 @@ package com.remote.device.util;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Component;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -48,37 +49,7 @@ public class Utils {
         return result;
     }
 
-    /**
-     * 解密
-     * @param devKey
-     * @return String
-     */
-    public static String decode(String devKey){
-        StringBuffer sb = new StringBuffer();
-        sb.append(devKey.substring(0,devKey.length() - 3));
-        Integer devK = Integer.valueOf(devKey.substring(devKey.length() - 3, devKey.length()));
-        Integer bai = devK / 100;
-        Integer shi = (devK / 10) % 10;
-        Integer ge = devK % 10;
-        if(bai >= 10){
-            bai = 1;
-        }else{
-            bai = bai + 1;
-        }
-        if(shi >= 10){
-            shi = 1;
-        }else{
-            shi = shi + 1;
-        }
-        if(ge >= 10){
-            ge = 1;
-        }else{
-            ge = ge + 1;
-        }
-        sb.append(bai).append(shi).append(ge);
-        System.out.println(sb);
-        return sb.toString();
-    }
+
 
     /**
      * 加密
@@ -86,44 +57,22 @@ public class Utils {
      * @return String
      */
     public static String encrypt(String devSN){
-        StringBuffer sb = new StringBuffer();
-        sb.append(devSN.substring(0,devSN.length() - 3));
-        Integer devK = Integer.valueOf(devSN.substring(devSN.length() - 3, devSN.length()));
-        Integer bai = devK / 100;
-        Integer shi = (devK / 10) % 10;
-        Integer ge = devK % 10;
-        if(bai == 0){
-            bai = 9;
-        }else{
-            bai = bai - 1;
+        String devKeyStr = "";
+        try {
+            byte[] bytes1 = devSN.substring(10,11).getBytes();
+            bytes1[0] = (byte) (bytes1[0] - 0x30 + 5);
+            byte[] bytes = devSN.getBytes();
+            for(int i=0;i<bytes.length;i++){
+                bytes[i] += bytes1[0];
+            }
+            devKeyStr = new String(bytes, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
-        if(shi == 0){
-            shi = 9;
-        }else{
-            shi = shi - 1;
-        }
-        if(ge == 0){
-            ge = 9;
-        }else{
-            ge = ge - 1;
-        }
-        sb.append(bai).append(shi).append(ge);
-        System.out.println(sb);
-        return sb.toString();
+        return devKeyStr;
     }
 
     public static void main(String[] args) {
-       String str = "{\n" +
-               "\t\"dataLen\": 59,\n" +
-               "\t\"cmdID\": 2,\n" +
-               "\t\"nextCmdID\": 55,\n" +
-               "\t\"devKey\": \"793193446958375\",\n" +
-               "\t\"devType\": 59,\n" +
-               "\t\"devSN\": \"359759002513931\",\n" +
-               "\t\"key\": [],\n" +
-               "\t\"value\": []\n" +
-               "}";
-       System.out.println(str.length());
-
+       System.out.println(encrypt("359759002513931"));
     }
 }

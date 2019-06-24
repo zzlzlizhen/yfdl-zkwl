@@ -69,7 +69,7 @@ public class SysUserController extends AbstractController {
 	public R info(){
 		return R.ok().put("user", getUser());
 	}
-	
+
 	/**
 	 * 修改登录用户密码
 	 */

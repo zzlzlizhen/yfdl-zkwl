@@ -1,6 +1,7 @@
 package com.remote.modules.sys.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -63,4 +64,15 @@ public class FeedbackEntity implements Serializable {
 	 * 反馈标题
 	 * */
 	private String title;
+
+	/**
+	 * 用户头像
+	 * */
+	@TableField(exist=false)
+	private String headUrl;
+	/**
+	 * 用户名
+	 * */
+	@TableField(exist=false)
+	private String userName;
 }

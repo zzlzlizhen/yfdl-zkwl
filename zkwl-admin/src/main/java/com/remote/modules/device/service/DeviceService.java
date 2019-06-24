@@ -3,6 +3,7 @@ package com.remote.modules.device.service;
 import com.github.pagehelper.PageInfo;
 import com.remote.modules.device.entity.DeviceEntity;
 import com.remote.modules.device.entity.DeviceQuery;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -82,4 +83,12 @@ public interface DeviceService {
      * @return  List<DeviceEntity>
      **/
     List<DeviceEntity> queryCountGroupByCity(Long userId);
+    /*
+     * @Author chengpunan
+     * @Description //TODO
+     * @Date 10:10 2019/6/24
+     * @Param
+     * @return
+     **/
+    int updateOnOffByIds(DeviceQuery deviceQuery);
 }

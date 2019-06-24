@@ -95,13 +95,13 @@ public class EchoServerNoBlock implements Runnable {
             }
         }
         //selector关闭后会自动释放里面管理的资源
-//        if(selector != null){
-//            try {
-//                selector.close();
-//            }catch (IOException e){
-//                e.printStackTrace();
-//            }
-//        }
+        if(selector != null){
+            try {
+                selector.close();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
 
     }
 
@@ -129,8 +129,8 @@ public class EchoServerNoBlock implements Runnable {
                 //判断客户端是否断开
                 if (readBytes < 0) {
                     selectionKey.cancel();
-                    //socketChannel.close();
-                    //return;
+                    socketChannel.close();
+                    return;
                 }
                 //读取到字节，对字节进行编解码
                 if (readBytes > 0) {
@@ -140,11 +140,14 @@ public class EchoServerNoBlock implements Runnable {
                     byte[] bytes = new byte[byteBuffer.remaining()];
                     //向缓冲区读数据到字节数组
                     byteBuffer.get(bytes);
-                    String expression = new String(bytes, "UTF-8");
-                    System.out.println("服务器收到消息：" + expression);
-                    //处理客户端的数据
-                    JSONObject jsonObject = JSONObject.parseObject(expression);
-                    DeviceInfo deviceInfo = JSONObject.toJavaObject(jsonObject, DeviceInfo.class);
+                    //String expression = new String(bytes, "UTF-8");
+                    DeviceInfo deviceInfo = HexConvert.BinaryToDeviceInfo(bytes);
+                    System.out.println("服务器收到消息：" + JSONObject.toJSONString(deviceInfo));
+                    String encrypt = Utils.encrypt(deviceInfo.getDevSN());
+                    if(!encrypt.equals(deviceInfo.getDevKey())){
+                        socketChannel.close();
+                        return;
+                    }
                     //判断客户端消息
                     socketMap.put(deviceInfo.getDevSN(), socketChannel);
                     logicalProcess(deviceInfo,socketChannel);
@@ -183,29 +186,15 @@ public class EchoServerNoBlock implements Runnable {
                     String encrypt = Utils.encrypt(deviceSN);
                     //需要客户端的设备信息
                     DeviceInfo result = new DeviceInfo(4,0,encrypt,deviceEntity.getDeviceType(),deviceSN);
-                    List<Integer> key = deviceEntity.getKey();
-                    //判断操作参数是否大于40，确保一次性发送40个数据
-                    if(key.size() > 40){
-                        List<List<Integer>> keys = Utils.averageAssign(key, 40);
-                        List<List<Integer>> values = Utils.averageAssign(value, 40);
-                        for(int i=0;i<keys.size();i++){
-                            list.addAll(keys.get(i));
-                            value.addAll(values.get(i));
-                            result.setKey(list);
-                            result.setValue(value);
-                            result.setDataLen(list.size());
-                            String s = JSONObject.toJSONString(result);
-                            socketChannel.write(ByteBuffer.wrap(s.getBytes()));
-                        }
-                    }else{
-                        list.addAll(deviceEntity.getKey());
-                        value.addAll(deviceEntity.getValue());
-                        result.setKey(list);
-                        result.setValue(value);
-                        result.setDataLen(list.size());
-                        String s = JSONObject.toJSONString(result);
-                        socketChannel.write(ByteBuffer.wrap(s.getBytes()));
-                    }
+
+                    list.addAll(deviceEntity.getKey());
+                    value.addAll(deviceEntity.getValue());
+                    result.setKey(list);
+                    result.setValue(value);
+                    result.setDataLen(list.size());
+                    byte[] bytes = HexConvert.hexStringToBytes(result);
+                    socketChannel.write(ByteBuffer.wrap(bytes));
+
                 }
             }
             msg = "";
@@ -240,22 +229,11 @@ public class EchoServerNoBlock implements Runnable {
         for (Map.Entry<Integer, String> entity : mapKey.entrySet()){
             list.add(entity.getKey());
         }
-        //当需要40个以上参数时，将参数分段发送给客户端
-        if(list.size() > 40){
-            //调用拆分list方法
-            List<List<Integer>> lists = Utils.averageAssign(list, 40);
-            for (List<Integer> list1 : lists){
-                result.setKey(list1);
-                result.setDataLen(list1.size());
-                String s = JSONObject.toJSONString(result);
-                socketChannel.write(ByteBuffer.wrap(s.getBytes()));
-            }
-        }else{
-            result.setKey(list);
-            result.setDataLen(list.size());
-            String s = JSONObject.toJSONString(result);
-            socketChannel.write(ByteBuffer.wrap(s.getBytes()));
-        }
+        result.setKey(list);
+        result.setDataLen(list.size());
+        byte[] bytes = HexConvert.hexStringToBytes(result);
+        socketChannel.write(ByteBuffer.wrap(bytes));
+
     }
 
     //数据格式解析

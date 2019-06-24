@@ -11,6 +11,7 @@ import com.remote.modules.device.service.DeviceService;
 import com.remote.modules.sys.controller.AbstractController;
 import com.remote.modules.sys.entity.SysUserEntity;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -141,4 +142,16 @@ public class DeviceController extends AbstractController {
         deviceQuery.setGroupId(projectId);
         return R.ok(deviceService.queryDeviceNoPage(deviceQuery));
     }
+
+
+    @RequestMapping(value = "/updateOnOffByIds", method= RequestMethod.POST)
+    public R updateOnOffByIds(@RequestBody DeviceQuery deviceQuery){
+        SysUserEntity user = getUser();
+        deviceQuery.setUpdateUser(user.getUserId());
+        deviceQuery.setUpdateTime(new Date());
+        deviceQuery.setUpdateUserName(user.getUsername());
+        return R.ok(deviceService.updateOnOffByIds(deviceQuery));
+    }
+
+
 }

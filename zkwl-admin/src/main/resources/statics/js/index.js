@@ -57,6 +57,9 @@ var vm = new Vue({
 				vm.user = r.user;
 			});
 		},
+		informa:function(){
+			vm.main="modules/informa/informa.html"
+		},
 		updatePassword: function(){
 			layer.open({
 				type: 1,

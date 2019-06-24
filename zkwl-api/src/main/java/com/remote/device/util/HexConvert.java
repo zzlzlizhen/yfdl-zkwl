@@ -1,92 +1,176 @@
 package com.remote.device.util;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.channels.SocketChannel;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * @Author EDZ
+ * @Author zhangwenping
  * @Date 2019/6/11 14:57
  * @Version 1.0
  **/
 public class HexConvert {
-    public static String  convertStringToHex(String str){
 
-        char[] chars = str.toCharArray();
+    public static byte[] hexStringToBytes(DeviceInfo deviceInfo) {
+        Integer dataLen = deviceInfo.getDataLen();
+        Integer cmdID = deviceInfo.getCmdID();
 
-        StringBuffer hex = new StringBuffer();
-        for(int i = 0; i < chars.length; i++){
-            hex.append(Integer.toHexString((int)chars[i]));
+        String devKey = deviceInfo.getDevKey();
+        String devSN = deviceInfo.getDevSN();
+
+        int i = 0;
+        int size = 46+deviceInfo.getKey().size() * 4;
+        byte[] bytes = new byte[size];
+        //代表是dataLen
+        bytes[i++]=(byte)( dataLen&0xFF);
+        bytes[i++]=(byte)( dataLen/0xFF);
+        //代表cmdId
+        bytes[i++]=(byte)( cmdID&0xFF);
+        bytes[i++]=(byte)( cmdID/0xFF);
+
+        //代表devType
+        bytes[i++]=(byte)( 1&0xFF);
+        bytes[i++]=(byte)( 1/0xFF);
+
+        byte[] bytes1 = devKey.getBytes();
+        for(byte b : bytes1){
+            bytes[i++] = b;
+        }
+        byte[] bytes2 = devSN.getBytes();
+        for (byte b : bytes2){
+            bytes[i++] = b;
+        }
+        List<Integer> key = deviceInfo.getKey();
+        List<Integer> value = deviceInfo.getValue();
+        for(int j = 0 ;j<dataLen;j++){
+            bytes[i++]=(byte)( key.get(j)&0xFF);
+            bytes[i++]=(byte)( key.get(j)/0xFF);
+            if(value.size() != 0){
+                bytes[i++]=(byte)( value.get(j)&0xFF);
+                bytes[i++]=(byte)( value.get(j)/0xFF);
+            }else{
+                bytes[i++]=(byte)(0);
+                bytes[i++]=(byte)(0);
+            }
         }
 
-        return hex.toString();
+        return bytes;
     }
 
-    public static String convertHexToString(String hex){
 
-        StringBuilder sb = new StringBuilder();
-        StringBuilder sb2 = new StringBuilder();
 
-        for( int i=0; i<hex.length()-1; i+=2 ){
-
-            String s = hex.substring(i, (i + 2));
-            int decimal = Integer.parseInt(s, 16);
-            sb.append((char)decimal);
-            sb2.append(decimal);
-        }
-
-        return sb.toString();
-    }
-    public static byte[] hexStringToBytes(String hexString) {
-        if (hexString == null || hexString.equals("")) {
-            return null;
-        }
-        // toUpperCase将字符串中的所有字符转换为大写
-        hexString = hexString.toUpperCase();
-        int length = hexString.length() / 2;
-        // toCharArray将此字符串转换为一个新的字符数组。
-        char[] hexChars = hexString.toCharArray();
-        byte[] d = new byte[length];
-        for (int i = 0; i < length; i++) {
-            int pos = i * 2;
-            d[i] = (byte) (charToByte(hexChars[pos]) << 4 | charToByte(hexChars[pos + 1]));
-        }
-        return d;
-    }
-    //返回匹配字符
-    private static byte charToByte(char c) {
-        return (byte) "0123456789ABCDEF".indexOf(c);
-    }
-
-    //将字节数组转换为short类型，即统计字符串长度
-    public static short bytes2Short2(byte[] b) {
-        short i = (short) (((b[1] & 0xff) << 8) | b[0] & 0xff);
-        return i;
-    }
     //将字节数组转换为16进制字符串
-    public static String BinaryToHexString(byte[] bytes) {
-        String hexStr = "0123456789ABCDEF";
-        String result = "";
-        String hex = "";
-        for (byte b : bytes) {
-            hex = String.valueOf(hexStr.charAt((b & 0xF0) >> 4));
-            hex += String.valueOf(hexStr.charAt(b & 0x0F));
-            result += hex + " ";
+    public static DeviceInfo BinaryToDeviceInfo(byte[] bytes)  {
+        DeviceInfo deviceInfo = new DeviceInfo();
+        try{
+
+            int dataLen = 0;
+            int cmdID = 0;
+            int devType = 0;
+
+            int newBytes[] = new int[bytes.length];
+
+            for (int l=0;l< bytes.length;l++){
+                newBytes[l] = bytes[l] & 0xff;
+            }
+
+
+            int i=0;
+
+            dataLen =newBytes[i++];
+            dataLen +=newBytes[i++]<<8;
+
+            cmdID =newBytes[i++];
+            cmdID +=newBytes[i++]<<8;
+
+            devType =newBytes[i++];
+            devType +=newBytes[i++]<<8;
+
+            int size = 0;
+            for(int j=0;j<24;j++){
+                if(bytes[i+j] != 0){
+                    size ++ ;
+                }
+            }
+            byte devSN[] = new byte[size];
+            byte devKey[] = new byte[size];
+            for(int j=0;j<24;j++){
+                if(bytes[i] != 0){
+                    devKey[j]=bytes[i++];
+                }else {
+                    i++;
+                }
+            }
+            for(int j=0;j<24;j++){
+                if(bytes[i] != 0){
+                    devSN[j]=bytes[i++];
+                }else{
+                    i++;
+                }
+            }
+            String devKeyStr = new String(devKey, "UTF-8");
+            String devSNStr = new String(devSN, "UTF-8");
+
+            deviceInfo.setDataLen(dataLen);
+            deviceInfo.setDevSN(devSNStr);
+            deviceInfo.setCmdID(cmdID);
+            deviceInfo.setDevKey(devKeyStr);
+            deviceInfo.setDevType(String.valueOf(devType));
+
+            List<Integer> keyList = new ArrayList<>();
+            List<Integer> valueList = new ArrayList<>();
+            int key = 0;
+            int value = 0;
+            for(int j=0;j<dataLen;j++){
+                key = newBytes[i++];
+                key += newBytes[i++]<<8;
+                keyList.add(key);
+                value = newBytes[i++];
+                value += newBytes[i++]<<8;
+                valueList.add(value);
+            }
+            deviceInfo.setKey(keyList);
+            deviceInfo.setValue(valueList);
+
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        return result;
+        return deviceInfo;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws UnsupportedEncodingException {
 
 
-        System.out.println("======ASCII码转换为16进制======");
-        String str = "*00007VERSION\\n1$";
-        System.out.println("字符串: " + str);
-        String hex = HexConvert.convertStringToHex(str);
-        System.out.println("====转换为16进制=====" + hex);
+//        System.out.println("======ASCII码转换为16进制======");
+//        String str = "A";
+//        System.out.println("字符串: " + str);
+//        String hex = HexConvert.convertStringToHex(str);
+//        System.out.println("====转换为16进制=====" + hex);
+//
+//        System.out.println("======16进制转换为ASCII======");
+//        System.out.println("Hex : " + hex);
+//        System.out.println("ASCII : " + HexConvert.convertHexToString(hex));
+//
+//        byte[] bytes = HexConvert.hexStringToBytes( hex );
+//
+//        System.out.println(HexConvert.BinaryToHexString( bytes ));
 
-        System.out.println("======16进制转换为ASCII======");
-        System.out.println("Hex : " + hex);
-        System.out.println("ASCII : " + HexConvert.convertHexToString(hex));
+        byte bytes[] ={
+                0x03, 0x00,//dataLen
+                0x01, 0x00,//cmdId
+                0x01, 0x00,//devType
+                0x37, 0x39, 0x33, 0x31, 0x39, 0x33, 0x34, 0x34, 0x36, 0x39, 0x35, 0x38, 0x33, 0x37, 0x35, 0x00, 0x00, 0x00, 0x00, 0x00,//devKey 20位  加密
+                0x33, 0x35, 0x39, 0x37, 0x35, 0x39, 0x30, 0x30, 0x32, 0x35, 0x31, 0x33, 0x39, 0x33, 0x31, 0x00, 0x00, 0x00, 0x00, 0x00,//devSN
+                0x05, 0x00,     -120, 0x00, //开灯 --- 值
+                0x01, 0x00,     0x08, 0x00,
+                0x07, 0x00,     0x60, 0x00,
+        };
+        DeviceInfo deviceInfo = BinaryToDeviceInfo(bytes);
 
-        byte[] bytes = HexConvert.hexStringToBytes( hex );
+        byte[] bytes1 = hexStringToBytes(deviceInfo);
 
-        System.out.println(HexConvert.BinaryToHexString( bytes ));
+        System.out.println(bytes1);
+
     }
 }
