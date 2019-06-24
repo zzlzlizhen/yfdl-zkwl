@@ -28,6 +28,13 @@
            #{uid}
         </foreach>
     </select>
+    <select id="queryPageCount" parameterMap="java.util.Map" resultType="java.lang.Integer">
+        select count(back_id) from feedback where uid in #{userIds}
+    </select>
 
+    <select id="queryPageList" parameterMap="java.util.Map" resultType="com.remote.modules.sys.entity.FeedbackEntity">
+      SELECT a.* FROM feedback a LEFT JOIN sys_user b ON a.uid=b.user_id
+       WHERE b.user_id IN #{userIds} LIMIT #{offset},#{limit}
+    </select>
 </mapper>
 

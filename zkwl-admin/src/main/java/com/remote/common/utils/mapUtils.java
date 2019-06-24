@@ -26,4 +26,6 @@ public class mapUtils {
         map.put("loadPower",89);//负载功率
         map.put("loadCurrent",90);//负载电流
     }
+
+
 }
