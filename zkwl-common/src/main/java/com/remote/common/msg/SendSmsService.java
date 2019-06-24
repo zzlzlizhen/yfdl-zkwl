@@ -10,10 +10,9 @@ import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.exceptions.ServerException;
 import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
-import com.remote.common.config.SendPhoneMsgProperties;
+import com.remote.common.config.SendPhoneSecurityCode;
 import com.remote.common.constant.CommonConstants;
 import com.remote.common.utils.R;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -24,22 +23,19 @@ import org.springframework.stereotype.Service;
 @Service("sendSmsService")
 public class SendSmsService {
 
-    @Autowired
-    private SendPhoneMsgProperties msgProperties;
-
-    public R sendSmsSecurityCode(String phone,String templateCode,String code){
+    public R sendSmsSecurityCode(SendPhoneSecurityCode sendPhoneSecurityCode){
         R r = R.ok();
         CommonRequest request = new CommonRequest();
         request.setMethod(MethodType.POST);
-        request.setDomain(msgProperties.getDomain());
-        request.setVersion(msgProperties.getVersion());
-        request.setAction(msgProperties.getAction());
-        request.putQueryParameter("PhoneNumbers", phone);
-        request.putQueryParameter("TemplateCode", templateCode);
-        request.putQueryParameter("TemplateParam", "{\"code\":\""+code+"\"}");
-        request.putQueryParameter("SignName", msgProperties.getSignName());
+        request.setDomain(sendPhoneSecurityCode.getDomain());
+        request.setVersion(sendPhoneSecurityCode.getVersion());
+        request.setAction(sendPhoneSecurityCode.getAction());
+        request.putQueryParameter("PhoneNumbers", sendPhoneSecurityCode.getPhone());
+        request.putQueryParameter("TemplateCode", sendPhoneSecurityCode.getTemplateCode());
+        request.putQueryParameter("TemplateParam", "{\"code\":\""+sendPhoneSecurityCode.getSecurityCode()+"\"}");
+        request.putQueryParameter("SignName", sendPhoneSecurityCode.getSignName());
         try {
-            CommonResponse response = getClient().getCommonResponse(request);
+            CommonResponse response = getClient(sendPhoneSecurityCode).getCommonResponse(request);
             if(response.getHttpStatus() == CommonConstants.HTTP_SUCESS_CODE){
                 String data = response.getData();
                 JSONObject json =  (JSONObject) JSONUtil.parse(data);
@@ -61,11 +57,11 @@ public class SendSmsService {
         return r;
     }
 
-    private IAcsClient getClient(){
+    private IAcsClient getClient(SendPhoneSecurityCode sendPhoneSecurityCode){
         if(CommonConstants.cache.get("sendSmsService.IAcsClient")!=null){
             return (IAcsClient)CommonConstants.cache.get("sendSmsService.IAcsClient");
         }
-        DefaultProfile profile = DefaultProfile.getProfile("default", msgProperties.getAccessKeyId(), msgProperties.getSecret());
+        DefaultProfile profile = DefaultProfile.getProfile("default", sendPhoneSecurityCode.getAccessKeyId(), sendPhoneSecurityCode.getSecret());
         IAcsClient client = new DefaultAcsClient(profile);
         CommonConstants.cache.put("sendSmsService.IAcsClient",client);
         return client;

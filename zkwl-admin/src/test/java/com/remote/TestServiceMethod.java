@@ -1,12 +1,11 @@
 package com.remote;
 
 import com.alibaba.fastjson.JSON;
-import com.remote.common.config.SendEmailMsgProperties;
-import com.remote.common.config.SendPhoneMsgProperties;
+import com.remote.common.config.SendEmailSecurityCode;
+import com.remote.common.config.SendPhoneSecurityCode;
 import com.remote.common.msg.SendEmailService;
 import com.remote.common.msg.SendSmsService;
 import com.remote.common.utils.R;
-import com.remote.common.utils.StringUtils;
 import com.remote.modules.sys.entity.SysUserEntity;
 import com.remote.modules.sys.service.SysUserService;
 import org.junit.Test;
@@ -28,13 +27,7 @@ public class TestServiceMethod {
     private SendSmsService sendSmsService;
 
     @Autowired
-    private SendPhoneMsgProperties sendPhoneMsgProperties;
-
-    @Autowired
     private SendEmailService sendEmailService;
-
-    @Autowired
-    private SendEmailMsgProperties sendEmailMsgProperties;
 
     @Test
     public void testSendPhoneAndEmail(){
@@ -46,25 +39,33 @@ public class TestServiceMethod {
 
     @Test
     public void testSendBindPhone(){
-       R r = sendSmsService.sendSmsSecurityCode("15810669164",sendPhoneMsgProperties.getBindPhoneTemplateCode(), StringUtils.getSecurityCode(6));
-       System.out.println(JSON.toJSONString(r));
+        SendPhoneSecurityCode sendPhoneSecurityCode = new SendPhoneSecurityCode();
+        //sendPhoneSecurityCode需要自己设置相关的属性值
+        R r = sendSmsService.sendSmsSecurityCode(sendPhoneSecurityCode);
+        System.out.println(JSON.toJSONString(r));
     }
 
     @Test
     public void testSendForgotPasswordPhone(){
-        R r  = sendSmsService.sendSmsSecurityCode("15810669164",sendPhoneMsgProperties.getForgotPasswordTemplateCode(),StringUtils.getSecurityCode(6));
+        SendPhoneSecurityCode sendPhoneSecurityCode = new SendPhoneSecurityCode();
+        //sendPhoneSecurityCode需要自己设置相关的属性值
+        R r  = sendSmsService.sendSmsSecurityCode(sendPhoneSecurityCode);
         System.out.println(JSON.toJSONString(r));
     }
 
     @Test
     public void testSendBindEmail(){
-        R r = sendEmailService.send(sendEmailMsgProperties.getEmailFrom(),"1648925727@qq.com",sendEmailMsgProperties.getTitleEmailBind(),sendEmailMsgProperties.getContentEmailBindTemplate(StringUtils.getSecurityCode(6)));
+        SendEmailSecurityCode sendEmailSecurityCode = new SendEmailSecurityCode();
+        //sendEmailSecurityCode需要自己设置相关的属性值
+        R r = sendEmailService.sendEmailSecurityCode(sendEmailSecurityCode);
         System.out.println(JSON.toJSONString(r));
     }
 
     @Test
     public void testSendForgotPasswordEmail(){
-        R r = sendEmailService.send(sendEmailMsgProperties.getEmailFrom(),"1648925727@qq.com",sendEmailMsgProperties.getTitleEmailForgotPassword(),sendEmailMsgProperties.getContentEmailForgotPasswordTemplate(StringUtils.getSecurityCode(6)));
+        SendEmailSecurityCode sendEmailSecurityCode = new SendEmailSecurityCode();
+        //sendEmailSecurityCode需要自己设置相关的属性值
+        R r = sendEmailService.sendEmailSecurityCode(sendEmailSecurityCode);
         System.out.println(JSON.toJSONString(r));
     }
 

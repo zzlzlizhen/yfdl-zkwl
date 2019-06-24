@@ -30,7 +30,7 @@ public class SecurityEntity implements Serializable {
 	/**
 	 * 验证码
 	 */
-	private Long securityCode;
+	private String securityCode;
 	/**
 	 * 验证码类型，手机，邮箱
 	 */

@@ -1,19 +1,18 @@
 package com.remote.common.config;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 /**
  * @author zsm
- * @date 2019/6/20 17:47
+ * @date 2019/6/24 17:25
  * @description:
  */
 @Component
 @ConfigurationProperties(prefix="sms")
 @PropertySource(value = {"classpath:sms-info.properties"}, encoding = "utf-8")
-public class SendPhoneMsgProperties {
+public class SendPhoneConfig{
 
     private String accessKeyId;
 
@@ -71,6 +70,14 @@ public class SendPhoneMsgProperties {
         this.action = action;
     }
 
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
     public String getForgotPasswordTemplateCode() {
         return forgotPasswordTemplateCode;
     }
@@ -85,13 +92,5 @@ public class SendPhoneMsgProperties {
 
     public void setBindPhoneTemplateCode(String bindPhoneTemplateCode) {
         this.bindPhoneTemplateCode = bindPhoneTemplateCode;
-    }
-
-    public String getVersion() {
-        return version;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
     }
 }

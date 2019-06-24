@@ -1,5 +1,6 @@
 package com.remote.common.msg;
 
+import com.remote.common.config.SendEmailSecurityCode;
 import com.remote.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
@@ -17,14 +18,14 @@ public class SendEmailService {
     @Autowired
     private MailSender mailSender;
 
-    public R send(String phoneFrom,String phoneTo,String title,String content){
+    public R sendEmailSecurityCode(SendEmailSecurityCode sendEmailSecurityCode){
         R r = null;
         try {
             SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom(phoneFrom);
-            message.setTo(phoneTo);
-            message.setSubject(title);
-            message.setText(content);
+            message.setFrom(sendEmailSecurityCode.getEmailFrom());
+            message.setTo(sendEmailSecurityCode.getEmailTo());
+            message.setSubject(sendEmailSecurityCode.getTitleEmail());
+            message.setText(sendEmailSecurityCode.getContentEmailTemplate().replace("code",sendEmailSecurityCode.getSecurityCode()));
             mailSender.send(message);
             r = R.ok();
         }catch (Exception e){

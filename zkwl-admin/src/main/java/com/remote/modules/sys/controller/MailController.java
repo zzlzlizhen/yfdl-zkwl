@@ -1,24 +1,23 @@
 package com.remote.modules.sys.controller;
 
-import com.remote.common.config.SendEmailMsgProperties;
-import com.remote.common.config.SendPhoneMsgProperties;
+import com.remote.common.config.SendEmailConfig;
+import com.remote.common.config.SendEmailSecurityCode;
+import com.remote.common.config.SendPhoneConfig;
+import com.remote.common.config.SendPhoneSecurityCode;
 import com.remote.common.msg.SendEmailService;
 import com.remote.common.msg.SendSmsService;
-import com.remote.common.utils.DateUtils;
 import com.remote.common.utils.R;
+import com.remote.common.utils.SendSecurityCodeUtils;
 import com.remote.common.utils.StringUtils;
 import com.remote.modules.sys.entity.SecurityEntity;
 import com.remote.modules.sys.entity.SysUserEntity;
-import com.remote.modules.sys.service.MailService;
 import com.remote.modules.sys.service.SecurityService;
 import com.remote.modules.sys.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.security.Security;
 import java.util.*;
 
 @Controller
@@ -31,54 +30,29 @@ public class MailController extends AbstractController{
     @Autowired
     SysUserService sysUserService;
     @Autowired
-    private SendEmailMsgProperties sendEmailMsgProperties;
-    @Autowired
     private SendSmsService sendSmsService;
     @Autowired
-    private SendPhoneMsgProperties sendPhoneMsgProperties;
-    private String securCode;
-    private Long userId;
+    private SendEmailConfig sendEmailConfig;
+
+    @Autowired
+    private SendPhoneConfig sendPhoneConfig;
     /**
      * 发送验证码并保存验证码到数据库中(綁定邮箱)
      * */
     @RequestMapping("/sendBindEmail")
     @ResponseBody
     public R sendBindEmail(String email){
-        String emailForm = "";
-        String titleEmailBind="";
-        String contentEmailBind="";
         boolean isBind = checkBindEmail(email,"isEmail") ;
         if(isBind){
             return R.error("该邮箱已绑定");
         }
-        /**
-         * 发送人
-         * */
-        emailForm = sendEmailMsgProperties.getEmailFrom();
-        /**
-         * 接收人
-         * */
-       /* email = "1648925727@qq.com";*/
-        /**
-         * 发送邮件标题
-         * */
-        titleEmailBind = sendEmailMsgProperties.getTitleEmailBind();
-        /**
-         * 验证码
-         * */
-        securCode = StringUtils.getSecurityCode(6);
-        /**
-         * 发送邮件内容
-         * */
-        contentEmailBind = sendEmailMsgProperties.getContentEmailBindTemplate(securCode);
-        R r  = sendEmailService.send(emailForm,email,titleEmailBind,contentEmailBind);
+        String securityCode = StringUtils.getSecurityCode(6);
+        SendEmailSecurityCode sendEmailSecurityCode = SendSecurityCodeUtils.buildSendEmailSecurityCode(sendEmailConfig,email,securityCode,"1");
+        R r = sendEmailService.sendEmailSecurityCode(sendEmailSecurityCode);
         if(!r.isOK()){
             return R.error("邮件发送失败");
         }
-        /**
-         * 邮件发送成功
-         * */
-        saveSecurity(email,"bindEmail");
+        saveSecurity(email,"bindEmail",securityCode);
         return R.ok();
     }
 
@@ -89,26 +63,16 @@ public class MailController extends AbstractController{
     @ResponseBody
     public R sendBindSms(String mobile){
         boolean falg = checkBindEmail(mobile,"isMobile");
-        /**
-         * 发给谁
-         * */
-      /*  mobile = "15810669164";*/
-        /**
-         * 绑定电话的模板
-         * */
-        String bindMobileTemp = sendPhoneMsgProperties.getBindPhoneTemplateCode();
-        securCode = StringUtils.getSecurityCode(6);
+        String securityCode = StringUtils.getSecurityCode(6);
         if(falg){
             return R.error("该手机号已绑定");
         }
-        R r = sendSmsService.sendSmsSecurityCode(mobile,bindMobileTemp, securCode);
+        SendPhoneSecurityCode sendPhoneSecurityCode = SendSecurityCodeUtils.bulidSendPhoneSecurityCode(sendPhoneConfig,mobile,securityCode,"1");
+        R r = sendSmsService.sendSmsSecurityCode(sendPhoneSecurityCode);
         if(!r.isOK()){
             R.error("手机发送失败");
         }
-        /**
-         * 手机号发送验证码成功
-         * */
-        saveSecurity(mobile,"bindMobile");
+        saveSecurity(mobile,"bindMobile",securityCode);
         return R.ok();
     }
     /**
@@ -156,65 +120,32 @@ public class MailController extends AbstractController{
          * 邮箱发送验证码 找回密码
          * */
         if("isEmail".equals(fPwdType)){//1邮箱忘记密码
-            String emailForm = "";
-            String titleEmailForgetPwd="";
-            String contentEmailForgetPwd="";
             boolean flag = checkBindEmail(contact,"isEmail");
             if(!flag){
                 return R.error("该邮箱不存在");
             }
-            /**
-             * 发送人
-             * */
-            emailForm = sendEmailMsgProperties.getEmailFrom();
-            /**
-             * 接收人
-             * */
-             /* email = "1648925727@qq.com";*/
-            /**
-             * 发送邮件标题
-             * */
-            titleEmailForgetPwd = sendEmailMsgProperties.getTitleEmailForgotPassword();
-            /**
-             * 验证码
-             * */
-            securCode = StringUtils.getSecurityCode(6);
-            /**
-             * 发送邮件内容
-             * */
-            contentEmailForgetPwd = sendEmailMsgProperties.getContentEmailForgotPasswordTemplate(securCode);
-            R r  = sendEmailService.send(emailForm,contact,titleEmailForgetPwd,contentEmailForgetPwd);
+            String securityCode = StringUtils.getSecurityCode(6);
+
+            SendEmailSecurityCode sendEmailSecurityCode = SendSecurityCodeUtils.buildSendEmailSecurityCode(sendEmailConfig,contact,securityCode,"2");
+            R r = sendEmailService.sendEmailSecurityCode(sendEmailSecurityCode);
             if(!r.isOK()){
                 return R.error("邮件发送失败");
             }
-            /**
-             * 邮件发送成功
-             * */
-            saveSecurity(contact,"rePwdEmail");
+            saveSecurity(contact,"rePwdEmail",securityCode);
             return R.ok();
-        }else{//如果忘记密码类型为手机忘记密码
+        }else{
+            //如果忘记密码类型为手机忘记密码
             boolean flag = checkBindEmail(contact,"isMobile");
             if(!flag){
                 R.error("手机号不存在");
             }
-            /**
-             * 发给谁
-             * */
-            /*  mobile = "15810669164";*/
-            /**
-             * 绑定电话的模板
-             * */
-            String forPadTemp = sendPhoneMsgProperties.getForgotPasswordTemplateCode();
-            securCode = StringUtils.getSecurityCode(6);
-
-            R r = sendSmsService.sendSmsSecurityCode(contact,forPadTemp, securCode);
+            String securityCode = StringUtils.getSecurityCode(6);
+            SendPhoneSecurityCode sendPhoneSecurityCode = SendSecurityCodeUtils.bulidSendPhoneSecurityCode(sendPhoneConfig,contact,securityCode,"2");
+            R r = sendSmsService.sendSmsSecurityCode(sendPhoneSecurityCode);
             if(!r.isOK()){
                 R.error("手机发送失败");
             }
-            /**
-             * 手机号发送验证码成功
-             * */
-            saveSecurity(contact,"rePwdMobile");
+            saveSecurity(contact,"rePwdMobile",securityCode);
             return R.ok();
 
         }
@@ -223,7 +154,7 @@ public class MailController extends AbstractController{
     /**
      *保存验证码
      */
-    public void saveSecurity(String contact,String sendSecurityType){
+    public void saveSecurity(String contact,String securityCode,String sendSecurityType){
         SecurityEntity securityEntity = new SecurityEntity();
         String content="";
         if("bindEmail".equals(sendSecurityType)){//绑定邮箱
@@ -248,22 +179,21 @@ public class MailController extends AbstractController{
         securityEntity.setContent(content);
         securityEntity.setUserId(getUserId());
         securityEntity.setCreateTime(new Date());
-        securityEntity.setSecurityCode(Long.parseLong(securCode));
+        securityEntity.setSecurityCode(securityCode);
         securityService.save(securityEntity);
     }
 
     //查看该邮箱(手机号)是否存在(綁定邮箱)
     public boolean checkBindEmail(String contact,String isEmailAndMob){
         boolean isExist = false;
-        userId = getUserId();
         SysUserEntity userEntity = null;
         if("isEmail".equals(isEmailAndMob)){//0是邮箱
-            userEntity = sysUserService.queryByEmailAndUid(contact,userId);
+            userEntity = sysUserService.queryByEmailAndUid(contact,getUserId());
             if(null != userEntity){
                 isExist = true;
             }
         }else if("isMobile".equals(isEmailAndMob)){//1是手机号
-            userEntity = sysUserService.queryBySmsAndUid(contact,userId);
+            userEntity = sysUserService.queryBySmsAndUid(contact,getUserId());
             if(userEntity != null){
                 isExist = true;
             }
@@ -274,11 +204,10 @@ public class MailController extends AbstractController{
      * 检查手机号，邮箱，验证码输入是否正确 是绑定，保存数据库，如果是发送验证码，不做处理
      * */
     public R checkEmailAndMob(String contact,String securityCode,String isEmailAndMobile,String isType){
-        userId = getUserId();
         SecurityEntity security =null;
         if("isEmail".equals(isEmailAndMobile)){//0代表邮箱
             //查询邮箱验证码是否正确
-            security = securityService.querySecurity(contact,securityCode,userId);
+            security = securityService.querySecurity(contact,securityCode,getUserId());
             if (security == null){
                 return R.error("验证码错误");
             }
@@ -286,19 +215,19 @@ public class MailController extends AbstractController{
                 /**
                  * 更新邮箱到用户表中
                  * */
-                boolean flag = sysUserService.updateEmail(contact,userId);
+                boolean flag = sysUserService.updateEmail(contact,getUserId());
                 if(!flag){
                     return R.error("邮箱信息保存失败");
                 }
             }
         }else if ("isMobile".equals(isEmailAndMobile)){ //1代表手机号
             //查询手机号验证码是否正确
-            security = securityService.querySmsSecurity(contact,securityCode,userId);
+            security = securityService.querySmsSecurity(contact,securityCode,getUserId());
             if (security == null){
                 return R.error("验证码错误");
             }
             if("bindMobile".equals(isType)){
-                boolean isBind = sysUserService.updateMobile(contact,userId);
+                boolean isBind = sysUserService.updateMobile(contact,getUserId());
                 if(!isBind){
                     return R.error("手机号保存失败");
                 }

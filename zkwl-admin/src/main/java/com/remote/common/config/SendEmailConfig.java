@@ -6,14 +6,13 @@ import org.springframework.stereotype.Component;
 
 /**
  * @author zsm
- * @date 2019/6/20 19:21
+ * @date 2019/6/24 17:26
  * @description:
  */
 @Component
 @ConfigurationProperties(prefix="mail")
 @PropertySource(value = {"classpath:mail-info.properties"},encoding = "utf-8")
-public class SendEmailMsgProperties {
-
+public class SendEmailConfig{
     private String emailFrom;
 
     private String titleEmailBind;
@@ -40,8 +39,8 @@ public class SendEmailMsgProperties {
         this.titleEmailBind = titleEmailBind;
     }
 
-    public String getContentEmailBindTemplate(String code) {
-        return contentEmailBindTemplate.replace("code",code);
+    public String getContentEmailBindTemplate() {
+        return contentEmailBindTemplate;
     }
 
     public void setContentEmailBindTemplate(String contentEmailBindTemplate) {
@@ -56,8 +55,8 @@ public class SendEmailMsgProperties {
         this.titleEmailForgotPassword = titleEmailForgotPassword;
     }
 
-    public String getContentEmailForgotPasswordTemplate(String code) {
-        return contentEmailForgotPasswordTemplate.replace("code",code);
+    public String getContentEmailForgotPasswordTemplate() {
+        return contentEmailForgotPasswordTemplate;
     }
 
     public void setContentEmailForgotPasswordTemplate(String contentEmailForgotPasswordTemplate) {
