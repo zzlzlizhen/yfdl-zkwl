@@ -11,6 +11,7 @@ import com.remote.modules.sys.entity.FeedbackEntity;
 import com.remote.modules.sys.entity.SysUserEntity;
 import com.remote.modules.sys.service.FeedbackService;
 import com.remote.modules.sys.service.SysUserService;
+import org.omg.PortableInterceptor.INACTIVE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -68,8 +69,15 @@ public class FeedbackServiceImpl extends ServiceImpl<FeedbackDao, FeedbackEntity
             }
         }*/
         //return new PageUtils(page);
-        int page = (Integer)params.get(Constant.PAGE);
-        int limit = (Integer)params.get(Constant.LIMIT);
+        int page = 1;
+        int limit = 10;
+
+        if(params.get(Constant.PAGE) != null){
+            page = Integer.parseInt((String)params.get(Constant.PAGE));
+        }
+        if(params.get(Constant.LIMIT) != null){
+            limit = Integer.parseInt((String)params.get(Constant.LIMIT));
+        }
         int offset = (page-1)*limit;
         params.put("offset",offset);
         params.put("userIds",userIds);

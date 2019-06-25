@@ -1,10 +1,8 @@
 
 package com.remote.modules.sys.controller;
-
-
-import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.remote.common.annotation.SysLog;
+import com.remote.common.utils.DateUtils;
 import com.remote.common.utils.PageUtils;
 import com.remote.common.utils.R;
 import com.remote.common.validator.Assert;
@@ -20,11 +18,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 系统用户
@@ -126,7 +120,15 @@ public class SysUserController extends AbstractController {
 	@RequiresPermissions("sys:user:save")
 	public R save(SysUserEntity user){
 		ValidatorUtils.validateEntity(user, AddGroup.class);
+		Date d = null;
+		if(user.getTermOfValidity() >= 1){
+			d = DateUtils.addDateYears(new Date(),user.getTermOfValidity());
+		}else{
+			d = DateUtils.addDateMonths(new Date(),6);
+		}
 		user.setFlag(1);
+
+		user.setDeadline(d);
 		sysUserService.saveUser(user,this.getUser());
 		return R.ok();
 	}
@@ -139,6 +141,13 @@ public class SysUserController extends AbstractController {
 	@RequiresPermissions("sys:user:update")
 	public R update(SysUserEntity user){
 		ValidatorUtils.validateEntity(user, UpdateGroup.class);
+		Date d = null;
+		if(user.getTermOfValidity() >= 1){
+			d = DateUtils.addDateYears(user.getCreateTime(),user.getTermOfValidity());
+		}else{
+			d = DateUtils.addDateMonths(user.getCreateTime(),6);
+		}
+		user.setDeadline(d);
 		user.setFlag(1);
 		sysUserService.update(user);
 		return R.ok();

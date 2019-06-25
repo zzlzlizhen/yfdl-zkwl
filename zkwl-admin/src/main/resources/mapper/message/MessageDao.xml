@@ -4,17 +4,17 @@
 <mapper namespace="com.remote.modules.message.dao.MessageDao">
 
 	<!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.remote.modules.message.entity.MessageEntity" id="messageMap">
-        <result property="msgId" column="msg_id"/>
-        <result property="title" column="title"/>
-        <result property="content" column="content"/>
-        <result property="publisher" column="publisher"/>
-        <result property="createDate" column="create_date"/>
-        <result property="deviceId" column="device_id"/>
-        <result property="userId" column="user_id"/>
-        <result property="type" column="type"/>
-        <result property="tip" column="tip"/>
-    </resultMap>
-
+    <sql id="columns" >
+        msg_id as msgId,
+        title as title,
+        content as content,
+        publisher as publisher,
+        create_date as createDate,
+        device_id as deviceId,
+        user_id as userId,
+        type as type,
+        tip as tip,
+        a.is_read as isRead
+    </sql>
 
 </mapper>

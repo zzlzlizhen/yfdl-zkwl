@@ -129,4 +129,8 @@ public class SysUserEntity implements Serializable {
 	 * */
 	private Integer isBindMtype;
 
+	/**
+	 * 账号有效期截止日期
+	 * */
+	private Date deadline;
 }

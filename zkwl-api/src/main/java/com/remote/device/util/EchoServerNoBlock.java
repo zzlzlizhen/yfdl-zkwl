@@ -7,6 +7,8 @@ import com.remote.device.entity.DeviceEntity;
 import com.remote.device.service.DeviceService;
 import com.remote.history.entity.HistoryMouth;
 import com.remote.history.service.HistoryService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.BeanUtils;
@@ -30,6 +32,7 @@ import static com.remote.device.util.MapKey.mapKey;
 @Component
 @RabbitListener(queues = "CalonDirectQueue")//CalonDirectQueue为队列名称
 public class EchoServerNoBlock implements Runnable {
+    private static Logger logger = LoggerFactory.getLogger(EchoServerNoBlock.class);
     private int port;
     private volatile boolean stop;
     private Selector selector;
@@ -69,6 +72,7 @@ public class EchoServerNoBlock implements Runnable {
 
             stop = false;
             System.out.println("服务器已经启动，端口号：" + port);
+            logger.info("服务器已经启动，端口号：" + port);
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -143,6 +147,7 @@ public class EchoServerNoBlock implements Runnable {
                     //String expression = new String(bytes, "UTF-8");
                     DeviceInfo deviceInfo = HexConvert.BinaryToDeviceInfo(bytes);
                     System.out.println("服务器收到消息：" + JSONObject.toJSONString(deviceInfo));
+                    logger.info("服务器收到消息：" + JSONObject.toJSONString(deviceInfo));
                     String encrypt = Utils.encrypt(deviceInfo.getDevSN());
                     if(!encrypt.equals(deviceInfo.getDevKey())){
                         socketChannel.close();
@@ -230,7 +235,7 @@ public class EchoServerNoBlock implements Runnable {
             list.add(entity.getKey());
         }
         result.setKey(list);
-        result.setDataLen(list.size());
+        result.setDataLen(list.size()+56);
         byte[] bytes = HexConvert.hexStringToBytes(result);
         socketChannel.write(ByteBuffer.wrap(bytes));
 

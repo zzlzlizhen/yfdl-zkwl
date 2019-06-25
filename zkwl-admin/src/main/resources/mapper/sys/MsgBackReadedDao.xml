@@ -3,15 +3,14 @@
 
 <mapper namespace="com.remote.modules.sys.dao.MsgBackReadedDao">
 
-	<!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.remote.modules.sys.entity.MsgBackReadedEntity" id="msgBackReadedMap">
-        <result property="id" column="id"/>
-        <result property="uid" column="uid"/>
-        <result property="createTime" column="create_time"/>
-        <result property="type" column="type"/>
-        <result property="msgBackId" column="msg_back_id"/>
-        <result property="deviceId" column="device_id"/>
-    </resultMap>
+    <sql id="columns" >
+        id as backId,
+        uid as uid,
+        create_time as createTime,
+        type as type,
+        msg_back_id as msgBackId,
+        device_id as deviceId,
+    </sql>
 <!--   <select id="queryBackIdAndUid" resultType="com.remote.modules.sys.entity.MsgBackReadedEntity">
        SELECT * FROM msg_back_readed mbr
        WHERE mbr.msg_back_id = #{msgBackId} and mbr.uid == #{uid}

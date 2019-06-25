@@ -82,8 +82,11 @@ thead>th{text-align: center !important;}
 #div{width:100%;height:auto;float:left;}
 
 /*滑動按鈕*/
+.swa{width:16%;height:50%;float:left;margin:1% 0px 0px 6%;}
 .switch{width: 50%;margin: 0px 0px 0 25%;}
+.switcha{width:100%;margin: 0px 0px 0 0%;}
 .btn_fath{margin-top: 8px;position: relative;border-radius: 20px;}
+.btn_fatha{margin:0;padding:0;}
 .btn1{float: left;}
 .btn2{float: right;}
 .btnSwitch{height: 30px;width: 50%;border:none;color: #fff;line-height: 30px;font-size: 15px;text-align: center;z-index: 1;}
@@ -155,15 +158,30 @@ thead>th{text-align: center !important;}
 .li_a{color:#333333 !important;}
 .clicka{background: 0 !important;}
 
-.navigation{width:300px;height:70%; position: absolute;top:25%;border:1px solid #000;left:2%;}
+.navigation{width:360px;height:70%; position: absolute;top:25%;left:2%;}
 .nav_t{width:100%;height:15%; background: #fff; opacity: 0.8;float:left;}
-.nav_n{width:100%;height:80%;background: #fff; opacity: 0.8;float:left;margin-top:5%;}
+.nav_n{width:100%;height:82%;background: #fff; opacity: 0.8;float:left;margin-top:5%;}
+.nav_n_a{width:100%;height:82%; position: absolute;bottom: 0;overflow-x: hidden;overflow-y: scroll; }
+.nav_n_a::-webkit-scrollbar {
+    display: none;
+}
+.nav_a{width:100%;height:auto;float:left;list-style:none;margin:0;padding:0;}
+.nav_a>li{width:90%;height:auto;float:left;margin-left:5%;list-style:none; }
+.nav_pro_v,.nav_pro_v_b{width:100%;height:40px;border-bottom:1px dashed #ccc;cursor: pointer;float:left;}
+.nav_project{width:40%;height:100%;float:left;line-height: 40px;font-size:16px;font-weight: bold;margin-right:6%;}
+.nav_pro_p,.nav_pro_s{width:auto;height:100%;line-height: 40px;font-size:13px;display: block;float:left;}
+.nav_pro_s{float:right;margin-right:3%;}
+.nav_gro,.nav_gro_b{width:100%;height:auto;float:left;margin:0;padding: 0;}
+.pro_li_a{width: 100%;margin: 0;list-style:none;}
+.nav_pro_fen,.nav_pro_she{width:40%;margin-right:6%;font-size:14px;text-indent:8px;}
+.nav_pro_she{font-weight: 500;font-size: 13px;text-indent:15px;}
 /*地图侧边抽屉*/
 .drawer{width:40%;height:76%;position: absolute;right:-38%;bottom:0%; transition: all 1.5s ease-in;z-index: 9;}
 .drawer_hid{transition: all 1.5s ease-in;right: 0;}
 
 .drawer_right{width:5%;height:100%;float:left;}
-.drawer_img{width:25px;height:45px;margin-top:745%;float:right;cursor: pointer;margin-right:10%;}
+.drawer_img,.drawer_img_a{width:25px;height:45px;margin-top:745%;float:right;cursor: pointer;margin-right:10%;}
+.drawer_img_a{margin: 5px 0px 0px 0px;height:30px;}
 .drawer_left{width:95%;height:100%;float: left;background: #fff;}
 .drawe_S{width:100%;height:15%;float:left;}
 .drawe_S ul{width:100%;height:100%;float:left;list-style:none;margin: 0;padding: 0;}
@@ -179,10 +197,14 @@ thead>th{text-align: center !important;}
 .con_an_a{width:90%;height:70px;border-top:1px solid #ccc;left:5%;text-align: center;position: absolute;bottom: 0;}
 .con_an_a input{width:70px;height:30px;background: rgba(24, 144, 255, 1); color:#fff;font-size:14px;border:0;border-radius: 4px;margin-top:20px;}
 
-.pro_list{width:90%;height:68%;float:left;margin:3% 0px 0px 5%;border-bottom: 1px solid #ccc;overflow-x: hidden;overflow-y: scroll;}
+.pro_list{width:94%;height:68%;float:left;margin:3% 0px 0px 3%;border-bottom: 1px solid #ccc;overflow-x: hidden;overflow-y: scroll;}
 .pro_list::-webkit-scrollbar {
     display: none;
 }
+.facility{width:100%;height: 45px;border-bottom:1px dashed #ccc;float:left; }
+.facility span{width:15%;height:100%;line-height: 45px;text-indent: 10px;font-size:14px;color:#333;float: left}
+.facility div{width:55%;height:100%;line-height: 45px;margin:0px 3% ;float: left;color:#ccc;}
+.facility p{width:24%;height:100%;line-height: 45px;float: left;color:#ccc;}
 /*项目管理顶部*/
 .hear p{width: auto;height:100%;float: left;}
 .p{margin:0;text-indent: 0;}

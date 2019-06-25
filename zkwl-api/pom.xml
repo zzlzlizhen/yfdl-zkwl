@@ -10,15 +10,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>api</artifactId>
-
+    <packaging>jar</packaging>
+    <version>1.0</version>
     <name>api</name>
-    <!-- FIXME change it to the project's website -->
-    <url>http://www.example.com</url>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
         <qcloud.cos.version>4.4</qcloud.cos.version>
     </properties>
 
@@ -121,6 +117,15 @@
                 <configuration>
                     <source>8</source>
                     <target>8</target>
+                </configuration>
+            </plugin>
+
+            <!-- 跳过单元测试 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <skipTests>true</skipTests>
                 </configuration>
             </plugin>
         </plugins>

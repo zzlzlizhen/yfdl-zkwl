@@ -19,7 +19,7 @@
     fault_log_id,create_user,fault_log_name,project_id,device_id,log_status,fault_log_desc,create_time
     </sql>
 
-    <select id="queryDevice" parameterType="com.remote.modules.device.entity.DeviceQuery" resultMap="BaseResultMap" >
+    <select id="queryFaultlogByDeviceId" parameterType="com.remote.modules.device.entity.DeviceQuery" resultMap="BaseResultMap" >
         SELECT
         fault_log_desc,create_time,device_id
         FROM

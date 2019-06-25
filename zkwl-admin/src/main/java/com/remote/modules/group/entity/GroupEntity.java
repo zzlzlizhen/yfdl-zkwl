@@ -70,4 +70,13 @@ public class GroupEntity {
      * 设备数量
      */
     private Integer deviceCount;
+
+    /**
+     * 经度
+     */
+    private String longitude;
+    /**
+     * 纬度
+     */
+    private String latitude;
 }

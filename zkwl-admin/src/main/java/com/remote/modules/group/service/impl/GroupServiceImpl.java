@@ -10,11 +10,14 @@ import com.remote.modules.group.dao.GroupMapper;
 import com.remote.modules.group.entity.GroupEntity;
 import com.remote.modules.group.entity.GroupQuery;
 import com.remote.modules.group.service.GroupService;
+import com.remote.modules.project.entity.ProjectEntity;
 import com.remote.modules.sys.service.SysUserService;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -168,10 +171,47 @@ public class GroupServiceImpl implements GroupService {
                 if(all.get(groupEntity.getGroupId()) != null){
                     groupEntity.setDeviceCount(all.get(groupEntity.getGroupId()));
                 }
+                DeviceQuery deviceQuery = new DeviceQuery();
+                deviceQuery.setGroupId(groupEntity.getGroupId());
+                //查询出项目下所有设备
+                List<DeviceEntity> deviceList = deviceService.queryDeviceNoPage(deviceQuery);
+                //定义经度总和
+                BigDecimal longitudeSum = new BigDecimal(0);
+                //定义纬度总和
+                BigDecimal latitudeSum = new BigDecimal(0);
+                if(CollectionUtils.isNotEmpty(deviceList)){
+                    //如果设备太多，只取前100条
+                    int size = deviceList.size() > 99 ? 99 : deviceList.size();
+                    for(int i = 0; i < size;i++ ){
+                        if(StringUtils.isNotEmpty(deviceList.get(i).getLongitude())){
+                            BigDecimal decimal = new BigDecimal(deviceList.get(i).getLongitude()).setScale(4,BigDecimal.ROUND_HALF_DOWN);
+                            longitudeSum = longitudeSum.add(decimal);
+                        }
+                        if(StringUtils.isNotEmpty(deviceList.get(i).getLatitude())){
+                            BigDecimal decimal = new BigDecimal(deviceList.get(i).getLatitude()).setScale(4,BigDecimal.ROUND_HALF_DOWN);
+                            latitudeSum = latitudeSum.add(decimal);
+                        }
+                    }
+                    //保存项目经度和纬度
+                    if(longitudeSum.compareTo(new BigDecimal(0)) == 1){ //判断是否大于0
+                        groupEntity.setLongitude(longitudeSum.divide(BigDecimal.valueOf(size),4,BigDecimal.ROUND_HALF_UP).toString());
+                    }else{
+                        groupEntity.setLongitude(latitudeSum.toString());
+                    }
+                    if(latitudeSum.compareTo(new BigDecimal(0)) == 1){
+                        groupEntity.setLatitude(latitudeSum.divide(BigDecimal.valueOf(size),4,BigDecimal.ROUND_HALF_UP).toString());
+                    }else{
+                        groupEntity.setLatitude(latitudeSum.toString());
+                    }
+
+                }
+
             }
         }
         return list;
     }
+
+
 
     @Override
     public boolean updateGroup(GroupEntity groupEntity) {

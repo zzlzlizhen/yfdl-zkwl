@@ -38,7 +38,7 @@ $(function () {
                 pageSize = res.page.pageSize;//每页条数
                 pageNum = res.page.totalPage;  //总页数
                 console.log(pages + "===" + pageSize + "===" + pageNum)
-                var html
+                var html=""
                 var offClass = "";
                 for (var i = 0; i < res.page.list.length; i++) {
                     if (res.page.list[i].status == 0) {

@@ -1,7 +1,6 @@
 package com.remote.device.util;
 
 import java.io.UnsupportedEncodingException;
-import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +42,7 @@ public class HexConvert {
         }
         List<Integer> key = deviceInfo.getKey();
         List<Integer> value = deviceInfo.getValue();
-        for(int j = 0 ;j<dataLen;j++){
+        for(int j = 0 ;j<key.size();j++){
             bytes[i++]=(byte)( key.get(j)&0xFF);
             bytes[i++]=(byte)( key.get(j)/0xFF);
             if(value.size() != 0){

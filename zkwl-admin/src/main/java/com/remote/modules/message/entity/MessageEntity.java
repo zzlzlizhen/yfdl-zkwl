@@ -9,7 +9,11 @@ import java.util.Date;
 
 /**
  * 
- * 
+ *
+ *
+ *
+ *
+ *
  * @author zsm
  * @date 2019-06-06 10:32:51
  */
@@ -62,5 +66,10 @@ MessageEntity implements Serializable {
 	 * 用户id
 	 */
 	private Long userId;
+
+	/**
+	 * 是否已读
+	 * */
+	private Integer isRead;
 
 }

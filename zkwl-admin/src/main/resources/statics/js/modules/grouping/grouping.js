@@ -72,7 +72,7 @@ $(function(){
                 pages=res.data.pages;
                 pageSize=res.data.pageSize;
                 pageNum=res.data.pageNum
-                var html
+                var html=""
                 for (var i = 0; i < res.data.list.length; i++) {
                     html += "<tr>\n" +
                         "<td id="+res.data.list[i].deviceId+" style=\"width:4%;\"> <input type= \"checkbox\" class=\"checkbox_in  checkbox_i\"> </td>\n" +

@@ -21,7 +21,8 @@
     	update_user as updateUser,
     	term_of_validity as termOfValidity,
     	flag as flag,
-    	is_bind_mtype as isBindMtype
+    	is_bind_mtype as isBindMtype,
+    	deadline as deadline
     </sql>
 
 	<!-- 查询用户的所有权限 -->

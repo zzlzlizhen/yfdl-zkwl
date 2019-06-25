@@ -15,26 +15,51 @@
         <result property="mobile" column="mobile"/>
         <result property="email" column="email"/>
         <result property="title" column="title"/>
+        <result property="isRead" column="is_read"/>
     </resultMap>
-    <sql id="feedBack" >
-        back_id,uid ,back_content, back_create_time, answer_content, answer_user,answer_create_time
+    <sql id="columns" >
+        a.back_id as backId,
+        a.uid as uid,
+        a.back_content as backContent,
+        a.back_create_time as backCreateTime,
+        a.answer_content as answerContent,
+        a.answer_user as answerUser,
+        a.answer_create_time as answerCreateTime,
+        a.mobile as mobile,
+        a.email as email,
+        a.title as title,
+        a.is_read as isRead
     </sql>
     <!-- 查询用户的所有下级用户的反馈列表 -->
     <select id="queryBackList" resultType="com.remote.modules.sys.entity.FeedbackEntity">
-       SELECT <include refid="feedBack"/> FROM feedback
-        WHERE uid in
+       SELECT <include refid="columns"/> FROM feedback
+        WHERE a.uid in
         <foreach collection="userIds" index="index"
                  item="uid" open="(" separator="," close=")">
            #{uid}
         </foreach>
     </select>
-    <select id="queryPageCount" parameterMap="java.util.Map" resultType="java.lang.Integer">
-        select count(back_id) from feedback where uid in #{userIds}
+    <select id="queryPageCount" resultType="java.lang.Integer">
+        select count(back_id) from feedback where uid in
+        <foreach collection="userIds" index="index"
+             item="uid" open="(" separator="," close=")">
+        #{uid}
+    </foreach>
     </select>
 
-    <select id="queryPageList" parameterMap="java.util.Map" resultType="com.remote.modules.sys.entity.FeedbackEntity">
-      SELECT a.* FROM feedback a LEFT JOIN sys_user b ON a.uid=b.user_id
-       WHERE b.user_id IN #{userIds} LIMIT #{offset},#{limit}
+    <select id="queryPageList"  resultType="com.remote.modules.sys.entity.FeedbackEntity">
+      SELECT <include refid="columns"/>,b.head_url as headUrl, b.username as username FROM feedback a LEFT JOIN sys_user b ON a.uid=b.user_id
+        left join msg_back_readed m on m.uid in
+        <foreach collection="userIds" index="index"
+           item="uid" open="(" separator="," close=")">
+        #{uid}
+    </foreach>
+       WHERE m. msg_back_id = a.back_id and b.user_id  IN
+        <foreach collection="userIds" index="index"
+                 item="uid" open="(" separator="," close=")">
+        #{uid}
+    </foreach>
+     LIMIT #{offset},#{limit}
     </select>
 </mapper>
 

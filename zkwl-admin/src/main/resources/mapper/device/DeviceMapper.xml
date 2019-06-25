@@ -57,6 +57,9 @@
         fun_device
         <where>
             is_del = 0
+            <if test="deviceQuery.deviceStatus !=null">
+                AND device_status = #{deviceQuery.deviceStatus}
+            </if>
             <if test="deviceQuery.groupId !=null and deviceQuery.groupId!=''">
                 AND group_id = #{deviceQuery.groupId}
             </if>
