@@ -5,8 +5,8 @@ import cn.hutool.http.HttpRequest;
 import org.junit.Test;
 
 public class TestMail {
-    private static final String baseURL="127.0.0.1:8080/remote-admin";
-    private static final String CURRENT_COOKIE = "JSESSIONID=4ba504fc-4397-4a1e-b4dd-e5938747c38e";
+    private static final String baseURL="127.0.0.1:8085/remote-admin";
+    private static final String CURRENT_COOKIE = "JSESSIONID=182d59fc-39bc-475b-8c88-450df166d74f";
     @Test
     public void testSendBindEmail(){
         String url = baseURL + "/contact/sendBindEmail?email=1648925727@qq.com";
@@ -17,7 +17,7 @@ public class TestMail {
     }
     @Test
     public void checkBindEmail(){
-        String url = baseURL + "/contact/checkBindEmail?email=1648925727@qq.com&securityCode=85847";
+        String url = baseURL + "/contact/checkBindEmail?email=1648925727@qq.com&securityCode=018671";
         String result4= HttpRequest.get(url)
                 .header(Header.COOKIE, CURRENT_COOKIE)
                 .execute().body();

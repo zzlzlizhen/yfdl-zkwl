@@ -43,12 +43,7 @@ public class FeedbackController extends AbstractController{
     @RequiresPermissions("sys:feedback:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = feedbackService.queryPage(params,getUser());
-        List<FeedbackEntity> feedbackEntities = (List<FeedbackEntity>) page.getList();
-        for(FeedbackEntity feedbackEntity:feedbackEntities){
-           SysUserEntity sysUserEntity = sysUserService.queryById(feedbackEntity.getUid());
-           feedbackEntity.setHeadUrl(sysUserEntity.getHeadUrl());
-           feedbackEntity.setUserName(sysUserEntity.getUsername());
-        }
+
         return R.ok().put("page", page);
     }
 

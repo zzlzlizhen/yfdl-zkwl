@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -18,5 +19,9 @@ import java.util.List;
 public interface FeedbackDao extends BaseMapper<FeedbackEntity> {
 
     List<FeedbackEntity> queryBackList(@Param("userIds") List<Long> userIds);
+
+    Integer queryPageCount(Map<String,Object> map);
+
+    List<FeedbackEntity> queryPageList(Map<String,Object> map);
 
 }

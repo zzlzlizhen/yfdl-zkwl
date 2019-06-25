@@ -2,6 +2,8 @@ package com.remote.modules.sys.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.remote.common.utils.CollectionUtils;
+import com.remote.common.utils.Constant;
 import com.remote.common.utils.PageUtils;
 import com.remote.common.utils.Query;
 import com.remote.modules.sys.dao.FeedbackDao;
@@ -9,14 +11,13 @@ import com.remote.modules.sys.entity.FeedbackEntity;
 import com.remote.modules.sys.entity.SysUserEntity;
 import com.remote.modules.sys.service.FeedbackService;
 import com.remote.modules.sys.service.SysUserService;
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -34,20 +35,48 @@ public class FeedbackServiceImpl extends ServiceImpl<FeedbackDao, FeedbackEntity
     FeedbackService feedbackService;
     @Override
     public PageUtils queryPage(Map<String, Object> params,SysUserEntity curUser) {
-       List<SysUserEntity> sysUserEntitys = sysUserService.queryChild(curUser);
+        List<SysUserEntity> sysUserEntitys = sysUserService.queryChild(curUser);
         List<Long> userIds = new ArrayList<Long>();
-        FeedbackEntity feedbackEntity = new FeedbackEntity();
         if(CollectionUtils.isNotEmpty(sysUserEntitys)){
             for(SysUserEntity sysUserEntity : sysUserEntitys){
                 userIds.add(sysUserEntity.getUserId());
-                feedbackEntity.setUserName(sysUserEntity.getUsername());
             }
         }
-        IPage<FeedbackEntity> page = this.page(
+
+        /*IPage<FeedbackEntity> page = this.page(
                 new Query<FeedbackEntity>().getPage(params),
                 new QueryWrapper<FeedbackEntity>().in("uid",userIds)
         );
-        return new PageUtils(page);
+        PageUtils pageUtils = new PageUtils(page);
+        if(CollectionUtils.isEmpty(pageUtils.getList())){
+            return pageUtils;
+        }
+        List<FeedbackEntity> feedbackEntities = (List<FeedbackEntity>)pageUtils.getList();
+        //填充反馈列表中的用户头像和用户名
+        List<Long> feedbackUserIds = new ArrayList<Long>();
+        for(FeedbackEntity feedbackEntity:feedbackEntities){
+            if(!feedbackUserIds.contains(feedbackEntity.getUid())){
+                feedbackUserIds.add(feedbackEntity.getUid());
+            }
+        }
+        Map<Long,SysUserEntity> map = CollectionUtils.getMapByList(sysUserService.listByIds(feedbackUserIds));
+        for(FeedbackEntity feedbackEntity:feedbackEntities){
+            SysUserEntity sysUserEntity = map.get(feedbackEntity.getUid());
+            if(sysUserEntity != null){
+                feedbackEntity.setHeadUrl(sysUserEntity.getHeadUrl());
+                feedbackEntity.setUserName(sysUserEntity.getUsername());
+            }
+        }*/
+        //return new PageUtils(page);
+        int page = (Integer)params.get(Constant.PAGE);
+        int limit = (Integer)params.get(Constant.LIMIT);
+        int offset = (page-1)*limit;
+        params.put("offset",offset);
+        params.put("userIds",userIds);
+        params.put("limit",limit);
+        List<FeedbackEntity> list = this.feedbackDao.queryPageList(params);
+        Integer total = this.feedbackDao.queryPageCount(params);
+        return new PageUtils(list,total,page,limit);
     }
 
     @Override
