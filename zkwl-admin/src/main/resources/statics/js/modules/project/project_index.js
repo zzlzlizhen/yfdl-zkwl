@@ -18,9 +18,7 @@ $(function () {
         type:"get",
         data:{},
         success: function(res) {
-            console.log("用户名")
-            console.log(res)
-            var html
+            var html=""
             for( var i=0 ;i<=res.realName.length;i++){
                 html+="<option>"+res.realName[i]+"</option>"
             }
@@ -72,7 +70,7 @@ $(function () {
                      "<td id="+res.data.list[i].projectId+">\n" +
                      "<a href=\"#\" class='modifier'><span class=\"glyphicon glyphicon-pencil\"></span></a>\n" +
                      "<a href=\"#\" class='particulars'><span class=\"glyphicon glyphicon-search\"></span></a>\n" +
-                     "<a href=\"#\"><span class=\"glyphicon glyphicon-picture\"></span></a>\n" +
+                     "<a href=\"#\" class='ma_p' id="+res.data.list[i].longitude+","+res.data.list[i].latitude+"><span class=\"glyphicon glyphicon-picture\"></span></a>\n" +
                      "<a href=\"#\" class='deleteq'><span class=\"glyphicon glyphicon-trash\"></span></a>\n" +
                      "</td>\n" +
                      "</tr>"
@@ -93,6 +91,12 @@ $(function () {
                           window.location.reload()
                         }
                     })
+                })
+            // 地图定位
+                $(".ma_p").click(function(){
+                    var longitude=$(this).attr("id")
+                    var searchUrl=encodeURI('../equipment/equipment.html?longitude='+longitude)
+                    location.href =searchUrl;
                 })
             // 编辑
                 var proid

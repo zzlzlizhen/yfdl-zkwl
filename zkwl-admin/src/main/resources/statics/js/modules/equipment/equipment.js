@@ -27,7 +27,7 @@ $(function () {
     })
 
 
-    map(0)
+     map(0)
 
     function map(deviceStatus) {
         console.log("类型"+deviceStatus)
@@ -61,10 +61,9 @@ $(function () {
 
                 $("#nav_a").append(html);
                 arra=arr //经纬度获取全局变量
-
                 console.log(deviceStatus+"项目变化定位")
                 console.log(arra)
-                m_p(deviceStatus,arra)
+                m_p(deviceStatus,arra,1)
 
                 $(".nav_pro_v").click(function(){
                     console.log($(this).parent().attr('id')+"项目id")
@@ -137,7 +136,7 @@ $(function () {
                                                 arra=arr //经纬度获取全局变量
                                                 console.log(deviceStatus+"设备变化定位")
                                                 console.log(arra)
-                                                m_p(deviceStatus,arra)
+                                                m_p(deviceStatus,arra,1)
                                                 // 滑动按钮
                                                 $(".toogle").click(function () {
                                                     var ele = $(this).children(".move");
@@ -166,6 +165,7 @@ $(function () {
                                                     var locon={y:$(this).attr("id"),x:$(this).children(".nav_pro_p").attr("id"),branch:$(this).children(".nav_pro_she").html()}
                                                     arr.push(locon)
                                                     arra=arr
+
                                                     m_p(deviceStatus,arra)
                                                     fu(par_id,1)
                                                 })
@@ -183,90 +183,6 @@ $(function () {
             //    项目下分组
             }
         });
-
-
-        function m_p(deviceStatus,arra) {
-            //百度地图
-            var map = new BMap.Map("allmap");
-            var geolocation = new BMap.Geolocation();
-            geolocation.getCurrentPosition(function(r) {
-                var point = new BMap.Point(r.point.lng, r.point.lat);
-                map.centerAndZoom(point,9);
-                map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
-                map.addControl(new BMap.NavigationControl({enableGeolocation:true}));
-                map.addControl(new BMap.OverviewMapControl());
-
-                console.log("pppp")
-                console.log(deviceStatus)
-
-                var xy //地图数组
-                var color  //背景颜色
-
-                var marker
-                var a=new BMap.Icon("../../../image/a.svg", new BMap.Size(300,157))
-                var b=new BMap.Icon("../../../image/b.svg", new BMap.Size(300,157))
-                var c=new BMap.Icon("../../../image/c.svg", new BMap.Size(300,157))
-                var d=new BMap.Icon("../../../image/d.svg", new BMap.Size(300,157))
-                var e=new BMap.Icon("../../../image/e.svg", new BMap.Size(300,157))
-                if(deviceStatus == "0"){
-                    //全部
-                    xy=arra;
-                    marker = new BMap.Marker(point,{icon :a});
-                    color='#4783E7';
-                }else if(deviceStatus == "1"){
-                    //正常
-                    xy=arra
-                    marker = new BMap.Marker(point,{icon :b});
-                    color='#00FF7F';
-                }else if(deviceStatus == "2"){
-                    //报警
-                    xy=arra
-                    marker = new BMap.Marker(point,{icon :c});
-                    color='#FFD700';
-                }else if(deviceStatus == "3"){
-                    //故障
-                    xy=arra
-                    marker = new BMap.Marker(point,{icon :d});
-                    color='#FF0000';
-                }else if(deviceStatus == "4"){
-                    //离线
-                    xy=arra
-                    marker = new BMap.Marker(point,{icon :e});
-                    color='#696969';
-                }
-
-                console.log(xy)
-                var mapPoints =xy;//经纬度定位
-                var i = 0;
-                map.addOverlay(marker);
-                map.enableScrollWheelZoom(true);//开启鼠标滚动
-                // 函数 创建多个标注
-                function markerFun (points,label,infoWindows) {
-                    var markers = new BMap.Marker(points);
-                    map.addOverlay(markers);
-                    markers.setLabel(label);
-                    markers.addEventListener("click",function (event) {
-                        map.openInfoWindow(infoWindows,points);//参数：窗口、点  根据点击的点出现对应的窗口
-                    });
-                }
-                for (;i<mapPoints.length;i++) {
-                    var points = new BMap.Point(mapPoints[i].y,mapPoints[i].x);//创建坐标点
-                    var opts = {
-                        width:250,
-                        height: 100,
-                        title:mapPoints[i].title,
-                        backgroundColor :color,
-                    };
-                    var label = new BMap.Label(mapPoints[i].branch,{
-                        offset:new BMap.Size(25,5)
-                    });
-                    var infoWindows = new BMap.InfoWindow(mapPoints[i].con,opts);
-                    markerFun(points,label,infoWindows);
-                }
-            })
-
-        }
-
 
         // // 百度地图API功能
         // var map = new BMap.Map("allmap");    // 创建Map实例
@@ -343,7 +259,133 @@ $(function () {
 
 
     }
+    //地图方法
+    function m_p(deviceStatus,arra,href_a) {
+        //百度地图
+        var map = new BMap.Map("allmap");
+        var geolocation = new BMap.Geolocation();
+        geolocation.getCurrentPosition(function(r) {
+            var point = new BMap.Point(r.point.lng, r.point.lat);
+            map.centerAndZoom(point,9);
+            map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
+            map.addControl(new BMap.NavigationControl({enableGeolocation:true}));
+            map.addControl(new BMap.OverviewMapControl());
 
+            console.log("pppp")
+            console.log(deviceStatus)
+            console.log(arra)
+            var xy //地图数组
+            var color  //背景颜色
+
+            var marker
+            var a=new BMap.Icon("../../../image/a.svg", new BMap.Size(300,157))
+            var b=new BMap.Icon("../../../image/b.svg", new BMap.Size(300,157))
+            var c=new BMap.Icon("../../../image/c.svg", new BMap.Size(300,157))
+            var d=new BMap.Icon("../../../image/d.svg", new BMap.Size(300,157))
+            var e=new BMap.Icon("../../../image/e.svg", new BMap.Size(300,157))
+            if(deviceStatus == "0"){
+                //全部
+                xy=arra;
+                marker = new BMap.Marker(point,{icon :a});
+                color='#4783E7';
+            }else if(deviceStatus == "1"){
+                //正常
+                xy=arra
+                marker = new BMap.Marker(point,{icon :b});
+                color='#00FF7F';
+            }else if(deviceStatus == "2"){
+                //报警
+                xy=arra
+                marker = new BMap.Marker(point,{icon :c});
+                color='#FFD700';
+            }else if(deviceStatus == "3"){
+                //故障
+                xy=arra
+                marker = new BMap.Marker(point,{icon :d});
+                color='#FF0000';
+            }else if(deviceStatus == "4"){
+                //离线
+                xy=arra
+                marker = new BMap.Marker(point,{icon :e});
+                color='#696969';
+            }
+            console.log("是不是")
+            console.log(xy)
+
+            var mapPoints =xy;//经纬度定位
+            var i = 0;
+            map.addOverlay(marker);
+            map.enableScrollWheelZoom(true);//开启鼠标滚动
+            // 函数 创建多个标注
+            function markerFun (points,label,infoWindows) {
+                var markers = new BMap.Marker(points);
+                map.addOverlay(markers);
+                markers.setLabel(label);
+                markers.addEventListener("click",function (event) {
+                    map.openInfoWindow(infoWindows,points);//参数：窗口、点  根据点击的点出现对应的窗口
+                });
+            }
+            for (;i<mapPoints.length;i++) {
+                var points = new BMap.Point(mapPoints[i].y,mapPoints[i].x);//创建坐标点
+                var opts = {
+                    width:250,
+                    height: 100,
+                    title:mapPoints[i].title,
+                    backgroundColor :color,
+                };
+                var label = new BMap.Label(mapPoints[i].branch,{
+                    offset:new BMap.Size(25,5)
+                });
+                var infoWindows = new BMap.InfoWindow(mapPoints[i].con,opts);
+                markerFun(points,label,infoWindows);
+            }
+        })
+
+
+        //上个页面的经纬度
+        var identification
+        if(identification == undefined ){
+            //获取上一个页面参数
+            function showWindowHref(){
+                var sHref = decodeURI(window.parent.document.getElementById("test").contentWindow.location.href);
+                var args = sHref.split('?');
+                if(args[0] == sHref){
+                    return "";
+                }
+                var arr = args[1].split('&');
+                var obj = {};
+                for(var i = 0;i< arr.length;i++){
+                    var arg = arr[i].split('=');
+                    obj[arg[0]] = arg[1];
+                }
+                return obj;
+            }
+            var href = showWindowHref();
+
+            var longitude=href['longitude'];
+            if(longitude != undefined){
+                if(href_a != undefined){
+                    identification = 1
+                    var href_b=undefined
+
+                    var partition=longitude.split(",");
+                    var ass=[{y:partition[0],x:partition[1]}]
+                    console.log(identification +"++++++++++++")
+                    m_p(0,ass,href_b)
+                    return
+                }else{
+                    console.log(href_a+"--------------++")
+                }
+            }
+        }else{
+           return;
+        }
+
+
+    }
+    //地图结束
+
+    //日志方法
     function fu(par_id,log){
         console.log("故障日志"+par_id)
         //故障日志
