@@ -41,7 +41,8 @@
         <swagger.version>2.7.0</swagger.version>
         <mail.version>2.1.2.RELEASE</mail.version>
         <hutool.version>4.5.10</hutool.version>
-        <aliyun-java-sdk-core.version>4.0.3</aliyun-java-sdk-core.version>
+        <aliyun.version>4.0.3</aliyun.version>
+        <mqttv3.version>1.1.0</mqttv3.version>
     </properties>
 
     <dependencies>
@@ -179,7 +180,12 @@
         <dependency>
             <groupId>com.aliyun</groupId>
             <artifactId>aliyun-java-sdk-core</artifactId>
-            <version>${aliyun-java-sdk-core.version}</version>
+            <version>${aliyun.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.paho</groupId>
+            <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
+            <version>${mqttv3.version}</version>
         </dependency>
     </dependencies>
 
