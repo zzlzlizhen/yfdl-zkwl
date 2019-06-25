@@ -79,4 +79,5 @@ public class FeedbackEntity implements Serializable {
 	 * 是否已读
 	 * */
 	private Integer isRead;
+
 }

@@ -2,16 +2,12 @@ package com.remote.modules.sys.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.remote.common.utils.CollectionUtils;
-import com.remote.common.utils.Constant;
-import com.remote.common.utils.PageUtils;
-import com.remote.common.utils.Query;
+import com.remote.common.utils.*;
 import com.remote.modules.sys.dao.FeedbackDao;
 import com.remote.modules.sys.entity.FeedbackEntity;
 import com.remote.modules.sys.entity.SysUserEntity;
 import com.remote.modules.sys.service.FeedbackService;
 import com.remote.modules.sys.service.SysUserService;
-import org.omg.PortableInterceptor.INACTIVE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -70,14 +66,15 @@ public class FeedbackServiceImpl extends ServiceImpl<FeedbackDao, FeedbackEntity
         }*/
         //return new PageUtils(page);
         int page = 1;
-        int limit = 10;
-
         if(params.get(Constant.PAGE) != null){
             page = Integer.parseInt((String)params.get(Constant.PAGE));
         }
+        ;
+        int limit = 10;
         if(params.get(Constant.LIMIT) != null){
             limit = Integer.parseInt((String)params.get(Constant.LIMIT));
         }
+
         int offset = (page-1)*limit;
         params.put("offset",offset);
         params.put("userIds",userIds);
