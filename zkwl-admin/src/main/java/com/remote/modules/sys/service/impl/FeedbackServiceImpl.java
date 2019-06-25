@@ -77,8 +77,9 @@ public class FeedbackServiceImpl extends ServiceImpl<FeedbackDao, FeedbackEntity
 
         int offset = (page-1)*limit;
         params.put("offset",offset);
-        params.put("userIds",userIds);
         params.put("limit",limit);
+        params.put("userIds",userIds);
+        params.put("curUid",curUser.getUserId());
         List<FeedbackEntity> list = this.feedbackDao.queryPageList(params);
         Integer total = this.feedbackDao.queryPageCount(params);
         return new PageUtils(list,total,page,limit);

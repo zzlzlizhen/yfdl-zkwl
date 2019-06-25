@@ -1,6 +1,7 @@
 package com.remote.modules.message.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -70,6 +71,7 @@ MessageEntity implements Serializable {
 	/**
 	 * 是否已读
 	 * */
+	@TableField(exist=false)
 	private Integer isRead;
 
 }

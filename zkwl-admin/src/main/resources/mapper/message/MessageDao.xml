@@ -13,8 +13,7 @@
         device_id as deviceId,
         user_id as userId,
         type as type,
-        tip as tip,
-        a.is_read as isRead
+        tip as tip
     </sql>
 
 </mapper>
