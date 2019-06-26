@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.remote.device.dao.DeviceMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.remote.device.entity.DeviceEntity" id="BaseResultMap">
+        <result property="deviceId" column="device_id"/>
+        <result property="deviceCode" column="device_code"/>
+        <result property="deviceName" column="device_name"/>
+        <result property="projectId" column="project_id"/>
+        <result property="groupId" column="group_id"/>
+        <result property="deviceType" column="device_type"/>
+        <result property="photocellState" column="photocell_state"/>
+        <result property="batteryState" column="battery_state"/>
+        <result property="loadState" column="load_state"/>
+        <result property="signalState" column="signal_state"/>
+        <result property="runState" column="run_state"/>
+        <result property="light" column="light"/>
+        <result property="communicationType" column="communication_type"/>
+        <result property="onOff" column="on_off"/>
+        <result property="longitude" column="longitude"/>
+        <result property="latitude" column="latitude"/>
+        <result property="isDel" column="is_del"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createName" column="create_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="updateTime" column="update_time"/>
+
+        <result property="batteryMargin" column="battery_margin"/>
+        <result property="batteryVoltage" column="battery_voltage"/>
+        <result property="photovoltaicCellVoltage" column="photovoltaic_cell_voltage"/>
+        <result property="chargingCurrent" column="charging_current"/>
+        <result property="chargingPower" column="charging_power"/>
+        <result property="loadVoltage" column="load_voltage"/>
+        <result property="loadPower" column="load_power"/>
+        <result property="loadCurrent" column="load_current"/>
+        <result property="lightingDuration" column="lighting_duration"/>
+        <result property="morningHours" column="morning_hours"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+    device_id, device_code,device_name, group_id, device_type, photocell_state, battery_state,load_state,signal_state,
+    run_state,light,communication_type,on_off,longitude,latitude,is_del,create_user,create_name,create_time
+    update_user,update_time,project_id,battery_margin,battery_voltage,photovoltaic_cell_voltage,charging_current,
+    charging_power,load_voltage,load_power,load_current,lighting_duration,morning_hours
+    </sql>
+
+    <select id="queryDeviceByCode"  resultMap="BaseResultMap" >
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        fun_device
+        <where>
+            is_del = 0 and device_code = #{deviceCode}
+        </where>
+    </select>
+
+
+    <update id="updateDeviceByCode" parameterType="com.remote.device.entity.DeviceEntity">
+        update fun_device
+        <set>
+            <if test="deviceName != null">
+                device_name = #{deviceName},
+            </if>
+            <if test="projectId != null">
+                project_id = #{projectId},
+            </if>
+            <if test="groupId != null">
+                group_id = #{groupId},
+            </if>
+            <if test="deviceType != null">
+                device_type = #{deviceType},
+            </if>
+            <if test="photocellState != null">
+                gateway_count = #{photocellState},
+            </if>
+            <if test="photocellState != null">
+                photocell_state = #{photocellState},
+            </if>
+            <if test="batteryState != null">
+                battery_state = #{batteryState},
+            </if>
+            <if test="loadState != null">
+                load_state = #{loadState},
+            </if>
+            <if test="signalState != null">
+                signal_state = #{signalState},
+            </if>
+            <if test="runState != null">
+                run_state = #{runState},
+            </if>
+            <if test="light != null">
+                light = #{light},
+            </if>
+            <if test="communicationType != null">
+                communication_type = #{communicationType},
+            </if>
+            <if test="onOff != null">
+                on_off = #{onOff},
+            </if>
+            <if test="longitude != null">
+                longitude = #{longitude},
+            </if>
+            <if test="latitude != null">
+                latitude = #{latitude},
+            </if>
+            <if test="isDel != null">
+                is_del = #{isDel},
+            </if>
+            <if test="batteryMargin != null">
+                battery_margin = #{batteryMargin},
+            </if>
+            <if test="batteryVoltage != null">
+                battery_voltage = #{batteryVoltage},
+            </if>
+            <if test="photovoltaicCellVoltage != null">
+                photovoltaic_cell_voltage = #{photovoltaicCellVoltage},
+            </if>
+            <if test="chargingCurrent != null">
+                charging_current = #{chargingCurrent},
+            </if>
+            <if test="chargingPower != null">
+                charging_power = #{chargingPower},
+            </if>
+            <if test="loadVoltage != null">
+                load_voltage = #{loadVoltage},
+            </if>
+            <if test="loadPower != null">
+                load_power = #{loadPower},
+            </if>
+            <if test="loadCurrent != null">
+                load_current = #{loadCurrent},
+            </if>
+            <if test="lightingDuration != null">
+                lighting_duration = #{lightingDuration},
+            </if>
+            <if test="morningHours != null">
+                morning_hours = #{morningHours},
+            </if>
+            update_time = now()
+        </set>
+        where device_code = #{deviceCode}
+    </update>
+</mapper>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.remote.history.dao.HistoryMouthMapper">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.remote.history.entity.HistoryMouth" id="BaseResultMap">
+        <result property="mouthId" column="mouth_id"/>
+        <result property="deviceCode" column="device_code"/>
+        <result property="dischargeCapacity" column="discharge_capacity"/>
+        <result property="chargingCapacity" column="charging_capacity"/>
+        <result property="chargingCurrent" column="charging_current"/>
+        <result property="dischargeCurrent" column="discharge_current"/>
+        <result property="batteryVoltage" column="battery_voltage"/>
+        <result property="ambientTemperature" column="ambient_temperature"/>
+        <result property="internalTemperature" column="internal_temperature"/>
+        <result property="visitorsFlowrate" column="visitors_flowrate"/>
+        <result property="inductionFrequency" column="induction_frequency"/>
+        <result property="meteorological" column="meteorological"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+    mouth_id, device_code, discharge_capacity, charging_capacity, charging_current, discharge_current,discharge_current,battery_voltage,ambient_temperature,
+    internal_temperature,visitors_flowrate,induction_frequency,meteorological,create_time
+    </sql>
+
+    <select id="queryHistoryMouth" resultMap="BaseResultMap" resultType="java.lang.Integer">
+        SELECT
+            count(1)
+        FROM
+            history_mouth
+        where device_code = #{deviceCode}
+        and DATE_FORMAT(create_time,'%Y-%m-%d') = #{time}
+    </select>
+    
+    <update id="updateHistoryByTime" parameterType="com.remote.history.entity.HistoryMouth">
+      update history_mouth set
+          discharge_capacity = discharge_capacity + #{historyMouth.dischargeCapacity},
+          charging_capacity = charging_capacity + #{historyMouth.chargingCapacity},
+          charging_current = charging_current + #{historyMouth.dischargeCurrent},
+          battery_voltage = battery_voltage + #{historyMouth.batteryVoltage},
+          ambient_temperature = ambient_temperature + #{historyMouth.ambientTemperature},
+          internal_temperature = internal_temperature + #{historyMouth.internalTemperature},
+          visitors_flowrate = visitors_flowrate + #{historyMouth.visitorsFlowrate},
+          induction_frequency = induction_frequency + #{historyMouth.inductionFrequency},
+          meteorological = meteorological + #{historyMouth.meteorological}
+          where device_code = #{historyMouth.deviceCode}
+    </update>
+</mapper>
