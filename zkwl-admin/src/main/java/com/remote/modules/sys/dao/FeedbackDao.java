@@ -23,5 +23,6 @@ public interface FeedbackDao extends BaseMapper<FeedbackEntity> {
     Integer queryPageCount(Map<String,Object> map);
 
     List<FeedbackEntity> queryPageList(Map<String,Object> map);
+    int queryCount(@Param("uid")Long uid);
 
 }

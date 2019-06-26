@@ -16,5 +16,6 @@ import java.util.Map;
 public interface MessageService extends IService<MessageEntity> {
 
     PageUtils queryPage(Map<String, Object> params,SysUserEntity curUser);
+    int queryCount(Long curUid);
 }
 

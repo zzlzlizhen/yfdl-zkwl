@@ -11,6 +11,7 @@ import com.remote.common.validator.ValidatorUtils;
 import com.remote.modules.message.entity.MessageEntity;
 import com.remote.modules.message.service.MessageService;
 import com.remote.modules.sys.controller.AbstractController;
+import com.remote.modules.sys.service.MsgBackReadedService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,7 +31,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class MessageController extends AbstractController {
     @Autowired
     private MessageService messageService;
-
+    @Autowired
+    private MsgBackReadedService msgBackReadedService;
     /**
      * 列表
      */
@@ -40,7 +42,20 @@ public class MessageController extends AbstractController {
         return R.ok().put("page", page);
     }
 
+    /**
+     * 查询当前用户未读消息总数
+     * */
+    @RequestMapping(value = "/queryCount")
+    public R queryCount(){
+        int total = messageService.queryCount(getUserId());
+        int queryCount = msgBackReadedService.queryCount(getUserId(),2);
+        int isRead = total - queryCount;
+        if(total < queryCount){
+            return R.error("信息错误");
+        }
 
+        return R.ok().put("queryCount",isRead);
+    }
     /**
      * 信息
      */

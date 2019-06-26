@@ -17,7 +17,7 @@
         <result property="title" column="title"/>
     </resultMap>
     <sql id="columns" >
-        a.back_id as backId,
+        a.back_id as back_id,
         a.uid as uid,
         a.back_content as backContent,
         a.back_create_time as backCreateTime,
@@ -45,6 +45,9 @@
         </foreach>
     </select>
 
+    <select id="queryCount" resultType="java.lang.Integer">
+        select count(back_id) from feedback where uid = #{uid}
+    </select>
     <select id="queryPageList" resultType="com.remote.modules.sys.entity.FeedbackEntity">
         SELECT
             <include refid="columns"/>,b.head_url as headUrl,b.username as username,

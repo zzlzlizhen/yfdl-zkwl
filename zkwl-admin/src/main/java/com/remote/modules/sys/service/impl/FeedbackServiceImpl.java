@@ -86,6 +86,10 @@ public class FeedbackServiceImpl extends ServiceImpl<FeedbackDao, FeedbackEntity
     }
 
     @Override
+    public int queryCount(Long curUid){
+        return this.feedbackDao.queryCount(curUid);
+    }
+    @Override
     public PageInfo<FeedbackEntity> queryBackList(List<Long> userIds,SysUserEntity curUser) {
         List<SysUserEntity> sysUserEntitys = sysUserService.queryChild(curUser);
         if(CollectionUtils.isNotEmpty(sysUserEntitys)){

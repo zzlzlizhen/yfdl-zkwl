@@ -4,7 +4,7 @@
 <mapper namespace="com.remote.modules.sys.dao.MsgBackReadedDao">
 
     <sql id="columns" >
-        id as backId,
+        id as id,
         uid as uid,
         create_time as createTime,
         type as type,
@@ -15,5 +15,8 @@
        SELECT * FROM msg_back_readed mbr
        WHERE mbr.msg_back_id = #{msgBackId} and mbr.uid == #{uid}
    </select>-->
+    <select id="queryCount" resultType="java.lang.Integer">
+        select count(msg_back_id) from msg_back_readed where uid = #{uid} and type=#{type}
+    </select>
 
 </mapper>

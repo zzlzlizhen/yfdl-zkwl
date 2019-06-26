@@ -48,6 +48,19 @@ public class FeedbackController extends AbstractController{
     }
 
     /**
+     * 查询当前用户未读反馈以及回复总数
+     * */
+    @RequestMapping(value = "/queryCount")
+    public R queryCount(){
+        int total = feedbackService.queryCount(getUserId());
+        int queryCount = msgBackReadedService.queryCount(getUserId(),1);
+        if(total < queryCount){
+            return R.error("信息错误");
+        }
+        int isRead = total - queryCount;
+        return R.ok().put("queryCount",isRead);
+    }
+    /**
      * 查询出所有用户uid在当前用户的ids中的反馈信息
      * */
     @RequestMapping("/backList")

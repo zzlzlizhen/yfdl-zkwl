@@ -22,6 +22,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 public class MessageServiceImpl extends ServiceImpl<MessageDao, MessageEntity> implements MessageService {
     @Autowired
     SysUserService sysUserService;
+    @Autowired
+    MessageDao messageDao;
     /**
      *
      * 如果硬件返回来的设备编号。通过设备编号找到设备id，和用户id ，把用户id跟设备id保存到数据表中，
@@ -38,5 +40,10 @@ public class MessageServiceImpl extends ServiceImpl<MessageDao, MessageEntity> i
                 new QueryWrapper<MessageEntity>().in("user_id",userIds)
         );
         return new PageUtils(page);
+    }
+
+    @Override
+    public int queryCount(Long curUid) {
+        return this.messageDao.queryCount(curUid);
     }
 }

@@ -56,4 +56,10 @@ public class MsgBackReadedServiceImpl extends ServiceImpl<MsgBackReadedDao, MsgB
         //return msgBackReadedDao.queryBackIdAndUid(backId,uid,cur);
     }
 
+
+    @Override
+    public int queryCount(Long curUid,int type){
+        return this.msgBackReadedDao.queryCount(curUid,type);
+    }
+
 }

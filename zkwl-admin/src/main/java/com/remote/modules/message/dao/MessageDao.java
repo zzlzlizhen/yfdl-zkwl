@@ -3,6 +3,7 @@ package com.remote.modules.message.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.remote.modules.message.entity.MessageEntity;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 
@@ -12,5 +13,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface MessageDao extends BaseMapper<MessageEntity> {
-	
+    int queryCount(@Param(value = "uid") Long uid);
 }

@@ -21,5 +21,7 @@ public interface MsgBackReadedService extends IService<MsgBackReadedEntity> {
     void delete(String backId);
     List<MsgBackReadedEntity> queryBackIds(List<String> backIds, Long uid);
     MsgBackReadedEntity queryBackIdAndUid(String backId,Long uid);
+    int queryCount(Long curUid,int type);
+
 }
 
