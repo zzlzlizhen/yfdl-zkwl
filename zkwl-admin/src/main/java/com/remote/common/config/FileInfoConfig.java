@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @ConfigurationProperties(prefix="message")
-@PropertySource("classpath:file-info.properties")
+@PropertySource(value = {"classpath:file-info.properties"},encoding = "utf-8")
 public class FileInfoConfig {
 
     private long fileSize;  //压缩大小
