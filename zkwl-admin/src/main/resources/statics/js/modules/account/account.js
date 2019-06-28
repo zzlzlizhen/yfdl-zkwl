@@ -13,7 +13,7 @@ $(function () {
         var acc_name = $("#acc_name").val()
         var select = $("#sele_ht option:selected").text()
         $("#div").html("")
-        form(pageSize, pageNum, acc_id, acc_hao, acc_name, select)
+        form(10, 1, acc_id, acc_hao, acc_name, select)
     })
     //渲染表格
 
