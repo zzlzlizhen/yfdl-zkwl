@@ -74,9 +74,6 @@
                 device_type = #{deviceType},
             </if>
             <if test="photocellState != null">
-                gateway_count = #{photocellState},
-            </if>
-            <if test="photocellState != null">
                 photocell_state = #{photocellState},
             </if>
             <if test="batteryState != null">

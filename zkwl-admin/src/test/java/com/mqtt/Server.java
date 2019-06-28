@@ -65,13 +65,13 @@ public class Server {
         Server server = new Server();
 
         server.message = new MqttMessage();
-        server.message.setQos(2);
+        server.message.setQos(1);
         server.message.setRetained(true);
         server.message.setPayload("一会下班了".getBytes());
         server.publish(server.topic, server.message);
 
         server.message = new MqttMessage();
-        server.message.setQos(2);
+        server.message.setQos(1);
         server.message.setRetained(true);
         server.message.setPayload("给客户端125推送的信息".getBytes());
         server.publish(server.topic125, server.message);

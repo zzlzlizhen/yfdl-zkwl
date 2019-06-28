@@ -28,6 +28,7 @@ public class MqttSub {
     @PostConstruct
     public void init() {
         try {
+            //订阅消息
             int[] Qos = {1};
             String[] topic1 = {mqttInfoConfig.getClientTopic()};
             if(mqttSubClient!=null){

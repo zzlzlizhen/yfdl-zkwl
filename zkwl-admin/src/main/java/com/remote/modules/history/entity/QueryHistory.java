@@ -13,7 +13,9 @@ import java.util.List;
  **/
 @Data
 public class QueryHistory {
-
+    private List<HistoryDay> historyDays = new ArrayList<>();
+    private List<HistoryMouth> historyMouths = new ArrayList<>();
+    private List<HistoryYear> historyYears = new ArrayList<>();
     private List<Double> dischargeCapacityList = new ArrayList<>();//放电量
     private List<Double> chargingCapacityList = new ArrayList<>();//充电量
     private List<Double> chargingCurrentList = new ArrayList<>();//充电电流
@@ -24,4 +26,5 @@ public class QueryHistory {
     private List<Double> visitorsFlowrateList = new ArrayList<>();//人流量
     private List<Double> inductionFrequencyList = new ArrayList<>();//感应次数
     private List<Double> meteorologicalList = new ArrayList<>();//气象信息
+    private List<String> hours = new ArrayList<>();//小时
 }

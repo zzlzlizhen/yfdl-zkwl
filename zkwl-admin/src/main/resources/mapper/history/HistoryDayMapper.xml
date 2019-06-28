@@ -18,6 +18,7 @@
         <result property="inductionFrequency" column="induction_frequency"/>
         <result property="meteorological" column="meteorological"/>
         <result property="createTime" column="create_time"/>
+        <result property="time" column="time"/>
     </resultMap>
 
     <sql id="Base_Column_List" >

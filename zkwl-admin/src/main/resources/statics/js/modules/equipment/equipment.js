@@ -1,4 +1,27 @@
 $(function () {
+    //获取上一个页面参数
+    function showWindowHref(){
+        var sHref = decodeURI(window.parent.document.getElementById("test").contentWindow.location.href);
+        var args = sHref.split('?');
+        if(args[0] == sHref){
+            return "";
+        }
+        var arr = args[1].split('&');
+        var obj = {};
+        for(var i = 0;i< arr.length;i++){
+            var arg = arr[i].split('=');
+            obj[arg[0]] = arg[1];
+        }
+        return obj;
+    }
+    var href = showWindowHref();
+    var longitude=href['longitude'];
+    var ass
+    if(longitude != undefined){
+        var partition=longitude.split(",");
+        ass=[{y:partition[0],x:partition[1]}]
+    }
+
 //    抽屉
     $("#drawer_img").click(function(){
         if($("#drawer").attr("class") == "drawer"){
@@ -15,6 +38,8 @@ $(function () {
     $("#hear_control").click(function(){
         location.href ='../control/control.html';
     })
+
+
 //    单选
     var ida
     $(".ra_div").click(function(){
@@ -26,11 +51,12 @@ $(function () {
 
     })
 
-
-     map(0)
-
-    function map(deviceStatus) {
-        console.log("类型"+deviceStatus)
+ /*   console.log("ass++++++++" )
+    console.log(ass)
+*/
+    map(0,ass)
+    function map(deviceStatus,ass) {
+        var ass //跳转
         //全部/经纬度
         var arra
         var arr=[]
@@ -40,8 +66,6 @@ $(function () {
             type:"get",
             data:{},
             success: function(res){
-                console.log("地图数据")
-                console.log(res)
                 var html=""
                 for(var i=0; i< res.data.length; i++){
                     html+=
@@ -60,15 +84,16 @@ $(function () {
                 }
 
                 $("#nav_a").append(html);
-                arra=arr //经纬度获取全局变量
-                console.log(deviceStatus+"项目变化定位")
-                console.log(arra)
-                m_p(deviceStatus,arra,1)
+                if(ass != undefined){
+                    arra = ass  //单个项目
+                    ass = undefined
+                }else{
+                    arra=arr //总项目经纬度获取全局变量
+                }
+                m_p(deviceStatus,arra)
 
                 $(".nav_pro_v").click(function(){
-                    console.log($(this).parent().attr('id')+"项目id")
                     var pro_je=$(this).parent().attr('id');
-                    console.log()
                     if($("#"+pro_je+"1").html() != ""){
                          $("#"+pro_je+"1").html("")
                         return
@@ -79,8 +104,6 @@ $(function () {
                             type: "get",
                             data: {},
                             success: function (res) {
-                                console.log("分组")
-                                console.log(res)
                                 arr=[]
                                 var htmla=""
                                 for (var i = 0; i < res.data.length; i++) {
@@ -92,12 +115,16 @@ $(function () {
                                         "<ul class=\"nav_gro_b\" id="+res.data[i].groupId+"2"+">\n" +
                                         "</ul>"
                                         "</li>\n"
+
+                                    var locon={y:res.data[i].longitude,x:res.data[i].latitude,title:"L",con:res.data[i].deviceCount+"台设备",branch:res.data[i].groupName}
+                                    arr.push(locon) //push经纬度
                                 }
                                 $("#" + pro_je + "1").append(htmla)
+                                arra=arr //分组经纬度获取全局变量
+                                m_p(deviceStatus,arra)
 
                             //    分组下设备
                                 $(".nav_pro_v_b").click(function(){
-                                    console.log($(this).parent().attr('id')+"分组id")
                                     var groupId=$(this).parent().attr('id');
                                     if( $("#" + groupId + "2").html() != ""){
                                         $("#" + groupId + "2").html("")
@@ -134,9 +161,8 @@ $(function () {
                                                 }
                                                 $("#" + groupId + "2").append(htmlb);
                                                 arra=arr //经纬度获取全局变量
-                                                console.log(deviceStatus+"设备变化定位")
-                                                console.log(arra)
-                                                m_p(deviceStatus,arra,1)
+                                                m_p(deviceStatus,arra)
+
                                                 // 滑动按钮
                                                 $(".toogle").click(function () {
                                                     var ele = $(this).children(".move");
@@ -166,8 +192,15 @@ $(function () {
                                                     arr.push(locon)
                                                     arra=arr
 
+                                                    //单台设备详情右侧
+
+                                                    zhuang(pro_je,groupId,par_id)
+
+                                                    //调用地图
                                                     m_p(deviceStatus,arra)
-                                                    fu(par_id,1)
+                                                    //日志信息
+                                                    fu(par_id)
+
                                                 })
 
                                             }
@@ -184,83 +217,10 @@ $(function () {
             }
         });
 
-        // // 百度地图API功能
-        // var map = new BMap.Map("allmap");    // 创建Map实例
-        // var geolocation = new BMap.Geolocation();
-        // geolocation.getCurrentPosition(function(r){
-        //     console.log('您的位置：'+r.point.lng+','+r.point.lat);
-        //     map.centerAndZoom(new BMap.Point(r.point.lng,r.point.lat),9);
-        //
-        //     //map.centerAndZoom(new BMap.Point(118.777882,32.059839), 12);  // 初始化地图,设置中心点坐标和地图级别
-        //      map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
-        //     map.addControl(new BMap.NavigationControl({enableGeolocation:true}));
-        //     map.addControl(new BMap.OverviewMapControl());
-        //     map.setCurrentCity("北京市");          // 设置地图显示的城市 此项是必须设置的
-        //     map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
-        //
-        //     console.log("pppp")
-        //     console.log(deviceStatus)
-        //
-        //     var xy //地图数组
-        //     var color  //背景颜色
-        //     var urla //背景圈
-        //     if(deviceStatus == "0"){
-        //         //全部
-        //         xy=arra;
-        //         urla='${request.contextPath}/statics/image/yuana.svg';
-        //         color='#4783E7';
-        //     }else if(deviceStatus == "1"){
-        //         //正常
-        //         xy=arrb
-        //         urla='${request.contextPath}/statics/image/yuanb.svg';
-        //         color='#00FF7F';
-        //     }else if(deviceStatus == "2"){
-        //         //报警
-        //         xy=arrc
-        //         urla='${request.contextPath}/statics/image/yuanc.svg';
-        //         color='#FFD700';
-        //     }else if(deviceStatus == "3"){
-        //         //故障
-        //         xy=arrd
-        //         urla='${request.contextPath}/statics/image/yuand.svg';
-        //         color='#FF0000';
-        //     }else if(deviceStatus == "4"){
-        //         //离线
-        //         xy=arre
-        //         urla='${request.contextPath}/statics/image/yuane.svg';
-        //         color='#696969';
-        //     }
-            //================================================
-            //全部
-            // var markers = [];
-            // var pt = null;
-            // for (var i in xy) {
-            //     pt = new BMap.Point(xy[i].x , xy[i].y);
-            //     markers.push(new BMap.Marker(pt));
-            // }
-            // //最简单的用法，生成一个marker数组，然后调用markerClusterer类即可。
-            //
-            // var markerClusterer = new BMapLib.MarkerClusterer(map,{
-            //     markers:markers,
-            //     girdSize : 100,
-            //     styles : [{
-            //         url:urla,
-            //         size: new BMap.Size(92, 92),
-            //         backgroundColor :color,
-            //     }
-            //     ],
-            // });
-            // markerClusterer.setMaxZoom(13);
-            // markerClusterer.setGridSize(100);
-            // console.log(markerClusterer);
-
-
-        // });
-
-
     }
+
     //地图方法
-    function m_p(deviceStatus,arra,href_a) {
+    function m_p(deviceStatus,arra) {
         //百度地图
         var map = new BMap.Map("allmap");
         var geolocation = new BMap.Geolocation();
@@ -271,9 +231,6 @@ $(function () {
             map.addControl(new BMap.NavigationControl({enableGeolocation:true}));
             map.addControl(new BMap.OverviewMapControl());
 
-            console.log("pppp")
-            console.log(deviceStatus)
-            console.log(arra)
             var xy //地图数组
             var color  //背景颜色
 
@@ -284,32 +241,28 @@ $(function () {
             var d=new BMap.Icon("../../../image/d.svg", new BMap.Size(300,157))
             var e=new BMap.Icon("../../../image/e.svg", new BMap.Size(300,157))
             if(deviceStatus == "0"){
-                //全部
-                xy=arra;
+                xy=arra;//全部
                 marker = new BMap.Marker(point,{icon :a});
                 color='#4783E7';
             }else if(deviceStatus == "1"){
-                //正常
-                xy=arra
+                xy=arra ;//正常
                 marker = new BMap.Marker(point,{icon :b});
                 color='#00FF7F';
             }else if(deviceStatus == "2"){
-                //报警
-                xy=arra
+                xy=arra;//报警
                 marker = new BMap.Marker(point,{icon :c});
                 color='#FFD700';
             }else if(deviceStatus == "3"){
-                //故障
-                xy=arra
+                xy=arra;//故障
                 marker = new BMap.Marker(point,{icon :d});
                 color='#FF0000';
             }else if(deviceStatus == "4"){
-                //离线
-                xy=arra
+                xy=arra;//离线
                 marker = new BMap.Marker(point,{icon :e});
                 color='#696969';
             }
             console.log("是不是")
+            console.log(deviceStatus)
             console.log(xy)
 
             var mapPoints =xy;//经纬度定位
@@ -341,71 +294,162 @@ $(function () {
             }
         })
 
-
-        //上个页面的经纬度
-        var identification
-        if(identification == undefined ){
-            //获取上一个页面参数
-            function showWindowHref(){
-                var sHref = decodeURI(window.parent.document.getElementById("test").contentWindow.location.href);
-                var args = sHref.split('?');
-                if(args[0] == sHref){
-                    return "";
-                }
-                var arr = args[1].split('&');
-                var obj = {};
-                for(var i = 0;i< arr.length;i++){
-                    var arg = arr[i].split('=');
-                    obj[arg[0]] = arg[1];
-                }
-                return obj;
-            }
-            var href = showWindowHref();
-
-            var longitude=href['longitude'];
-            if(longitude != undefined){
-                if(href_a != undefined){
-                    identification = 1
-                    var href_b=undefined
-
-                    var partition=longitude.split(",");
-                    var ass=[{y:partition[0],x:partition[1]}]
-                    console.log(identification +"++++++++++++")
-                    m_p(0,ass,href_b)
-                    return
-                }else{
-                    console.log(href_a+"--------------++")
-                }
-            }
-        }else{
-           return;
-        }
-
-
     }
     //地图结束
 
     //日志方法
     function fu(par_id,log){
-        console.log("故障日志"+par_id)
-        //故障日志
+        //日志
         $("#malfunction").click(function(){
             $(".shade_project,.shade_b_project").css("display","block");
+            $(".Bian_P").html("故障日志")
+            r(par_id,1)
+        })
+        $("#operation").click(function(){
+            $(".shade_project,.shade_b_project").css("display","block");
+            $(".Bian_P").html("操作日志")
+            r(par_id,2)
+        })
+        function r(par_id,log){
             $.ajax({
                 url:baseURL + 'fun/faultlog/queryFaultlog?deviceId='+par_id+"&status="+log,
                 contentType: "application/json;charset=UTF-8",
                 type:"get",
                 data:{},
                 success: function(res){
-                    console.log("日志")
-                    console.log(res)
+                    var html=""
+                    for(var i=0; i< res.data.length; i++){
+                        html+="  <div class=\"facility\">\n" +
+                            "<span></span>\n" +
+                            "<div>"+res.data[i].faultLogDesc+"</div>\n" +
+                            "<p>"+res.data[i].createTime+"</p>\n" +
+                            "</div>"
+                    }
+                    $("#pro_list").append(html)
                 }
             });
-        })
+        }
+
     }
 
-    //关闭故障日志
+    //关闭日志弹窗
     $(".shade_add_project").click(function(){
         $(".shade_project,.shade_b_project").css("display","none")
     })
+
+    // // 百度地图API功能
+    // var map = new BMap.Map("allmap");    // 创建Map实例
+    // var geolocation = new BMap.Geolocation();
+    // geolocation.getCurrentPosition(function(r){
+    //     console.log('您的位置：'+r.point.lng+','+r.point.lat);
+    //     map.centerAndZoom(new BMap.Point(r.point.lng,r.point.lat),9);
+    //
+    //     //map.centerAndZoom(new BMap.Point(118.777882,32.059839), 12);  // 初始化地图,设置中心点坐标和地图级别
+    //      map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
+    //     map.addControl(new BMap.NavigationControl({enableGeolocation:true}));
+    //     map.addControl(new BMap.OverviewMapControl());
+    //     map.setCurrentCity("北京市");          // 设置地图显示的城市 此项是必须设置的
+    //     map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+    //
+    //     console.log("pppp")
+    //     console.log(deviceStatus)
+    //
+    //     var xy //地图数组
+    //     var color  //背景颜色
+    //     var urla //背景圈
+    //     if(deviceStatus == "0"){
+    //         //全部
+    //         xy=arra;
+    //         urla='${request.contextPath}/statics/image/yuana.svg';
+    //         color='#4783E7';
+    //     }else if(deviceStatus == "1"){
+    //         //正常
+    //         xy=arrb
+    //         urla='${request.contextPath}/statics/image/yuanb.svg';
+    //         color='#00FF7F';
+    //     }else if(deviceStatus == "2"){
+    //         //报警
+    //         xy=arrc
+    //         urla='${request.contextPath}/statics/image/yuanc.svg';
+    //         color='#FFD700';
+    //     }else if(deviceStatus == "3"){
+    //         //故障
+    //         xy=arrd
+    //         urla='${request.contextPath}/statics/image/yuand.svg';
+    //         color='#FF0000';
+    //     }else if(deviceStatus == "4"){
+    //         //离线
+    //         xy=arre
+    //         urla='${request.contextPath}/statics/image/yuane.svg';
+    //         color='#696969';
+    //     }
+    //================================================
+    //全部
+    // var markers = [];
+    // var pt = null;
+    // for (var i in xy) {
+    //     pt = new BMap.Point(xy[i].x , xy[i].y);
+    //     markers.push(new BMap.Marker(pt));
+    // }
+    // //最简单的用法，生成一个marker数组，然后调用markerClusterer类即可。
+    //
+    // var markerClusterer = new BMapLib.MarkerClusterer(map,{
+    //     markers:markers,
+    //     girdSize : 100,
+    //     styles : [{
+    //         url:urla,
+    //         size: new BMap.Size(92, 92),
+    //         backgroundColor :color,
+    //     }
+    //     ],
+    // });
+    // markerClusterer.setMaxZoom(13);
+    // markerClusterer.setGridSize(100);
+    // console.log(markerClusterer);
+
+
+    // });
+
+//    丸子
+    layui.use('slider', function(){
+        var $ = layui.$
+            ,slider = layui.slider;
+        slider.render({
+            elem: '#slideTest1'
+            ,theme: '#1E9FFF' //主题色
+        });
+        slider.render({
+            elem: '#slideTest2'
+            ,theme: '#1E9FFF' //主题色
+        });
+        slider.render({
+            elem: '#slideTest3'
+            ,theme: '#1E9FFF' //主题色
+        });
+
+    });
+ $("#rrrrrrrrr").click(function(){
+    var r_wen1 = $("#slideTest1").children().children(".layui-slider-bar").width();
+    var r_wen2 = $("#slideTest2").children().children(".layui-slider-bar").width();
+    var r_wen3 = $("#slideTest3").children().children(".layui-slider-bar").width();
+
+    var a =  r_wen1/$(".progres").width()*100
+    var abc = Math.ceil(a);
+    console.log( abc)
+
+
+})
+
+$("#re").click(function(){
+    $("#slideTest1").children().children(".layui-slider-bar").width((50/$(".progres").width()*$(".progres").width())+"%");
+    $(".layui-slider-wrap").css('left', 50/$(".progres").width()*$(".progres").width() + '%');
+    console.log($(".layui-slider-wrap").left())
+})
+
+
+
+//    丸子
+
+
+
 });

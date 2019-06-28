@@ -1,5 +1,8 @@
 package com.remote.device.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,36 +13,55 @@ import java.util.List;
  * @Version 1.0
  **/
 public class HexConvert {
+    private static Logger logger = LoggerFactory.getLogger(HexConvert.class);
+
 
     public static byte[] hexStringToBytes(DeviceInfo deviceInfo) {
-        Integer dataLen = deviceInfo.getDataLen();
         Integer cmdID = deviceInfo.getCmdID();
+        Integer nextCmdID = deviceInfo.getNextCmdID();
 
         String devKey = deviceInfo.getDevKey();
         String devSN = deviceInfo.getDevSN();
 
         int i = 0;
-        int size = 46+deviceInfo.getKey().size() * 4;
+        int size = 56+deviceInfo.getKey().size() * 4;
         byte[] bytes = new byte[size];
         //代表是dataLen
-        bytes[i++]=(byte)( dataLen&0xFF);
-        bytes[i++]=(byte)( dataLen/0xFF);
+        bytes[i++]=(byte)( size&0xFF);
+        bytes[i++]=(byte)( size/0xFF);
+
         //代表cmdId
         bytes[i++]=(byte)( cmdID&0xFF);
         bytes[i++]=(byte)( cmdID/0xFF);
+
+        //nextId
+        bytes[i++]=(byte)( nextCmdID&0xFF);
+        bytes[i++]=(byte)( nextCmdID/0xFF);
 
         //代表devType
         bytes[i++]=(byte)( 1&0xFF);
         bytes[i++]=(byte)( 1/0xFF);
 
+
+
         byte[] bytes1 = devKey.getBytes();
-        for(byte b : bytes1){
-            bytes[i++] = b;
+        for(int j = 0 ; j < 24 ; j++){
+            if(j< bytes1.length){
+                bytes[i++] = bytes1[j];
+            }else{
+                bytes[i++] = 0;
+            }
         }
+
         byte[] bytes2 = devSN.getBytes();
-        for (byte b : bytes2){
-            bytes[i++] = b;
+        for(int j = 0 ; j < 24 ; j++){
+            if(j< bytes2.length){
+                bytes[i++] = bytes2[j];
+            }else{
+                bytes[i++] = 0;
+            }
         }
+
         List<Integer> key = deviceInfo.getKey();
         List<Integer> value = deviceInfo.getValue();
         for(int j = 0 ;j<key.size();j++){
@@ -58,6 +80,71 @@ public class HexConvert {
     }
 
 
+    public static byte[] updateVersionToBytes(DeviceVersionInfo deviceInfo) {
+
+        Integer cmdID = deviceInfo.getCmdID();
+        Integer nextCmdID = deviceInfo.getNextCmdID();
+        Integer upgradeFlag = deviceInfo.getUpgradeFlag();
+        Integer binSize = deviceInfo.getBinSize();
+        Integer binLastSize = deviceInfo.getBinLastSize();
+        Integer checkSum = deviceInfo.getCheckSum();
+        String devKey = deviceInfo.getDevKey();
+        String devSN = deviceInfo.getDevSN();
+
+        int i = 0;
+        int size = 1088;
+        byte[] bytes = new byte[1088];
+        //代表是dataLen
+        bytes[i++]=(byte)( size&0xFF);
+        bytes[i++]=(byte)( size/0xFF);
+        //代表cmdId
+        bytes[i++]=(byte)( cmdID&0xFF);
+        bytes[i++]=(byte)( cmdID/0xFF);
+        //nextId
+        bytes[i++]=(byte)( nextCmdID&0xFF);
+        bytes[i++]=(byte)( nextCmdID/0xFF);
+        //代表devType
+        bytes[i++]=(byte)( 1&0xFF);
+        bytes[i++]=(byte)( 1/0xFF);
+        //devKey
+        byte[] bytes1 = devKey.getBytes();
+        for(int j = 0 ; j < 24 ; j++){
+            if(j< bytes1.length){
+                bytes[i++] = bytes1[j];
+            }else{
+                bytes[i++] = 0;
+            }
+        }
+        //SN
+        byte[] bytes2 = devSN.getBytes();
+        for(int j = 0 ; j < 24 ; j++){
+            if(j< bytes2.length){
+                bytes[i++] = bytes2[j];
+            }else{
+                bytes[i++] = 0;
+            }
+        }
+        //代表upgradeFlag
+        bytes[i++]=(byte)(upgradeFlag&0xFF);
+        bytes[i++]=(byte)(upgradeFlag/0xFF);
+        //binSize
+        bytes[i++]=(byte)(binSize&0xFF);
+        bytes[i++]=(byte)(binSize/0xFF);
+        //binLastSize
+        bytes[i++]=(byte)(binLastSize&0xFF);
+        bytes[i++]=(byte)(binLastSize/0xFF);
+        //checkSum
+        bytes[i++]=(byte)(checkSum&0xFF);
+        bytes[i++]=(byte)(checkSum/0xFF);
+        //数据
+        Byte[] bin = deviceInfo.getBin();
+        for (int j = 0 ; j < bin.length ; j++){
+            bytes[i++] = bin[j];
+        }
+        return bytes;
+    }
+
+
 
     //将字节数组转换为16进制字符串
     public static DeviceInfo BinaryToDeviceInfo(byte[] bytes)  {
@@ -67,6 +154,7 @@ public class HexConvert {
             int dataLen = 0;
             int cmdID = 0;
             int devType = 0;
+            int nextId = 0;
 
             int newBytes[] = new int[bytes.length];
 
@@ -83,8 +171,13 @@ public class HexConvert {
             cmdID =newBytes[i++];
             cmdID +=newBytes[i++]<<8;
 
+            nextId =newBytes[i++];
+            nextId +=newBytes[i++]<<8;
+
             devType =newBytes[i++];
             devType +=newBytes[i++]<<8;
+
+
 
             int size = 0;
             for(int j=0;j<24;j++){
@@ -116,11 +209,12 @@ public class HexConvert {
             deviceInfo.setCmdID(cmdID);
             deviceInfo.setDevKey(devKeyStr);
             deviceInfo.setDevType(String.valueOf(devType));
-
+            deviceInfo.setNextCmdID(nextId);
             List<Integer> keyList = new ArrayList<>();
             List<Integer> valueList = new ArrayList<>();
             int key = 0;
             int value = 0;
+            dataLen = (dataLen - 56) / 4;
             for(int j=0;j<dataLen;j++){
                 key = newBytes[i++];
                 key += newBytes[i++]<<8;
@@ -133,6 +227,7 @@ public class HexConvert {
             deviceInfo.setValue(valueList);
 
         }catch (Exception e){
+            logger.error("数据解析异常:"+e);
             e.printStackTrace();
         }
         return deviceInfo;

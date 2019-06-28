@@ -12,7 +12,7 @@ public interface FaultlogService {
      * @Param deviceId status
      * @return List<FaultlogEntity>
      **/
-    List<FaultlogEntity> queryFaultlogByDeviceId(String deviceId,Integer status);
+    List<FaultlogEntity> queryFaultlogByDeviceId(String deviceId,Integer status,String groupId);
     /*
      * @Author zhangwenping
      * @Description 添加操作日志

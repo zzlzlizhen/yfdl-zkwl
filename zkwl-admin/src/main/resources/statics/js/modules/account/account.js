@@ -21,7 +21,7 @@ $(function () {
 
     function form(pageSizea, pagesa, userId, username, realName, status) {
         $.ajax({
-            url: baseURL + '/sys/user/userList',
+            url: baseURL + 'sys/user/userList',
             type: "get",
             data: {
                 "userId": userId,  //账号id
@@ -371,18 +371,6 @@ $(function () {
             }
         });
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //分页

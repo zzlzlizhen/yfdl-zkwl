@@ -25,5 +25,6 @@ public class HistoryDay {
     private Double visitorsFlowrate;//人流量
     private Double inductionFrequency;//感应次数
     private Double meteorological;//气象信息
+    private String time;
     private Date createTime;
 }

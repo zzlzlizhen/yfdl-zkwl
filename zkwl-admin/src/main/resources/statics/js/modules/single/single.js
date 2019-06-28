@@ -54,6 +54,8 @@ $(function(){
                 "pageNum": pagesa
             }),
             success: function (res) {
+                console.log("分组下设备")
+                console.log(res)
                 pages = res.data.pages;
                 pageSize = res.data.pageSize;
                 pageNum = res.data.pageNum
@@ -82,12 +84,18 @@ $(function(){
                         "<td>" + res.data.list[i].updateTime + "</td>\n" +
                         "<td id=" + res.data.list[i].deviceId + ">" +
                         "<a class='particulars'><span class=\"glyphicon glyphicon-search\"></span></a>\n" +
-                        "<a href=\"\"><span class=\"glyphicon glyphicon-picture\"></span></a>\n" +
+                        "<a href=\"#\" class='ma_p' id="+res.data.list[i].longitude+","+res.data.list[i].latitude+"><span class=\"glyphicon glyphicon-picture\"></span></a>\n" +
                         "<a  class='deleteq'><span class=\"glyphicon glyphicon-trash\"></span></a>\n" +
                         "</td>\n" +
                         "</tr>"
                 }
                 $("#div").append(html);
+                // 地图定位
+                $(".ma_p").click(function(){
+                    var longitude=$(this).attr("id")
+                    var searchUrl=encodeURI('../equipment/equipment.html?longitude='+longitude)
+                    location.href =searchUrl;
+                })
                 //移动分组删除
                 var arr=[]
                 $(".checkbox_i").click(function () {
@@ -168,7 +176,7 @@ $(function(){
                         type:"get",
                         data:{},
                         success: function(res) {
-                            var html
+                            var html=""
                             for (var i = 0; i < res.data.length; i++) {
                                 html += "<span id="+res.data[i].groupId+">\n" +
                                     "<input type= \"checkbox\" class=\"checkbox_in che_i\" name=\"alla\">\n" +

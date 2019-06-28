@@ -12,9 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.InetSocketAddress;
@@ -39,13 +37,7 @@ public class EchoServerNoBlock implements Runnable {
     private ServerSocketChannel serverSocketChannel;
     private static Map<String,SocketChannel> socketMap = new LinkedHashMap<>();
     private static String msg = "";
-
-    @Autowired
-    private DeviceService deviceService;
-
-    @Autowired
-    private HistoryService historyService;
-
+    private Integer count = 0;
     public EchoServerNoBlock(int port){
         this.port = port;
     }
@@ -71,9 +63,9 @@ public class EchoServerNoBlock implements Runnable {
             serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
 
             stop = false;
-            System.out.println("服务器已经启动，端口号：" + port);
             logger.info("服务器已经启动，端口号：" + port);
         }catch (IOException e){
+            logger.error("IOException:"+e.getMessage(),e);
             e.printStackTrace();
         }
     }
@@ -95,17 +87,18 @@ public class EchoServerNoBlock implements Runnable {
                 }
                 selectionKeys.clear();
             } catch (IOException e) {
+                logger.error("run:"+e.getMessage(),e);
                 e.printStackTrace();
             }
         }
         //selector关闭后会自动释放里面管理的资源
-        if(selector != null){
-            try {
-                selector.close();
-            }catch (IOException e){
-                e.printStackTrace();
-            }
-        }
+//        if(selector != null){
+//            try {
+//                selector.close();
+//            }catch (IOException e){
+//                e.printStackTrace();
+//            }
+//        }
 
     }
 
@@ -121,7 +114,6 @@ public class EchoServerNoBlock implements Runnable {
                 socketChannel.configureBlocking(false);
                 //在选择器注册，并订阅读事件
                 socketChannel.register(selector, SelectionKey.OP_READ);
-                socketChannel.write(ByteBuffer.wrap("success".getBytes()));
             }
             //可读事件
             if (selectionKey.isReadable()) {
@@ -132,6 +124,7 @@ public class EchoServerNoBlock implements Runnable {
                 int readBytes = socketChannel.read(byteBuffer);
                 //判断客户端是否断开
                 if (readBytes < 0) {
+                    count = 0;
                     selectionKey.cancel();
                     socketChannel.close();
                     return;
@@ -146,7 +139,11 @@ public class EchoServerNoBlock implements Runnable {
                     byteBuffer.get(bytes);
                     //String expression = new String(bytes, "UTF-8");
                     DeviceInfo deviceInfo = HexConvert.BinaryToDeviceInfo(bytes);
-                    System.out.println("服务器收到消息：" + JSONObject.toJSONString(deviceInfo));
+                    StringBuffer sb = new StringBuffer();
+                    for(int i=0; i < bytes.length ; i++){
+                        sb.append(bytes[i]);
+                    }
+                    logger.info("服务器收到消息16位：" + sb.toString());
                     logger.info("服务器收到消息：" + JSONObject.toJSONString(deviceInfo));
                     String encrypt = Utils.encrypt(deviceInfo.getDevSN());
                     if(!encrypt.equals(deviceInfo.getDevKey())){
@@ -159,6 +156,7 @@ public class EchoServerNoBlock implements Runnable {
                 }
             }
         }catch (Exception e){
+            logger.error("处理客户端消息异常:"+e.getMessage(),e);
             e.printStackTrace();
         }
     }
@@ -169,13 +167,13 @@ public class EchoServerNoBlock implements Runnable {
         List<Integer> value = new ArrayList<>();
         try{
             if(!"".equals(msg)){
-                System.out.println(msg);
                 JSONObject jsonObject = JSONObject.parseObject(msg);
                 DeviceEntity deviceEntity = JSONObject.toJavaObject(jsonObject, DeviceEntity.class);
                 //代表操作设备
                 onWhile(list,value,deviceEntity);
             }
         }catch (Exception e){
+            logger.error("服务端向客户端推送数据:"+e.getMessage(),e);
             e.printStackTrace();
         }
     }
@@ -205,6 +203,7 @@ public class EchoServerNoBlock implements Runnable {
             msg = "";
         } catch (IOException e) {
             e.printStackTrace();
+            logger.error("操作设备异常:"+e.getMessage(),e);
         }
 
     }
@@ -217,14 +216,53 @@ public class EchoServerNoBlock implements Runnable {
             if(cmdID.equals(new Integer(1))){
                 //需要客户端的设备信息
                 //第一次连接需要向客户端要一些设备信息
-                conFirst(deviceInfo,socketChannel);
-            }else if(cmdID.equals(new Integer(3))){
-                //3终端发送需要上报的类型值 拿到客户端向服务端返回的设备信息做处理
+                //conFirst(deviceInfo,socketChannel);
+            }else if(cmdID.equals(new Integer(5))){
+                //5终端发送需要上报的类型值 拿到客户端向服务端返回的设备信息做处理
                 dataAnalysis(deviceInfo);
+            }else if(cmdID.equals(new Integer(6))){
+                //更新版本
+                updateVersion(deviceInfo,socketChannel);
             }
         }catch (Exception e){
-            e.printStackTrace();
+           e.printStackTrace();
+           logger.error("处理服务器接受客户端数据异常:"+e.getMessage(),e);
         }
+    }
+
+    private void updateVersion(DeviceInfo deviceInfo, SocketChannel socketChannel)throws Exception {
+        Integer nextCmdID = deviceInfo.getNextCmdID();
+        //判断是否为重复数据
+        if(nextCmdID != count){
+            count = nextCmdID;
+            //获取更新文件信息
+            List<Byte> list = Arrays.asList(Utils.newBytes);
+            //切割成多少分，每份1024
+            List<List<Byte>> lists = Utils.averageAssign(list, 1024);
+            if(nextCmdID <= lists.size()){
+                //拿到客户端需要的第几份
+                List<Byte> bytes1 = lists.get(deviceInfo.getNextCmdID() - 1);
+                //nextId+1 确保客户端下次拿的数据正确
+                Integer nextId = deviceInfo.getNextCmdID() + 1;
+                //封装返回对象
+                DeviceVersionInfo result = new DeviceVersionInfo(7,nextId,deviceInfo.getDevKey(),deviceInfo.getDevType(),deviceInfo.getDevSN(),2,Integer.valueOf((int)Utils.length),Utils.sum);
+                int binLastSize = (int)Utils.length - (1024 * (deviceInfo.getNextCmdID()));
+                result.setBinLastSize(binLastSize);
+                //转换成数组
+                Byte [] newBytes = bytes1.toArray(new Byte[1024]);
+                result.setBin(newBytes);
+                logger.info("升级设备数据信息"+JSONObject.toJSONString(result));
+                //转换成字节
+                byte[] bytes = HexConvert.updateVersionToBytes(result);
+                socketChannel.write(ByteBuffer.wrap(bytes));
+            }else{
+                //升级完毕
+                logger.info("升级设备完毕");
+                count = 0;
+                socketChannel.close();
+            }
+        }
+
     }
 
     public void conFirst(DeviceInfo deviceInfo,SocketChannel socketChannel) throws Exception{
@@ -236,6 +274,7 @@ public class EchoServerNoBlock implements Runnable {
         }
         result.setKey(list);
         result.setDataLen(list.size()+56);
+        logger.info("返回数据json格式："+JSONObject.toJSON(result));
         byte[] bytes = HexConvert.hexStringToBytes(result);
         socketChannel.write(ByteBuffer.wrap(bytes));
 
@@ -243,6 +282,7 @@ public class EchoServerNoBlock implements Runnable {
 
     //数据格式解析
     public void dataAnalysis(DeviceInfo deviceInfo) throws Exception {
+        logger.info("设备上传的信息："+JSONObject.toJSONString(deviceInfo));
         List<Integer> upKey = deviceInfo.getKey();
         List<Integer> upValue = deviceInfo.getValue();
         List<String> dataKey = new ArrayList<>();
@@ -251,6 +291,7 @@ public class EchoServerNoBlock implements Runnable {
             dataKey.add(mapKey.get(integer));
         }
         //根据devSN查询设备信息
+        DeviceService deviceService = (DeviceService)SpringUtils.getBean("deviceServiceImpl");
         DeviceEntity deviceEntity = deviceService.queryDeviceByCode(deviceInfo.getDevSN());
         //提供一个公共的类，类中存放设备全部信息  否则反射时会找不到属性。start
         CommonEntity common = new CommonEntity();
@@ -260,7 +301,17 @@ public class EchoServerNoBlock implements Runnable {
         if(dataKey != null && dataKey.size() > 0){
             for (String str : dataKey){
                 Field field = common.getClass().getDeclaredField(str);
-                field.set(str,upValue.get(index));
+                Integer value = upValue.get(index);
+                if (field.getGenericType().toString().equals("class java.lang.String")) {
+                    field.setAccessible(true);
+                    field.set(common,value.toString());
+                }else if (field.getGenericType().toString().equals("class java.lang.Integer")) {
+                    field.setAccessible(true);
+                    field.set(common,value);
+                }else if (field.getGenericType().toString().equals("class java.lang.Double")) {
+                    field.setAccessible(true);
+                    field.set(common, Double.valueOf(value.toString()));
+                }
                 index ++;
             }
         }
@@ -271,11 +322,11 @@ public class EchoServerNoBlock implements Runnable {
         //所有设备属性都映射到公共的类中，需要哪些信息，自行转换 end
         //判断公共类属于历史数据，还是设备信息
         //判断是否时历史数据
-        if(common.getDischargeCapacity() != null && common.getChargingCapacity() != null){
-            HistoryMouth historyMouth = new HistoryMouth();
-            BeanUtils.copyProperties(common, historyMouth);
-            historyService.insertHistoryData(historyMouth);
-        }
+        HistoryMouth historyMouth = new HistoryMouth();
+        BeanUtils.copyProperties(common, historyMouth);
+        HistoryService historyService = (HistoryService)SpringUtils.getBean("historyServiceImpl");
+        historyService.insertHistoryData(historyMouth);
+
     }
 
 }

@@ -22,7 +22,7 @@ $(function () {
             for( var i=0 ;i<=res.realName.length;i++){
                 html+="<option>"+res.realName[i]+"</option>"
             }
-            $("#realName,#select1").append(html)
+            $("#realName,#select1,#select1_b").append(html)
         }
     })
     //搜索
@@ -51,8 +51,6 @@ $(function () {
                 "pageNum":pagesa
             },
             success: function(res){
-                console.log("数据")
-                console.log(res)
                 pages=res.data.pages;
                 pageSize=res.data.pageSize;
                 pageNum=res.data.pageNum
@@ -108,8 +106,9 @@ $(function () {
                     var pro_name_b= $(".pro_name_b").val()
                     var pro_s_b= $(".pro_s_b").val()
                     var select_b=$("#select1_b option:selected").text()
+
                     //正则  丸子
-                    if(pro_name_b == ""||pro_s_b == ""||select_b == ""){
+                    if(pro_name_b ==""||select_b=="") {
                         $(".mistake").css("display","block")
                     }else{
                         $.ajax({
@@ -203,13 +202,11 @@ $(function () {
 
         }
 
-
     })
     //编辑去弹窗/////////////////////////////////
      $(".shade_modifier_project").click(function(){
          $(".shade_modifier,.shade_b_modifier").css("display","none")
      })
-
 
 })
 

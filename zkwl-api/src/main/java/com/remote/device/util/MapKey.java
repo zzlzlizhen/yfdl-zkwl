@@ -12,9 +12,34 @@ public class MapKey {
     public static Map<Integer,String> mapKey = new HashMap<Integer,String>();
 
     static {
-        mapKey.put(1,"batteryState");//蓄电池状态
-        mapKey.put(19,"loadState");//负载状态
-        mapKey.put(11,"photocellState");//光电池状态
-        mapKey.put(54,"onOff");
+        //设备信息
+        mapKey.put(1,"light");//亮度
+        mapKey.put(2,"onOff");//开关
+        mapKey.put(3,"lightingDuration");//亮灯时长
+        mapKey.put(4,"morningHours");//晨亮时长
+        mapKey.put(83,"batteryState");//蓄电池状态
+        mapKey.put(84,"batteryMargin");//蓄电池余量
+        mapKey.put(88,"photocellState");//光电池状态
+        mapKey.put(89,"photovoltaicCellVoltage");//光电池电压
+        mapKey.put(91,"loadState");//负载状态
+        mapKey.put(92,"loadVoltage");//负载电压
+        mapKey.put(93,"loadPower");//负载功率
+        mapKey.put(94,"loadCurrent");//负载电流
+
+
+        //历史数据
+        mapKey.put(71,"chargingCapacity");//充电量
+        mapKey.put(72,"dischargeCapacity");//放电量
+        mapKey.put(74,"dischargeCurrent");//放电电流
+        mapKey.put(76,"ambientTemperature");//环境温度
+        mapKey.put(77,"internalTemperature");//内部温度
+        mapKey.put(78,"visitorsFlowrate");//人流量
+        mapKey.put(79,"inductionFrequency");//感应次数
+        mapKey.put(82,"meteorological");//气象信息
+        //公共数据
+        mapKey.put(73,"chargingCurrent");//充电电流
+        mapKey.put(75,"batteryVoltage");//电池电压
+
+
     }
 }

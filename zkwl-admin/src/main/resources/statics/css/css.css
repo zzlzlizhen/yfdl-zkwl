@@ -1,6 +1,7 @@
 /*css页面项目更改样式*/
 /*创建人：马振超*/
 html,body{width:100% !important;height:100% !important;margin:0;padding:0;font-size:12px;}
+ul,li,ol{list-style:none;display: block}
 /*css功能样式*/
 .hear{width:100%;height:8%;float:left;border-bottom: 10px solid rgba(242, 242, 242, 1);text-indent: 25px;line-height:60px;font-size:18px;}
 .project_he{width:100%;height:11.5%;float:left;border-bottom: 10px solid rgba(242, 242, 242, 1);}
@@ -47,6 +48,7 @@ html,body{width:100% !important;height:100% !important;margin:0;padding:0;font-s
 .shade_b,.shade_b_delete,.shade_b_new,.shade_b_project,.shade_b_modifier,.shade_b_yi{width:600px;height:380px; position: absolute; z-index: 99999;top:50%;left:50%;margin:-190px 0px 0px -300px;background: #fff;display: none;}
 .shade_b_delete{width:400px;height:300px;margin:-150px 0px 0px -200px;}
 .Bian_j,.Bian_j_delete{width:100%;float:left;height:50px;text-indent: 20px;font-size:14px;line-height: 50px;border-bottom: 1px solid #ccc;color:#333;}
+.Bian_P{width:auto;height:auto;float:left;line-height: 50px;color:#333;font-size:14px;text-indent: 20px;}
 .mistake{width:90%;height:30px;border-radius: 5px;border:1px solid red;float:left;margin:3% 0px 0px 5%;text-indent: 10px;line-height: 30px;display: none;}
 .mistake span:first-child{
     display: inline-block;
@@ -190,14 +192,53 @@ thead>th{text-align: center !important;}
 .drawe_S ul li img{width:35%;height:30%;float:left;margin:4% 0px 0px 5%;}
 .drawe_S ul li span{width:50%;float:left;height:50%;line-height: 40px;text-align: center}
 
-.convention{width:100%;height:30%;float:left;margin-top:40%;}
+.convention{width:100%;height:21%;float:left;}
 .con_span{width:100%;height:30px;text-indent: 10px;line-height:30px;background:#ccc;display: block;}
 .con_an{width:50%;float:left;height:50px;border-bottom: 1px solid #ccc;}
-.con_an>span{width:68px;height:100%;float: left;margin-left:10px;line-height:50px;}
+.con_an_span{width:68px;height:100%;float: left;margin-left:10px;line-height:50px;}
 .con_an_a{width:90%;height:70px;border-top:1px solid #ccc;left:5%;text-align: center;position: absolute;bottom: 0;}
 .con_an_a input{width:70px;height:30px;background: rgba(24, 144, 255, 1); color:#fff;font-size:14px;border:0;border-radius: 4px;margin-top:20px;}
+.form_con_an{width:60%;height:100%;float:left;line-height:57px;}
+.con_Xu ul,.con_Gu ul{width:100%;height:50%;float:left;margin:4% 0px 0px 0%;padding: 0;}
+.con_Xu ul li,.con_Gu li{width:33%;height:100%;float:left;border-right:1px dashed #999;}
+.con_Gu li{width:24.8%}
+.con_Xu ul img,.con_Gu ul img{float:left;width:22px;height:22px;margin:5% 0px 0px 24%;}
+.con_Gu ul img{margin-left:10%;}
+.con_Xu ul span,.con_Gu ul span{width:auto;height:auto;float:left;margin:7% 0px 0px 2%;color:#999;font-size:14px;}
+.con_Xu ul p,.con_Gu ul p{width:100%;height:auto;float:left;font-size: 17px;color:#999;text-align: center;margin-top:2%;}
+.dra_spa,.dra_p{width:auto;height:auto;float:left;margin:1% 0px 0px 3%;}
+.dra_p{margin:0% 0px 0px 0px;font-size:16px;}
 
-.pro_list{width:94%;height:68%;float:left;margin:3% 0px 0px 3%;border-bottom: 1px solid #ccc;overflow-x: hidden;overflow-y: scroll;}
+/*进度条*/
+/*.scroll{width: 60%;height: 5px;background: #ccc;position: relative;top: 45%;left: 20%;}*/
+/*.bar{width: 15px;height:15px;background: #369;border-radius:50%;position: absolute;top: -5px;left: 0;cursor: pointer;}*/
+/*.mask{position: absolute;left: 0;top: 0;background: #369;width: 0;height: 5px;}*/
+/*.pa{width:auto;height:auto;position: relative;left: 50%;top:25%;margin:0;padding: 0;}*/
+
+
+
+/*丸子*/
+
+.progres{
+    width: 24%;
+    float: left;
+    margin-top: 18px;
+    margin-left: 5%;
+}
+
+
+
+/*丸子*/
+
+
+
+
+
+
+
+
+
+.pro_list{width:94%;height:68%;float:left;margin:3% 0px 0px 3%;overflow-x: hidden;overflow-y: scroll;}
 .pro_list::-webkit-scrollbar {
     display: none;
 }
@@ -220,9 +261,130 @@ thead>th{text-align: center !important;}
 #filer {width: 80px;height: 32px;opacity: 0;position: absolute;left: 172px;top: 0;cursor: pointer;z-index: 5;}
 
 
-/**/
+/*我要反馈*/
+.project_he{width:100%;height:11.5%;float:left;border-bottom: 10px solid rgba(242, 242, 242, 1);}
 
 
+/*选项卡*/
+.option_a{width:100%;height:80%;float:left;}
+
+.option{width:100%;height:82%;display:none;float:left; overflow-x: hidden;overflow-y: scroll;}
+.option::-webkit-scrollbar {
+    display: none;
+}
+.tab {width:100%;height:82px;float:left;margin:0;padding:0;list-style:none;overflow:hidden;border-bottom: 10px solid rgba(242, 242, 242, 1);background: #ffffff;}
+.tab li {float:left;width:6%;height:50%;color:#666;font-size:14px;text-align:center;line-height:30px;cursor:pointer;margin:1.1% 0px 0px 2%;}
+.on {display:block;}
+.tab li.cur {border-bottom: 2px solid rgba(24, 144, 255, 1);}
+.Shu_r{width:100%;height:18%;float:left;border-bottom: 10px solid rgba(242, 242, 242, 1);}
+
+.option ul{
+    display: inline-block;
+    width:100% ;
+    height: auto;
+    background: #ffffff;
+    padding:0 40px;
+}
+
+.option ul li{
+    display: inline-block;
+    width: 100%;
+    border-bottom: 1px solid #cccccc;
+    font-size: 14px;
+    padding: 20px 0;
+
+}
+.option ul li>img{
+    display: inline-block;
+    width: 62px;
+    height: 62px;
+    border-radius: 50%;
+    float: left;
+    margin-right: 13px;
+
+}
+.option ul li>p{
+    display: inline-block;
+    width: 76%;
+    float: left;
+}
+.option ul li>p>span{
+    width: 100%;
+    display: inline-block;
+    line-height: 32px;
+}
+.option ul li>span{
+    float: right;
+}
+.option ul li>div{
+    float: right;
+    width: 12%;
+}
+.option ul li>div span:last-child{
+    width:87px;
+    height: 44px;
+    border:1px solid #00acd6;
+    line-height: 44px;
+    text-align: center;
+    border-radius: 29px;
+    display: block;
+    margin-left: 49px;
+    margin-top: 17px;
+}
+
+.r_list{
+    margin: 21px;
+    float: left;
+    width: 92%;
+    font-size: 14px;
+}
+.r_list>img{
+    display: inline-block;
+    width: 62px;
+    height: 62px;
+    border-radius: 50%;
+    float: left;
+    margin-right: 13px;
+}
+.r_list>div{
+    width: 72%;
+    float: left;
+    padding: 10px 0;
+}
+.r_list>div>span {
+    line-height: 26px;
+    display: block;
+}
+
+
+.shade_b_project_r>p{
+    padding: 0 96px;
+    line-height: 34px;
+    float: left;
+    font-size: 14px;
+    width: 100%;
+}
+.shade_b_project_r>span{
+    font-size: 14px;
+    line-height:28px;
+    display: block;
+    margin: 0 96px;
+    float: left;
+    width: 100%;
+}
+
+
+.shade_b_project_r>span>i{
+    font-style:normal
+}
+
+
+
+
+
+
+
+.shade_b_project_r{width:600px;height:380px; position: absolute; z-index: 99999;top:50%;left:50%;margin:-190px 0px 0px -300px;background: #fff;display: none;;}
 
 
 

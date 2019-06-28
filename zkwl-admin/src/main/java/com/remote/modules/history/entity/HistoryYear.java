@@ -25,4 +25,5 @@ public class HistoryYear {
     private Double visitorsFlowrate;//人流量
     private Double inductionFrequency;//感应次数
     private Date createTime;
+    private String time;
 }

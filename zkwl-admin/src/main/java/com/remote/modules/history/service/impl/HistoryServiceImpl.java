@@ -12,6 +12,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -36,7 +37,12 @@ public class HistoryServiceImpl implements HistoryService {
         QueryHistory queryHistory = new QueryHistory();
         List<HistoryDay> historyDays = historyDayMapper.queryHistoryDay(deviceCode,time);
         if(CollectionUtils.isNotEmpty(historyDays)){
+            queryHistory.setHistoryDays(historyDays);
             for (HistoryDay historyDay : historyDays){
+                String time1 = historyDay.getTime();
+                String substring = time1.substring(11,13);
+                historyDay.setTime(substring);
+                queryHistory.getHours().add(substring);
                 queryHistory.getDischargeCapacityList().add(historyDay.getDischargeCapacity());
                 queryHistory.getChargingCapacityList().add(historyDay.getChargingCapacity());
                 queryHistory.getChargingCurrentList().add(historyDay.getChargingCurrent());
@@ -54,10 +60,15 @@ public class HistoryServiceImpl implements HistoryService {
 
     @Override
     public QueryHistory queryHistoryMouth(String deviceCode,String year,String month) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd");
         QueryHistory queryHistory = new QueryHistory();
         List<HistoryMouth> historyMouths = historyMouthMapper.queryHistoryMouth(deviceCode, year, month);
         if(CollectionUtils.isNotEmpty(historyMouths)){
+            queryHistory.setHistoryMouths(historyMouths);
             for (HistoryMouth historyMouth : historyMouths){
+                String format = dateFormat.format(historyMouth.getCreateTime());
+                historyMouth.setTime(format);
+                queryHistory.getHours().add(format);
                 queryHistory.getDischargeCapacityList().add(historyMouth.getDischargeCapacity());
                 queryHistory.getChargingCapacityList().add(historyMouth.getChargingCapacity());
                 queryHistory.getChargingCurrentList().add(historyMouth.getChargingCurrent());
@@ -75,10 +86,15 @@ public class HistoryServiceImpl implements HistoryService {
 
     @Override
     public QueryHistory queryHistoryYear(String deviceCode, String year) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM");
         QueryHistory queryHistory = new QueryHistory();
         List<HistoryYear> historyYears = historyYearMapper.queryHistoryYear(deviceCode, year);
         if(CollectionUtils.isNotEmpty(historyYears)){
+            queryHistory.setHistoryYears(historyYears);
             for (HistoryYear historyYear : historyYears){
+                String format = dateFormat.format(historyYear.getCreateTime());
+                historyYear.setTime(format);
+                queryHistory.getHours().add(format);
                 queryHistory.getDischargeCapacityList().add(historyYear.getDischargeCapacity());
                 queryHistory.getChargingCapacityList().add(historyYear.getChargingCapacity());
                 queryHistory.getChargingCurrentList().add(historyYear.getChargingCurrent());

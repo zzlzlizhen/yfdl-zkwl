@@ -13,19 +13,28 @@
         <result property="logStatus" column="log_status"/>
         <result property="faultLogDesc" column="fault_log_desc"/>
         <result property="createTime" column="create_time"/>
+        <result property="groupId" column="group_id"/>
     </resultMap>
 
     <sql id="Base_Column_List" >
-    fault_log_id,create_user,fault_log_name,project_id,device_id,log_status,fault_log_desc,create_time
+    fault_log_id,create_user,fault_log_name,project_id,device_id,log_status,fault_log_desc,create_time,group_id
     </sql>
 
-    <select id="queryFaultlogByDeviceId" parameterType="com.remote.modules.device.entity.DeviceQuery" resultMap="BaseResultMap" >
+    <select id="queryFaultlogByDeviceId" resultMap="BaseResultMap" >
         SELECT
-        fault_log_desc,create_time,device_id
+        fault_log_desc,create_time,device_id,group_id
         FROM
         fun_fault_log
         <where>
-            device_id = #{deviceId} and log_status = #{logStatus}
+            <if test="deviceId != null">
+                device_id = #{deviceId},
+            </if>
+            <if test="logStatus != null">
+                log_status = #{logStatus},
+            </if>
+            <if test="groupId != null">
+                group_id = #{groupId},
+            </if>
         </where>
         order by create_time desc
     </select>

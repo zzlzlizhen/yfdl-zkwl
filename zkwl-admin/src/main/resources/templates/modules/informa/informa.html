@@ -5,13 +5,82 @@
     <#include "/header.html">
     <link rel="stylesheet" href="${request.contextPath}/statics/css/css.css">
     <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/jquery_page.css">
+    <script src="${request.contextPath}/statics/js/modules/project/jquery_page.js"></script>
 </head>
-<body>
-wwwwwwwwwwwwwwwww
+<style>
+    ul li {list-style: none;}
+</style>
+<body style="background-color:#cccccc">
 
 
+<ul class="tab">
+    <li class="cur">系统消息</li>
+    <li>用户反馈</li>
+</ul>
+<div class="option_a">
+    <div class="option on">
+        <ul>
+            <li>
+                <img  src="${request.contextPath}/statics/image/sousuo.svg">
+                <p>
+                    <span>系统消息</span>
+                    <span>XXXX项目XXXXX分组XXXX设备运行异常，运行电压过高！！！</span>
+                </p>
+                <span>2019/02/10   09:10:20</span>
+            </li>
+        </ul>
+        <div class="box">
+            <div id="pagination5" class="page fl"></div>
+        </div>
+    </div>
 
+    <div class="option r_llis">
+        <ul>
+            <li>
+                <img  src="${request.contextPath}/statics/image/sousuo.svg">
+                <p>
+                    <span>系统消息</span>
+                    <span>XXXX项目XXXXX分组XXXX设备运行异常，运行电压过高！！！</span>
+                </p>
+               <div>
+                   <span>2019/02/10   09:10:20</span>
+                   <span class="r_details">详情</span>
+               </div>
+            </li>
+        </ul>
+        <div class="box">
+            <div id="pagination4" class="page fl"></div>
+        </div>
+    </div>
+</div>
+<!--详情-->
+<div class="shade_project">
+<div class="shade_a shade_add_project"></div>
+<div class="shade_b_project_r">
+    <div class="Bian_j">详情<span class="glyphicon glyphicon-remove guan_shc shade_add_project" ></span></div>
+    <div class="mistake">
+        <span class="glyphicon glyphicon-pencil cu_m"></span>错误提示
+        <span class="glyphicon glyphicon-remove wrong"></span>
+    </div>
+    <div class="r_list">
+        <img  src="${request.contextPath}/statics/image/sousuo.svg"  id="r_imgs">
+        <div>
+            <span  id='r_tents'></span>
+            <span id='r_imes'>2156468486456</span>
+        </div>
+    </div>
+    <p id="r_const">
 
+    </p>
+    <span>邮箱：<i id="r_emls"></i></span>
+    <span>手机号：<i id="r_moes"></i></span>
+    <div class="sha_buttom">
+        <input type="button" value="确定" id="project_confirm" class="r_yes">
+        <input type="button" value="取消" class="shade_add_project">
+    </div>
+</div>
+</div>
 <script src="${request.contextPath}/statics/js/modules/informa/informa.js"></script>
 </body>
 </html>

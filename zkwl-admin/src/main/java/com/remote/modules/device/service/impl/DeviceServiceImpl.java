@@ -24,6 +24,8 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -94,32 +96,32 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public boolean updateById(DeviceEntity deviceEntity) {
-        StringBuffer sb = new StringBuffer("");
-        String userName = deviceEntity.getUpdateUserName();
-        if(StringUtils.isNotEmpty(deviceEntity.getLightingDuration())){
-            sb.append("亮灯时长,");
-        }
-        if(StringUtils.isNotEmpty(deviceEntity.getMorningHours())){
-            sb.append("晨亮时长,");
-        }
-        if(StringUtils.isNotEmpty(deviceEntity.getLight())){
-            sb.append("亮度,");
-        }
-        if(deviceEntity.getOnOff() != null){
-            sb.append("开关,");
-        }
-        if(!"".equals(sb.toString())){
-            FaultlogEntity faultlogEntity = new FaultlogEntity();
-            faultlogEntity.setProjectId(deviceEntity.getProjectId());
-            faultlogEntity.setFaultLogId(UUID.randomUUID().toString());
-            faultlogEntity.setDeviceId(deviceEntity.getDeviceId());
-            faultlogEntity.setCreateTime(new Date());
-            faultlogEntity.setCreateUserId(deviceEntity.getUpdateUser());
-            faultlogEntity.setLogStatus(FaultlogEnum.OPERATIONALLOG.getCode());
-            String logStr = sb.substring(0, sb.length() - 1);
-            faultlogEntity.setFaultLogDesc(logStr);
-            faultlogService.addFaultlog(faultlogEntity);
-        }
+//        StringBuffer sb = new StringBuffer("");
+//        String userName = deviceEntity.getUpdateUserName();
+//        if(StringUtils.isNotEmpty(deviceEntity.getLightingDuration())){
+//            sb.append("亮灯时长,");
+//        }
+//        if(StringUtils.isNotEmpty(deviceEntity.getMorningHours())){
+//            sb.append("晨亮时长,");
+//        }
+//        if(StringUtils.isNotEmpty(deviceEntity.getLight())){
+//            sb.append("亮度,");
+//        }
+//        if(deviceEntity.getOnOff() != null){
+//            sb.append("开关,");
+//        }
+//        if(!"".equals(sb.toString())){
+//            FaultlogEntity faultlogEntity = new FaultlogEntity();
+//            faultlogEntity.setProjectId(deviceEntity.getProjectId());
+//            faultlogEntity.setFaultLogId(UUID.randomUUID().toString());
+//            faultlogEntity.setDeviceId(deviceEntity.getDeviceId());
+//            faultlogEntity.setCreateTime(new Date());
+//            faultlogEntity.setCreateUserId(deviceEntity.getCreateUser());
+//            faultlogEntity.setLogStatus(FaultlogEnum.OPERATIONALLOG.getCode());
+//            String logStr = sb.substring(0, sb.length() - 1);
+//            faultlogEntity.setFaultLogDesc(logStr);
+//            faultlogService.addFaultlog(faultlogEntity);
+//        }
         return deviceMapper.updateById(deviceEntity) > 0 ? true : false;
     }
 
@@ -135,7 +137,18 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public DeviceEntity queryDeviceByDeviceId(String deviceId) {
-        return deviceMapper.queryDeviceByDeviceId(deviceId);
+        DeviceEntity deviceEntity = null;
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            deviceEntity = deviceMapper.queryDeviceByDeviceId(deviceId);
+            String startTime = sdf.format(deviceEntity.getCreateTime());
+            String endTime = sdf.format(new Date());
+            long day = (sdf.parse(startTime).getTime() - sdf.parse(endTime).getTime()) /(24*60*60*1000);
+            deviceEntity.setRunDay(day);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return deviceEntity;
     }
 
     @Override
@@ -156,7 +169,28 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public int updateOnOffByIds(DeviceQuery deviceQuery) {
-        List<DeviceEntity> deviceEntityList = deviceMapper.queryDevice(deviceQuery);
+        List<DeviceEntity> deviceEntityList = null;
+        //代表操作单个设备开关
+        if(StringUtils.isNotEmpty(deviceQuery.getDeviceId())){
+            DeviceEntity deviceEntity = new DeviceEntity();
+            deviceEntity.setDeviceId(deviceQuery.getDeviceId());
+            deviceEntityList.add(deviceEntity);
+        }else{
+            deviceEntityList = deviceMapper.queryDevice(deviceQuery);
+        }
+        StringBuffer sb = new StringBuffer();
+        if(StringUtils.isNotEmpty(deviceQuery.getLightingDuration())){
+            sb.append("亮灯时长,");
+        }
+        if(StringUtils.isNotEmpty(deviceQuery.getMorningHours())){
+            sb.append("晨亮时长,");
+        }
+        if(StringUtils.isNotEmpty(deviceQuery.getLight())){
+            sb.append("亮度,");
+        }
+        if(deviceQuery.getOnOff() != null){
+            sb.append("开关,");
+        }
         List<String> deviceList = new ArrayList<>();
         String userName = deviceQuery.getUpdateUserName();
         if(CollectionUtils.isNotEmpty(deviceEntityList)){
@@ -169,7 +203,7 @@ public class DeviceServiceImpl implements DeviceService {
                 faultlogEntity.setCreateTime(new Date());
                 faultlogEntity.setCreateUserId(deviceQuery.getUpdateUser());
                 faultlogEntity.setLogStatus(FaultlogEnum.OPERATIONALLOG.getCode());
-                faultlogEntity.setFaultLogDesc(userName+"操作了路灯开关");
+                faultlogEntity.setFaultLogDesc(userName+"操作了路灯"+sb.toString());
                 faultlogService.addFaultlog(faultlogEntity);
             }
         }

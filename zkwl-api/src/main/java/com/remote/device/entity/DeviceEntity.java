@@ -125,6 +125,11 @@ public class DeviceEntity {
     //负载电流
     private String loadCurrent;
 
+    //亮灯时长
+    private String lightingDuration;
+    //晨亮时长
+    private String  morningHours;
+
     private List<Integer> key;
 
     private List<Integer> value;

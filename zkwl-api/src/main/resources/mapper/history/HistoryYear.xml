@@ -24,7 +24,7 @@
     internal_temperature,visitors_flowrate,induction_frequency,meteorological,create_time
     </sql>
 
-    <select id="queryHistoryYear" resultMap="BaseResultMap" resultType="java.lang.Integer">
+    <select id="queryHistoryYear" resultType="java.lang.Integer">
         SELECT
             count(1)
         FROM

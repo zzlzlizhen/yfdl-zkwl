@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,7 +28,20 @@ public class HistoryController extends AbstractController {
 
     @RequestMapping(value = "/queryHistoryByDay", method= RequestMethod.GET)
     public R queryDevice(String deviceCode,String time){
-        QueryHistory queryHistory = historyService.queryHistoryDay(deviceCode,time);
+        StringBuffer sb = new StringBuffer();
+        String[] split = time.split("-");
+        sb.append(split[0]).append("-");
+        if(split[1].length() != 2){
+            sb.append("0").append(split[1]).append("-");
+        }else{
+            sb.append(split[1]).append("-");
+        }
+        if(split[2].length() != 2){
+            sb.append("0").append(split[2]);
+        }else{
+            sb.append(split[2]);
+        }
+        QueryHistory queryHistory = historyService.queryHistoryDay(deviceCode,sb.toString());
         if(queryHistory != null){
             return R.ok(queryHistory);
         }
@@ -50,4 +65,6 @@ public class HistoryController extends AbstractController {
         }
         return R.error(400,"查询历史数据失败");
     }
+
+
 }

@@ -45,6 +45,8 @@ $(function () {
                 "pageNum": pagesa
             }),
             success: function (res) {
+                console.log("分组1111")
+                console.log(res)
                 pages = res.data.pages;
                 pageSize = res.data.pageSize;
                 pageNum = res.data.pageNum
@@ -61,12 +63,18 @@ $(function () {
                         "<td id=" + res.data.list[i].groupId + ">" +
                         "<a  class='modifier'><span class=\"glyphicon glyphicon-pencil\"></span></a>\n" +
                         "<a  class='particulars'><span class=\"glyphicon glyphicon-search\"></span></a>\n" +
-                        "<a href=\"\"><span class=\"glyphicon glyphicon-picture\"></span></a>\n" +
+                        "<a  href=\"#\" class='ma_p' id="+res.data.list[i].longitude+","+res.data.list[i].latitude+"><span class=\"glyphicon glyphicon-picture\"></span></a>\n" +
                         "<a  class='deleteq'><span class=\"glyphicon glyphicon-trash\"></span></a>\n" +
                         "</td>\n" +
                         "</tr>"
                 }
                 $("#div").append(html);
+                // 地图定位
+                $(".ma_p").click(function(){
+                    var longitude=$(this).attr("id")
+                    var searchUrl=encodeURI('../equipment/equipment.html?longitude='+longitude)
+                    location.href =searchUrl;
+                })
                 //移动分组删除
                 var arr=[]
                 $(".checkbox_i").click(function () {

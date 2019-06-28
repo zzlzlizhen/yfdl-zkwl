@@ -127,7 +127,18 @@
 
     <update id="updateOnOffByIds" parameterType="com.remote.modules.device.entity.DeviceQuery">
         update fun_device set
-        on_off = #{deviceQuery.onOff},
+        <if test="deviceQuery.onOff != null">
+            on_off = #{deviceQuery.onOff},
+        </if>
+        <if test="deviceQuery.light != null">
+            light = #{deviceQuery.light},
+        </if>
+        <if test="deviceQuery.lightingDuration != null">
+            lighting_duration = #{deviceQuery.lightingDuration},
+        </if>
+        <if test="deviceQuery.morningHours != null">
+            morning_hours = #{deviceQuery.morningHours}
+        </if>
         update_user = #{deviceQuery.updateUser},update_time = #{deviceQuery.updateTime}
         <where>
             <if test="deviceQuery.deviceList !=null and deviceQuery.deviceList.size()!= 0">

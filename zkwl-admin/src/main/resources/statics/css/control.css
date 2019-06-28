@@ -1,33 +1,33 @@
 html,body{width:100% !important;height:100% !important;margin:0;padding:0;font-size:12px;background: rgba(242, 242, 242, 1)}
 /*css功能样式*/
-.hear{width:100%;height:8%;float:left;border-bottom: 10px solid rgba(242, 242, 242, 1);text-indent: 25px;line-height:60px;font-size:18px;}
+.hear{width:100%;height:8%;float:left;border-bottom: 10px solid rgba(242, 242, 242, 1);text-indent: 25px;line-height:60px;font-size:18px;background: #fff;}
 .project_he{width:100%;height:11.5%;float:left;border-bottom: 10px solid rgba(242, 242, 242, 1);}
 .hear_w{width:auto;height:auto;float:left;margin:2.7% 0px 0px 2.5%;font-size:14px;}
 .form_input{  margin-bottom: 0px !important; padding: 0px !important;width:11% !important;;height:100%;margin-top:26px;}
 
 /*选项卡*/
-.option_a{width:100%;height:80%;float:left;}
+.option_a{width:100%;height:81%;float:left;}
 
-.option{width:100%;height:82%;display:none;float:left; overflow-x: hidden;overflow-y: scroll;}
+.option{width:100%;height:100%;display:none;float:left; overflow-x: hidden;overflow-y: scroll;}
 .option::-webkit-scrollbar {
     display: none;
 }
-.tab {width:100%;height:10%;float:left;margin:0;padding:0;list-style:none;overflow:hidden;border-bottom: 10px solid rgba(242, 242, 242, 1);}
+.tab {width:100%;height:10%;float:left;margin:0;padding:0;list-style:none;overflow:hidden;border-bottom: 10px solid rgba(242, 242, 242, 1);background: #fff;}
 .tab li {float:left;width:6%;height:50%;color:#666;font-size:14px;text-align:center;line-height:30px;cursor:pointer;margin:1.1% 0px 0px 2%;}
 .on {display:block;}
 .tab li.cur {border-bottom: 2px solid rgba(24, 144, 255, 1);}
-.Shu_r{width:100%;height:18%;float:left;border-bottom: 10px solid rgba(242, 242, 242, 1);}
+.Shu_r{width:100%;height:18%;float:left;border-bottom: 10px solid rgba(242, 242, 242, 1);background: #fff;}
 
 .form_input{margin:0;padding: 0;}
 .sele_con{width:10%;margin-top: 2.2%; float:left;}
 .op_T{background:rgba(24, 144, 255, 1);border:0;margin: 2.3% 0px 0px 1%;}
-.Biao_g{width:100%;height:82%;float:left;overflow-x: hidden;overflow-y: scroll;}
+.Biao_g{width:100%;height:82%;float:left;overflow-x: hidden;overflow-y: scroll;background: #fff;}
 .Biao_g::-webkit-scrollbar {
     display: none;
 }
 .B_left{width:49.5%;height:270px;float:left;border-bottom:10px solid rgba(242, 242, 242, 1);}
 .B_left:nth-of-type(odd){border-right:10px solid rgba(242, 242, 242, 1);}
-
+.da_te{width:137px;height:35px !important;float:left;border-radius: 4px; border:1px solid #ccc;margin-top:2%;text-indent: 10px;}
 
 /*负载*/
 .r-load{
@@ -300,6 +300,7 @@ color: red;
     width: 100%;
     height:42px ;
     line-height: 42px;
+    clear: both;
 }
 .r-Lamp i{
     color: red;
@@ -370,7 +371,7 @@ color: red;
 .r-Lamp-Progress div p{
     width: 12%;
     float: left;
-    margin-left: 11px;
+    margin-left: 1%;
 }
 
 
@@ -395,5 +396,28 @@ color: red;
     color:red;
 }
 
+/*丸子*/
+
+.progres{
+    width: 24%;
+    float: left;
+    margin-top: 18px;
+    margin-left: 5%;
+}
+
+.demo-slider{
+    line-height: 10px;
+}
 
 
+#r_inpl_one,#r_inpl_tw{
+    line-height: 28px;
+}
+
+
+.r_i{
+   line-height: 32px;width: 3%;
+}
+.r_ie{
+    line-height: 21px;width: 3%;
+}

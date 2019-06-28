@@ -26,4 +26,5 @@ public class HistoryMouth {
     private Double inductionFrequency;//感应次数
     private Double meteorological;//气象信息
     private Date createTime;
+    private String time;
 }

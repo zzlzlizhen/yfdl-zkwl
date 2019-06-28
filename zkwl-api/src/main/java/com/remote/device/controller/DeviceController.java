@@ -29,7 +29,6 @@ import static com.remote.device.util.MapKey.mapKey;
 @RequestMapping("/fun/device")
 public class DeviceController {
 
-    public static StringBuffer sb = new StringBuffer();
 
     @RequestMapping(value = "/change", method= RequestMethod.POST)
     public DeviceEntity chage(String change){
