@@ -35,7 +35,6 @@ $(window).on('resize', function() {
 
 //注册菜单组件
 Vue.component('menuItem',menuItem);
-
 var vm = new Vue({
 	el:'#rrapp',
 	data:{
@@ -56,9 +55,6 @@ var vm = new Vue({
 			$.getJSON("sys/user/info?_"+$.now(), function(r){
 				vm.user = r.user;
 			});
-		},
-		informa:function(){
-			vm.main="modules/informa/informa.html"
 		},
 		updatePassword: function(){
 			layer.open({
@@ -135,4 +131,8 @@ function routerList(router, menuList){
 			});
 		}
 	}
+	router.add('#modules/informa/informa.html', function() {
+		var url = window.location.hash;
+		vm.main = url.replace('#', '');
+	});
 }
