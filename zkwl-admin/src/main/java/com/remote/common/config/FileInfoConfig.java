@@ -20,6 +20,8 @@ public class FileInfoConfig {
 
     private String upPath; //保存路径
 
+    private String relativePath;
+
     private String imageType; //图片类型
 
     public long getFileSize() {
@@ -52,5 +54,13 @@ public class FileInfoConfig {
 
     public void setImageType(String imageType) {
         this.imageType = imageType;
+    }
+
+    public String getRelativePath() {
+        return relativePath;
+    }
+
+    public void setRelativePath(String relativePath) {
+        this.relativePath = relativePath;
     }
 }

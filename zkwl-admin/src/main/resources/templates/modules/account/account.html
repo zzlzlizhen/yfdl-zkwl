@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="${request.contextPath}/statics/css/bootstrap.min.css">
     <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
     <script src="${request.contextPath}/statics/js/modules/project/jquery_page.js"></script>
+    <script src="${request.contextPath}/statics/libs/ajaxupload.js"></script>
 </head>
 <body>
 <div class="project_he" >
@@ -93,10 +94,9 @@
             </div>
         </span>
         <span class="sha_span preview">
-             <p><span  style="color: red">*</span>头像：</p>
-              <div id="preview"></div>
-              <input type="file" accept="image/*" id="file" value=""/>
-              <i>上传图片</i>
+            <a class="btn btn-primary" id="upload"><i class="fa fa-plus"></i>&nbsp;上传文件</a>
+            <img id="pic" style="width:100px;height:100px;border-radius:50%;" src="">
+            <input id="headUrl" type="hidden">
         </span>
         <span class="sha_span">
             <p><span  style="color: red">*</span>邮箱：</p>
@@ -221,6 +221,27 @@
             var lujing=$("#pic").attr("src");
             console.log(lujing)
         });
+
+        new AjaxUpload('#upload', {
+            action: baseURL + "sys/upload",
+            name: 'file',
+            autoSubmit:true,
+            responseType:"json",
+            onSubmit:function(file, extension){
+                if (!(extension && /^(jpg|jpeg|png|gif)$/.test(extension.toLowerCase()))){
+                    alert('只支持jpg、png、gif格式的图片！');
+                    return false;
+                }
+            },
+            onComplete : function(file, r){
+                if(r.code == 200){
+                    alert(r.url);
+                    $("#headUrl").val(r.url);
+                    $("#pic").attr("src",baseURL+r.url);
+                }else{
+                    alert(r.msg);
+                }
+            }
     });
 
     //建立一?可存取到?file的url
@@ -255,5 +276,8 @@
             }
         });
     }
+
+
+    });
 </script>
 </html>

@@ -67,7 +67,7 @@ public class FileUpAndDownServiceImpl implements FileUpAndDownService {
                     // 压缩图片
                     Thumbnails.of(oldFile).scale(config.getScaleRatio()).toFile(path);
                     // 显示路径
-                    r.put("url", "/" + basedir + "/" + newUUID + "." + imageName);
+                    r.put("url", config.getRelativePath()+"/" + basedir + "/" + newUUID + "." + imageName);
                 } else {
                     path = config.getUpPath() + "/" + basedir + "/" + uuid + "." + imageName;
                     // 如果目录不存在则创建目录
@@ -77,7 +77,7 @@ public class FileUpAndDownServiceImpl implements FileUpAndDownService {
                     }
                     file.transferTo(uploadFile);
                     // 显示路径
-                    r.put("url", "/" + basedir + "/" + uuid + "." + imageName);
+                    r.put("url", config.getRelativePath()+"/" + basedir + "/" + uuid + "." + imageName);
                 }
                 r.put("oldFileName", oldFileName);
                 r.put("newFileName", newFileName);

@@ -274,6 +274,7 @@ $(function () {
         var acc_mailbox = $("#acc_mailbox").val()
         var acc_call = $("#acc_call").val();
         var roleId = $("#role").val();
+        var headUrl = $("#headUrl").val();
         regular(acc_call,acc_select,acc_number,acc_user,acc_password)
         lay()
         if (acc_number == "" || acc_user == "" || acc_password == "" || acc_mailbox == "" || acc_call == "") {
@@ -283,14 +284,14 @@ $(function () {
                 url: baseURL + 'sys/user/save',
                 type: "POST",
                 data:
-                "&headUrl=" + "" +
+                "&headUrl=" + headUrl +
                 "&username=" + acc_number +
                 "&realName=" + acc_user +
                 "&password=" + acc_password +
                 "&termOfValidity=" + acc_select +
                 "&email=" + acc_mailbox +
                 "&mobile=" + acc_call +
-                "&roleId=" + roleId,
+                "&roleId=" + roleId ,
                 success: function (res) {
                     console.log(JSON.stringify(res));
                     if (res.code == 200) {
@@ -399,7 +400,6 @@ $(function () {
             form(pageSize, pagesb, acc_id, acc_hao, acc_name, select);
         }
     });
-
 
 });
 
