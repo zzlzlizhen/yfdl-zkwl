@@ -13,7 +13,8 @@ $(function () {
         var acc_name = $("#acc_name").val()
         var select = $("#sele_ht option:selected").text()
         $("#div").html("")
-        form(10, 1, acc_id, acc_hao, acc_name, select)
+        pageNum = 1;
+        form(pageSize, pageNum, acc_id, acc_hao, acc_name, select)
     })
     //渲染表格
 
@@ -225,8 +226,12 @@ $(function () {
                     callback: function (current) {
                         //当前页数current
                         var pagesb = current
-                        $("#div").html("")
-                        form(pageSize, pagesb)
+                        var acc_id = $("#acc_id").val();
+                        var acc_hao = $("#acc_hao").val();
+                        var acc_name = $("#acc_name").val();
+                        var select = $("#sele_ht option:selected").text();
+                        $("#div").html("");
+                        form(pageSize, pagesb, acc_id, acc_hao, acc_name, select);
                     }
                 });
             }
@@ -386,8 +391,12 @@ $(function () {
         callback: function (current) {
             //当前页数current
             var pagesb = current
-            $("#div").html("")
-            form(pageSize, pagesb)
+            var acc_id = $("#acc_id").val();
+            var acc_hao = $("#acc_hao").val();
+            var acc_name = $("#acc_name").val();
+            var select = $("#sele_ht option:selected").text();
+            $("#div").html("");
+            form(pageSize, pagesb, acc_id, acc_hao, acc_name, select);
         }
     });
 
