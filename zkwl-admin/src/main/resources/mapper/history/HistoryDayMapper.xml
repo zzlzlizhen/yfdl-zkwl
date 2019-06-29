@@ -19,11 +19,13 @@
         <result property="meteorological" column="meteorological"/>
         <result property="createTime" column="create_time"/>
         <result property="time" column="time"/>
+        <result property="fillingsNumber" column="fillings_number"/>
+        <result property="dischargeNumber" column="discharge_number"/>
     </resultMap>
 
     <sql id="Base_Column_List" >
     day_id, device_code, discharge_capacity, charging_capacity, charging_current, discharge_current,discharge_current,battery_voltage,ambient_temperature,
-    internal_temperature,visitors_flowrate,induction_frequency,meteorological,create_time
+    internal_temperature,visitors_flowrate,induction_frequency,meteorological,create_time,fillings_number,discharge_number
     </sql>
 
     <select id="queryHistoryDay" resultMap="BaseResultMap" >
@@ -43,6 +45,13 @@
         and device_code = #{deviceCode}
         GROUP BY time
         ORDER BY time;
+    </select>
+
+    <select id="queryHistoryDayOther" resultMap="BaseResultMap" >
+        SELECT sum(fillings_number) as fillings_number,sum(discharge_number) as discharge_number,device_code
+        FROM history_day
+        where DATE_FORMAT(create_time,'%Y-%m-%d') = #{time}
+        and device_code = #{deviceCode}
     </select>
 
 

@@ -76,7 +76,7 @@ $(function(){
                     html += "<tr>\n" +
                         "<td id="+res.data.list[i].deviceId+" style=\"width:4%;\"> <input type= \"checkbox\" class=\"checkbox_in  checkbox_i\"> </td>\n" +
                         "<td id='r_nm'>"+res.data.list[i].deviceCode+"</td>\n" +
-                        "<td style=\"width:10%;\">"+res.data.list[i].deviceName+"</td>\n" +
+                        "<td style=\"width:10%;\" id='r_namem'>"+res.data.list[i].deviceName+"</td>\n" +
                         "<td>"+res.data.list[i].groupName+"</td>\n" +
                         "<td>"+res.data.list[i].deviceType+"</td>\n" +
                         "<td>"+res.data.list[i].photocellState+"</td>\n" +
@@ -241,7 +241,9 @@ $(function(){
                 var proid
                 $(".particulars").click(function(){
                     $(".shade_modifier,.shade_b_modifier").css("display","block");
-                    proid=$(this).parent().attr('id');
+                    var proid=$(this).parent().attr('id');
+                    var  r_namem = $(this).parent().siblings("#r_namem").html();
+                    $(".pro_s_b").val(r_namem)
                     fen()
                 })
                 $("#confirm_x").click(function(){
@@ -307,16 +309,17 @@ $(function(){
             type:"get",
             data:{},
             success: function(res) {
-                var html
+                var html=""
                 for (var i = 0; i < res.data.length; i++) {
-                    html += "<option class='option' id="+res.data[i].groupId+">"+res.data[i].groupName+"</option>\n"
+                    html += "<option class='option opti_a' id="+res.data[i].groupId+">"+res.data[i].groupName+"</option>\n"
                 }
                 $("#select1,#select1_b").append(html)
             }
         })
     }
     $(".shade_add_project").click(function(){
-        $(".shade_project,.shade_b_project").css("display","none")
+        $(".shade_project,.shade_b_project").css("display","none");
+        $("#select1,#select1_b").html("")
     })
 
 
@@ -354,6 +357,7 @@ $(function(){
 //编辑去弹窗/////////////////////////////////
     $(".shade_modifier_project").click(function(){
         $(".shade_modifier,.shade_b_modifier").css("display","none")
+        $("#select1,#select1_b").html("")
     })
 
 //分组管理

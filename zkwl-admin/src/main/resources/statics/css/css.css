@@ -195,7 +195,7 @@ thead>th{text-align: center !important;}
 .convention{width:100%;height:21%;float:left;}
 .con_span{width:100%;height:30px;text-indent: 10px;line-height:30px;background:#ccc;display: block;}
 .con_an{width:50%;float:left;height:50px;border-bottom: 1px solid #ccc;}
-.con_an_span{width:68px;height:100%;float: left;margin-left:10px;line-height:50px;}
+.con_an_span{width:79px;height:100%;float: left;margin-left:10px;line-height:50px;}
 .con_an_a{width:90%;height:70px;border-top:1px solid #ccc;left:5%;text-align: center;position: absolute;bottom: 0;}
 .con_an_a input{width:70px;height:30px;background: rgba(24, 144, 255, 1); color:#fff;font-size:14px;border:0;border-radius: 4px;margin-top:20px;}
 .form_con_an{width:60%;height:100%;float:left;line-height:57px;}
@@ -214,7 +214,7 @@ thead>th{text-align: center !important;}
 /*.bar{width: 15px;height:15px;background: #369;border-radius:50%;position: absolute;top: -5px;left: 0;cursor: pointer;}*/
 /*.mask{position: absolute;left: 0;top: 0;background: #369;width: 0;height: 5px;}*/
 /*.pa{width:auto;height:auto;position: relative;left: 50%;top:25%;margin:0;padding: 0;}*/
-
+.demo-slider{border:0;box-shadow: 0 0 0 #fff;height:auto;}
 
 
 /*丸子*/
@@ -266,10 +266,16 @@ thead>th{text-align: center !important;}
 
 
 /*选项卡*/
+.opti_a{display: block !important;}
 .option_a{width:100%;height:80%;float:left;}
-
+.option_b{height:89.9% !important;}
 .option{width:100%;height:82%;display:none;float:left; overflow-x: hidden;overflow-y: scroll;}
 .option::-webkit-scrollbar {
+    display: none;
+}
+.r_llis ,.r_op{height:100%;}
+.r_op>ul,.r_llis>ul{height:91% !important;overflow-x: hidden;overflow-y: scroll; }
+.r_op>ul::-webkit-scrollbar,.r_llis>ul::-webkit-scrollbar {
     display: none;
 }
 .tab {width:100%;height:82px;float:left;margin:0;padding:0;list-style:none;overflow:hidden;border-bottom: 10px solid rgba(242, 242, 242, 1);background: #ffffff;}
@@ -380,12 +386,7 @@ thead>th{text-align: center !important;}
 
 
 
-
-
-
-
 .shade_b_project_r{width:600px;height:380px; position: absolute; z-index: 99999;top:50%;left:50%;margin:-190px 0px 0px -300px;background: #fff;display: none;;}
-
 
 
 

@@ -42,3 +42,55 @@
 
 
 
+/*我要反馈*/
+.mistake{width:90%;height:30px !important;border-radius: 5px;border:1px solid red;float:left;margin:3% 0px 0px 5%;text-indent: 10px;line-height: 30px;display: none;}
+.mistake span:first-child{
+    display: inline-block;
+    width: 20px !important;
+    float: left;
+    margin-top: 7px;}
+.mistake span:last-child{
+    display: inline-block;
+    width: 20px !important;
+    float: right;
+    margin-top: 7px;}
+.mistake p{
+    display: inline-block;
+    float: left;
+    width:300px;
+    line-height:30px}
+
+/*丸子弹窗*/
+.r_lay{
+    width:316px;
+    height:150px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-top: -75px;
+    margin-left: -117.5px;
+    background: blue;
+    z-index: 999999;
+    font-size: 14px;
+    padding: 30px;
+    display: none;
+}
+.r_lay>div>span{
+    float: right;
+    border:1px solid #ccc;
+    padding: 2px 5px;
+    border-radius: 4px;
+}
+.r_lay>div{
+    height: 30px;
+}
+.r_lay>button{
+    float: right;
+    margin-top: 20px;
+}
+#btn{
+    float: right;
+    border:1px solid #ccc;
+    padding: 2px 5px;
+    border-radius: 4px;
+}

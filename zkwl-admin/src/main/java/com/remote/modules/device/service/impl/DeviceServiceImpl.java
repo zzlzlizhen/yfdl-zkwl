@@ -7,6 +7,7 @@ import com.remote.common.enums.FaultlogEnum;
 import com.remote.modules.device.dao.DeviceMapper;
 import com.remote.modules.device.entity.DeviceEntity;
 import com.remote.modules.device.entity.DeviceQuery;
+import com.remote.modules.device.entity.DeviceResult;
 import com.remote.modules.device.service.DeviceService;
 import com.remote.modules.faultlog.entity.FaultlogEntity;
 import com.remote.modules.faultlog.service.FaultlogService;
@@ -21,6 +22,7 @@ import com.remote.modules.sys.entity.SysUserEntity;
 import com.remote.modules.sys.service.SysUserService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -136,19 +138,20 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public DeviceEntity queryDeviceByDeviceId(String deviceId) {
-        DeviceEntity deviceEntity = null;
+    public DeviceResult queryDeviceByDeviceId(String deviceId) {
+        DeviceResult resut = new DeviceResult();
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            deviceEntity = deviceMapper.queryDeviceByDeviceId(deviceId);
+            DeviceEntity deviceEntity = deviceMapper.queryDeviceByDeviceId(deviceId);
             String startTime = sdf.format(deviceEntity.getCreateTime());
             String endTime = sdf.format(new Date());
             long day = (sdf.parse(startTime).getTime() - sdf.parse(endTime).getTime()) /(24*60*60*1000);
-            deviceEntity.setRunDay(day);
+            BeanUtils.copyProperties(deviceEntity, resut);
+            resut.setRunDay(day);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return deviceEntity;
+        return resut;
     }
 
     @Override
@@ -169,7 +172,7 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public int updateOnOffByIds(DeviceQuery deviceQuery) {
-        List<DeviceEntity> deviceEntityList = null;
+        List<DeviceEntity> deviceEntityList = new ArrayList<>();
         //代表操作单个设备开关
         if(StringUtils.isNotEmpty(deviceQuery.getDeviceId())){
             DeviceEntity deviceEntity = new DeviceEntity();
@@ -201,7 +204,7 @@ public class DeviceServiceImpl implements DeviceService {
                 faultlogEntity.setFaultLogId(UUID.randomUUID().toString());
                 faultlogEntity.setDeviceId(device.getDeviceId());
                 faultlogEntity.setCreateTime(new Date());
-                faultlogEntity.setCreateUserId(deviceQuery.getUpdateUser());
+                faultlogEntity.setCreateUserId(deviceQuery.getCreateUser());
                 faultlogEntity.setLogStatus(FaultlogEnum.OPERATIONALLOG.getCode());
                 faultlogEntity.setFaultLogDesc(userName+"操作了路灯"+sb.toString());
                 faultlogService.addFaultlog(faultlogEntity);

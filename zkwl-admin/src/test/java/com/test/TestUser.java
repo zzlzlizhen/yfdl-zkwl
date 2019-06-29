@@ -1,11 +1,6 @@
 package com.test;
-
-import cn.hutool.core.util.ReUtil;
 import cn.hutool.http.Header;
 import cn.hutool.http.HttpRequest;
-import cn.hutool.http.HttpUtil;
-import com.sun.xml.internal.ws.client.sei.ResponseBuilder;
-import io.swagger.models.auth.In;
 import org.junit.Test;
 
 import java.util.HashMap;

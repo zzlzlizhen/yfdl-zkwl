@@ -42,6 +42,9 @@ public class EchoServerNoBlock implements Runnable {
         this.port = port;
     }
     public EchoServerNoBlock(){}
+    private List<List<Byte>> lists = new ArrayList<>();
+    UpdateVersion updateVersion  = null;
+
 
     @RabbitHandler
     public void process(String str) {
@@ -163,16 +166,16 @@ public class EchoServerNoBlock implements Runnable {
 
     //服务端向客户端推送数据
     private void push(){
-        List<Integer> list = new ArrayList<>();
-        List<Integer> value = new ArrayList<>();
+
         try{
             if(!"".equals(msg)){
                 JSONObject jsonObject = JSONObject.parseObject(msg);
                 DeviceEntity deviceEntity = JSONObject.toJavaObject(jsonObject, DeviceEntity.class);
                 //代表操作设备
-                onWhile(list,value,deviceEntity);
+                onWhile(deviceEntity);
             }
         }catch (Exception e){
+            msg = "";
             logger.error("服务端向客户端推送数据:"+e.getMessage(),e);
             e.printStackTrace();
         }
@@ -180,7 +183,9 @@ public class EchoServerNoBlock implements Runnable {
 
 
     //代表操作设备
-    private void onWhile(List<Integer> list,List<Integer> value,DeviceEntity deviceEntity){
+    private void onWhile(DeviceEntity deviceEntity){
+        List<Integer> list = new ArrayList<>();
+        List<Integer> value = new ArrayList<>();
         try {
             List<String> deviceCodes = deviceEntity.getDeviceCodes();
             if(deviceCodes != null && deviceCodes.size() > 0){
@@ -195,6 +200,7 @@ public class EchoServerNoBlock implements Runnable {
                     result.setKey(list);
                     result.setValue(value);
                     result.setDataLen(list.size());
+                    logger.info("操作设备："+JSONObject.toJSONString(result));
                     byte[] bytes = HexConvert.hexStringToBytes(result);
                     socketChannel.write(ByteBuffer.wrap(bytes));
 
@@ -203,6 +209,7 @@ public class EchoServerNoBlock implements Runnable {
             msg = "";
         } catch (IOException e) {
             e.printStackTrace();
+            msg = "";
             logger.error("操作设备异常:"+e.getMessage(),e);
         }
 
@@ -232,21 +239,26 @@ public class EchoServerNoBlock implements Runnable {
 
     private void updateVersion(DeviceInfo deviceInfo, SocketChannel socketChannel)throws Exception {
         Integer nextCmdID = deviceInfo.getNextCmdID();
+
         //判断是否为重复数据
         if(nextCmdID != count){
             count = nextCmdID;
-            //获取更新文件信息
-            List<Byte> list = Arrays.asList(Utils.newBytes);
-            //切割成多少分，每份1024
-            List<List<Byte>> lists = Utils.averageAssign(list, 1024);
+            if(nextCmdID.equals(new Integer(1))){
+                //获取更新文件信息
+                updateVersion = Utils.version();
+                List<Byte> list = Arrays.asList(updateVersion.getBytes());
+                //切割成多少分，每份1024
+                lists = Utils.averageAssign(list, 1024);
+            }
+
             if(nextCmdID <= lists.size()){
                 //拿到客户端需要的第几份
                 List<Byte> bytes1 = lists.get(deviceInfo.getNextCmdID() - 1);
                 //nextId+1 确保客户端下次拿的数据正确
                 Integer nextId = deviceInfo.getNextCmdID() + 1;
                 //封装返回对象
-                DeviceVersionInfo result = new DeviceVersionInfo(7,nextId,deviceInfo.getDevKey(),deviceInfo.getDevType(),deviceInfo.getDevSN(),2,Integer.valueOf((int)Utils.length),Utils.sum);
-                int binLastSize = (int)Utils.length - (1024 * (deviceInfo.getNextCmdID()));
+                DeviceVersionInfo result = new DeviceVersionInfo(7,nextId,deviceInfo.getDevKey(),deviceInfo.getDevType(),deviceInfo.getDevSN(),2,Integer.valueOf((int)updateVersion.getLength()),updateVersion.getSum());
+                int binLastSize = (int)updateVersion.getLength() - (1024 * (deviceInfo.getNextCmdID()));
                 result.setBinLastSize(binLastSize);
                 //转换成数组
                 Byte [] newBytes = bytes1.toArray(new Byte[1024]);
@@ -317,7 +329,8 @@ public class EchoServerNoBlock implements Runnable {
         }
         //所有设备属性都映射到公共的类中，需要哪些信息，自行转换 start
         BeanUtils.copyProperties(common, deviceEntity);
-        //不论什么数据，首先修改设备信息
+
+        //首先修改设备信息
         deviceService.updateDeviceByCode(deviceEntity);
         //所有设备属性都映射到公共的类中，需要哪些信息，自行转换 end
         //判断公共类属于历史数据，还是设备信息

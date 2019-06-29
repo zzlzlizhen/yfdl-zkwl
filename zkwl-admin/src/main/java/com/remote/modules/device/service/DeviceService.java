@@ -3,6 +3,7 @@ package com.remote.modules.device.service;
 import com.github.pagehelper.PageInfo;
 import com.remote.modules.device.entity.DeviceEntity;
 import com.remote.modules.device.entity.DeviceQuery;
+import com.remote.modules.device.entity.DeviceResult;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -74,7 +75,7 @@ public interface DeviceService {
      * @Param deviceId
      * @return DeviceEntity
      **/
-    DeviceEntity queryDeviceByDeviceId(String deviceId);
+    DeviceResult queryDeviceByDeviceId(String deviceId);
     /*
      * @Author zhangwenping
      * @Description 按照城市统计安装路灯数量

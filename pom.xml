@@ -11,6 +11,7 @@
     <modules>
         <module>zkwl-common</module>
         <module>zkwl-admin</module>
+        <module>zkwl-wxapi</module>
         <module>zkwl-api</module>
     </modules>
 

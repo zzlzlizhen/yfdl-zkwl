@@ -162,7 +162,11 @@ $(function () {
                                                 $("#" + groupId + "2").append(htmlb);
                                                 arra=arr //经纬度获取全局变量
                                                 m_p(deviceStatus,arra)
+                                                console.log("---------000-------")
+                                                console.log(pro_je)
+                                                console.log(groupId)
 
+                                                f_en(pro_je,groupId)
                                                 // 滑动按钮
                                                 $(".toogle").click(function () {
                                                     var ele = $(this).children(".move");
@@ -428,27 +432,14 @@ $(function () {
         });
 
     });
- $("#rrrrrrrrr").click(function(){
-    var r_wen1 = $("#slideTest1").children().children(".layui-slider-bar").width();
-    var r_wen2 = $("#slideTest2").children().children(".layui-slider-bar").width();
-    var r_wen3 = $("#slideTest3").children().children(".layui-slider-bar").width();
-
-    var a =  r_wen1/$(".progres").width()*100
-    var abc = Math.ceil(a);
-    console.log( abc)
-
-
-})
-
-$("#re").click(function(){
-    $("#slideTest1").children().children(".layui-slider-bar").width((50/$(".progres").width()*$(".progres").width())+"%");
-    $(".layui-slider-wrap").css('left', 50/$(".progres").width()*$(".progres").width() + '%');
-    console.log($(".layui-slider-wrap").left())
-})
 
 
 
-//    丸子
+    //亮度条赋值
+
+
+        // $('input:radio[name="category"]:checked').val("2")
+
 
 
 

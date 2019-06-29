@@ -37,7 +37,8 @@ public class HistoryServiceImpl implements HistoryService {
         QueryHistory queryHistory = new QueryHistory();
         List<HistoryDay> historyDays = historyDayMapper.queryHistoryDay(deviceCode,time);
         if(CollectionUtils.isNotEmpty(historyDays)){
-            queryHistory.setHistoryDays(historyDays);
+            List<HistoryDay> historyDays1 = historyDayMapper.queryHistoryDayOther(deviceCode, time);
+            queryHistory.setHistoryDays(historyDays1);
             for (HistoryDay historyDay : historyDays){
                 String time1 = historyDay.getTime();
                 String substring = time1.substring(11,13);

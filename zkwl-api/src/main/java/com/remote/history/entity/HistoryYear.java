@@ -24,5 +24,9 @@ public class HistoryYear {
     private Double internalTemperature;//内部温度
     private Double visitorsFlowrate;//人流量
     private Double inductionFrequency;//感应次数
+    private Integer fillingsNumber; //充满次数
+    private Integer dischargeNumber;//冲放次数
     private Date createTime;
+    private String year;
+    private String month;
 }

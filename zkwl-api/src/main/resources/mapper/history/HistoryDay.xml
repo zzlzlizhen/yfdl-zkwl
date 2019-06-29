@@ -18,11 +18,13 @@
         <result property="inductionFrequency" column="induction_frequency"/>
         <result property="meteorological" column="meteorological"/>
         <result property="createTime" column="create_time"/>
+        <result property="fillingsNumber" column="fillings_number"/>
+        <result property="dischargeNumber" column="discharge_number"/>
     </resultMap>
 
     <sql id="Base_Column_List" >
     day_id, device_code, discharge_capacity, charging_capacity, charging_current, discharge_current,discharge_current,battery_voltage,ambient_temperature,
-    internal_temperature,visitors_flowrate,induction_frequency,meteorological,create_time
+    internal_temperature,visitors_flowrate,induction_frequency,meteorological,create_time,fillings_number,discharge_number
     </sql>
 
 

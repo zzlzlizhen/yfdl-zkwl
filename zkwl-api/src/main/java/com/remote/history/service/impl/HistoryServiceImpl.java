@@ -49,6 +49,7 @@ public class HistoryServiceImpl implements HistoryService {
             BeanUtils.copyProperties(historyMouth, historyYear);
             historyYear.setYearId(UUID.randomUUID().toString());
             if(i > 0){
+                historyMouth.setTime(time);
                 //代表今天已经上报过历史数据，去修改月表中数据
                 int history = historyMouthMapper.updateHistoryByTime(historyMouth);
                 //月表修改成功，查询年表中数据，如果有历史数据，修改年表数据
@@ -58,6 +59,8 @@ public class HistoryServiceImpl implements HistoryService {
                     String mon=String .format("%tm", date);
                     int m = historyYearMapper.queryHistoryYear(historyYear.getDeviceCode(), year, mon);
                     if(m > 0){
+                        historyYear.setYear(year);
+                        historyYear.setMonth(mon);
                         return historyYearMapper.updateHistroyByCode(historyYear);
                     }else{
                         return historyYearMapper.insert(historyYear);

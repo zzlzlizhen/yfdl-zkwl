@@ -137,10 +137,11 @@
             lighting_duration = #{deviceQuery.lightingDuration},
         </if>
         <if test="deviceQuery.morningHours != null">
-            morning_hours = #{deviceQuery.morningHours}
+            morning_hours = #{deviceQuery.morningHours},
         </if>
-        update_user = #{deviceQuery.updateUser},update_time = #{deviceQuery.updateTime}
+        update_user = #{deviceQuery.updateUser},update_time = now()
         <where>
+         1 =1
             <if test="deviceQuery.deviceList !=null and deviceQuery.deviceList.size()!= 0">
                 and device_id in
                 <foreach collection="deviceQuery.deviceList" index="index" item="item" open="(" separator="," close=")">

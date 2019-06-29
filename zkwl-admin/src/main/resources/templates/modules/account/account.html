@@ -3,13 +3,13 @@
 <head>
     <title>賬戶管理</title>
     <#include "/header.html">
-    <link rel="stylesheet" href="${request.contextPath}/statics/css/css.css">
-    <link rel="stylesheet" href="${request.contextPath}/statics/css/jquery_page.css">
-    <link rel="stylesheet" href="${request.contextPath}/statics/css/bootstrap.min.css">
-    <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
-    <script src="${request.contextPath}/statics/js/modules/project/jquery_page.js"></script>
-    <script src="${request.contextPath}/statics/libs/ajaxupload.js"></script>
-</head>
+        <link rel="stylesheet" href="${request.contextPath}/statics/css/css.css">
+        <link rel="stylesheet" href="${request.contextPath}/statics/css/jquery_page.css">
+        <link rel="stylesheet" href="${request.contextPath}/statics/css/bootstrap.min.css">
+        <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+        <script src="${request.contextPath}/statics/js/modules/project/jquery_page.js"></script>
+        <script src="${request.contextPath}/statics/libs/ajaxupload.js"></script>
+        </head>
 <body>
 <div class="project_he" >
     <span class="hear_w">账号ID：</span>
@@ -66,7 +66,8 @@
     <div class="shade_b_new">
         <div class="Bian_j">新建账户<span class="glyphicon glyphicon-remove guan_shb" ></span></div>
         <div class="mistake">
-            <span class="glyphicon glyphicon-pencil cu_m"></span>错误提示
+            <span class="glyphicon glyphicon-pencil cu_m"></span>
+            <P class="rrbol"></P>
             <span class="glyphicon glyphicon-remove wrong"></span>
         </div>
         <span class="sha_span">
@@ -158,10 +159,10 @@
             </div>
         </span>
         <!--<span class="sha_span preview">-->
-             <!--<p><span  style="color: red">*</span>头像：</p>-->
-              <!--<div id="previewr"></div>-->
-              <!--<input type="file" accept="image/*" id="filer" value=""/>-->
-              <!--<i>上传图片</i>-->
+        <!--<p><span  style="color: red">*</span>头像：</p>-->
+        <!--<div id="previewr"></div>-->
+        <!--<input type="file" accept="image/*" id="filer" value=""/>-->
+        <!--<i>上传图片</i>-->
         <!--</span>-->
         <!--<img id="pic" style="width:100px;height:100px;border-radius:50%;" src="">-->
         <!--<input id="upload" name="file" accept="image/*" type="file" style="display: none">-->
@@ -235,47 +236,47 @@
             },
             onComplete : function(file, r){
                 if(r.code == 200){
-                    alert(r.url);
+                    // alert(r.url);
                     $("#headUrl").val(r.url);
                     $("#pic").attr("src",baseURL+r.url);
                 }else{
                     alert(r.msg);
                 }
             }
-    });
-
-    //建立一?可存取到?file的url
-    function getObjectURL(file) {
-        var url = null;
-        if (window.createObjectURL != undefined) { // basic
-            url = window.createObjectURL(file);
-        } else if (window.URL != undefined) { // mozilla(firefox)
-            url = window.URL.createObjectURL(file);
-        } else if (window.webkitURL != undefined) { // webkit or chrome
-            url = window.webkitURL.createObjectURL(file);
-        }
-        return url;
-    }
-    //上传头像到服务器
-    function upimg() {
-        console.log(344)
-        var pic = $('#upload')[0].files[0];
-        var file = new FormData();
-        file.append('image', pic);
-        $.ajax({
-            url: "sys/upload",
-            type: "post",
-            data: file,
-            cache: false,
-            contentType: false,
-            processData: false,
-            success: function(data) {
-                console.log(data);
-                var res = data;
-                $("#resimg").append("<img src='/" + res + "'>")
-            }
         });
-    }
+
+        //建立一?可存取到?file的url
+        function getObjectURL(file) {
+            var url = null;
+            if (window.createObjectURL != undefined) { // basic
+                url = window.createObjectURL(file);
+            } else if (window.URL != undefined) { // mozilla(firefox)
+                url = window.URL.createObjectURL(file);
+            } else if (window.webkitURL != undefined) { // webkit or chrome
+                url = window.webkitURL.createObjectURL(file);
+            }
+            return url;
+        }
+        //上传头像到服务器
+        function upimg() {
+            console.log(344)
+            var pic = $('#upload')[0].files[0];
+            var file = new FormData();
+            file.append('image', pic);
+            $.ajax({
+                url: "sys/upload",
+                type: "post",
+                data: file,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function(data) {
+                    console.log(data);
+                    var res = data;
+                    $("#resimg").append("<img src='/" + res + "'>")
+                }
+            });
+        }
 
 
     });

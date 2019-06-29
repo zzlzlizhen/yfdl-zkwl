@@ -24,11 +24,28 @@ $(function(){
         var r_ph_fan = $("#r_ph_fan").val()
         //内容
         var r_wen_fan = $("#r_wen_fan").val()
-        // console.log(r_wen_fan)
-        regular(r_ph_fan,r_eml_fan);
+
         if(rTitle ==""||r_eml_fan ==""||r_ph_fan==""||r_wen_fan==""){
-            alert("不能为空")
-        }else{
+            $(".rrbol").html("輸入不能為空");
+            lay()
+        } else {
+            // 邮箱
+            if (!patrn2.exec(r_eml_fan)) {
+                $(".rrbol").html("邮箱错误");
+                console.log("邮箱错误")
+                $(".mistake").css("display","block");
+                return false;
+            }
+            //手机号错误
+            if (!patrn1.exec(r_ph_fan)){
+                $(".rrbol").html("手机号错误");
+                console.log("手机号错误")
+                $(".rrbol").html("手机号错误");
+                $(".mistake").css("display","block");
+                return false;
+            }
+
+
             $.ajax({
                 url:'sys/feedback/save',
                 type: "POST",

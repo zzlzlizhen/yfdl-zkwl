@@ -5,7 +5,6 @@ $(function () {
     var Id_a
     var ids
 
-
     //搜索
     $("#proje_search").click(function () {
         var acc_id = $("#acc_id").val()
@@ -47,6 +46,7 @@ $(function () {
                     } else {
                         offClass = "btn_fath clearfix  toogle on";
                     }
+
                     html += " <tr class='r_pw'>\n" +
                         " <td>" + res.page.list[i].userId + "</td>\n" +
                         "<td class='username'>" + res.page.list[i].username + "</td>\n" +
@@ -134,7 +134,7 @@ $(function () {
                     var r_emal = $(this).parent().siblings(".r_emal").html();
                     $("#acc_mailbox_b").val(r_emal);
                 })
-                    //修改管理员
+                //修改管理员
                 $("#sha_que_can").click(function () {
                     console.log("8888888888888888888888")
                     //账号
@@ -155,13 +155,51 @@ $(function () {
                     //管理者
                     var r_Ad_mod = $("#r_Ad_mod").val();
 
-                    regular(r_typ_mod,r_emal_mod,na_ma_mod,r_user_mod,r_pw_mod)
-
-                    lay()
 
                     if (na_ma_mod == "" || r_user_mod == "" || r_pw_mod == "" || r_termof_mod == "" || r_emal_mod == "" || r_typ_mod == "" || r_Ad_mod == "") {
-                        // alert("輸入不能為空")
+                       $(".rrbol").html("輸入不能為空");
+                         lay()
+
                     } else {
+                        //    账号
+                        if (!patrn3.exec(na_ma_mod)) {
+                            $(".rrbol").html("账号错误");
+                            console.log("账号错误")
+                            $(".mistake").css("display","block");
+                            return false;
+                        }
+                        //    用户名
+                        if (!patrn4.exec(r_user_mod)) {
+                            $(".rrbol").html("用户名错误");
+                            console.log("用户名错误")
+                            $(".mistake").css("display","block");
+                            return false;
+                        }
+
+                        //    密码
+                        if (!patrn5.exec(r_pw_mod)) {
+                            $(".rrbol").html("密码错误");
+                            console.log("密码错误")
+                            $(".shade_b").css("display","block");
+                            return false;
+                        }
+                        // 邮箱
+                        if (!patrn2.exec(r_emal_mod)) {
+                            $(".rrbol").html("邮箱错误");
+                            console.log("邮箱错误")
+                            $(".mistake").css("display","block");
+                            return false;
+                        }
+                        //手机号错误
+                        if (!patrn1.exec(r_typ_mod)){
+                            $(".rrbol").html("手机号错误");
+                            console.log("手机号错误")
+                            $(".rrbol").html("手机号错误");
+                            $(".mistake").css("display","block");
+                            return false;
+
+                        }
+
                         $.ajax({
                             url: baseURL + 'sys/user/update',
                             type: "POST",
@@ -178,7 +216,7 @@ $(function () {
                                 console.log(JSON.stringify(res));
                                 if (res.code == "200") {
                                     alert('修改成功')
-                                     window.location.reload()
+                                    window.location.reload()
 
                                 } else {
                                     alert(res.msg);
@@ -275,11 +313,49 @@ $(function () {
         var acc_call = $("#acc_call").val();
         var roleId = $("#role").val();
         var headUrl = $("#headUrl").val();
-        regular(acc_call,acc_select,acc_number,acc_user,acc_password)
-        lay()
+
         if (acc_number == "" || acc_user == "" || acc_password == "" || acc_mailbox == "" || acc_call == "") {
-            alert("輸入不能為空")
+          $(".rrbol").html("輸入不能為空");
+            lay()
         } else {
+            //    账号
+            if (!patrn3.exec(acc_number)) {
+                $(".rrbol").html("账号错误");
+                console.log("账号错误")
+                $(".mistake").css("display","block");
+                return false;
+            }
+            //    用户名
+            if (!patrn4.exec(acc_user)) {
+                $(".rrbol").html("用户名错误");
+                console.log("用户名错误")
+                $(".mistake").css("display","block");
+                return false;
+            }
+            //    密码
+            if (!patrn5.exec(acc_password)) {
+                $(".rrbol").html("密码错误");
+                console.log("密码错误")
+                $(".shade_b").css("display","block");
+                return false;
+            }
+            // 邮箱
+            if (!patrn2.exec(acc_mailbox)) {
+                $(".rrbol").html("邮箱错误");
+                console.log("邮箱错误")
+                $(".mistake").css("display","block");
+                return false;
+            }
+            //手机号错误
+            if (!patrn1.exec(acc_call)){
+                $(".rrbol").html("手机号错误");
+                console.log("手机号错误")
+                $(".rrbol").html("手机号错误");
+                $(".mistake").css("display","block");
+                return false;
+            }
+
+
             $.ajax({
                 url: baseURL + 'sys/user/save',
                 type: "POST",
@@ -303,7 +379,7 @@ $(function () {
                         $("#acc_call").val("");
                         $("#role").val("");
                         alert('保存成功', function () {
-                             window.location.reload()
+                            window.location.reload()
                         });
                     } else {
                         alert(res.msg);
@@ -400,6 +476,7 @@ $(function () {
             form(pageSize, pagesb, acc_id, acc_hao, acc_name, select);
         }
     });
+
 
 });
 

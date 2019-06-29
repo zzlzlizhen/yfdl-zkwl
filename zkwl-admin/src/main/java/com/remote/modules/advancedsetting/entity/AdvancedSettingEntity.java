@@ -43,27 +43,27 @@ public class AdvancedSettingEntity implements Serializable {
 	/**
 	 * 1时段时长
 	 */
-	private String time1;
+	private Integer time1;
 	/**
 	 * 2时段时长
 	 */
-	private String time2;
+	private Integer time2;
 	/**
 	 * 3时段时长
 	 */
-	private String time3;
+	private Integer time3;
 	/**
 	 * 4时段时长
 	 */
-	private String time4;
+	private Integer time4;
 	/**
 	 * 5时段时长
 	 */
-	private String time5;
+	private Integer time5;
 	/**
 	 * 晨亮时长
 	 */
-	private String timeDown;
+	private Integer timeDown;
 	/**
 	 * 时段1 有人功率
 	 */

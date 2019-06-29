@@ -1,4 +1,9 @@
 spring:
+  rabbitmq:
+    host : 127.0.0.1
+    post : 5672
+    username: guest
+    password: guest
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:

@@ -21,6 +21,7 @@ $(function(){
     var partition=deviceCode.split(",");
     console.log(partition[1])
 
+    //判断高级设置页面针对是单台设备还是多台设备（做处理）
     if(partition[1] == undefined ){
         var myDate = new Date;
         var ms = (1000 * 60 * 60 * 24 * 30)
@@ -58,46 +59,86 @@ $(function(){
         })
     }
 
+    var dischargeCapacityList //放电量
+    var chargingCapacityList //充电量
+    var chargingCurrentList  //充电电流
+    var dischargeCurrentList//放电电流
+    var batteryVoltageList  //电池电压
+    var ambientTemperatureList//环境温度
+    var internalTemperatureList  //内部温度
+    var visitorsFlowrateList    //人流量
+    var inductionFrequencyList  //感应次数
+    var meteorologicalList   //气象信息
+    var hours
+    //根据年月日调取渲染数据表格
     function day(deviceCode,va_l){
-        console.log(deviceCode)
-        console.log(va_l)
         $.ajax({
             url: baseURL + 'fun/history/queryHistoryByDay?deviceCode=' + deviceCode+"&time="+va_l,
             contentType: "application/json;charset=UTF-8",
             type: "get",
             data: {},
             success: function (res) {
-                console.log("日")
                 console.log(res)
+                dischargeCapacityList=res.data.dischargeCapacityList;//放电量
+                chargingCapacityList=res.data.chargingCapacityList;  //充电量
+                chargingCurrentList=res.data.chargingCurrentList;    //充电电流
+                dischargeCurrentList=res.data.dischargeCurrentList;  //放电电流
+                batteryVoltageList=res.data.batteryVoltageList;      //电池电压
+                ambientTemperatureList=res.data.ambientTemperatureList;  //环境温度
+                internalTemperatureList=res.data.internalTemperatureList; //内部温度
+                visitorsFlowrateList =res.data.visitorsFlowrateList;   //人流量
+                inductionFrequencyList =res.data.inductionFrequencyList; //感应次数
+                meteorologicalList=res.data.meteorologicalList;   //气象信息
+                hours=res.data.hours; //X坐标
+                f(hours,dischargeCapacityList,chargingCapacityList,chargingCurrentList,dischargeCurrentList,batteryVoltageList,ambientTemperatureList,internalTemperatureList,visitorsFlowrateList,inductionFrequencyList,meteorologicalList)
             }
         })
     }
     function Month(deviceCode,va_l){
         var va_y=va_l.split("-");
         $.ajax({
-            url: baseURL + 'fun/history/queryHistoryByMouth?deviceCode=' + deviceCode+"&year="+va_y[0]+"&year="+va_y[1],
+            url: baseURL + 'fun/history/queryHistoryByMouth?deviceCode=' + deviceCode+"&year="+va_y[0]+"&month="+va_y[1],
             contentType: "application/json;charset=UTF-8",
             type: "get",
             data: {},
             success: function (res) {
-                console.log("月")
-                console.log(res)
+                dischargeCapacityList=res.data.dischargeCapacityList;//放电量
+                chargingCapacityList=res.data.chargingCapacityList;  //充电量
+                chargingCurrentList=res.data.chargingCurrentList;    //充电电流
+                dischargeCurrentList=res.data.dischargeCurrentList;  //放电电流
+                batteryVoltageList=res.data.batteryVoltageList;      //电池电压
+                ambientTemperatureList=res.data.ambientTemperatureList;  //环境温度
+                internalTemperatureList=res.data.internalTemperatureList; //内部温度
+                visitorsFlowrateList =res.data.visitorsFlowrateList;   //人流量
+                inductionFrequencyList =res.data.inductionFrequencyList; //感应次数
+                hours=res.data.hours; //X坐标
+                meteorologicalList=res.data.meteorologicalList;   //气象信息
+                f(hours,dischargeCapacityList,chargingCapacityList,chargingCurrentList,dischargeCurrentList,batteryVoltageList,ambientTemperatureList,internalTemperatureList,visitorsFlowrateList,inductionFrequencyList,meteorologicalList)
             }
         })
     }
     function Year(deviceCode,va_l){
         $.ajax({
-            url: baseURL + 'fun/history/queryHistoryByMouth?deviceCode=' + deviceCode+"&year="+va_l,
+            url: baseURL + 'fun/history/queryHistoryByYear?deviceCode='+ deviceCode+"&year="+va_l,
             contentType: "application/json;charset=UTF-8",
             type: "get",
             data: {},
             success: function (res) {
-                console.log("年")
-                console.log(res)
+                dischargeCapacityList=res.data.dischargeCapacityList;//放电量
+                chargingCapacityList=res.data.chargingCapacityList;  //充电量
+                chargingCurrentList=res.data.chargingCurrentList;    //充电电流
+                dischargeCurrentList=res.data.dischargeCurrentList;  //放电电流
+                batteryVoltageList=res.data.batteryVoltageList;      //电池电压
+                ambientTemperatureList=res.data.ambientTemperatureList;  //环境温度
+                internalTemperatureList=res.data.internalTemperatureList; //内部温度
+                visitorsFlowrateList =res.data.visitorsFlowrateList;   //人流量
+                inductionFrequencyList =res.data.inductionFrequencyList; //感应次数
+                hours=res.data.hours; //X坐标
+                meteorologicalList=res.data.meteorologicalList;   //气象信息
+                f(hours,dischargeCapacityList,chargingCapacityList,chargingCurrentList,dischargeCurrentList,batteryVoltageList,ambientTemperatureList,internalTemperatureList,visitorsFlowrateList,inductionFrequencyList,meteorologicalList)
             }
         })
     }
-
 
 
     $(".tab li").click(function() {
@@ -164,23 +205,21 @@ $(function(){
 
     })
 
-
     $("#r_cl").click(function(){
         $("#slideTest1").children().children(".layui-slider-bar").width((50/$(".progres").width()*$(".progres").width())+"%");
         // $(".layui-slider-wrap").lef(30)
     })
 
-    f()
-
 })
 
-function  f(p_id) {
+function  f(hours,dischargeCapacityList,chargingCapacityList,chargingCurrentList,dischargeCurrentList,batteryVoltageList,ambientTemperatureList,internalTemperatureList,visitorsFlowrateList,inductionFrequencyList,meteorologicalList) {
+
+    var time =hours
     //充电量
     var dom = document.getElementById("container");
     var myChart = echarts.init(dom);
     var app = {};
     option = null;
-    app.title = '环形图';
     var posList = [
         'left', 'right', 'top', 'bottom',
         'inside',
@@ -191,13 +230,6 @@ function  f(p_id) {
         rotate: {
             min: -90,
             max: 90
-        },
-        align: {
-            options: {
-                left: 'left',
-                center: 'center',
-                right: 'right'
-            }
         },
         verticalAlign: {
             options: {
@@ -217,7 +249,6 @@ function  f(p_id) {
             max: 100
         }
     };
-
     app.config = {
         rotate: 90,
         align: 'left',
@@ -243,17 +274,15 @@ function  f(p_id) {
             });
         }
     };
-
     var labelOption = {
         normal: {
-            show: true,
+            show: false, //图标上显示数据
             position: app.config.position,
             distance: app.config.distance,
             align: app.config.align,
             verticalAlign: app.config.verticalAlign,
             rotate: app.config.rotate,
             formatter: '{c}  {name|{a}}',
-            fontSize: 16,
             rich: {
                 name: {
                     textBorderColor: '#fff'
@@ -290,7 +319,7 @@ function  f(p_id) {
             {
                 type: 'category',
                 axisTick: {show: false},
-                data: ['2012', '2013', '2014', '2015', '2016']
+                data:time
             }
         ],
         yAxis: [
@@ -304,13 +333,13 @@ function  f(p_id) {
                 type: 'bar',
                 barGap: 0,
                 label: labelOption,
-                data: [320, 332, 301, 334, 390]
+                data: chargingCapacityList
             },
             {
                 name: '放电量',
                 type: 'bar',
                 label: labelOption,
-                data: [220, 182, 191, 234, 290]
+                data: dischargeCapacityList
             }
         ]
     };
@@ -319,23 +348,20 @@ function  f(p_id) {
     }
 
 
-
     //  充电电流
     var dom_z = document.getElementById("zhe_x");
     var myChart_z = echarts.init(dom_z);
     var app_z = {};
     option_z = null;
-    app_z.title = '环形图';
-
     option_z = {
         title: {
-            text: '折线图堆叠'
+            text: '充电电流/放电电流'
         },
         tooltip: {
             trigger: 'axis'
         },
         legend: {
-            data:['邮件营销','联盟广告']
+            data:['充电电流','放电电流']
         },
         grid: {
             left: '3%',
@@ -351,39 +377,38 @@ function  f(p_id) {
         xAxis: {
             type: 'category',
             boundaryGap: false,
-            data: ['周一','周二','周三','周四','周五','周六','周日']
+            data: time
         },
         yAxis: {
             type: 'value'
         },
         series: [
             {
-                name:'邮件营销',
+                name:'充电电流',
                 type:'line',
                 stack: '总量',
-                data:[120, 132, 101, 134, 90, 230, 210]
+                data:chargingCurrentList
             },
             {
-                name:'联盟广告',
+                name:'放电电流',
                 type:'line',
                 stack: '总量',
-                data:[220, 182, 191, 234, 290, 330, 310]
+                data:dischargeCurrentList
             },
         ]
     };
     if (option_z && typeof option_z === "object") {
         myChart_z.setOption(option_z, true);
     }
+
 //    充电电压
     var dom_c = document.getElementById("voltage");
     var myChart_c = echarts.init(dom_c);
     var app_c = {};
     option_c = null;
-    app_c.title = '环形图';
-
     option_c = {
         title: {
-            text: '堆叠区域图'
+            text: '电池电压'
         },
         tooltip : {
             trigger: 'axis',
@@ -395,7 +420,7 @@ function  f(p_id) {
             }
         },
         legend: {
-            data:['邮件营销']
+            data:['电池电压']
         },
         toolbox: {
             feature: {
@@ -412,7 +437,7 @@ function  f(p_id) {
             {
                 type : 'category',
                 boundaryGap : false,
-                data : ['周一','周二','周三','周四','周五','周六','周日']
+                data : time
             }
         ],
         yAxis : [
@@ -422,27 +447,26 @@ function  f(p_id) {
         ],
         series : [
             {
-                name:'邮件营销',
+                name:'电池电压',
                 type:'line',
                 stack: '总量',
                 areaStyle: {},
-                data:[120, 132, 101, 134, 90, 230, 210]
+                data:batteryVoltageList
             },
         ]
     };
     if (option_c && typeof option_c === "object") {
         myChart_c.setOption(option_c, true);
     }
+
 //    环境温度
     var dom_h = document.getElementById("environment");
     var myChart_h= echarts.init(dom_h);
     var app_h = {};
     option_h = null;
-    app_h.title = '环形图';
-
     option_h = {
         title: {
-            text: '堆叠区域图'
+            text: '环境温度/内部温度'
         },
         tooltip : {
             trigger: 'axis',
@@ -454,7 +478,7 @@ function  f(p_id) {
             }
         },
         legend: {
-            data:['邮件营销','联盟广告']
+            data:['环境温度','内部温度']
         },
         toolbox: {
             feature: {
@@ -471,7 +495,7 @@ function  f(p_id) {
             {
                 type : 'category',
                 boundaryGap : false,
-                data : ['周一','周二','周三','周四','周五','周六','周日']
+                data : time
             }
         ],
         yAxis : [
@@ -481,40 +505,39 @@ function  f(p_id) {
         ],
         series : [
             {
-                name:'邮件营销',
+                name:'环境温度',
                 type:'line',
                 stack: '总量',
                 areaStyle: {},
-                data:[120, 132, 101, 134, 90, 230, 210]
+                data:ambientTemperatureList,
             },
             {
-                name:'联盟广告',
+                name:'内部温度',
                 type:'line',
                 stack: '总量',
                 areaStyle: {},
-                data:[220, 182, 191, 234, 290, 330, 310]
+                data:internalTemperatureList
             },
         ]
     };
     if (option_h && typeof option_h === "object") {
         myChart_h.setOption(option_h, true);
     }
+
 //    人流量
     var dom_r = document.getElementById("induced");
     var myChart_r = echarts.init(dom_r);
     var app_r = {};
     option_r = null;
-    app_r.title = '环形图';
-
     option_r = {
         title: {
-            text: '折线图堆叠'
+            text: '人流量/感应次数'
         },
         tooltip: {
             trigger: 'axis'
         },
         legend: {
-            data:['邮件营销','联盟广告']
+            data:['人流量','感应次数']
         },
         grid: {
             left: '3%',
@@ -530,23 +553,23 @@ function  f(p_id) {
         xAxis: {
             type: 'category',
             boundaryGap: false,
-            data: ['周一','周二','周三','周四','周五','周六','周日']
+            data: time
         },
         yAxis: {
             type: 'value'
         },
         series: [
             {
-                name:'邮件营销',
+                name:'人流量',
                 type:'line',
                 stack: '总量',
-                data:[120, 132, 101, 134, 90, 230, 210]
+                data:visitorsFlowrateList
             },
             {
-                name:'联盟广告',
+                name:'感应次数',
                 type:'line',
                 stack: '总量',
-                data:[220, 182, 191, 234, 290, 330, 310]
+                data:inductionFrequencyList
             },
         ]
     };
@@ -554,5 +577,50 @@ function  f(p_id) {
         myChart_r.setOption(option_r, true);
     }
 
-
+//    天气
+    var dom_t = document.getElementById("tian_q");
+    var myChart_t = echarts.init(dom_t);
+    var app_t = {};
+    option_t = null;
+    option_t = {
+        title: {
+            text: '气象信息'
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data:['气象信息']
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        toolbox: {
+            feature: {
+                saveAsImage: {}
+            }
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: time
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [
+            {
+                name:'气象信息',
+                type:'line',
+                stack: '总量',
+                data:meteorologicalList
+            }
+        ]
+    };
+    if (option_t && typeof option_t === "object") {
+        myChart_t.setOption(option_t, true);
+    }
 }

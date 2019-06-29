@@ -1,16 +1,14 @@
 package com.remote.modules.advancedsetting.controller;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Map;
+import java.util.*;
 
+import com.remote.common.utils.FiledOptUtils;
 import com.remote.common.utils.PageUtils;
 import com.remote.common.utils.R;
 import com.remote.common.validator.ValidatorUtils;
 import com.remote.modules.advancedsetting.entity.AdvancedSettingEntity;
 import com.remote.modules.advancedsetting.service.AdvancedSettingService;
 import com.remote.modules.sys.controller.AbstractController;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -61,6 +59,20 @@ public class AdvancedSettingController extends AbstractController{
         return R.ok();
     }
 
+    public void saveAdn(AdvancedSettingEntity advancedSettingEntity){
+        List<String> filedList = new ArrayList<String>();
+        filedList= FiledOptUtils.getFiledName(advancedSettingEntity);
+        for(String fileName : filedList){
+          Object filedValue =  FiledOptUtils.getFieldValueByName(fileName,advancedSettingEntity);
+            if(fileName.equals("timeTurnOn")){
+
+            }else if(fileName.equals("timeTurnOff")){
+
+            }else{
+
+            }
+        }
+    }
     /**
      * 修改
      */

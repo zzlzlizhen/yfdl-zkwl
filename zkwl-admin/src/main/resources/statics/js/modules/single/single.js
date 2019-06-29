@@ -59,13 +59,19 @@ $(function(){
                 pages = res.data.pages;
                 pageSize = res.data.pageSize;
                 pageNum = res.data.pageNum
-                var html=""
+                var html="";
+                var offClass = "";
                 for (var i = 0; i < res.data.list.length; i++) {
+                    if (res.data.list[i].onOff == 1) {
+                        offClass = "btn_fath clearfix  toogle on";
+                    } else {
+                        offClass = "btn_fath clearfix  toogle off";
+                    }
                     html += "<tr>\n" +
                         "<td id=" + res.data.list[i].deviceId + " style=\"width:4%;\"> <input type= \"checkbox\" class=\"checkbox_in checkbox_i\"> </td>\n" +
-                        "<td>" + res.data.list[i].deviceCode + "</td>\n" +
-                        "<td>" + res.data.list[i].deviceName + "</td>\n" +
-                        "<td>" + res.data.list[i].deviceType + "</td>\n" +
+                        "<td class='li_deviceCode'>" + res.data.list[i].deviceCode + "</td>\n" +
+                        "<td id='r_namem'>" + res.data.list[i].deviceName + "</td>\n" +
+                        "<td class='li_deviceType' id=" + res.data.list[i].projectId + ">" + res.data.list[i].deviceType + "</td>\n" +
                         "<td>" + res.data.list[i].photocellState + "</td>\n" +
                         "<td>" + res.data.list[i].batteryState + "</td>\n" +
                         "<td>" + res.data.list[i].loadState + "</td>\n" +
@@ -75,8 +81,8 @@ $(function(){
                         "<td>" + res.data.list[i].communicationType + "</td>\n" +
                         "<td>" +
                         "<div class=\"switch\"> \n" +
-                        "<div class=\"btn_fath clearfix on toogle\"  > \n" +
-                        "<div class=\"move\" data-state=1></div> \n" +
+                        "<div class='" + offClass + "' id=" + res.data.list[i].deviceId + " > \n" +
+                        "<div class=\"move\" data-state=" + res.data.list[i].onOff + "></div> \n" +
                         "<div class=\"btnSwitch btn1\">ON</div> \n" +
                         "<div class=\"btnSwitch btn2 \">OFF</div> \n" +
                         "</div> " +
@@ -216,30 +222,73 @@ $(function(){
                     })
                 })
 
-
                 //滑动按钮
                 $(".toogle").click(function () {
+                    var li_deviceCode = $(this).parent().parent().siblings(".li_deviceCode").html();
+                    var li_deviceType = $(this).parent().parent().siblings(".li_deviceType").html();
+                    var deviceId=$(this).attr("id") //设备id
+                    var projectId =$(this).parent().parent().siblings(".li_deviceType").attr("id")
                     var ele = $(this).children(".move");
+
                     if (ele.attr("data-state") == "1") {
                         ele.animate({left: "0"}, 300, function () {
                             ele.attr("data-state", "0");
-                            alert("关！");
+                            var value=["0"]
+                            off(li_deviceCode,value,li_deviceType,deviceId,projectId)
                         });
                         $(this).removeClass("on").addClass("off");
                     } else if (ele.attr("data-state") == "0") {
                         ele.animate({left: '50%'}, 300, function () {
-                            $(this).attr("data-state", "1");
-                            alert("开！");
+                            ele.attr("data-state", "1");
+                            var value=["1"]
+                            off(li_deviceCode,value,li_deviceType,deviceId,projectId)
                         });
                         $(this).removeClass("off").addClass("on");
                     }
                 })
+
+                function  off(li_deviceCode,value,li_deviceType,deviceId,projectId){
+                    console.log(li_deviceCode+"----"+value+"----"+li_deviceType)
+                    var ass=[]
+                        ass.push(li_deviceCode)
+                    $.ajax({
+                        url:baseURL + 'fun/device/change',
+                        contentType: "application/json;charset=UTF-8",
+                        type:"POST",
+                        data: JSON.stringify({
+                            "deviceCodes": ass, //需要修改的设备code
+                            "qaKey": ["onOff"], //需要修改的参数键
+                            "value": value, //需要修改的参数值
+                            "deviceType": li_deviceType //设备类型
+                        }),
+                        success: function(res) {
+                          console.log(res)
+                        }
+                    })
+                    $.ajax({
+                        url:baseURL + 'fun/device/updateOnOffByIds',
+                        contentType: "application/json;charset=UTF-8",
+                        type:"POST",
+                        data: JSON.stringify({
+                            "deviceId":deviceId,//设备id
+                            "projectId":projectId,//项目id
+                            "onOff":value[0], //0：关；1：开：
+                        }),
+                        success: function(res) {
+                            console.log(res)
+                        }
+                    })
+                }
 
                 //编辑
 
                 $(".particulars").click(function(){
                     $(".shade_modifier,.shade_b_modifier").css("display","block");
                     proid=$(this).parent().attr('id');
+                    var r_namem = $(this).parent().siblings("#r_namem").html();
+                    $(".pro_s_b").val(r_namem)
+                    console.log(r_namem)
+                    console.log("5555555555555555")
                 })
                 $("#confirm_x").click(function(){
                     var pro_s_b=$(".pro_s_b").val()

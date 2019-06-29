@@ -9,11 +9,6 @@ server:
     context-path: /remote-admin
 
 spring:
-  rabbitmq:
-    host : 127.0.0.1
-    post : 5672
-    username: guest
-    password: guest
   thymeleaf:
     prefix: classpath:/templates/
   profiles:

@@ -136,3 +136,106 @@ function routerList(router, menuList){
 		vm.main = url.replace('#', '');
 	});
 }
+//点击弹窗
+$("#r_val_eml").click(function(){
+    $(".r_lay").css("display","block")
+})
+//点击获取验证码
+$("#btn").click(function(){
+    var r_val_eml = $("#r_rlm").val()
+	$("#r_upd").val(r_val_eml)
+    // console.log(r_val_eml)
+		$.ajax({
+			url:  'contact/sendBindEmail',
+			type: "GET",
+			data: "&email=" + r_val_eml ,
+			success: function (res) {
+				console.log(JSON.stringify(res));
+				if (res.code == "200") {
+					console.log("///////////////////////")
+                    ryanzhengma()
+				} else {
+					console.log(res.msg);
+			}}
+	  })
+})
+//提交  验证码  邮箱
+function ryanzhengma(){
+    $("#r_bte").click(function(){
+        var r_upd = $("#r_upd").val();
+        var r_el_upd = $("#r_el_upd").val()
+        $.ajax({
+            url:  'contact/checkBindEmail',
+            type: "GET",
+            data: "&email=" + r_upd +
+            "&securityCode=" + r_el_upd ,
+            success: function (res) {
+                console.log(JSON.stringify(res));
+                if (res.code == "200") {
+                    console.log("///////////////////////")
+                    $(".r_lay").css("display","none")
+                } else {
+                    console.log(res.msg);
+                }}
+        })
+    })
+}
+//进入页面获取数据
+$.ajax({
+    url:  'sys/user/baseInfo',
+    type: "POST",
+    success: function (res) {
+        console.log(JSON.stringify(res));
+        if (res.code == "200") {
+        	console.log(res)
+            var r_ide = res.user.userId;
+            $("#r_ide").val(r_ide)
+            var select1 = res.user.roleId;
+			$("#acc_select_b option:selected").text(select1);
+            var r_ide = res.user.userId;
+            $("#r_ide").val(r_ide)
+
+
+            $(".r_lay").css("display","none")
+        } else {
+            console.log(res.msg);
+        }}
+})
+
+$("#r_tijiao").click(function(){
+
+})
+
+
+//倒计时60秒
+var countdown=60;
+function sendemail(){
+    var obj = $("#btn");
+    settime(obj);
+
+}
+function settime(obj) { //发送验证码倒计时
+    if (countdown == 0) {
+        obj.attr('disabled',false);
+        //obj.removeattr("disabled");
+        obj.val("获取验证码");
+        countdown = 60;
+        return;
+    } else {
+        obj.attr('disabled',true);
+        obj.val("重新发送(" + countdown + ")");
+        countdown--;
+    }
+    setTimeout(function() {
+            settime(obj) }
+        ,1000)
+}
+
+
+
+
+
+
+
+
+

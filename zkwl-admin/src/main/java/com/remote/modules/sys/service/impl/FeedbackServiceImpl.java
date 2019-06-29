@@ -82,7 +82,7 @@ public class FeedbackServiceImpl extends ServiceImpl<FeedbackDao, FeedbackEntity
         params.put("curUid",curUser.getUserId());
         List<FeedbackEntity> list = this.feedbackDao.queryPageList(params);
         Integer total = this.feedbackDao.queryPageCount(params);
-        return new PageUtils(list,total,page,limit);
+        return new PageUtils(list,total,limit,page);
     }
 
     @Override

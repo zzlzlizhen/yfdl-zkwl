@@ -11,24 +11,15 @@
 <style>
     ul li {list-style: none;}
 </style>
-<body style="background-color:#cccccc">
-
-
+<body>
 <ul class="tab">
     <li class="cur">系统消息</li>
     <li>用户反馈</li>
 </ul>
-<div class="option_a">
-    <div class="option on">
+<div class="option_a option_b">
+    <div class="option on r_op">
         <ul>
-            <li>
-                <img  src="${request.contextPath}/statics/image/sousuo.svg">
-                <p>
-                    <span>系统消息</span>
-                    <span>XXXX项目XXXXX分组XXXX设备运行异常，运行电压过高！！！</span>
-                </p>
-                <span>2019/02/10   09:10:20</span>
-            </li>
+
         </ul>
         <div class="box">
             <div id="pagination5" class="page fl"></div>
@@ -36,18 +27,8 @@
     </div>
 
     <div class="option r_llis">
-        <ul>
-            <li>
-                <img  src="${request.contextPath}/statics/image/sousuo.svg">
-                <p>
-                    <span>系统消息</span>
-                    <span>XXXX项目XXXXX分组XXXX设备运行异常，运行电压过高！！！</span>
-                </p>
-               <div>
-                   <span>2019/02/10   09:10:20</span>
-                   <span class="r_details">详情</span>
-               </div>
-            </li>
+        <ul id="r_op_ul">
+
         </ul>
         <div class="box">
             <div id="pagination4" class="page fl"></div>

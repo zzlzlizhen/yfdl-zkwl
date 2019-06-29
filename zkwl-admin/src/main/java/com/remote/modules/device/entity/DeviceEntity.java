@@ -134,6 +134,4 @@ public class DeviceEntity {
     private String updateUserName;
 
     private String cityName;
-    //运行天数
-    private long runDay;
 }

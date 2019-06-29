@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.remote.common.utils.DataUtils;
 import com.remote.common.utils.R;
+import com.remote.common.utils.StringUtils;
 import com.remote.common.utils.mapUtils;
 import com.remote.modules.device.entity.DeviceEntity;
 import com.remote.modules.device.entity.DeviceQuery;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @Author zhangwenping
@@ -47,13 +49,29 @@ public class DeviceController extends AbstractController {
 
     @RequestMapping(value = "/change", method= RequestMethod.POST)
     public void change(@RequestBody DataUtils data){
+        List<String> deviceCodes = new ArrayList<>();
+        DeviceQuery deviceQuery = new DeviceQuery();
+        if(StringUtils.isNotEmpty(data.getGroupId())){
+            deviceQuery.setGroupId(data.getGroupId());
+            List<DeviceEntity> deviceEntities = deviceService.queryDeviceNoPage(deviceQuery);
+            deviceCodes = deviceEntities.parallelStream().map(deviceEntity -> deviceEntity.getDeviceCode()).collect(Collectors.toCollection(ArrayList::new));
+            data.setDeviceCodes(deviceCodes);
+        }
+        if(StringUtils.isNotEmpty(data.getProjectId())){
+            deviceQuery.setGroupId(data.getGroupId());
+            List<DeviceEntity> deviceEntities = deviceService.queryDeviceNoPage(deviceQuery);
+            deviceCodes = deviceEntities.parallelStream().map(deviceEntity -> deviceEntity.getDeviceCode()).collect(Collectors.toCollection(ArrayList::new));
+            data.setDeviceCodes(deviceCodes);
+        }
         List<Integer> key = new ArrayList<>();
         if(CollectionUtils.isNotEmpty(data.getQaKey())){
             for(String str : data.getQaKey()){
                 key.add(mapUtils.map.get(str));
             }
         }
+        data.setKey(key);
         String s = JSONObject.toJSONString(data);
+        logger.info("操作设备:"+s);
         template.convertAndSend("CalonDirectExchange", "CalonDirectRouting", s);
     }
 
@@ -66,6 +84,8 @@ public class DeviceController extends AbstractController {
         deviceEntity.setCreateName(user.getUsername());
         deviceEntity.setCreateTime(new Date());
         deviceEntity.setDeviceId(UUID.randomUUID().toString());
+        deviceEntity.setOnOff(0);
+        deviceEntity.setSignalState(0);
         boolean flag = deviceService.addDevice(deviceEntity);
         if(!flag){
             return R.error(400,"添加设备失败");

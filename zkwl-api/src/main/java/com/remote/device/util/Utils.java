@@ -13,43 +13,11 @@ import java.util.List;
  **/
 @Component
 public class Utils {
-    public static Byte [] newBytes = null;
-    public static Integer sum = 0;
-    public static long length = 0;
+
     public static File file = null;
     public static FileInputStream fileInputStream = null;
     public static DataInputStream  dataInputStream = null;
-    static{
-        try {
-            file = new File("/home/test.bin");
-            //file = new File("D:\\test.bin");
-            fileInputStream = new FileInputStream(file);
-            dataInputStream = new DataInputStream(fileInputStream);
-            //建立缓冲文本输入流
-            length=file.length();
-            if(length % 1024 != 0){
-                length= ( length / 1024 + 1 ) * 1024;
-            }
-            byte[] bytes = new byte[(int)length];
-            newBytes = new Byte[(int)length];
-            dataInputStream.read(bytes);
-            int dataLen = 0,temp=0;
-            for(int i = 0 ; i < bytes.length;i+=2){
-                temp=bytes[i];
-                dataLen =temp&0xFF;
-                temp=bytes[i+1]<<8;
-                dataLen +=temp&0xFF00;
-                dataLen = dataLen & 0xffff;
-                sum+=dataLen;
-            }
-            for(int i = 0 ; i < bytes.length ; i ++){
-                newBytes[i] = bytes[i];
-            }
-            sum = sum & 0xffff;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+
 
     /**
      * 将源List按照指定元素数量拆分为多个List
@@ -108,42 +76,42 @@ public class Utils {
 
 
 
-//    public static UpdateVersion version(){
-//        UpdateVersion version = new UpdateVersion();
-//        try {
-//            file = new File("/home/test.bin");
-//
-//            fileInputStream = new FileInputStream(file);
-//            dataInputStream = new DataInputStream(fileInputStream);
-//            //建立缓冲文本输入流
-//            long len=file.length();
-//            if(len % 1024 != 0){
-//                len= ( len / 1024 + 1 ) * 1024;
-//            }
-//            byte[] bytes = new byte[(int)len];
-//            Byte[] newBytes = new Byte[(int)len];
-//            dataInputStream.read(bytes);
-//            int dataLen = 0,sum=0,temp=0;
-//            for(int i = 0 ; i < bytes.length;i+=2){
-//                temp=bytes[i];
-//                dataLen =temp&0xFF;
-//                temp=bytes[i+1]<<8;
-//                dataLen +=temp&0xFF00;
-//                dataLen = dataLen & 0xffff;
-//                sum+=dataLen;
-//            }
-//            for(int i = 0 ; i < bytes.length ; i ++){
-//                newBytes[i] = bytes[i];
-//            }
-//            sum = sum & 0xffff;
-//            version.setLength(len);
-//            version.setSum(sum);
-//            version.setBytes(newBytes);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return version;
-//    }
+    public static UpdateVersion version(){
+        UpdateVersion version = new UpdateVersion();
+        try {
+            file = new File("/home/test.bin");
+
+            fileInputStream = new FileInputStream(file);
+            dataInputStream = new DataInputStream(fileInputStream);
+            //建立缓冲文本输入流
+            long len=file.length();
+            if(len % 1024 != 0){
+                len= ( len / 1024 + 1 ) * 1024;
+            }
+            byte[] bytes = new byte[(int)len];
+            Byte[] newBytes = new Byte[(int)len];
+            dataInputStream.read(bytes);
+            int dataLen = 0,sum=0,temp=0;
+            for(int i = 0 ; i < bytes.length;i+=2){
+                temp=bytes[i];
+                dataLen =temp&0xFF;
+                temp=bytes[i+1]<<8;
+                dataLen +=temp&0xFF00;
+                dataLen = dataLen & 0xffff;
+                sum+=dataLen;
+            }
+            for(int i = 0 ; i < bytes.length ; i ++){
+                newBytes[i] = bytes[i];
+            }
+            sum = sum & 0xffff;
+            version.setLength(len);
+            version.setSum(sum);
+            version.setBytes(newBytes);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return version;
+    }
 
 
     public static void main(String[] args) {

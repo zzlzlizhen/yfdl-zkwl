@@ -3,6 +3,7 @@ package com.remote.common.utils;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,5 +24,10 @@ public class DataUtils implements Serializable {
     private String deviceType;
     //用于前端发送数据
     private List<String> qaKey;
+    //用于分组操作
+    private String groupId;
+    //用于项目操作
+    private String projectId;
+
 
 }
