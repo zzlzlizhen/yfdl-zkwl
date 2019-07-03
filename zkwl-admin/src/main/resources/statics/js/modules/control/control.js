@@ -1,5 +1,16 @@
 $(function(){
+        //    数值增殖期
+    (function ($) {
+        $('.spinner .btn:first-of-type').on('click', function () {
+            // console.log( $(this).parent().siblings(".form-control").val() )
+            $(this).parent().siblings(".form-control").val(parseInt($(this).parent().siblings(".form-control").val(), 0) + 1);
+        });
+        $('.spinner .btn:last-of-type').on('click', function () {
+            // $('.spinner input').val( parseInt($('.spinner input').val(), 10) - 1);
+            $(this).parent().siblings(".form-control").val(parseInt($(this).parent().siblings(".form-control").val(), 0) - 1);
+        });
 
+    })(jQuery);
     //获取上一个页面参数
     function showWindowHref(){
         var sHref = decodeURI(window.parent.document.getElementById("test").contentWindow.location.href);
@@ -152,21 +163,24 @@ $(function(){
         var r_btne_l = $("#r_btne_l input[type='radio']:checked").val();
         var r_l_p = $("#r_Load_power").val();
         var r_teml = $("#d414").val();
+        var r_temlr = $("#d4141").val();
         var r_teml_t = $(".rda").val();
-        var r_one_teml = $("#r_one_teml").val();
-        var r_teml_tw = $("#r_teml_tw").val();
-        var  r_teml_th = $("#r_teml_th").val();
-        var r_teml_for = $("#r_teml_for").val();
-        var r_teml_fif = $("#r_teml_fif").val();
-        var r_teml_six = $("#r_teml_six").val();
+        var r_one_teml = Number($("#r_one_teml").val())*60+Number($("#r_teml_tw").val());
+        // var r_teml_tw = $("#r_teml_tw").val();
+        var  r_teml_th = Number($("#r_teml_th").val())*60+Number($("#r_teml_for").val());
+        // var r_teml_for = $("#r_teml_for").val();
+        var r_teml_fif =Number($("#r_teml_fif").val())*60Number($("#r_teml_six").val());
+        // var r_teml_six = $("#r_teml_six").val();
         var r_Load_power = $("#r_Load_power").val();
-        var r_teml_sv =$("#r_teml_sv").val();
-        var r_teml_eg = $("#r_teml_eg").val();
-        var r_teml_ng = $("#r_teml_ng").val();
-        var r_teml_te = $("#r_teml_te").val();
-        var r_teml_el = $("#r_teml_el").val();
-        var r_teml_egl = $("#r_teml_egl").val();
-        var r_teml_tgl = $("#r_teml_tgl").val();
+        var r_teml_sv =Number($("#r_teml_sv").val())*60+Number($("#r_teml_eg").val());
+        // console.log(r_teml_sv)
+        // console.log("llllllllllllllllllllllllllll")
+        // var r_teml_eg = $("#r_teml_eg").val();
+
+        var r_teml_ng = Number($("#r_teml_ng").val())*60+Number($("#r_teml_te").val());
+        // var r_teml_te = $("#r_teml_te").val();
+        var r_teml_el =Number($("#r_teml_el").val())*60+Number($("#r_teml_egl").val());
+        // var r_teml_tgl = $("#r_teml_tgl").val();
         var r_btl_th = $("#r_btl_th input[type='radio']:checked").val();
         var r_jin_on = $("#r_jin_on").width();
         var r_jin_tw = $("#r_jin_tw").width();
@@ -199,11 +213,43 @@ $(function(){
         var rc_select_b=$("#rc_select_b option:selected").text();
         var r_jin_z = $("#r_jin_z").width();
 
-        var a =  r_wunl/$(".progres").width()*100
-        var abc = Math.ceil(a);
-        console.log( abc)
+        // var a =  r_wunl/$(".progres").width()*100
+        // var abc = Math.ceil(a);
+        // console.log( abc)
 
+
+
+        $.ajax({
+            url:baseURL + 'advancedsetting/update',
+            contentType: "application/json;charset=UTF-8",
+            type:"POST",
+            data:
+                "&id=" + dd +
+                "&loadWorkMode=" + r_btn_l +
+                "&realName=" + pro_s_b +
+                "&exclusiveUser=" + r_Load_power +
+                "&timeTurnOn=" + r_teml +
+                "&timeTurnOff=" + r_temlr +
+                "&time1=" + r_one_teml +
+                "&time2=" + r_teml_sv +
+                "&time3=" + r_teml_th +
+                "&time4=" + r_teml_ng +
+                "&time5=" + r_teml_fif +
+                "&timeDown=" + r_teml_el
+
+
+            success: function(res){
+                window.location.reload()
+            }
+        });
     })
+
+
+
+
+
+
+
 
     $("#r_cl").click(function(){
         $("#slideTest1").children().children(".layui-slider-bar").width((50/$(".progres").width()*$(".progres").width())+"%");

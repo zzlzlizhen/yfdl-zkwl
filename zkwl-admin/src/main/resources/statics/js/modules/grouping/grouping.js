@@ -404,17 +404,27 @@ $(function(){
                     //
                     // }
 
-                    var T_an=data.data.forecast[0].type+" "+str_bb+"-"+str_a;
+                     var T_an=data.data.forecast[0].type+" "+str_bb+"-"+str_a;
 
                     if(data.data.forecast[0].type== "多云"){
-                        $("#img").attr("src","${request.contextPath}/statics/image/duoyun.svg")
+                        $("#img").attr("src","/remote-admin/statics/image/duoyun.svg")
                     }else if(data.data.forecast[0].type== "晴"){
-                        $("#img").attr("src","${request.contextPath}/statics/image/qing.svg")
+                        $("#img").attr("src","/remote-admin/statics/image/qing.svg")
                     }else if(data.data.forecast[0].type== "雨"){
-                        $("#img").attr("src","${request.contextPath}/statics/image/yu.svg")
+                        $("#img").attr("src","/remote-admin/statics/image/yu.svg")
+                    }else if(data.data.forecast[0].type== "小雨"){
+                        $("#img").attr("src","/remote-admin/statics/image/xiaoyu.svg")
+                    }else if(data.data.forecast[0].type== "阵雨"){
+                        $("#img").attr("src","/remote-admin/statics/image/zhenyu.svg")
+                    }else if(data.data.forecast[0].type== "雪"){
+                        $("#img").attr("src","/remote-admin/statics/image/xue.svg")
+                    }else if(data.data.forecast[0].type== "阴"){
+                        $("#img").attr("src","/remote-admin/statics/image/yintian.svg")
+                    }else if(data.data.forecast[0].type== "雨夹雪"){
+                        $("#img").attr("src","/remote-admin/statics/image/yujiaxue.svg")
                     }
-                    console.log(  $("#img").attr("src",url))
-                    // $("#T_an").html(T_an)
+
+                     $("#T_an").html(T_an)
                 }
             })
         }

@@ -248,8 +248,7 @@ $(function(){
                 })
 
                 function  off(li_deviceCode,value,li_deviceType,deviceId,projectId){
-                    console.log(li_deviceCode+"----"+value+"----"+li_deviceType)
-                    var ass=[]
+                    var ass=[];
                         ass.push(li_deviceCode)
                     $.ajax({
                         url:baseURL + 'fun/device/change',

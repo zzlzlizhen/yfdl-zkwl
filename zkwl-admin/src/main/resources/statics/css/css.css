@@ -13,10 +13,8 @@ ul,li,ol{list-style:none;display: block}
 
 /*表格*/
 .table_m{width:96%;height:auto;max-height:61%;float:left;margin-left:2%; display: list-item !important;list-style:none !important;
-    margin-top:1.6%; overflow-x: hidden;overflow-y: scroll;border: 1px solid #ccc;}
-.table_m::-webkit-scrollbar {
-    display: none;
-}
+    margin-top:1.6%;overflow: hidden;overflow-y: auto;white-space: nowrap;  border: 1px solid #ccc;}
+.table_m::-webkit-scrollbar {display: none;width:0px}
 
 .table_m ul{width:100%;height:45px;float:left;border-top: 1px solid #ccc;list-style:none !important;margin:0;padding:0; background: rgba(250, 250, 250, 1);}
 .table_m ul li{width:11.111111%;height:100%;float:left;border:0px; border-right:1px solid #ccc;line-height: 40px;text-align: center;list-style:none !important;
@@ -269,15 +267,15 @@ thead>th{text-align: center !important;}
 .opti_a{display: block !important;}
 .option_a{width:100%;height:80%;float:left;}
 .option_b{height:89.9% !important;}
-.option{width:100%;height:82%;display:none;float:left; overflow-x: hidden;overflow-y: scroll;}
+.option{width:100%;height:82%;display:none;float:left; overflow: hidden;overflow-y: auto; }
 .option::-webkit-scrollbar {
     display: none;
 }
 .r_llis ,.r_op{height:100%;}
-.r_op>ul,.r_llis>ul{height:91% !important;overflow-x: hidden;overflow-y: scroll; }
-.r_op>ul::-webkit-scrollbar,.r_llis>ul::-webkit-scrollbar {
-    display: none;
-}
+.r_op>ul,.r_llis>ul{height:91% !important; }
+/*.r_op>ul::-webkit-scrollbar,.r_llis>ul::-webkit-scrollbar {*/
+    /*display: none;*/
+/*}*/
 .tab {width:100%;height:82px;float:left;margin:0;padding:0;list-style:none;overflow:hidden;border-bottom: 10px solid rgba(242, 242, 242, 1);background: #ffffff;}
 .tab li {float:left;width:6%;height:50%;color:#666;font-size:14px;text-align:center;line-height:30px;cursor:pointer;margin:1.1% 0px 0px 2%;}
 .on {display:block;}
@@ -287,7 +285,7 @@ thead>th{text-align: center !important;}
 .option ul{
     display: inline-block;
     width:100% ;
-    height: auto;
+    /*height: auto;*/
     background: #ffffff;
     padding:0 40px;
 }

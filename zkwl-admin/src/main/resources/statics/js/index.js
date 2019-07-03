@@ -143,8 +143,6 @@ $("#r_val_eml").click(function(){
 //点击获取验证码
 $("#btn").click(function(){
     var r_val_eml = $("#r_rlm").val()
-	$("#r_upd").val(r_val_eml)
-    // console.log(r_val_eml)
 		$.ajax({
 			url:  'contact/sendBindEmail',
 			type: "GET",
@@ -157,28 +155,38 @@ $("#btn").click(function(){
 				} else {
 					console.log(res.msg);
 			}}
-	  })
+	    })
 })
-//提交  验证码  邮箱
-function ryanzhengma(){
-    $("#r_bte").click(function(){
-        var r_upd = $("#r_upd").val();
-        var r_el_upd = $("#r_el_upd").val()
-        $.ajax({
-            url:  'contact/checkBindEmail',
-            type: "GET",
-            data: "&email=" + r_upd +
-            "&securityCode=" + r_el_upd ,
-            success: function (res) {
-                console.log(JSON.stringify(res));
-                if (res.code == "200") {
-                    console.log("///////////////////////")
-                    $(".r_lay").css("display","none")
-                } else {
-                    console.log(res.msg);
-                }}
-        })
-    })
+	//提交  验证码  邮箱
+	function ryanzhengma(){
+		$("#r_bte").click(function(){
+			var r_rlm=$("#r_rlm").val()
+			var r_el_upd = $("#r_el_upd").val()
+		if(r_rlm == "" || r_el_upd == ""){
+					alert("输入不能为空")
+		}else{
+            // 邮箱
+            if (!patrn2.exec(r_rlm)) {
+                console.log("邮箱错误")
+                return false;
+            }
+			$.ajax({
+				url:  'contact/checkBindEmail',
+				type: "GET",
+				data: "&email=" + r_rlm +
+				"&securityCode=" + r_el_upd ,
+				success: function (res) {
+					console.log(JSON.stringify(res));
+					if (res.code == "200") {
+						console.log("///////////////////////")
+						$(".r_lay").css("display","none")
+					} else {
+						console.log(res.msg);
+					}
+				}
+			})
+		}
+	})
 }
 //进入页面获取数据
 $.ajax({
@@ -188,51 +196,167 @@ $.ajax({
         console.log(JSON.stringify(res));
         if (res.code == "200") {
         	console.log(res)
+            // var r_header_img = res.user.headUrl;
+            // 图片
+            // $("#r_header_img").attr("src", "user.headUrl");
             var r_ide = res.user.userId;
             $("#r_ide").val(r_ide)
             var select1 = res.user.roleId;
 			$("#acc_select_b option:selected").text(select1);
-            var r_ide = res.user.userId;
-            $("#r_ide").val(r_ide)
-
-
+            var r_num = res.user.username;
+            $("#r_num").val(r_num)
+            var r_name_l = res.user.realName;
+            $("#r_name_l").val(r_name_l)
+            var r_rlm = res.user.email;
+            $("#r_rlm").val(r_rlm)
+            var r_rlp = res.user.mobile;
+            $("#r_rlp").val(r_rlp)
             $(".r_lay").css("display","none")
         } else {
             console.log(res.msg);
         }}
 })
 
-$("#r_tijiao").click(function(){
-
+//点击获取手机验证码
+$("#btne").click(function(){
+    var r_el_upde = $("#r_rlp").val()
+    $.ajax({
+        url:  'contact/sendBindMobile',
+        type: "GET",
+        data: "&mobile=" + r_el_upde ,
+        success: function (res) {
+            console.log(JSON.stringify(res));
+            if (res.code == "200") {
+                console.log("///////////////////////")
+                ryph()
+            } else {
+                console.log(res.msg);
+            }
+        }
+    })
 })
 
+//提交  验证码 手机号
+function ryph(){
+    $("#r_btee").click(function(){
+        var r_rlmn=$("#r_rlp").val()
+        var r_el_updn = $("#r_el_upde").val()
+		console.log(r_rlmn)
+        console.log(r_el_updn)
+        if(r_rlmn == "" || r_el_updn == ""){
+            alert("输入不能为空")
+        }else{
+            //手机号错误
+            if (!patrn1.exec(r_rlmn)){
+                console.log("手机号错误")
+                return false;
+            }
+            $.ajax({
+                url:  'contact/checkBindMobile',
+                type: "GET",
+                data: "&email=" + r_rlmn +
+                "&securityCode=" + r_el_updn ,
+                success: function (res) {
+                    console.log(JSON.stringify(res));
+                    if (res.code == "200") {
+                        console.log("///////////////////////")
+                        $(".r_lay_a").css("display","none")
+                    } else {
+                        console.log(res.msg);
+                    }
+                }
+            })
+        }
+    })
+}
 
+
+
+
+$("#r_tijiao").click(function(){
+    var r_rlma=$("#r_num").val()
+    var r_rlmb = $("#r_name_l").val()
+    var r_rlmc=$("#r_rlm").val()
+    var r_rlmd = $("#r_rlp").val()
+	if(r_rlma == "" || r_rlmb == ""|| r_rlmc == "" || r_rlmd == ""){
+alert("输入不能为空")
+	}else{
+        //    账号
+        if (!patrn3.exec(r_rlma)) {
+            console.log("账号错误")
+            return false;
+        }
+        //    用户名
+        if (!patrn4.exec(r_rlmb)) {
+            console.log("用户名错误")
+            return false;
+        }
+
+        // 邮箱
+        if (!patrn2.exec(r_rlmc)) {
+            console.log("邮箱错误")
+            return false;
+        }
+        //手机号错误
+        if (!patrn1.exec(r_rlmd)){
+            console.log("手机号错误")
+            return false;
+
+        }
+        $.ajax({
+            url:  'sys/user/updateBaseInfo',
+            type: "POST",
+            data:
+            "&username=" + r_rlma +
+            "&realName=" + r_rlmb +
+            "&email=" + r_rlmc +
+            "&securityCode=" + r_rlmd  ,
+            success: function (res) {
+                console.log(JSON.stringify(res));
+                if (res.code == "200") {
+                    console.log(res)
+                    $(".r_lay").css("display","none")
+                } else {
+                    console.log(res.msg);
+                }}
+        })
+	}
+})
+
+$("#r_val_pho").click(function(){
+    $(".r_lay_a").css("display","block")
+})
 //倒计时60秒
 var countdown=60;
 function sendemail(){
-    var obj = $("#btn");
-    settime(obj);
-
+    console.log("22222")
+    var obje = $("#btn");
+    countdown=60
+    settime(obje);
 }
-function settime(obj) { //发送验证码倒计时
+
+function sendemail_a() {
+	console.log("111111111")
+    var obj = $("#btne");
+    countdown=60
+    settime(obj);
+}
+function settime(obja) { //发送验证码倒计时
     if (countdown == 0) {
-        obj.attr('disabled',false);
+        obja.attr('disabled',false);
         //obj.removeattr("disabled");
-        obj.val("获取验证码");
+        obja.val("获取验证码");
         countdown = 60;
         return;
     } else {
-        obj.attr('disabled',true);
-        obj.val("重新发送(" + countdown + ")");
+        obja.attr('disabled',true);
+        obja.val("重新发送(" + countdown + ")");
         countdown--;
     }
     setTimeout(function() {
-            settime(obj) }
+            settime(obja) }
         ,1000)
 }
-
-
-
 
 
 

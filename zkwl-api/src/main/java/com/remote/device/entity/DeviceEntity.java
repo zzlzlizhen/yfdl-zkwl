@@ -133,4 +133,10 @@ public class DeviceEntity {
     private List<Integer> key;
 
     private List<Integer> value;
+    //总充电量
+    private double chargingCapacitySum;
+    //总放电量
+    private double dischargeCapacitySum;
+    //运行天数
+    private Integer runDay;
 }

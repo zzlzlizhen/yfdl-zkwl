@@ -1,10 +1,13 @@
 package com.remote.sys.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.remote.common.utils.PageUtils;
 import com.remote.sys.entity.SysUserEntity;
 
 import java.util.List;
+import java.util.Map;
 
-public interface SysUserService {
+public interface SysUserService extends IService<SysUserEntity> {
 
     /*
      * @Author zhangwenping
@@ -14,4 +17,19 @@ public interface SysUserService {
      * @return List<SysUserEntity>
      **/
     List<SysUserEntity> queryAllLevel(Long userId);
+    SysUserEntity queryByUsername(String username);
+    SysUserEntity queryByUnameAndPwd(String username, String password);
+
+    PageUtils queryPage(Map<String, Object> params);
+
+    List<SysUserEntity> queryChild(SysUserEntity sysUserEntity);
+
+    List<SysUserEntity> queryAllChild(SysUserEntity sysUserEntity);
+
+    List<SysUserEntity> queryUserList(Map<String, Object> params);
+    /**
+     * 保存用户
+     */
+    void saveUser(SysUserEntity user);
+
 }

@@ -1,5 +1,6 @@
 package com.remote.device.service;
 
+import com.remote.common.CommonEntity;
 import com.remote.device.entity.DeviceEntity;
 
 public interface DeviceService {
@@ -18,5 +19,5 @@ public interface DeviceService {
      * @Param deviceEntity
      * @return int
      **/
-    int updateDeviceByCode(DeviceEntity deviceEntity);
+    int updateDeviceByCode(CommonEntity commonEntity,DeviceEntity deviceEntity);
 }

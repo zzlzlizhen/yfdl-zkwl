@@ -28,7 +28,7 @@ import static com.remote.device.util.MapKey.mapKey;
  * @Version 1.0
  **/
 @Component
-@RabbitListener(queues = "CalonDirectQueue")//CalonDirectQueue为队列名称
+//@RabbitListener(queues = "CalonDirectQueue")//CalonDirectQueue为队列名称
 public class EchoServerNoBlock implements Runnable {
     private static Logger logger = LoggerFactory.getLogger(EchoServerNoBlock.class);
     private int port;
@@ -36,7 +36,6 @@ public class EchoServerNoBlock implements Runnable {
     private Selector selector;
     private ServerSocketChannel serverSocketChannel;
     private static Map<String,SocketChannel> socketMap = new LinkedHashMap<>();
-    private static String msg = "";
     private Integer count = 0;
     public EchoServerNoBlock(int port){
         this.port = port;
@@ -48,7 +47,7 @@ public class EchoServerNoBlock implements Runnable {
 
     @RabbitHandler
     public void process(String str) {
-        msg = str;
+       push(str);
     }
 
 
@@ -80,7 +79,6 @@ public class EchoServerNoBlock implements Runnable {
                 //无论是否有读写事件发生，selector每隔5s被唤醒一次
                 selector.select(1000);
                 //判断服务端是否修改了数据
-                push();
                 Set<SelectionKey> selectionKeys = selector.selectedKeys();
                 Iterator<SelectionKey> iterator = selectionKeys.iterator();
                 while (iterator.hasNext()) {
@@ -165,7 +163,7 @@ public class EchoServerNoBlock implements Runnable {
     }
 
     //服务端向客户端推送数据
-    private void push(){
+    private void push(String msg){
 
         try{
             if(!"".equals(msg)){
@@ -206,10 +204,8 @@ public class EchoServerNoBlock implements Runnable {
 
                 }
             }
-            msg = "";
         } catch (IOException e) {
             e.printStackTrace();
-            msg = "";
             logger.error("操作设备异常:"+e.getMessage(),e);
         }
 
@@ -331,7 +327,7 @@ public class EchoServerNoBlock implements Runnable {
         BeanUtils.copyProperties(common, deviceEntity);
 
         //首先修改设备信息
-        deviceService.updateDeviceByCode(deviceEntity);
+        deviceService.updateDeviceByCode(common,deviceEntity);
         //所有设备属性都映射到公共的类中，需要哪些信息，自行转换 end
         //判断公共类属于历史数据，还是设备信息
         //判断是否时历史数据

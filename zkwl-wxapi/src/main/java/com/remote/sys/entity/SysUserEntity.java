@@ -132,4 +132,15 @@ public class SysUserEntity implements Serializable {
 	 * 账号有效期截止日期
 	 * */
 	private Date deadline;
+
+	/**
+	 * 当前用户id
+	 * */
+	@TableField(exist=false)
+	private Long curUid;
+	/**
+	 * 当前用户所有父id
+	 * */
+	@TableField(exist=false)
+	private String curAllParentId;
 }

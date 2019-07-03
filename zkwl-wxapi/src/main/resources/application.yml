@@ -4,9 +4,13 @@ server:
     uri-encoding: UTF-8
     max-threads: 1000
     min-spare-threads: 30
-  port: 8086
+    remote_ip_header: x-forwarded-for
+    protocol_header: x-forwarded-proto
+    port-header: X-Forwarded-Port
+  use-forward-headers: true
+  port: 8020
   servlet:
-    context-path: /remote-api
+    context-path: /remote-wxapi
 
 spring:
   datasource:
@@ -43,7 +47,7 @@ spring:
           config:
             multi-statement-allow: true
   profiles:
-    active: dev
+    active: prod
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8

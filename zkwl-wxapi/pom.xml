@@ -11,6 +11,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.remote</groupId>
+	<packaging>jar</packaging>
 	<artifactId>zkwl-wxapi</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
@@ -41,10 +42,29 @@
 	</dependencies>
 
 	<build>
+		<finalName>${project.artifactId}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<fork>true</fork>
+					<executable>
+						C:\Program Files\Java\jdk1.8.0_102\bin\javac.exe
+					</executable>
+				</configuration>
+			</plugin>
+			<!-- 跳过单元测试 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<skipTests>true</skipTests>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

@@ -476,8 +476,150 @@ $(function () {
             form(pageSize, pagesb, acc_id, acc_hao, acc_name, select);
         }
     });
+    //上传头像   添加
+    $("#pic").click(function() {
+        $("#upload").click(); //隐藏了input:file样式后，点击头像就可以本地上传
+        $("#upload").on("change", function() {
+            var objUrl = getObjectURL(this.files[0]); //获取图片的路径，该路径不是图片在本地的路径
+            if (objUrl) {
+                $("#pic").attr("src", objUrl); //将图片路径存入src中，显示出图片
+                upimg();
+            }
+        });
+
+        var lujing=$("#pic").attr("src");
+        console.log(lujing)
+    });
+
+    new AjaxUpload('#upload', {
+        action: baseURL + "sys/upload",
+        name: 'file',
+        autoSubmit:true,
+        responseType:"json",
+        onSubmit:function(file, extension){
+            if (!(extension && /^(jpg|jpeg|png|gif)$/.test(extension.toLowerCase()))){
+                alert('只支持jpg、png、gif格式的图片！');
+                return false;
+            }
+        },
+        onComplete : function(file, r){
+            if(r.code == 200){
+                // alert(r.url);
+                $("#headUrl").val(r.url);
+                $("#pic").attr("src",baseURL+r.url);
+            }else{
+                alert(r.msg);
+            }
+        }
+    });
 
 
 });
 
+//建立一?可存取到?file的url
+function getObjectURL(file) {
+    var url = null;
+    if (window.createObjectURL != undefined) { // basic
+        url = window.createObjectURL(file);
+    } else if (window.URL != undefined) { // mozilla(firefox)
+        url = window.URL.createObjectURL(file);
+    } else if (window.webkitURL != undefined) { // webkit or chrome
+        url = window.webkitURL.createObjectURL(file);
+    }
+    return url;
+}
+//上传头像到服务器
+function upimg() {
+    console.log(344)
+    var pic = $('#upload')[0].files[0];
+    var file = new FormData();
+    file.append('image', pic);
+    $.ajax({
+        url: "sys/upload",
+        type: "post",
+        data: file,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function(data) {
+            console.log(data);
+            var res = data;
+            $("#resimg").append("<img src='/" + res + "'>")
+        }
+    });
+}
 
+
+//修改   上传图片
+//上传头像   添加
+$("#pice").click(function() {
+    $("#uploade").click(); //隐藏了input:file样式后，点击头像就可以本地上传
+    $("#uploade").on("change", function() {
+        var objUrl = getObjectURL(this.files[0]); //获取图片的路径，该路径不是图片在本地的路径
+        if (objUrl) {
+            $("#pice").attr("src", objUrl); //将图片路径存入src中，显示出图片
+            upimg();
+        }
+    });
+
+    var lujing=$("#pice").attr("src");
+    console.log(lujing)
+});
+
+new AjaxUpload('#uploade', {
+    action: baseURL + "sys/upload",
+    name: 'file',
+    autoSubmit:true,
+    responseType:"json",
+    onSubmit:function(file, extension){
+        if (!(extension && /^(jpg|jpeg|png|gif)$/.test(extension.toLowerCase()))){
+            alert('只支持jpg、png、gif格式的图片！');
+            return false;
+        }
+    },
+    onComplete : function(file, r){
+        if(r.code == 200){
+            // alert(r.url);
+            $("#headUrle").val(r.url);
+            $("#pice").attr("src",baseURL+r.url);
+        }else{
+            alert(r.msg);
+        }
+    }
+
+
+
+});
+
+//建立一?可存取到?file的url
+function getObjectURL(file) {
+    var url = null;
+    if (window.createObjectURL != undefined) { // basic
+        url = window.createObjectURL(file);
+    } else if (window.URL != undefined) { // mozilla(firefox)
+        url = window.URL.createObjectURL(file);
+    } else if (window.webkitURL != undefined) { // webkit or chrome
+        url = window.webkitURL.createObjectURL(file);
+    }
+    return url;
+}
+//上传头像到服务器
+function upimg() {
+    console.log(344)
+    var pic = $('#upload')[0].files[0];
+    var file = new FormData();
+    file.append('image', pic);
+    $.ajax({
+        url: "sys/upload",
+        type: "post",
+        data: file,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function(data) {
+            console.log(data);
+            var res = data;
+            $("#resimg").append("<img src='/" + res + "'>")
+        }
+    });
+}

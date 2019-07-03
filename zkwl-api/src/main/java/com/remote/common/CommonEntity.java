@@ -148,4 +148,29 @@ public class CommonEntity{
     private List<Integer> key;
 
     private List<Integer> value;
+
+    //经度整数
+    private String longitudeInt;
+    //经度小数L
+    private String longitudeL;
+    //经度小数H
+    private String longitudeH;
+    //纬度整数
+    private String latitudeInt;
+    //纬度小数L
+    private String latitudeL;
+    //纬度小数H
+    private String latitudeH;
+
+    //总充电量
+    private double chargingCapacitySum;
+    //总放电量
+    private double dischargeCapacitySum;
+    //运行天数
+    private Integer runDay;
+    //故障日志
+    private String faultLog;
+
+    //软件版本
+    private Integer version;
 }

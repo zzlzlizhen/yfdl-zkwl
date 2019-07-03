@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.remote.sys.dao.SysUserDao">
+
+	<sql id="columns" >
+    	su.user_id as userId,
+    	su.username as username,
+    	su.password as password,
+    	su.email as email,
+    	su.mobile as mobile,
+    	su.status as status,
+    	su.create_time as createTime,
+    	su.update_time as updateTime,
+    	su.dept_id as deptId,
+    	su.parent_id as parentId,
+    	su.all_parent_id as allParentId,
+    	su.device_count as deviceCount,
+    	su.project_count as projectCount,
+    	su.head_url as headUrl,
+    	su.update_user as updateUser,
+    	su.term_of_validity as termOfValidity,
+    	su.flag as flag,
+    	su.salt as salt,
+    	su.type as type,
+    	su.is_bind_mtype as isBindMtype,
+    	su.deadline as deadline
+    </sql>
+
+	<!-- 查询用户的所有权限 -->
+	<select id="queryAllPerms" resultType="string">
+		select m.perms from sys_user_role ur 
+			LEFT JOIN sys_role_menu rm on ur.role_id = rm.role_id 
+			LEFT JOIN sys_menu m on rm.menu_id = m.menu_id 
+		where ur.user_id = #{userId}
+	</select>
+	
+	<!-- 查询用户的所有菜单ID --> 
+	<select id="queryAllMenuId" resultType="long">
+		select distinct rm.menu_id from sys_user_role ur 
+			LEFT JOIN sys_role_menu rm on ur.role_id = rm.role_id 
+		where ur.user_id = #{userId}
+	</select>
+
+	<select id="queryAllLevel" resultType="com.remote.sys.entity.SysUserEntity">
+		select <include refid="columns"/> from sys_user where ${where}
+	</select>
+	<!--通过用户id跟邮箱查询该用户是否已经绑定邮箱-->
+	<select id="queryByEmailAndUid" resultType="com.remote.sys.entity.SysUserEntity">
+		select <include refid="columns"/> from sys_user as su  where su.flag = 1 and su.type =1 and su.user_id = #{userId} and su.email = #{email}
+	</select>
+	<!--通过用户id跟手机查询该手机号是否已绑定-->
+	<select id="queryBySmsAndUid" resultType="com.remote.sys.entity.SysUserEntity">
+		SELECT <include refid="columns"/> from sys_user as su where su.flag = 1 and su.is_bind_mtype = 1 and su.user_id = #{userId} and su.mobile = #{mobile}
+	</select>
+<!--	<select id="queryByUser" resultType="com.remote.modules.sys.entity.SysUserEntity">
+		select <include refid="columns"/> from sys_user where 1=1 and username = #{username}
+	</select>-->
+	<!-- 查询用户自身和子用户信息 -->
+	<select id="queryChild" resultType="com.remote.sys.entity.SysUserEntity">
+		select <include refid="columns"/> from sys_user as su where su.flag = 1 and su.parent_id = #{userId} or su.user_id = #{userId}
+	</select>
+	<!-- 查询用户的自身或者子用户信息 -->
+	<select id="queryAllChild" resultType="com.remote.sys.entity.SysUserEntity">
+		select <include refid="columns"/> from sys_user as su where su.flag = 1 and su.all_parent_id like concat(#{allParentId},',%') or su.user_id = #{userId}
+	</select>
+    <select id="queryByUnameAndPwd" resultType="com.remote.sys.entity.SysUserEntity">
+		select <include refid="columns"/>,sur.role_id as roleId from sys_user as su left JOIN sys_user_role as sur ON su.user_id= sur.user_id where su.flag=1 and su.username=#{username} and su.password=#{password}
+	</select>
+	<select id="queryByUname" resultType="com.remote.sys.entity.SysUserEntity">
+		select <include refid="columns"/>,sur.role_id as roleId from sys_user as su left JOIN sys_user_role as sur ON su.user_id = sur.user_id
+		where su.flag=1 and su.username=#{username}
+	</select>
+</mapper>

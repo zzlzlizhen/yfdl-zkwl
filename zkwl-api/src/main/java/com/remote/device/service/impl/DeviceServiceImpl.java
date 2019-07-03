@@ -1,5 +1,6 @@
 package com.remote.device.service.impl;
 
+import com.remote.common.CommonEntity;
 import com.remote.device.dao.DeviceMapper;
 import com.remote.device.entity.DeviceEntity;
 import com.remote.device.service.DeviceService;
@@ -23,7 +24,18 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public int updateDeviceByCode(DeviceEntity deviceEntity) {
+    public int updateDeviceByCode(CommonEntity commonEntity, DeviceEntity deviceEntity) {
+        //解析经纬度
+        String latitudeInt = commonEntity.getLatitudeInt();//纬度整数
+        String latitudeH = commonEntity.getLatitudeH();
+        String latitudeL = commonEntity.getLatitudeL();
+        deviceEntity.setLatitude(latitudeInt+"."+latitudeH+latitudeL);
+
+        String longitudeInt = commonEntity.getLongitudeInt();//经度整数
+        String longitudeH = commonEntity.getLongitudeH();
+        String longitudeL = commonEntity.getLongitudeL();
+        deviceEntity.setLongitude(longitudeInt+"."+longitudeH+longitudeL);
+
         //判断运行状态
         //负载状态 loadState  蓄电池状态 batteryState 光电池状态  photocellState
         Integer loadState = deviceEntity.getLoadState();

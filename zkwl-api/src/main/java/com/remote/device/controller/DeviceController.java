@@ -1,6 +1,7 @@
 package com.remote.device.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.remote.common.redis.CacheUtils;
 import com.remote.device.entity.DeviceEntity;
 import com.remote.device.service.DeviceService;
 import com.remote.device.util.DeviceInfo;
@@ -29,11 +30,19 @@ import static com.remote.device.util.MapKey.mapKey;
 @RequestMapping("/fun/device")
 public class DeviceController {
 
+    @Autowired
+    private CacheUtils cacheUtils;
 
-    @RequestMapping(value = "/change", method= RequestMethod.POST)
-    public DeviceEntity chage(String change){
+    @RequestMapping(value = "/set", method= RequestMethod.GET)
+    public void setTest(){
+        cacheUtils.set("11","22");
 
-        return new DeviceEntity();
+
+    }
+    @RequestMapping(value = "/get", method= RequestMethod.GET)
+    public void getTest(){
+        Object o = cacheUtils.get("11");
+        System.out.println(o);
     }
 
 
