@@ -28,19 +28,19 @@ public class HexConvert {
         byte[] bytes = new byte[size];
         //代表是dataLen
         bytes[i++]=(byte)( size&0xFF);
-        bytes[i++]=(byte)( size/0xFF);
+        bytes[i++]=(byte)( size>>8);
 
         //代表cmdId
         bytes[i++]=(byte)( cmdID&0xFF);
-        bytes[i++]=(byte)( cmdID/0xFF);
+        bytes[i++]=(byte)( cmdID>>8);
 
         //nextId
         bytes[i++]=(byte)( nextCmdID&0xFF);
-        bytes[i++]=(byte)( nextCmdID/0xFF);
+        bytes[i++]=(byte)( nextCmdID>>8);
 
         //代表devType
         bytes[i++]=(byte)( 1&0xFF);
-        bytes[i++]=(byte)( 1/0xFF);
+        bytes[i++]=(byte)( 1>>8);
 
 
 
@@ -66,10 +66,10 @@ public class HexConvert {
         List<Integer> value = deviceInfo.getValue();
         for(int j = 0 ;j<key.size();j++){
             bytes[i++]=(byte)( key.get(j)&0xFF);
-            bytes[i++]=(byte)( key.get(j)/0xFF);
+            bytes[i++]=(byte)( key.get(j)>>8);
             if(value.size() != 0){
                 bytes[i++]=(byte)( value.get(j)&0xFF);
-                bytes[i++]=(byte)( value.get(j)/0xFF);
+                bytes[i++]=(byte)( value.get(j)>>8);
             }else{
                 bytes[i++]=(byte)(0);
                 bytes[i++]=(byte)(0);
@@ -96,16 +96,16 @@ public class HexConvert {
         byte[] bytes = new byte[1088];
         //代表是dataLen
         bytes[i++]=(byte)( size&0xFF);
-        bytes[i++]=(byte)( size/0xFF);
+        bytes[i++]=(byte)( size>>8);
         //代表cmdId
         bytes[i++]=(byte)( cmdID&0xFF);
-        bytes[i++]=(byte)( cmdID/0xFF);
+        bytes[i++]=(byte)( cmdID>>8);
         //nextId
         bytes[i++]=(byte)( nextCmdID&0xFF);
-        bytes[i++]=(byte)( nextCmdID/0xFF);
+        bytes[i++]=(byte)( nextCmdID>>8);
         //代表devType
         bytes[i++]=(byte)( 1&0xFF);
-        bytes[i++]=(byte)( 1/0xFF);
+        bytes[i++]=(byte)( 1>>8);
         //devKey
         byte[] bytes1 = devKey.getBytes();
         for(int j = 0 ; j < 24 ; j++){
@@ -126,16 +126,16 @@ public class HexConvert {
         }
         //代表upgradeFlag
         bytes[i++]=(byte)(upgradeFlag&0xFF);
-        bytes[i++]=(byte)(upgradeFlag/0xFF);
+        bytes[i++]=(byte)(upgradeFlag>>8);
         //binSize
         bytes[i++]=(byte)(binSize&0xFF);
-        bytes[i++]=(byte)(binSize/0xFF);
+        bytes[i++]=(byte)(binSize>>8);
         //binLastSize
         bytes[i++]=(byte)(binLastSize&0xFF);
-        bytes[i++]=(byte)(binLastSize/0xFF);
+        bytes[i++]=(byte)(binLastSize>>8);
         //checkSum
+        bytes[i++]=(byte)(checkSum&0xFF);
         bytes[i++]=(byte)(checkSum>>8);
-        bytes[i++]=(byte)(checkSum/0xFF);
         //数据
         Byte[] bin = deviceInfo.getBin();
         for (int j = 0 ; j < bin.length ; j++){
@@ -150,7 +150,9 @@ public class HexConvert {
     public static DeviceInfo BinaryToDeviceInfo(byte[] bytes)  {
         DeviceInfo deviceInfo = new DeviceInfo();
         try{
-
+            for (int i = 0 ; i < bytes.length;i++){
+                System.out.print(bytes[i]+",");
+            }
             int dataLen = 0;
             int cmdID = 0;
             int devType = 0;
@@ -185,6 +187,7 @@ public class HexConvert {
                     size ++ ;
                 }
             }
+            logger.info("SN长度："+size);
             byte devSN[] = new byte[size];
             byte devKey[] = new byte[size];
             for(int j=0;j<24;j++){
@@ -227,7 +230,7 @@ public class HexConvert {
             deviceInfo.setValue(valueList);
 
         }catch (Exception e){
-            logger.error("数据解析异常:"+e);
+            logger.error("数据解析异常:"+e.getMessage(),e);
             e.printStackTrace();
         }
         return deviceInfo;
@@ -260,11 +263,11 @@ public class HexConvert {
                 0x01, 0x00,     0x08, 0x00,
                 0x07, 0x00,     0x60, 0x00,
         };
-        DeviceInfo deviceInfo = BinaryToDeviceInfo(bytes);
+        for (int i = 0 ; i < bytes.length;i++){
+            System.out.print(bytes[i]+",");
+        }
 
-        byte[] bytes1 = hexStringToBytes(deviceInfo);
-
-        System.out.println(bytes1);
+       // System.out.println(bytes1);
 
     }
 }
