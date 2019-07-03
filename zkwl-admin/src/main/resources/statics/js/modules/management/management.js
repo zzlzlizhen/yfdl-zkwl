@@ -52,14 +52,35 @@ $(function () {
                 pageNum = res.data.pageNum
                 var html=""
                 for (var i = 0; i < res.data.list.length; i++) {
+                    //设备数量
+                    var deviceCount=res.data.list[i].deviceCount
+                    if (deviceCount == null ) {
+                        deviceCount = "";
+                    }else{
+                        deviceCount =deviceCount
+                    }
+                    //报警
+                    var callPoliceCount=res.data.list[i].callPoliceCount
+                    if (callPoliceCount == null ) {
+                        callPoliceCount = "";
+                    }else{
+                        callPoliceCount =callPoliceCount
+                    }
+                    //报警
+                    var faultCount=res.data.list[i].faultCount
+                    if (faultCount == null ) {
+                        faultCount = "";
+                    }else{
+                        faultCount =faultCount
+                    }
                     html += "<tr>\n" +
                         "<td id=" + res.data.list[i].groupId + " style=\"width:4%;\"> <input type= \"checkbox\" class=\"checkbox_in checkbox_i\"> </td>\n" +
                         "<td class='groupName'>" + res.data.list[i].groupName + "</td>\n" +
                         "<td>" + res.data.list[i].groupName + "</td>\n" +
-                        "<td>" + res.data.list[i].deviceCount + "</td>\n" +
+                        "<td>" + deviceCount + "</td>\n" +
                         "<td>" + res.data.list[i].createTime + "</td>\n" +
-                        "<td>" + res.data.list[i].callPoliceCount + "</td>\n" +
-                        "<td>" + res.data.list[i].faultCount + "</td>\n" +
+                        "<td>" + callPoliceCount + "</td>\n" +
+                        "<td>" + faultCount + "</td>\n" +
                         "<td id=" + res.data.list[i].groupId + ">" +
                         "<a  class='modifier'><span class=\"glyphicon glyphicon-pencil\"></span></a>\n" +
                         "<a  class='particulars'><span class=\"glyphicon glyphicon-search\"></span></a>\n" +

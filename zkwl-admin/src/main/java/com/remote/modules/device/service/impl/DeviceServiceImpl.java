@@ -17,7 +17,6 @@ import com.remote.modules.group.entity.GroupQuery;
 import com.remote.modules.project.dao.ProjectMapper;
 import com.remote.modules.project.entity.ProjectEntity;
 import com.remote.modules.project.entity.ProjectQuery;
-import com.remote.modules.project.service.ProjectService;
 import com.remote.modules.sys.entity.SysUserEntity;
 import com.remote.modules.sys.service.SysUserService;
 import org.apache.commons.collections.CollectionUtils;
@@ -30,6 +29,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.remote.common.utils.DeviceTypeMap.DEVICE_TYPE;
 
 /**
  * @Author zhangwenping
@@ -82,8 +83,13 @@ public class DeviceServiceImpl implements DeviceService {
         //目前只有一种产品，2G 日后在添加其他产品
         deviceEntity.setCommunicationType(CommunicationEnum.NORMAL.getCode());
         String deviceType = deviceCode.substring(0, 4);
-        deviceEntity.setDeviceType(deviceType);
-        return deviceMapper.insert(deviceEntity) > 0 ? true : false;
+        if(DEVICE_TYPE.get(deviceType) != null){
+            deviceEntity.setDeviceType(DEVICE_TYPE.get(deviceType).toString());
+            return deviceMapper.insert(deviceEntity) > 0 ? true : false;
+        }else{
+            return false;
+        }
+
     }
 
     @Override

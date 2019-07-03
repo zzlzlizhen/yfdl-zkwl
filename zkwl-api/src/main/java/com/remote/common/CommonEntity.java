@@ -128,17 +128,17 @@ public class CommonEntity{
     //蓄电池电压
     private Double batteryVoltage;
     //光电池电压
-    private String photovoltaicCellVoltage;
+    private Double photovoltaicCellVoltage;
     //充电电流
     private Double chargingCurrent;
     //充电功率
-    private String chargingPower;
+    private Double chargingPower;
     //负载电压
-    private String loadVoltage;
+    private Double loadVoltage;
     //负载功率
-    private String loadPower;
+    private Double loadPower;
     //负载电流
-    private String loadCurrent;
+    private Double loadCurrent;
 
     //亮灯时长
     private String lightingDuration;
@@ -163,9 +163,9 @@ public class CommonEntity{
     private String latitudeH;
 
     //总充电量
-    private double chargingCapacitySum;
+    private Double chargingCapacitySum;
     //总放电量
-    private double dischargeCapacitySum;
+    private Double dischargeCapacitySum;
     //运行天数
     private Integer runDay;
     //故障日志

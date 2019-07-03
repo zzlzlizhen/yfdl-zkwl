@@ -113,17 +113,17 @@ public class DeviceEntity {
     //蓄电池电压
     private Double batteryVoltage;
     //光电池电压
-    private String photovoltaicCellVoltage;
+    private Double photovoltaicCellVoltage;
     //充电电流
     private Double chargingCurrent;
     //充电功率
-    private String chargingPower;
+    private Double chargingPower;
     //负载电压
-    private String loadVoltage;
+    private Double loadVoltage;
     //负载功率
-    private String loadPower;
+    private Double loadPower;
     //负载电流
-    private String loadCurrent;
+    private Double loadCurrent;
 
     //亮灯时长
     private String lightingDuration;

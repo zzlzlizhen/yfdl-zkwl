@@ -134,7 +134,7 @@ public class HexConvert {
         bytes[i++]=(byte)(binLastSize&0xFF);
         bytes[i++]=(byte)(binLastSize/0xFF);
         //checkSum
-        bytes[i++]=(byte)(checkSum&0xFF);
+        bytes[i++]=(byte)(checkSum>>8);
         bytes[i++]=(byte)(checkSum/0xFF);
         //数据
         Byte[] bin = deviceInfo.getBin();

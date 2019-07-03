@@ -73,21 +73,100 @@ $(function(){
                 pageNum=res.data.pageNum
                 var html=""
                 for (var i = 0; i < res.data.list.length; i++) {
+                    //光电池状态
+                    var photocellState=res.data.list[i].photocellStat
+                    if (photocellState == null ) {
+                        photocellState = "";
+                    } else if(photocellState == 0) {
+                        photocellState = "光弱";
+                    }else if(photocellState == 1) {
+                        photocellState = "光强";
+                    }else if(photocellState == 2) {
+                        photocellState = "正在充电";
+                    }
+                    //蓄电池状态
+                    var batteryState=res.data.list[i].batteryState
+                    if (batteryState == null ) {
+                        batteryState = "";
+                    } else if(batteryState == 0) {
+                        batteryState = "过放";
+                    }else if(batteryState == 1) {
+                        batteryState = "欠压";
+                    }else if(batteryState == 2) {
+                        batteryState = "正常";
+                    }else if(batteryState == 3) {
+                        batteryState = "限压值";
+                    }else if(batteryState == 4) {
+                        batteryState = "超压";
+                    }else if(batteryState == 5) {
+                        batteryState = "过温";
+                    }else if(batteryState == 6) {
+                        batteryState = "激活";
+                    }
+                    //负载
+                    var loadState=res.data.list[i].loadState
+                    if (loadState == null ) {
+                        loadState = "";
+                    } else if(loadState == 0) {
+                        loadState = "关";
+                    }else if(loadState == 1) {
+                        loadState = "开";
+                    }else if(loadState == 2) {
+                        loadState = "开路保护";
+                    }else if(loadState == 3) {
+                        loadState = "直通";
+                    }else if(loadState == 4) {
+                        loadState = "短路保护";
+                    }else if(loadState == 5) {
+                        loadState = "过载保护";
+                    }else if(loadState == 6) {
+                        loadState = "过载警告";
+                    }
+                    //运行状态
+                    var runState=res.data.list[i].runState
+                    if (runState == null ) {
+                        runState = "";
+                    } else if(runState == 1) {
+                        runState = "正常";
+                    }else if(runState == 2) {
+                        runState = "报警";
+                    }else if(runState == 3) {
+                        runState = "故障";
+                    }
+
+                    //通讯类型
+                    var communicationType=res.data.list[i].communicationType
+                    if (communicationType == null ) {
+                        communicationType = "";
+                    } else if(communicationType == 1) {
+                        communicationType = "2G";
+                    }else if(communicationType == 2) {
+                        communicationType = "Lora";
+                    }else if(communicationType == 3) {
+                        communicationType = "NBlot";
+                    }
+                    //亮度
+                    var light=res.data.list[i].light
+                    if (light == null ) {
+                        light = "";
+                    } else  {
+                        light = light;
+                    }
                     html += "<tr>\n" +
                         "<td id="+res.data.list[i].deviceId+" style=\"width:4%;\"> <input type= \"checkbox\" class=\"checkbox_in  checkbox_i\"> </td>\n" +
                         "<td id='r_nm'>"+res.data.list[i].deviceCode+"</td>\n" +
                         "<td style=\"width:10%;\" id='r_namem'>"+res.data.list[i].deviceName+"</td>\n" +
                         "<td>"+res.data.list[i].groupName+"</td>\n" +
                         "<td>"+res.data.list[i].deviceType+"</td>\n" +
-                        "<td>"+res.data.list[i].photocellState+"</td>\n" +
-                        "<td>"+res.data.list[i].batteryState+"</td>\n" +
-                        "<td>"+res.data.list[i].loadState+"</td>\n" +
+                        "<td>"+photocellState+" </td>\n" +
+                        "<td>"+batteryState+"</td>\n" +
+                        "<td>"+loadState+"</td>\n" +
                         "<td>"+res.data.list[i].signalState+"</td>\n" +
-                        "<td>"+res.data.list[i].runState+"</td>\n" +
-                        "<td>"+res.data.list[i].light+"</td>\n" +
-                        "<td>"+res.data.list[i].communicationType+"</td>\n" +
+                        "<td>"+ runState+"</td>\n" +
+                        "<td>"+light+"</td>\n" +
+                        "<td>"+communicationType+"</td>\n" +
                         "<td id="+res.data.list[i].deviceId+" style=\"width:10%;\">" +
-                        "<a href=\"#\" class='particulars'><span class=\"glyphicon glyphicon-search\"></span></a>\n" +
+                        "<a href=\"#\" class='particulars' id="+res.data.list[i].deviceId+"><span class=\"glyphicon glyphicon-search\"></span></a>\n" +
                         "<a href=\"#\" class='ma_p' id="+res.data.list[i].longitude+","+res.data.list[i].latitude+"><span class=\"glyphicon glyphicon-picture\"></span></a>\n" +
                         "<a href='' class='deleteq'><span class=\"glyphicon glyphicon-trash\"></span></a>\n" +
                         "</td>\n" +
@@ -100,6 +179,7 @@ $(function(){
                     var searchUrl=encodeURI('../equipment/equipment.html?longitude='+longitude)
                     location.href =searchUrl;
                 })
+
                 //移动分组删除
                 var arr=[]
                 var ass=[]
@@ -241,11 +321,12 @@ $(function(){
                 var proid
                 $(".particulars").click(function(){
                     $(".shade_modifier,.shade_b_modifier").css("display","block");
-                    var proid=$(this).parent().attr('id');
+                     proid=$(this).parent().attr('id');
                     var  r_namem = $(this).parent().siblings("#r_namem").html();
                     $(".pro_s_b").val(r_namem)
                     fen()
                 })
+
                 $("#confirm_x").click(function(){
                     var pro_s_b= $(".pro_s_b").val();
                     var select_b=$("#select1_b option:selected").attr("id");
@@ -273,6 +354,7 @@ $(function(){
                     }
 
                 })
+
 
                 $("#pagination3").pagination({
                     currentPage: pageNum,
@@ -429,9 +511,5 @@ $(function(){
             })
         }
     });
-
-
-
-
 
 })

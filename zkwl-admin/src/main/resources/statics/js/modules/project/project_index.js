@@ -56,6 +56,13 @@ $(function () {
                 pageNum=res.data.pageNum
                 var html=""
                 for(var i=0; i< res.data.list.length; i++){
+                    //项目描述
+                    var projectDesc=res.data.list[i].projectDesc
+                    if (projectDesc == null ) {
+                        projectDesc = "";
+                    } else  {
+                        projectDesc = projectDesc;
+                    }
                  html+=" <tr id="+res.data.list[i].projectId+">\n" +
                      "<td>"+res.data.list[i].projectCode+"</td>\n" +
                      "<td class='Na_me'>"+res.data.list[i].projectName+"</td>\n" +
@@ -64,7 +71,7 @@ $(function () {
                      "<td class='gatewayCount'>"+res.data.list[i].gatewayCount+"</td>\n" +
                      "<td class='faultCount'>"+res.data.list[i].faultCount+"</td>\n" +
                      "<td class='callPoliceCount'>"+res.data.list[i].callPoliceCount+"</td>\n" +
-                     "<td>"+res.data.list[i].projectDesc+"</td>\n" +
+                     "<td>"+projectDesc+"</td>\n" +
                      "<td id="+res.data.list[i].projectId+">\n" +
                      "<a href=\"#\" class='modifier'><span class=\"glyphicon glyphicon-pencil\"></span></a>\n" +
                      "<a href=\"#\" class='particulars'><span class=\"glyphicon glyphicon-search\"></span></a>\n" +

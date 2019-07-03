@@ -115,7 +115,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         System.out.println();
         //如果map中不包含此连接，就保存连接
 
-        if (CHANNEL_MAP.containsKey(channelId)) {
+        if (CHANNEL_MAP.containsKey(channelId.asShortText())) {
             log.info("客户端【" + channelId + "】是连接状态，连接通道数量: " + CHANNEL_MAP.size());
         } else {
             //保存连接
@@ -133,7 +133,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
-
         InetSocketAddress insocket = (InetSocketAddress) ctx.channel().remoteAddress();
 
         String clientIp = insocket.getAddress().getHostAddress();
@@ -141,9 +140,9 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         ChannelId channelId = ctx.channel().id();
 
         //包含此客户端才去删除
-        if (CHANNEL_MAP.containsKey(channelId)) {
+        if (CHANNEL_MAP.get(channelId.asShortText()) != null) {
             //删除连接
-            CHANNEL_MAP.remove(channelId);
+            CHANNEL_MAP.remove(channelId.asShortText());
 
             System.out.println();
             log.info("客户端【" + channelId + "】退出netty服务器[IP:" + clientIp + "--->PORT:" + insocket.getPort() + "]");
@@ -165,6 +164,18 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
         //转换为对象
         DeviceInfo deviceInfo = HexConvert.BinaryToDeviceInfo(bytes);
+        if(deviceInfo == null){
+            log.info("数据格式不正确");
+            ctx.close();
+            CHANNEL_MAP.remove(ctx.channel().id().asShortText());
+            return;
+        }
+        if(StringUtils.isEmpty(deviceInfo.getDevSN()) || StringUtils.isEmpty(deviceInfo.getDevKey()) || StringUtils.isEmpty(deviceInfo.getDevType())){
+            log.info("数据格式不正确");
+            ctx.close();
+            CHANNEL_MAP.remove(ctx.channel().id().asShortText());
+            return;
+        }
         //把连接放到redis中
         CacheUtils cacheUtils = (CacheUtils)SpringUtils.getBean("cacheUtils");
         cacheUtils.set(deviceInfo.getDevSN(),ctx.channel().id().asShortText());
@@ -175,6 +186,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         if(StringUtils.isEmpty(deviceInfo.getDevSN()) && StringUtils.isEmpty(deviceInfo.getDevKey())){
             log.info("密钥和SN号为空");
             ctx.close();
+            CHANNEL_MAP.remove(ctx.channel().id().asShortText());
             return;
         }
         String encrypt = Utils.encrypt(deviceInfo.getDevSN());
@@ -182,6 +194,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         if(!encrypt.equals(deviceInfo.getDevKey())){
             log.info("解密失败");
             ctx.close();
+            CHANNEL_MAP.remove(ctx.channel().id().asShortText());
             return;
         }
         /**
@@ -276,6 +289,9 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                 index ++;
             }
         }
+
+        //转换参数信息
+        convert(common);
         //所有设备属性都映射到公共的类中，需要哪些信息，自行转换 start
         BeanUtils.copyProperties(common, deviceEntity);
         //首先修改设备信息
@@ -291,6 +307,60 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         HistoryService historyService = (HistoryService)SpringUtils.getBean("historyServiceImpl");
         historyService.insertHistoryData(historyMouth);
 
+    }
+
+    //参数转换
+    private void convert(CommonEntity common) {
+        //放电量
+        if(common.getDischargeCapacity() != null){
+            common.setDischargeCapacity(Utils.div(common.getDischargeCapacity(),1));
+        }
+        //充电量
+        if(common.getChargingCapacity() != null){
+            common.setChargingCapacity(Utils.div(common.getChargingCapacity(),1));
+        }
+        //放电电流
+        if(common.getDischargeCurrent() != null){
+            common.setDischargeCurrent(Utils.div(common.getDischargeCurrent(),1));
+        }
+        //充电电流
+        if(common.getChargingCurrent() != null){
+            common.setChargingCurrent(Utils.div(common.getChargingCurrent(),1));
+        }
+        //电池电压
+        if(common.getBatteryVoltage() != null){
+            common.setBatteryVoltage(Utils.div(common.getBatteryVoltage(),1));
+        }
+        //总充电量
+        if(common.getChargingCapacitySum() != null){
+            common.setChargingCapacitySum(Utils.div(common.getChargingCapacitySum(),1));
+        }
+        //总放电量
+        if(common.getDischargeCapacitySum() != null){
+            common.setDischargeCapacitySum(Utils.div(common.getDischargeCapacitySum(),1));
+        }
+        //光电池电压
+        if(common.getPhotovoltaicCellVoltage() != null){
+            common.setPhotovoltaicCellVoltage(Utils.div(common.getPhotovoltaicCellVoltage(),1));
+        }
+        //充电电流
+        if(common.getChargingCurrent() != null){
+            common.setChargingCurrent(Utils.div(common.getChargingCurrent(),1));
+        }
+        //充电功率chargingPower
+        common.setChargingPower(Utils.mul(common.getPhotovoltaicCellVoltage(),common.getChargingCurrent()));
+        //负载电压
+        if(common.getLoadVoltage() != null){
+            common.setLoadVoltage(Utils.div(common.getLoadVoltage(),1));
+        }
+        //负载功率
+        if(common.getLoadPower() != null){
+            common.setLoadPower(Utils.div(common.getLoadPower(),1));
+        }
+        //负载电流
+        if(common.getLoadCurrent() != null){
+            common.setLoadCurrent(Utils.div(common.getLoadCurrent(),1));
+        }
     }
 
 
@@ -350,6 +420,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
         System.out.println();
         ctx.close();
+        CHANNEL_MAP.remove(ctx.channel().id().asShortText());
         log.info(ctx.channel().id() + " 发生了错误,此连接被关闭" + "此时连通数量: " + CHANNEL_MAP.size());
         log.error("发生了错误:"+cause.getMessage(),cause);
         //cause.printStackTrace();

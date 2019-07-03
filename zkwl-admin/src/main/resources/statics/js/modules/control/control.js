@@ -169,7 +169,7 @@ $(function(){
         // var r_teml_tw = $("#r_teml_tw").val();
         var  r_teml_th = Number($("#r_teml_th").val())*60+Number($("#r_teml_for").val());
         // var r_teml_for = $("#r_teml_for").val();
-        var r_teml_fif =Number($("#r_teml_fif").val())*60Number($("#r_teml_six").val());
+        var r_teml_fif =Number($("#r_teml_fif").val())*60+Number($("#r_teml_six").val());
         // var r_teml_six = $("#r_teml_six").val();
         var r_Load_power = $("#r_Load_power").val();
         var r_teml_sv =Number($("#r_teml_sv").val())*60+Number($("#r_teml_eg").val());
@@ -191,19 +191,31 @@ $(function(){
         var r_teml_thgl=$("#r_teml_thgl").val()
         var r_teml_thel =$("#r_teml_thel").val()
         var r_select_b=$("#r_select_b option:selected").text();
-        var r_wunl = $("#slideTest1").children().children(".layui-slider-bar").width();
-        var r_wen1 = $("#slideTest2").children().children(".layui-slider-bar").width();
-        var r_wen2 = $("#slideTest3").children().children(".layui-slider-bar").width();
-        var r_wen3 = $("#slideTest4").children().children(".layui-slider-bar").width();
-        var r_wen4 = $("#slideTest5").children().children(".layui-slider-bar").width();
-        var r_wen5 = $("#slideTest6").width();
-        var r_wen6 = $("#slideTest7").width();
-        var r_wen7 = $("#slideTest8").width();
-        var r_wen8 = $("#slideTest9").width();
-        var r_wen9 = $("#slideTest10").width();
-        var r_wen10 = $("#slideTest11").width();
-        var r_wen11 = $("#slideTest12").width();
-        var r_wen12 = $("#slideTest13").width();
+        var r_wen13 = parseInt($("#slideTest13").children().children(".layui-slider-bar").width()/$("#slideTest13").parent(".progres").width()*100);
+        var r_wen4 = parseInt($("#slideTest4").children().children(".layui-slider-bar").width()/$("#slideTest4").parent(".progres").width()*100);
+        var r_wen6 = parseInt($("#slideTest6").children().children(".layui-slider-bar").width()/$("#slideTest6").parent(".progres").width()*100);
+        var r_wen8 = parseInt($("#slideTest8").children().children(".layui-slider-bar").width()/$("#slideTest8").parent(".progres").width()*100);
+        var r_wen10 = parseInt($("#slideTest10").children().children(".layui-slider-bar").width()/$("#slideTest10").parent(".progres").width()*100);
+        var r_wen12 = parseInt($("#slideTest12").children().children(".layui-slider-bar").width()/$("#slideTest12").parent(".progres").width()*100);
+        var r_wen14 = parseInt($("#slideTest14").children().children(".layui-slider-bar").width()/$("#slideTest14").parent(".progres").width()*100);
+        var r_wen5 = parseInt($("#slideTest14").children().children(".layui-slider-bar").width()/$("#slideTest5").parent(".progres").width()*100);
+       // var r_wunl = $("#slideTest1").children().children(".layui-slider-bar").width();
+        // console.log(r_wunl)
+      //  var r_wen1 = $("#slideTest1").children().children(".layui-slider-bar").width()/$("#slideTest1").parent(".progres").width();
+        // var r_wen2 = $("#slideTest3").children().children(".layui-slider-bar").width();
+        // var r_wen3 = $("#slideTest4").children().children(".layui-slider-bar").width();
+        // var r_wen4 = $("#slideTest5").children().children(".layui-slider-bar").width();
+        // var r_wen5 = $("#slideTest6").width();
+        // var r_wen6 = $("#slideTest7").width();
+        // var r_wen7 = $("#slideTest8").width();
+        // var r_wen8 = $("#slideTest9").width();
+        // var r_wen9 = $("#slideTest10").width();
+        // var r_wen10 = $("#slideTest11").width();
+        // var r_wen11 = $("#slideTest12").width();
+        // var r_wen12 = $("#slideTest12").children().children(".layui-slider-bar").width();
+
+        console.log(r_wen12)
+        console.log("6666666666666666")
         var slideTest14 = $("#slideTest14").width();
         var slideTest15 = $("#slideTest15").width();
         var slideTest16 = $("#slideTest16").width();
@@ -213,9 +225,9 @@ $(function(){
         var rc_select_b=$("#rc_select_b option:selected").text();
         var r_jin_z = $("#r_jin_z").width();
 
-        // var a =  r_wunl/$(".progres").width()*100
+
         // var abc = Math.ceil(a);
-        // console.log( abc)
+        // console.log(parseInt(r_wen1*100))
 
 
 
@@ -224,9 +236,9 @@ $(function(){
             contentType: "application/json;charset=UTF-8",
             type:"POST",
             data:
-                "&id=" + dd +
+
                 "&loadWorkMode=" + r_btn_l +
-                "&realName=" + pro_s_b +
+                // "&realName=" + pro_s_b +
                 "&exclusiveUser=" + r_Load_power +
                 "&timeTurnOn=" + r_teml +
                 "&timeTurnOff=" + r_temlr +
@@ -235,9 +247,20 @@ $(function(){
                 "&time3=" + r_teml_th +
                 "&time4=" + r_teml_ng +
                 "&time5=" + r_teml_fif +
-                "&timeDown=" + r_teml_el
-
-
+                "&timeDown=" + r_teml_el+
+                "&powerDawnPeople=" + r_wen14+
+                "&powerPeople1=" + r_btn_l +
+                "&powerPeople2=" + r_wen6+
+                 "&powerPeople3=" + r_wen8+
+                 "&powerPeople4=" + r_wen10+
+                "&powerPeople5=" + r_wen12+
+                "&powerDawnPeople=" + slideTest13+
+                "&powerSensor1=" + slideTest5
+                // "&time3=" + r_teml_th +
+                // "&time4=" + r_teml_ng +
+                // "&time5=" + r_teml_fif +
+                // "&timeDown=" + r_teml_el
+                ,
             success: function(res){
                 window.location.reload()
             }

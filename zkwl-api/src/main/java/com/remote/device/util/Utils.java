@@ -3,6 +3,7 @@ package com.remote.device.util;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,6 +76,29 @@ public class Utils {
     }
 
 
+
+    /**
+     * double 除法
+     * @param d1
+     * @param scale 四舍五入 小数点位数
+     * @return
+     */
+    public static double div(double d1,int scale){
+        //  当然在此之前，你要判断分母是否为0，
+        //  为0你可以根据实际需求做相应的处理
+
+        BigDecimal bd1 = new BigDecimal(Double.toString(d1));
+        double v = bd1.divide(new BigDecimal(100), scale, BigDecimal.ROUND_HALF_UP).doubleValue();
+        return v;
+    }
+
+    // 进行乘法运算
+    public static double mul(double d1, double d2){
+        BigDecimal b1 = new BigDecimal(d1);
+        BigDecimal b2 = new BigDecimal(d2);
+        BigDecimal multiply = b1.multiply(b2);
+        return multiply.setScale(1).doubleValue();
+    }
 
     public static UpdateVersion version(){
         UpdateVersion version = new UpdateVersion();

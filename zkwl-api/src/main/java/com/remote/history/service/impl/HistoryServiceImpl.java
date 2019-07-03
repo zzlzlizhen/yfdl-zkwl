@@ -65,8 +65,10 @@ public class HistoryServiceImpl implements HistoryService {
                     }else{
                         return historyYearMapper.insert(historyYear);
                     }
+                }else{
+                    int updateHistoryByTime = historyMouthMapper.updateHistoryByTime(historyMouth);
+                    return historyYearMapper.insert(historyYear);
                 }
-                return historyMouthMapper.updateHistoryByTime(historyMouth);
             }else{
                 int insert1 = historyMouthMapper.insert(historyMouth);
                 return historyYearMapper.insert(historyYear);

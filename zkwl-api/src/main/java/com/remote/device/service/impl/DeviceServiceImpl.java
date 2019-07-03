@@ -36,7 +36,7 @@ public class DeviceServiceImpl implements DeviceService {
         String longitudeL = commonEntity.getLongitudeL();
         deviceEntity.setLongitude(longitudeInt+"."+longitudeH+longitudeL);
 
-        //判断运行状态
+
         //负载状态 loadState  蓄电池状态 batteryState 光电池状态  photocellState
         Integer loadState = deviceEntity.getLoadState();
         Integer batteryState = deviceEntity.getBatteryState();
