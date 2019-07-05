@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.remote.modules.device.entity.DeviceEntity;
 import com.remote.modules.device.entity.DeviceQuery;
 import com.remote.modules.device.entity.DeviceResult;
+import com.remote.modules.sys.entity.SysUserEntity;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -83,7 +84,7 @@ public interface DeviceService {
      * @Param userId
      * @return  List<DeviceEntity>
      **/
-    List<DeviceEntity> queryCountGroupByCity(Long userId);
+    List<Map<String,Integer>> queryCountGroupByCity(Long userId);
     /*
      * @Author chengpunan
      * @Description //TODO
@@ -101,4 +102,12 @@ public interface DeviceService {
      * 通过组id查询所有的设备code
      * */
     List<String> queryByGroupId(@Param("groupId")String groupId);
+    /**
+     * 通过当前用户id查询所有子孙用户的设备数量
+     * */
+    Integer getDeviceCount(List<Long> curUser);
+    /**
+     * 通过当前用户所有用户的userIds查询故障数
+     * */
+    Integer getDevFailNum(List<Long> curUser);
 }

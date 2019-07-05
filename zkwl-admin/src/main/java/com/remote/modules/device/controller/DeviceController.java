@@ -74,6 +74,12 @@ public class DeviceController extends AbstractController {
         template.convertAndSend("CalonDirectExchange", "CalonDirectRouting", s);
     }
 
+    @RequestMapping(value = "/updateVersion", method= RequestMethod.POST)
+    public void updateVersion(@RequestBody DataUtils data){
+        String s = JSONObject.toJSONString(data);
+        logger.info("设备升级:"+s);
+        template.convertAndSend("CalonDirectExchange", "CalonDirectRouting", s);
+    }
 
     @RequestMapping(value = "/add", method= RequestMethod.POST)
     public R queryDevice(@RequestBody DeviceEntity deviceEntity) throws Exception {
@@ -171,6 +177,8 @@ public class DeviceController extends AbstractController {
         deviceQuery.setUpdateUserName(user.getUsername());
         return R.ok(deviceService.updateOnOffByIds(deviceQuery));
     }
+
+
 
 
 }

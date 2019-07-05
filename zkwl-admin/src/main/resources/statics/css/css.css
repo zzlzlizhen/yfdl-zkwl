@@ -119,10 +119,10 @@ thead>th{text-align: center !important;}
 
 
 /*分组*/
-.weather{height: 18%; position: relative;}
+.weather{height: 135px; position: relative;}
 .gl_fu{margin:4px 2px 0px 0px !important;}
 .gl_bt{padding:5.5px 8px !important;}
-.hear_weather{width:23%;height:100%;float:left;text-align: left}
+.hear_weather{width:277px;height:100%;float:left;text-align: left}
 .hear_project{width: 80%;
     height: 34%;
     float: left;
@@ -148,7 +148,7 @@ thead>th{text-align: center !important;}
 .gross div{width:auto;height:auto;font-size:32px;text-indent: 0px;font-weight: bold;position: absolute;top:20%;left:66%;}
 .gross_map{width:60%;height:60%;right:-2%;position: absolute;bottom: 0;}
 .hear_map{width:67%;height:30%;background:rgba(24, 144, 255, 1);text-align: center;line-height:45px;color:#fff;font-size:14px;
-    text-indent: 0;margin-top:2.9%;cursor: pointer}
+    text-indent: 0;margin-top:15.9%;cursor: pointer}
 .status{width:80px;height:25px;position: absolute;right:0;top:0;background: rgba(26, 188, 156, 1);line-height:25px;
     text-align: center;font-size:14px;text-indent: 0;color:#fff;border-radius:0px 0px 0px 10px;}
 .checkbox_in{margin-top:18px !important;}
@@ -443,7 +443,7 @@ thead>th{text-align: center !important;}
     line-height: 47px;
     text-align: center;
     margin-top: 23px;
-    margin-left: 30px;
+    margin-left:1%;
     font-size: 15px;
     vertical-align: middle;
     color: #008E8E !important;
@@ -524,7 +524,7 @@ thead>th{text-align: center !important;}
     background:#fffffff !important;
 }
 .r_xiugai_six_tu{
-    width: 8%;
+    width: 25px;
     height: 130px;
     float: left;
     writing-mode: vertical-rl;
@@ -564,11 +564,78 @@ thead>th{text-align: center !important;}
     width: 46px;height: 39px
 }
 
+/*@media screen and (min-width: 800px) {*/
+    /*.gross {*/
+        /*width: 5%;*/
+        /*height: 84%;*/
+        /*float: left;*/
+        /*border-radius: 5px;*/
+        /*overflow: hidden;*/
+        /*margin: 0.7% 0.5% 0px 0px;*/
+        /*position: relative;*/
+    /*}*/
+/*}*/
+
+@media screen and (max-width:800px){
+
+        .gross {
+            width: 10%;
+            height: 59%;
+            float: left;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 3.7% 0.5% 0px 0px;
+            position: relative;
+        }
+        .gross>img{
+            width: 100%;
+            height: 89%;
+        }
+        .gross span{
+            font-size: 12px;
+            margin: 0;
+            float: unset;
+            line-height: 0;
+        }
+        .gross div{
+            top: 20%;
+            left: 90%;
+            font-size: 14px;
+        }
 
 
+    }
 
 
+/*@media screen and (min-width:1000px){*/
 
+    /*.gross {*/
+        /*width: 10%;*/
+        /*height: 59%;*/
+        /*float: left;*/
+        /*border-radius: 5px;*/
+        /*overflow: hidden;*/
+        /*margin: 3.7% 0.5% 0px 0px;*/
+        /*position: relative;*/
+    /*}*/
+    /*.gross>img{*/
+        /*width: 100%;*/
+        /*height: 89%;*/
+    /*}*/
+    /*.gross span{*/
+        /*font-size: 12px;*/
+        /*margin: 0;*/
+        /*float: unset;*/
+        /*line-height: 0;*/
+    /*}*/
+    /*.gross div{*/
+        /*top: 20%;*/
+        /*left: 90%;*/
+        /*font-size: 14px;*/
+    /*}*/
+
+
+/*}*/
 
 
 

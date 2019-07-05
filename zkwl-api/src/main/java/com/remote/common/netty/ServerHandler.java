@@ -16,6 +16,7 @@ import io.netty.channel.ChannelId;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
+import io.netty.handler.timeout.IdleStateHandler;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +29,7 @@ import java.lang.reflect.Field;
 import java.net.InetSocketAddress;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 import static com.remote.device.util.MapKey.mapKey;
 
@@ -146,7 +148,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         String clientIp = insocket.getAddress().getHostAddress();
 
         ChannelId channelId = ctx.channel().id();
-        log.info("客户端关闭连接:");
         //包含此客户端才去删除
         if (CHANNEL_MAP.get(channelId.asShortText()) != null) {
             //删除连接
@@ -459,21 +460,17 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
 
         String socketString = ctx.channel().remoteAddress().toString();
-
         if (evt instanceof IdleStateEvent) {
             IdleStateEvent event = (IdleStateEvent) evt;
             if (event.state() == IdleState.READER_IDLE) {
-                CHANNEL_MAP.remove(ctx.channel().id().asShortText());
                 log.info("Client: " + socketString + " READER_IDLE 读超时");
-                ctx.disconnect();
+                ctx.close();
             } else if (event.state() == IdleState.WRITER_IDLE) {
-                CHANNEL_MAP.remove(ctx.channel().id().asShortText());
                 log.info("Client: " + socketString + " WRITER_IDLE 写超时");
-                ctx.disconnect();
+                ctx.close();
             } else if (event.state() == IdleState.ALL_IDLE) {
-                CHANNEL_MAP.remove(ctx.channel().id().asShortText());
                 log.info("Client: " + socketString + " ALL_IDLE 总超时");
-                ctx.disconnect();
+                ctx.close();
             }
         }
     }

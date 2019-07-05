@@ -33,4 +33,9 @@ public interface HistoryDayMapper extends BaseMapper<HistoryDay> {
      * @return List<HistoryDay>
      **/
     List<HistoryDay> queryHistoryDayOther(@Param("deviceCode") String deviceCode, @Param("time")String time);
+
+    /**
+     * 通过当前用户所有用户的设备codes查询总放电量
+     * */
+    Double getTotalDischarge(@Param("deviceCodes") List<String> deviceCodes);
 }

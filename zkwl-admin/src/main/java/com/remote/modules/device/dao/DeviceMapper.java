@@ -3,10 +3,12 @@ package com.remote.modules.device.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.remote.modules.device.entity.DeviceEntity;
 import com.remote.modules.device.entity.DeviceQuery;
+import com.remote.modules.sys.entity.SysUserEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface DeviceMapper extends BaseMapper<DeviceEntity> {
@@ -58,7 +60,7 @@ public interface DeviceMapper extends BaseMapper<DeviceEntity> {
      * @Param projectIds
      * @return List<DeviceEntity>
      **/
-    List<DeviceEntity> queryDeviceGroupByCity(@Param("projectIds") List<String> projectIds);
+    List<Map<String,Integer>> queryDeviceGroupByCity(@Param("userIds") List<Long> userIds);
     /*
      * @Author zhagnwenping
      * @Description 批量开关灯
@@ -75,4 +77,12 @@ public interface DeviceMapper extends BaseMapper<DeviceEntity> {
      * 通过组id查询所有的设备code
      * */
     List<String> queryByGroupId(@Param("groupId")String groupId);
+    /**
+     * 通过当前用户id查询所有子孙用户的设备数量
+     * */
+    Integer getDeviceCount(@Param("curUid")List<Long> curUid);
+    /**
+     * 通过当前用户查询所有子孙用户的设备故障数量
+     */
+    Integer getDevFailNum(@Param("curUid")List<Long> curUser);
 }

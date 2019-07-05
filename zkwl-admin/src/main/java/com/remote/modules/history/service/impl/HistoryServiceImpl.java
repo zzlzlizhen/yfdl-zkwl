@@ -124,4 +124,12 @@ public class HistoryServiceImpl implements HistoryService {
     public int deleteBatchYear() {
         return historyYearMapper.deleteBatchYear();
     }
+
+    /**
+     * 通过当前设备codes查询所有设备的放电量
+     * */
+    @Override
+    public Double getTotalDischarge(List<String> deviceCode) {
+        return historyDayMapper.getTotalDischarge(deviceCode);
+    }
 }

@@ -7,6 +7,12 @@
     <link rel="stylesheet" href="${request.contextPath}/statics/css/jquery_page.css">
     <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
     <script src="${request.contextPath}/statics/js/modules/project/jquery_page.js"></script>
+    <script type="text/javascript">
+        document.documentElement.style.fontSize = innerWidth / 16 + 'px';
+        onresize = function () {
+            document.documentElement.style.fontSize = innerWidth / 16 + 'px';
+        }
+    </script>
 </head>
 <style>
     .table_m table tr td a{
@@ -21,8 +27,9 @@
     <!--分组天气-->
     <div class="hear weather" >
         <!--天气-->
+        <div class="r_xiugai_six_tu">正常运行</div>
         <div class="hear_weather">
-            <div class="r_xiugai_six_tu">正常运行</div>
+
            <div class="hear_project" id="hear_project"></div>
            <div class="hear_city hear_city_a">
               <div>
@@ -69,7 +76,7 @@
             <!--<img src="${request.contextPath}/statics/image/map.svg" class="gross_map"/>-->
         </div>
 
-      <div style="float: right;width: 16%">
+      <div style="float: right;width: 15%">
           <div class="hear_map" ><img src="${request.contextPath}/statics/image/r_sxditu.png" alt="">地图</div>
       </div>
 
@@ -234,5 +241,6 @@
         </div>
     </div>
     <script src="${request.contextPath}/statics/js/modules/grouping/grouping.js"></script>
+
 </body>
 </html>

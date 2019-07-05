@@ -54,6 +54,9 @@
         and device_code = #{deviceCode}
     </select>
 
+    <select id="getTotalDischarge" resultType="java.lang.Double">
+        select sum(discharge_capacity) from history_day where device_code in #{deviceCodes}
+    </select>
 
     <delete id="deleteBatchDay">
         delete from history_day where create_time &lt; date_add(curdate(),INTERVAL -1 month)

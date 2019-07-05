@@ -10,8 +10,11 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.handler.timeout.IdleStateHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -38,8 +41,12 @@ public class NettyServer implements Runnable{
                     .handler(new LoggingHandler(LogLevel.INFO))
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         protected void initChannel(SocketChannel sc) throws Exception {
-                            //5s没有交互，就会关闭channel
-                            sc.pipeline().addLast(new ServerHandler());   //服务端业务处理类
+                            // 超时处理
+                            sc.pipeline().addLast(new IdleStateHandler(60,0,0,TimeUnit.SECONDS));
+                            /**
+                             * 自定义ChannelInboundHandlerAdapter
+                             */
+                            sc.pipeline().addLast(new ServerHandler());
                         }
                     });
             ChannelFuture cf = null;

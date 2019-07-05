@@ -89,20 +89,21 @@
         </where>
     </select>
 
-    <select id="queryDeviceGroupByCity" resultMap="BaseResultMap" >
+    <select id="queryDeviceGroupByCity" resultType="java.util.HashMap" >
         SELECT
         city_name,count(1) as counts
         FROM
         fun_device
         <where>
             is_del = 0
-            <if test="projectIds !=null and projectIds.size()!= 0">
-                and project_id in
-                <foreach collection="projectIds" index="index" item="item" open="(" separator="," close=")">
+            <if test="userIds !=null and userIds.size()!= 0">
+                and create_user in
+                <foreach collection="userIds" index="index" item="item" open="(" separator="," close=")">
                     #{item}
                 </foreach>
             </if>
         </where>
+        group by city_name
     </select>
 
     <update id="deleteDevice" parameterType="com.remote.modules.device.entity.DeviceQuery">
@@ -281,5 +282,11 @@
     </select>
     <select id="queryByGroupId" resultType="java.lang.String">
         select device_code from fun_device where group_id=#{groupId}
+    </select>
+    <select id="getDeviceCount" resultType="java.lang.Integer">
+        select count(id) from fun_device where update_user in #{curUid}
+    </select>
+    <select id="getDevFailNum" resultType="java.lang.Integer">
+        select count(id) from fun_device where device_status = 3 and update_user in #{curUid}
     </select>
 </mapper>

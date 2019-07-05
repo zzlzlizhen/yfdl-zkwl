@@ -2,6 +2,8 @@ package com.remote.modules.history.service;
 
 import com.remote.modules.history.entity.QueryHistory;
 
+import java.util.List;
+
 
 public interface HistoryService {
     /*
@@ -49,4 +51,8 @@ public interface HistoryService {
      * @return int
      **/
     int deleteBatchYear();
+    /**
+     * 通过当前用户的所有设备codes获取总放电量
+     * */
+    Double getTotalDischarge(List<String> deviceCode);
 }

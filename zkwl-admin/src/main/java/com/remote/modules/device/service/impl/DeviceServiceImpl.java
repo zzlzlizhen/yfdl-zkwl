@@ -140,17 +140,11 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public List<DeviceEntity> queryCountGroupByCity(Long userId) {
+    public List<Map<String,Integer>> queryCountGroupByCity(Long userId) {
         List<SysUserEntity> userList = sysUserService.queryAllLevel(userId);
         if(CollectionUtils.isNotEmpty(userList)){
             List<Long> userIds = userList.parallelStream().map(sysUserEntity -> sysUserEntity.getUserId()).collect(Collectors.toCollection(ArrayList::new));
-            ProjectQuery projectQuery = new ProjectQuery();
-            projectQuery.setUserIds(userIds);
-            List<ProjectEntity> list = projectMapper.queryProjectByUserIds(projectQuery);
-            if(CollectionUtils.isNotEmpty(list)){
-                List<String> projectIds = list.parallelStream().map(projectEntity -> projectEntity.getProjectId()).collect(Collectors.toCollection(ArrayList::new));
-
-            }
+            return deviceMapper.queryDeviceGroupByCity(userIds);
         }
         return null;
     }
@@ -207,5 +201,19 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public List<String> queryByGroupId(String groupId) {
         return this.deviceMapper.queryByGroupId(groupId);
+    }
+
+    /**
+     * 通过当前用户id查询所有用户的设备数量
+     * */
+    @Override
+    public Integer getDeviceCount(List<Long> curUid) {
+
+        return this.deviceMapper.getDeviceCount(curUid);
+    }
+
+    @Override
+    public Integer getDevFailNum(List<Long> curUser) {
+        return this.deviceMapper.getDevFailNum(curUser);
     }
 }
