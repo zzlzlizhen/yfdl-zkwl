@@ -33,4 +33,39 @@ public interface DeviceService {
      * @return PageInfo<DeviceEntity>
      **/
     PageInfo<DeviceEntity> queryDevice(DeviceQuery deviceQuery);
+
+    /*
+     * @Author zhangwenping
+     * @Description 查询设备信息 不分页
+     * @Date 13:29 2019/6/6
+     * @Param deviceQuery
+     * @return  List<DeviceEntity>
+     **/
+    List<DeviceEntity> queryDeviceNoPage(DeviceQuery deviceQuery);
+    /*
+     * @Author zhangwenping
+     * @Description 删除设备
+     * @Date 16:52 2019/7/3
+     * @Param
+     * @return
+     **/
+    boolean deleteDevice(DeviceQuery deviceQuery);
+
+    /*
+     * @Author zhangwenping
+     * @Description 修改设备信息
+     * @Date 15:32 2019/6/5
+     * @Param deviceEntity
+     * @return boolean
+     **/
+    boolean updateById(DeviceEntity deviceEntity);
+
+    /*
+     * @Author chengpunan
+     * @Description //TODO
+     * @Date 10:10 2019/6/24
+     * @Param
+     * @return
+     **/
+    int updateOnOffByIds(DeviceQuery deviceQuery);
 }

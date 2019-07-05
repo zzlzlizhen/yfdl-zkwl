@@ -8,53 +8,70 @@
     <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
     <script src="${request.contextPath}/statics/js/modules/project/jquery_page.js"></script>
 </head>
+<style>
+    .table_m table tr td a{
+        margin-left:8%;
+    }
+    .table_grouping table tr td, .table_grouping ul li{
+        width: 7%;
+    }
+</style>
+
 <body style="position: relative">
     <!--分组天气-->
     <div class="hear weather" >
         <!--天气-->
         <div class="hear_weather">
+            <div class="r_xiugai_six_tu">正常运行</div>
            <div class="hear_project" id="hear_project"></div>
            <div class="hear_city hear_city_a">
-               <span>所属城市：</span>
-               <p id="weather" style="margin-right:5%"></p>
-               <span>天气信息：</span>
-               <img src="" style="display: inline-block;width: 20px;height:20px;float: left;margin-top: 9px;" id="img">
-               <p id="T_an"> </p>
+              <div>
+                  <img src="${request.contextPath}/statics/image/rdiquz.png" alt=""  class="r_sox_ioc">
+                  <span>所属城市：</span>
+                  <p id="weather" style="margin-right:5%"></p>
+              </div>
+             <div>
+                 <img src="${request.contextPath}/statics/image/tianqi.png" alt="" class="r_sox_ioc">
+                 <span>天气信息：</span>
+                 <img src=""  id="img" class="r_yun_sx" >
+                 <p id="T_an"> </p>
+             </div>
            </div>
-           <div class="hear_city hear_city_b">
+           <div class="hear_city hear_city_b r_sdx_box" >
+               <img src="${request.contextPath}/statics/image/yonghu.png" alt="" class="r_sox_ioc">
                <span>用户：</span>
                <p id="hear_city_b"></p>
            </div>
         </div>
         <!-- 总量-->
         <div class="gross gross_a">
-            <img src="${request.contextPath}/statics/image/alarm.svg" class="gross_alarm"/>
+            <img src="${request.contextPath}/statics/image/zongzhuangjishuliang.png" class="gross_alarm"/>
             <span>总装机数量</span>
             <div id="sumCount">0</div>
-            <img src="${request.contextPath}/statics/image/map.svg" class="gross_map"/>
+            <!--<img src="${request.contextPath}/statics/image/map.svg" class="gross_map"/>-->
         </div>
         <div class="gross gross_b">
-            <img src="${request.contextPath}/statics/image/alarm.svg" class="gross_alarm"/>
+            <img src="${request.contextPath}/statics/image/wangguan.png" class="gross_alarm"/>
             <span>网关数量</span>
             <div id="gatewayCount">0</div>
-            <img src="${request.contextPath}/statics/image/map.svg" class="gross_map"/>
+            <!--<img src="${request.contextPath}/statics/image/map.svg" class="gross_map"/>-->
         </div>
         <div class="gross gross_c">
-            <img src="${request.contextPath}/statics/image/alarm.svg" class="gross_alarm"/>
+            <img src="${request.contextPath}/statics/image/guzhang.png" class="gross_alarm"/>
             <span>故障数量</span>
             <div id="faultCount">0</div>
-            <img src="${request.contextPath}/statics/image/map.svg" class="gross_map"/>
+            <!--<img src="${request.contextPath}/statics/image/map.svg" class="gross_map"/>-->
         </div>
         <div class="gross gross_d">
-            <img src="${request.contextPath}/statics/image/alarm.svg" class="gross_alarm"/>
+            <img src="${request.contextPath}/statics/image/baojing.png" class="gross_alarm"/>
             <span>报警数量</span>
             <div id="callPoliceCount">0</div>
-            <img src="${request.contextPath}/statics/image/map.svg" class="gross_map"/>
+            <!--<img src="${request.contextPath}/statics/image/map.svg" class="gross_map"/>-->
         </div>
 
-        <div class="hear_map" style="margin-right: 0.5%;">地图</div>
-        <div class="hear_map" id="hear_control">控制面板</div>
-        <div class="status" id="status">运行正常</div>
+      <div style="float: right;width: 16%">
+          <div class="hear_map" ><img src="${request.contextPath}/statics/image/r_sxditu.png" alt="">地图</div>
+      </div>
 
     </div>
 
@@ -87,10 +104,10 @@
                 <option>5</option>
             </select>
         </div>
-        <a class="btn btn-primary btn_m gl_bt" id="proje_search"><i class="glyphicon glyphicon-search gl_fu"></i>搜索</a>
-        <a class="btn btn-primary btn_m" id="add_equipments">添加设备</a>
+        <a class="btn btn-primary btn_m gl_bt r_top_fon" id="proje_search"><i class="glyphicon glyphicon-search gl_fu"></i>搜索</a>
+        <a class="btn btn-primary btn_m r_top_fon" id="add_equipments"><img src="${request.contextPath}/statics/image/tianjia.png" alt="">添加设备</a>
 <!--        <a class="btn btn-primary btn_m gl_bt" id="refresh"><i class="glyphicon glyphicon-repeat gl_fu"></i>刷新</a>-->
-        <a class="btn btn-primary btn_m" id="grouping">分组管理</a>
+        <a class="btn btn-primary btn_m r_top_fon" id="grouping"><img src="${request.contextPath}/statics/image/fenzu.png" alt="">分组管理</a>
     </div>
 
 
@@ -117,10 +134,19 @@
 
     <!-- 移动分组-->
     <div class="move_a">
+        <img src="${request.contextPath}/statics/image/zhuyi.png" alt="">
         <div>已选择</div>
         <span id="mo_sp"></span>
-        <input type="button" class="deleteAll" value="删除">
-        <input type="button" class="mobile_pac" value="移动分组" >
+      <p  class="r_span">
+          <img src="${request.contextPath}/statics/image/shanchu-1.png" alt="">
+          <!--<input type=""value="删除">-->
+          <i class="deleteAll" >删除</i>
+      </p>
+    <p  class="r_span">
+         <img src="${request.contextPath}/statics/image/yidong.png" alt="">
+        <!--<input type="" value="移动分组" >-->
+        <i class="mobile_pac" style=" font-style:normal">移动分组</i>
+    </p>
     </div>
     <!--分页-->
     <div class="box">

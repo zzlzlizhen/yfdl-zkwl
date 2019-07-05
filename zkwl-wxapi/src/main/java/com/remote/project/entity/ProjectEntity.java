@@ -1,6 +1,7 @@
 package com.remote.project.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.remote.sys.entity.SysUserEntity;
 import lombok.Data;
 
 import java.util.Date;
@@ -42,5 +43,9 @@ public class ProjectEntity {
      * 纬度
      */
     private String latitude;
+
+    private Long userId;
+
+    private String userName;
 
 }

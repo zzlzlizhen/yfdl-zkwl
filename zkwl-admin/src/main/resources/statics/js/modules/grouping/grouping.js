@@ -66,7 +66,7 @@ $(function(){
                 "pageNum":pagesa
             }),
             success: function (res) {
-                console.log("数据")
+                console.log("项目下设备数据")
                 console.log(res)
                 pages=res.data.pages;
                 pageSize=res.data.pageSize;
@@ -152,25 +152,45 @@ $(function(){
                     } else  {
                         light = light;
                     }
+                    //信号状态
+                    var signalState=res.data.list[i].signalState
+                    if(signalState == null){
+                        signalState=""
+                    }else if(signalState == 0){
+                        signalState="-0"
+                    }else if(signalState == 1){
+                        signalState="-1"
+                    }else if(2 <= signalState <= 30){
+                        signalState="-2"
+                    }else if(31 <= signalState <= 51){
+                        signalState="-31"
+                    }else if(52 <= signalState <= 99){
+                        signalState="-99"
+                    }
                     html += "<tr>\n" +
-                        "<td id="+res.data.list[i].deviceId+" style=\"width:4%;\"> <input type= \"checkbox\" class=\"checkbox_in  checkbox_i\"> </td>\n" +
+                        "<td id="+res.data.list[i].deviceId+" style=\"width:4%;\"> <input type= \"checkbox\" name='clk' class=\"checkbox_in  checkbox_i\"> </td>\n" +
                         "<td id='r_nm'>"+res.data.list[i].deviceCode+"</td>\n" +
                         "<td style=\"width:10%;\" id='r_namem'>"+res.data.list[i].deviceName+"</td>\n" +
-                        "<td>"+res.data.list[i].groupName+"</td>\n" +
+                        "<td class='grod' id="+res.data.list[i].groupId+">"+res.data.list[i].groupName+"</td>\n" +
                         "<td>"+res.data.list[i].deviceType+"</td>\n" +
                         "<td>"+photocellState+" </td>\n" +
                         "<td>"+batteryState+"</td>\n" +
                         "<td>"+loadState+"</td>\n" +
-                        "<td>"+res.data.list[i].signalState+"</td>\n" +
+                        "<td>"+signalState+"</td>\n" +
                         "<td>"+ runState+"</td>\n" +
                         "<td>"+light+"</td>\n" +
                         "<td>"+communicationType+"</td>\n" +
-                        "<td id="+res.data.list[i].deviceId+" style=\"width:10%;\">" +
-                        "<a href=\"#\" class='particulars' id="+res.data.list[i].deviceId+"><span class=\"glyphicon glyphicon-search\"></span></a>\n" +
-                        "<a href=\"#\" class='ma_p' id="+res.data.list[i].longitude+","+res.data.list[i].latitude+"><span class=\"glyphicon glyphicon-picture\"></span></a>\n" +
-                        "<a href='' class='deleteq'><span class=\"glyphicon glyphicon-trash\"></span></a>\n" +
+                        "<td id="+res.data.list[i].deviceId+" >" +
+                        "<a href=\"#\" class='particulars_a' ><img src='/remote-admin/statics/image/r_kongzhi.svg' alt='' class='r_erkongzhi'></a>\n" +
+                        "<a href=\"#\" class='particulars' id="+res.data.list[i].deviceId+"><img src='/remote-admin/statics/image/bianji.png' alt=''></a>\n" +
+                        "<a href=\"#\" class='ma_p' id="+res.data.list[i].longitude+","+res.data.list[i].latitude+"><img src='/remote-admin/statics/image/ditu.svg' alt=''style='width: 25px;height:25px;'></a>\n" +
+                        "<a href='' class='deleteq'><img src='/remote-admin/statics/image/shanchu.png' alt=''></a>\n" +
                         "</td>\n" +
                         "</tr>"
+                //修改样式<span class="glyphicon glyphicon-search"></span>
+                    //<span class="glyphicon glyphicon-picture"></span>
+                    //<span class="glyphicon glyphicon-trash"></span>
+
                 }
                 $("#div").append(html);
                 // 地图定位
@@ -180,17 +200,25 @@ $(function(){
                     location.href =searchUrl;
                 })
 
+                //控制面板
+                $(".particulars_a").click(function(){
+                    var deviceCode=$(this).parent().siblings("#r_nm").html();
+                    var grod=$(this).parent().siblings(".grod").attr('id');
+                    var deviceId=$(this).parent().attr('id');
+                    var searchUrl=encodeURI('../control/control.html?deviceCode='+deviceCode+"&grod="+grod+"&deviceId="+deviceId)
+                    location.href =searchUrl;
+                })
+
                 //移动分组删除
                 var arr=[]
-                var ass=[]
+
                 $(".checkbox_i").click(function () {
                     var che_c=$(this).prop('checked');
                     if(che_c == true){
                         $("#checkbox[name=all]:checkbox").prop('checked', true);
                         var devId=$(this).parent().attr('id');
                             arr.push(devId)
-                        var deviceCode=$(this).parent().siblings("#r_nm").html();
-                            ass.push(deviceCode)
+
                         var len=arr.length;
                         $("#mo_sp").html(len+"项")
                         $(".move_a").show()
@@ -206,21 +234,12 @@ $(function(){
                         var devId=$(this).parent().attr('id');
                         var index = arr.indexOf(devId);
                             arr.splice(index, 1);
-                        var deviceCode=$(this).parent().siblings("#r_nm").html();
-                        var index1 = ass.indexOf(deviceCode);
-                            ass.splice(index1, 1);
 
                         var len=arr.length;
                         $("#mo_sp").html(len+"项")
                     }
                 })
-                //控制面板
-                $("#hear_control").click(function(){
-                    console.log("ass++++++++++++++++++++")
-                    console.log(ass)
-                    var searchUrl=encodeURI('../control/control.html?deviceCode='+ass)
-                    location.href =searchUrl;
-                })
+
                 // 批量删除
                 $(".deleteAll").click(function(){
                     if(arr.length <=0 ){
@@ -504,6 +523,8 @@ $(function(){
                         $("#img").attr("src","/remote-admin/statics/image/yintian.svg")
                     }else if(data.data.forecast[0].type== "雨夹雪"){
                         $("#img").attr("src","/remote-admin/statics/image/yujiaxue.svg")
+                    }else if(data.data.forecast[0].type== "雷阵雨"){
+                        $("#img").attr("src","/remote-admin/statics/image/zhenyu.svg")
                     }
 
                      $("#T_an").html(T_an)

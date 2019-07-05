@@ -15,6 +15,8 @@ public class ProjectQuery {
 
     private long userId;
 
+    private String parentId;
+
     private Integer pageSize;
 
     private String projectName;

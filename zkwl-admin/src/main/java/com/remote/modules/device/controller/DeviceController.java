@@ -5,14 +5,13 @@ import com.github.pagehelper.PageInfo;
 import com.remote.common.utils.DataUtils;
 import com.remote.common.utils.R;
 import com.remote.common.utils.StringUtils;
-import com.remote.common.utils.mapUtils;
+import com.remote.common.utils.MapUtils;
 import com.remote.modules.device.entity.DeviceEntity;
 import com.remote.modules.device.entity.DeviceQuery;
 import com.remote.modules.device.service.DeviceService;
 import com.remote.modules.sys.controller.AbstractController;
 import com.remote.modules.sys.entity.SysUserEntity;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -66,7 +65,7 @@ public class DeviceController extends AbstractController {
         List<Integer> key = new ArrayList<>();
         if(CollectionUtils.isNotEmpty(data.getQaKey())){
             for(String str : data.getQaKey()){
-                key.add(mapUtils.map.get(str));
+                key.add(MapUtils.map.get(str));
             }
         }
         data.setKey(key);

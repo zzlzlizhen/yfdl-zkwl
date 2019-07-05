@@ -88,7 +88,7 @@ public class UserRealm extends AuthorizingRealm {
 			throw new LockedAccountException("账号已被锁定,请联系管理员");
 		}
 		if(user.getCreateTime() != null && user.getDeadline() != null){
-			if(user.getCreateTime().compareTo(user.getDeadline()) == -1){
+			if(user.getCreateTime().compareTo(user.getDeadline()) == 1){
 				throw new LockedAccountException("账号已被锁定,请联系管理员");
 			}
 		}

@@ -3,17 +3,23 @@
 <head>
     <title>賬戶管理</title>
     <#include "/header.html">
-        <link rel="stylesheet" href="${request.contextPath}/statics/css/css.css">
         <link rel="stylesheet" href="${request.contextPath}/statics/css/jquery_page.css">
         <link rel="stylesheet" href="${request.contextPath}/statics/css/bootstrap.min.css">
+        <link rel="stylesheet" href="${request.contextPath}/statics/css/css.css">
         <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
         <script src="${request.contextPath}/statics/js/modules/project/jquery_page.js"></script>
         <script src="${request.contextPath}/statics/libs/ajaxupload.js"></script>
     <style>
         html{ overflow: hidden}
+        .project_he>a{
+            line-height: 33px;
+        }
     </style>
 </head>
 <body>
+<div class="hear">
+    <img src="${request.contextPath}/statics/image/dingwei.png" alt="">账户管理
+</div>
 <div class="project_he" >
     <span class="hear_w">账号ID：</span>
     <div class="form-group col-sm-2 form_input">
@@ -35,8 +41,10 @@
             <option>1</option>
         </select>
     </div>
-    <a class="btn btn-primary btn_m gl_bt" id="proje_search"><i class="glyphicon glyphicon-search gl_fu"></i>搜索</a>
-    <a class="btn btn-primary btn_m btn_m_new" ><i class="fa fa-plus"></i>&nbsp;新建</a>
+    <a class="btn btn-primary btn_m gl_bt" id="proje_search"><img src="${request.contextPath}/statics/image/rsousu.svg" alt="">搜索</a>
+    <!--删除的样式<i class="glyphicon glyphicon-search gl_fu"></i>-->
+    <a class="btn btn-primary btn_m btn_m_new" ><img src="${request.contextPath}/statics/image/tianjia.png" alt="">新建</a>
+    <!--删除的样式<i class="fa fa-plus"></i>-->
 </div>
 
 <div class="table_m table_m_Z" style="max-height:100%;">

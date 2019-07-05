@@ -4,6 +4,10 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>智控物联</title>
+    <style>
+
+
+    </style>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!--头部logo-->
@@ -41,16 +45,19 @@
           </a>
           <div class="navbar-custom-menu" style="margin-top:7px;">
             <ul class="nav navbar-nav">
+
+                <li><a  href="#modules/informa/informa.html" class="navbar_m r_lingdan_l" style="padding: 0;margin-top: 10px;margin-right: 10px;" ><img src="${request.contextPath}/statics/image/tongzhi.png" alt=""></a></li>
+                <!--样式修改-->
                 <li id="nav_a">
-                    <a href="javascript:;"  class="navbar_m"><i class="glyphicon glyphicon-user"></i>admin</a>
-                    <div class="setting">
-                        <span id="set_p" style="border-bottom: 1px solid #ccc">基本设置</span>
+                    <a href="javascript:;"  class="navbar_m"><span class=" r_ioc"  ></span></a>
+                    <div class="setting" style="width: 90px;margin-left: -15px;">
+                        <span id="set_p" style="border-bottom: 1px solid #ccc;">基本设置</span>
                         <span id="feedback">我要反馈</span>
                     </div>
                 </li>
-                <li><a  href="#modules/informa/informa.html" class="navbar_m" ><i class="glyphicon glyphicon-bell"></i></a></li>
 <!--                <li><a  @click="updatePassword"  class="navbar_m"><i class="glyphicon glyphicon-bell"></i></a></li>-->
                 <li><a href="logout"  class="navbar_m"><i class="glyphicon glyphicon-off"></i></a></li>
+                <li><a  class="navbar_m"><i class="r_touling"></i><img src="">  管理员</a></li>
             </ul>
           </div>
         </nav>

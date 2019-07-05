@@ -193,6 +193,7 @@ $.ajax({
     url:  'sys/user/baseInfo',
     type: "POST",
     success: function (res) {
+        console.log("修改账户信息")
         console.log(JSON.stringify(res));
         if (res.code == "200") {
         	console.log(res)
@@ -310,7 +311,7 @@ alert("输入不能为空")
             "&username=" + r_rlma +
             "&realName=" + r_rlmb +
             "&email=" + r_rlmc +
-            "&securityCode=" + r_rlmd  ,
+            "&mobile=" + r_rlmd  ,
             success: function (res) {
                 console.log(JSON.stringify(res));
                 if (res.code == "200") {

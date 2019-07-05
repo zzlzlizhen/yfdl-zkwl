@@ -104,7 +104,7 @@ public class Utils {
         UpdateVersion version = new UpdateVersion();
         try {
             file = new File("/home/test.bin");
-
+            //file = new File("D:\\test1.bin");
             fileInputStream = new FileInputStream(file);
             dataInputStream = new DataInputStream(fileInputStream);
             //建立缓冲文本输入流

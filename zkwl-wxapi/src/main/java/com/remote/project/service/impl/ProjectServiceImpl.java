@@ -15,10 +15,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -48,7 +45,10 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public PageInfo<ProjectEntity> queryProjectByUserIds(ProjectQuery projectQuery) {
-        List<SysUserEntity> userList = sysUserService.queryAllLevel(projectQuery.getUserId());
+        SysUserEntity sysUserEntitys = new SysUserEntity();
+        sysUserEntitys.setUserId(projectQuery.getUserId());
+        sysUserEntitys.setAllParentId(projectQuery.getParentId());
+        List<SysUserEntity> userList = sysUserService.queryAllChild(sysUserEntitys);
         if(CollectionUtils.isNotEmpty(userList)){
             List<Long> transform = userList.parallelStream().map(sysUserEntity -> sysUserEntity.getUserId()).collect(Collectors.toCollection(ArrayList::new));
             projectQuery.setUserIds(transform);
@@ -131,4 +131,15 @@ public class ProjectServiceImpl implements ProjectService {
         return data;
     }
 
+
+    @Override
+    public boolean delProject(List<String> projectList,Long updateUser) {
+        return projectMapper.delProject(projectList,updateUser,new Date()) > 0 ? true : false;
+    }
+
+
+    @Override
+    public boolean updateProject(ProjectEntity projectEntity) {
+        return projectMapper.updateProjectById(projectEntity) > 0 ? true : false;
+    }
 }

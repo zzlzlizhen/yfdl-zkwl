@@ -6,6 +6,8 @@ import com.remote.history.entity.HistoryMouth;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 @Mapper
 public interface HistoryMouthMapper extends BaseMapper<HistoryMouth> {
     /*
@@ -23,5 +25,5 @@ public interface HistoryMouthMapper extends BaseMapper<HistoryMouth> {
      * @Param deviceCode time
      * @return int
      **/
-    int queryHistoryMouth(@Param("deviceCode") String deviceCode,@Param("time") String time);
+    List<HistoryMouth> queryHistoryMouth(@Param("deviceCode") String deviceCode, @Param("time") String time);
 }

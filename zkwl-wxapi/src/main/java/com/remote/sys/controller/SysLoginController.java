@@ -44,6 +44,8 @@ public class SysLoginController {
 		if(sysUserEntity == null){
 			return R.error("密码不存在");
 		}
+		sysUserEntity.setCurUid(sysUserEntity.getUserId());
+		sysUserEntity.setCurAllParentId(sysUserEntity.getAllParentId());
 		return R.ok().put("user",sysUserEntity);
 	}
 }

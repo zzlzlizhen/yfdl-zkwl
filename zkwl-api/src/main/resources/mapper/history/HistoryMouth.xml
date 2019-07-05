@@ -27,9 +27,9 @@
     internal_temperature,visitors_flowrate,induction_frequency,meteorological,create_time,fillings_number,discharge_number
     </sql>
 
-    <select id="queryHistoryMouth" resultType="java.lang.Integer">
+    <select id="queryHistoryMouth" resultMap="BaseResultMap">
         SELECT
-            count(1)
+        <include refid="Base_Column_List"/>
         FROM
             history_mouth
         where device_code = #{deviceCode}
@@ -49,6 +49,6 @@
           meteorological = meteorological + #{historyMouth.meteorological},
           fillings_number = fillings_number + #{historyMouth.fillingsNumber},
           discharge_number = discharge_number + #{historyMouth.dischargeNumber}
-          where device_code = #{historyMouth.deviceCode} and DATE_FORMAT(create_time,'%Y-%m-%d') = #{historyMouth.time}
+          where mouth_id = #{historyMouth.mouthId}
     </update>
 </mapper>

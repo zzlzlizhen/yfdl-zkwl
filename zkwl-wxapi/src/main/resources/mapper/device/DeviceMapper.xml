@@ -9,7 +9,7 @@
         <result property="deviceCode" column="device_code"/>
         <result property="deviceName" column="device_name"/>
         <result property="projectId" column="project_id"/>
-        <result property="groupId" column="group_id"/>
+        <result property="groupId" column="grqueryDeviceByGroupCountoup_id"/>
         <result property="deviceType" column="device_type"/>
         <result property="photocellState" column="photocell_state"/>
         <result property="batteryState" column="battery_state"/>
@@ -89,7 +89,175 @@
         </where>
     </select>
 
+    <select id="queryDeviceByGroupCount" resultMap="BaseResultMap" >
+        select
+        <if test="groupIds !=null and groupIds.size()!= 0">
+            group_id,
+        </if>
+        <if test="projectIds !=null and projectIds.size()!= 0">
+            project_id,
+        </if>
+        count(1) as counts from fun_device
+        where
+        is_del = 0
+        <if test="groupIds !=null and groupIds.size()!= 0">
+            and group_id in
+            <foreach collection="groupIds" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="projectIds !=null and projectIds.size()!= 0">
+            and project_id in
+            <foreach collection="projectIds" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="deviceStatus != 0">
+            and device_status = #{deviceStatus}
+        </if>
+        <if test="projectIds !=null and projectIds.size()!= 0">
+            group by project_id
+        </if>
+        <if test="groupIds !=null and groupIds.size()!= 0">
+            group by group_id
+        </if>
+    </select>
+
+    <update id="deleteDevice" parameterType="com.remote.device.entity.DeviceQuery">
+        update fun_device set
+        <if test="deviceQuery.groupId != null">
+            group_id = #{deviceQuery.groupId},
+        </if>
+        <if test="deviceQuery.isDel != null">
+            is_del = #{deviceQuery.isDel},
+        </if>
+        update_user = #{deviceQuery.updateUser},update_time = #{deviceQuery.updateTime}
+        <where>
+            <if test="deviceQuery.deviceList !=null and deviceQuery.deviceList.size()!= 0">
+                and device_id in
+                <foreach collection="deviceQuery.deviceList" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </update>
 
 
+    <update id="updateById" parameterType="com.remote.device.entity.DeviceEntity">
+        update fun_device
+        <set>
+            <if test="deviceCode != null">
+                device_code = #{deviceCode},
+            </if>
+            <if test="deviceName != null">
+                device_name = #{deviceName},
+            </if>
+            <if test="projectId != null">
+                project_id = #{projectId},
+            </if>
+            <if test="groupId != null">
+                group_id = #{groupId},
+            </if>
+            <if test="deviceType != null">
+                device_type = #{deviceType},
+            </if>
+            <if test="photocellState != null">
+                gateway_count = #{photocellState},
+            </if>
+            <if test="photocellState != null">
+                photocell_state = #{photocellState},
+            </if>
+            <if test="batteryState != null">
+                battery_state = #{batteryState},
+            </if>
+            <if test="loadState != null">
+                load_state = #{loadState},
+            </if>
+            <if test="signalState != null">
+                signal_state = #{signalState},
+            </if>
+            <if test="runState != null">
+                run_state = #{runState},
+            </if>
+            <if test="light != null">
+                light = #{light},
+            </if>
+            <if test="communicationType != null">
+                communication_type = #{communicationType},
+            </if>
+            <if test="onOff != null">
+                on_off = #{onOff},
+            </if>
+            <if test="longitude != null">
+                longitude = #{longitude},
+            </if>
+            <if test="latitude != null">
+                latitude = #{latitude},
+            </if>
+            <if test="isDel != null">
+                is_del = #{isDel},
+            </if>
+            <if test="batteryMargin != null">
+                battery_margin = #{batteryMargin},
+            </if>
+            <if test="batteryVoltage != null">
+                battery_voltage = #{batteryVoltage},
+            </if>
+            <if test="photovoltaicCellVoltage != null">
+                photovoltaic_cell_voltage = #{photovoltaicCellVoltage},
+            </if>
+            <if test="chargingCurrent != null">
+                charging_current = #{chargingCurrent},
+            </if>
+            <if test="chargingPower != null">
+                charging_power = #{chargingPower},
+            </if>
+            <if test="loadVoltage != null">
+                load_voltage = #{loadVoltage},
+            </if>
+            <if test="loadPower != null">
+                load_power = #{loadPower},
+            </if>
+            <if test="loadCurrent != null">
+                load_current = #{loadCurrent},
+            </if>
+            <if test="lightingDuration != null">
+                lighting_duration = #{lightingDuration},
+            </if>
+            <if test="morningHours != null">
+                morning_hours = #{morningHours},
+            </if>
+
+            update_user = #{updateUser},
+            update_time = now()
+        </set>
+        where device_id = #{deviceId}
+    </update>
+
+    <update id="updateOnOffByIds" parameterType="com.remote.device.entity.DeviceQuery">
+        update fun_device set
+        <if test="deviceQuery.onOff != null">
+            on_off = #{deviceQuery.onOff},
+        </if>
+        <if test="deviceQuery.light != null">
+            light = #{deviceQuery.light},
+        </if>
+        <if test="deviceQuery.lightingDuration != null">
+            lighting_duration = #{deviceQuery.lightingDuration},
+        </if>
+        <if test="deviceQuery.morningHours != null">
+            morning_hours = #{deviceQuery.morningHours},
+        </if>
+        update_user = #{deviceQuery.updateUser},update_time = now()
+        <where>
+            1 =1
+            <if test="deviceQuery.deviceList !=null and deviceQuery.deviceList.size()!= 0">
+                and device_id in
+                <foreach collection="deviceQuery.deviceList" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </update>
 
 </mapper>

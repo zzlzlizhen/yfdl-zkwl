@@ -7,6 +7,8 @@ import com.remote.history.entity.HistoryYear;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 
 @Mapper
 public interface HistoryYearMapper extends BaseMapper<HistoryYear> {
@@ -17,7 +19,7 @@ public interface HistoryYearMapper extends BaseMapper<HistoryYear> {
      * @Param deviceCode year month
      * @return int
      **/
-    int queryHistoryYear(@Param("deviceCode") String deviceCode, @Param("year") String year, @Param("month") String month);
+    List<HistoryYear> queryHistoryYear(@Param("deviceCode") String deviceCode, @Param("year") String year, @Param("month") String month);
     /*
      * @Author zhangwenping
      * @Description 修改年表统计数据

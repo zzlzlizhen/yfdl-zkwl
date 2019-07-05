@@ -82,18 +82,29 @@ $(function () {
                         "<td>" + callPoliceCount + "</td>\n" +
                         "<td>" + faultCount + "</td>\n" +
                         "<td id=" + res.data.list[i].groupId + ">" +
-                        "<a  class='modifier'><span class=\"glyphicon glyphicon-pencil\"></span></a>\n" +
-                        "<a  class='particulars'><span class=\"glyphicon glyphicon-search\"></span></a>\n" +
-                        "<a  href=\"#\" class='ma_p' id="+res.data.list[i].longitude+","+res.data.list[i].latitude+"><span class=\"glyphicon glyphicon-picture\"></span></a>\n" +
-                        "<a  class='deleteq'><span class=\"glyphicon glyphicon-trash\"></span></a>\n" +
+                        "<a  class='modifier_a'><img src='/remote-admin/statics/image/r_kongzhi.svg' alt='' class='r_erkongzhi'></a>\n" +
+                        "<a  class='modifier'><img src='/remote-admin/statics/image/bianji.png' alt=''></a>\n" +
+                        "<a  href=\"#\" class='ma_p' id="+res.data.list[i].longitude+","+res.data.list[i].latitude+"><img src='/remote-admin/statics/image/ditu.svg' alt=''style='width: 25px;height:25px;'></a>\n" +
+                        "<a  class='deleteq'><img src='/remote-admin/statics/image/shanchu.png' alt=''></a>\n" +
+                        "<a  class='particulars'><img src='/remote-admin/statics/image/r-se-youjiantou.svg' alt='' style='width: 22px;height:20px;' ></a>\n" +
                         "</td>\n" +
                         "</tr>"
+                    //修改样式<span class="glyphicon glyphicon-pencil"></span>
+                    //<span class="glyphicon glyphicon-search"></span>
+                    //<span class="glyphicon glyphicon-picture"></span>
+                    //<span class="glyphicon glyphicon-trash"></span>
                 }
                 $("#div").append(html);
                 // 地图定位
                 $(".ma_p").click(function(){
                     var longitude=$(this).attr("id")
                     var searchUrl=encodeURI('../equipment/equipment.html?longitude='+longitude)
+                    location.href =searchUrl;
+                })
+                $(".modifier_a").click(function(){
+                    var deviceId=$(this).parent().attr('id');
+                    console.log(deviceId)
+                    var searchUrl=encodeURI('../control/control.html?deviceCode='+""+"&grod="+""+"&deviceId="+deviceId)
                     location.href =searchUrl;
                 })
                 //移动分组删除

@@ -32,7 +32,7 @@ $(function () {
                 "page": pagesa
             },
             success: function (res) {
-                console.log("数据")
+                console.log("数据1")
                 console.log(res)
                 pages = res.page.currPage;  //第几页
                 pageSize = res.page.pageSize;//每页条数
@@ -40,11 +40,21 @@ $(function () {
                 console.log(pages + "===" + pageSize + "===" + pageNum)
                 var html=""
                 var offClass = "";
+                //当前时间
+                var date = new Date();
+                var Tima = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " +date.getHours()+ ":" + date.getMinutes()+":"+ date.getSeconds();
                 for (var i = 0; i < res.page.list.length; i++) {
+                    var state
+                    var dead=res.page.list[i].deadline
                     if (res.page.list[i].status == 0) {
                         offClass = "btn_fath clearfix  toogle off";
                     } else {
                         offClass = "btn_fath clearfix  toogle on";
+                    }
+                    if(res.page.list[i].status == 1 &&  dead > Tima ){
+                        state="有效期"
+                    }else{
+                        state="<img src='/remote-admin/statics/image/yichang.png' alt=''>"
                     }
 
                     html += " <tr class='r_pw'>\n" +
@@ -55,23 +65,24 @@ $(function () {
                         "<td>" + res.page.list[i].deviceCount + "</td>\n" +
                         "<td>" + res.page.list[i].createTime + "</td>\n" +
                         "<td class='r_termof'>" + res.page.list[i].termOfValidity + "年</td>\n" +
-                        "<td></td>\n" +
+                        "<td>"+state+"</td>\n" +
                         "<td>" +
                         "<div class=\"switch\" > \n" +
                         "<div class='" + offClass + "'  id=" + res.page.list[i].userId + "> \n" +
                         "<div class=\"move\"  data-state=" + res.page.list[i].status + "></div> \n" +
-                        "<div class=\"btnSwitch btn1\">ON</div> \n" +
-                        "<div class=\"btnSwitch btn2 \">OFF</div> \n" +
+                        "<div class=\"btnSwitch btn1\">停用</div> \n" +
+                        "<div class=\"btnSwitch btn2 \">启用</div> \n" +
                         "</div> " +
                         "</td>\n" +
                         "<td class='r_typ'>" + res.page.list[i].mobile + "</td>\n" +
                         "<td class='r_emal'>" + res.page.list[i].email + "</td>\n" +
                         "<td id=" + res.page.list[i].userId + ">\n" +
-                        " <a class='compile'><span class=\"glyphicon glyphicon-pencil \" ></span></a>\n" +
-                        " <a href='javascript:void(0)'  class='Delete'><span class=\"glyphicon glyphicon-trash \"></span></a>\n" +
+                        " <a class='compile r_bu_sou1'><img src='/remote-admin/statics/image/bianji.png' alt=''></a>\n" +
+                        " <a href='javascript:void(0)'  class='Delete r_bu_sou2'><img src='/remote-admin/statics/image/shanchu.png' alt=''></a>\n" +
                         "</td>\n" +
                         "</tr>"
-
+                        // 删除的样式<span class="glyphicon glyphicon-pencil " ></span>
+                        // <span class="glyphicon glyphicon-trash "></span>
                 }
 
                 $("#div").append(html)

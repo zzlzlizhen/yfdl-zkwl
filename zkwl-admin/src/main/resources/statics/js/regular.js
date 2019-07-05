@@ -23,7 +23,7 @@ function lay(){
     //     $(".mistake").css("display","block");
     // }
     //校验EMail
-    var patrn2 = /^([0-9A-Za-z\-_\.]+)@([0-9A-Za-z]+\.[A-Za-z]{2,3}(\.[A-Za-z]{2})?)$/g;
+    var patrn2 =/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
     // if (!patrn2.exec(r_emal_mod)) {
     //     $(".rrbol").html("邮箱错误");
     //     console.log("邮箱错误")

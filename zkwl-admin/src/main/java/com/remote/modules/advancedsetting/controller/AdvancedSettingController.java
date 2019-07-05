@@ -1,8 +1,9 @@
 package com.remote.modules.advancedsetting.controller;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Map;
 
-import com.remote.common.utils.FiledOptUtils;
 import com.remote.common.utils.PageUtils;
 import com.remote.common.utils.R;
 import com.remote.common.validator.ValidatorUtils;
@@ -42,8 +43,8 @@ public class AdvancedSettingController extends AbstractController{
      * 信息
      */
     @RequestMapping("/settingInfo")
-    public R info(String projectId,String groupId){
-        AdvancedSettingEntity advancedSetting =  advancedSettingService.queryByProGroupId(projectId,groupId);
+    public R info(String deviceCode,String groupId){
+        AdvancedSettingEntity advancedSetting =  advancedSettingService.queryByProGroupId(deviceCode,groupId);
         return R.ok().put("advancedSetting", advancedSetting);
     }
 
@@ -59,20 +60,6 @@ public class AdvancedSettingController extends AbstractController{
         return R.ok();
     }
 
-    public void saveAdn(AdvancedSettingEntity advancedSettingEntity){
-        List<String> filedList = new ArrayList<String>();
-        filedList= FiledOptUtils.getFiledName(advancedSettingEntity);
-        for(String fileName : filedList){
-          Object filedValue =  FiledOptUtils.getFieldValueByName(fileName,advancedSettingEntity);
-            if(fileName.equals("timeTurnOn")){
-
-            }else if(fileName.equals("timeTurnOff")){
-
-            }else{
-
-            }
-        }
-    }
     /**
      * 修改
      */

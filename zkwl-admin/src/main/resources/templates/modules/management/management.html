@@ -8,6 +8,20 @@
     <script src="${request.contextPath}/statics/js/jquery.min.js"></script>
     <script src="${request.contextPath}/statics/js/modules/project/jquery_page.js"></script>
 </head>
+<style>
+    .table_m table tr td a{
+        margin-left: 8%;
+    }
+    .table_grouping_z table tr td, .table_grouping_z ul li{
+        width:13.1%;
+    }
+    .table_m table tr td:last-child {
+        width: 17.111%;
+    }
+    .table_m table tr td a {
+        margin-left: 4%;
+    }
+</style>
 <body>
     <div class="hear">
         <p>当前位置>项目管理></p><p class="p" id="p_a"></p><p class="p" id="p_b">分组管理</p>
@@ -24,8 +38,8 @@
                 <option>5</option>
             </select>
         </div>
-        <a class="btn btn-primary btn_m gl_bt" id="proje_search"><i class="glyphicon glyphicon-search gl_fu"></i>搜索</a>
-        <a class="btn btn-primary btn_m" id="add_grouping">新增分组</a>
+        <a class="btn btn-primary btn_m gl_bt r_top_fon" id="proje_search"><i class="glyphicon glyphicon-search gl_fu"></i>搜索</a>
+        <a class="btn btn-primary btn_m r_top_fon" id="add_grouping">新增分组</a>
     </div>
 <!--    表格-->
     <div class="table_m table_grouping_z" id="rrapp" style="max-height:60%;height:auto;">

@@ -45,4 +45,52 @@
         </where>
     </select>
 
+
+    <update id="delProject">
+        update fun_project set is_del = 1,update_user = #{updateUser},update_time = #{updateTime}
+        <where>
+            <if test="projectList !=null and projectList.size()!= 0">
+                and project_id in
+                <foreach collection="projectList" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </update>
+
+    <update id="updateProjectById" parameterType="com.remote.project.entity.ProjectEntity">
+        update fun_project
+        <set>
+            <if test="projectName != null">
+                project_name = #{projectName},
+            </if>
+            <if test="projectDesc != null">
+                project_desc = #{projectDesc},
+            </if>
+            <if test="exclusiveUser != null">
+                exclusive_user = #{exclusiveUser},
+            </if>
+            <if test="runStatus != null">
+                run_status = #{runStatus},
+            </if>
+            <if test="sumCount != null">
+                sum_count = #{sumCount},
+            </if>
+            <if test="gatewayCount != null">
+                gateway_count = #{gatewayCount},
+            </if>
+            <if test="faultCount != null">
+                fault_count = #{faultCount},
+            </if>
+            <if test="callPoliceCount != null">
+                call_police_count = #{callPoliceCount},
+            </if>
+            <if test="projectStatus != null">
+                project_status = #{projectStatus},
+            </if>
+            update_user = #{updateUser},
+            update_time = now()
+        </set>
+        where project_id = #{projectId}
+    </update>
 </mapper>

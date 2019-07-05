@@ -21,13 +21,12 @@ public class AdvancedSettingServiceImpl extends ServiceImpl<AdvancedSettingDao, 
                 new Query<AdvancedSettingEntity>().getPage(params),
                 new QueryWrapper<AdvancedSettingEntity>()
         );
-
         return new PageUtils(page);
     }
 
     @Override
-    public AdvancedSettingEntity queryByProGroupId(String projectId,String groupId) {
-        return this.baseMapper.selectOne(new QueryWrapper<AdvancedSettingEntity>().eq("project_id",projectId).eq("group_id",groupId));
+    public AdvancedSettingEntity queryByProGroupId(String deviceCode,String groupId) {
+        return this.baseMapper.selectOne(new QueryWrapper<AdvancedSettingEntity>().eq("device_code",deviceCode).eq("group_id",groupId));
     }
 
 }

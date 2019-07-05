@@ -9,67 +9,87 @@
     <script src="${request.contextPath}/statics/js/modules/project/jquery_page.js"></script>
 </head>
 <style>
-
     body{
         overflow: hidden;
     }
+    #proje_search{
+        background: url('${request.contextPath}/statics/image/kuang-3.png');
+        width: 122px;
+        height: 43px;
+        display: inline-block;
+        background-size: 99%;
+        line-height: 40px;
+        text-align: center;
+        margin-top: 22px;
+        margin-left: 30px;
+        font-size: 15px;
+    }
+    .project_he>a{
+        vertical-align:middle
+    }
+    .project_he>a>img{
+         display: inline-block;
+         width: 18px;
+         height: 18px;
+    }
+
 </style>
 <body>
-  <div class="hear">
-      当前项目>项目管理
-  </div>
-  <div class="project_he" >
-      <span class="hear_w">项目编号：</span>
-      <div class="form-group col-sm-2 form_input">
-          <input type="text" class="form-control" id="serial"  placeholder=" ">
-      </div>
-      <span class="hear_w">项目名称：</span>
-      <div class="form-group col-sm-2 form_input">
-          <input type="text" class="form-control" id="pro_name"  placeholder=" ">
-      </div>
-      <span class="hear_w">用户：</span>
-      <div class="form-group col-sm-2 form_input">
-          <select class="form-control" id="realName">
-              <option></option>
-          </select>
-      </div>
-      <a class="btn btn-primary btn_m" id="proje_search"><i class="glyphicon glyphicon-search gl_fu"></i>搜索</a>
-      <a class="btn btn-primary btn_m" id="proje_add" ><i class="fa fa-plus"></i>&nbsp;新增</a>
-      <a class="btn btn-primary btn_m" id="pandect" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;总览</a>
-  </div>
+<div class="hear">
+    <img src="${request.contextPath}/statics/image/dingwei.png" alt="">项目管理
+</div>
+<div class="project_he" >
+    <span class="hear_w">项目编号：</span>
+    <div class="form-group col-sm-2 form_input">
+        <input type="text" class="form-control" id="serial"  placeholder=" ">
+    </div>
+    <span class="hear_w">项目名称：</span>
+    <div class="form-group col-sm-2 form_input">
+        <input type="text" class="form-control" id="pro_name"  placeholder=" ">
+    </div>
+    <span class="hear_w">用户：</span>
+    <div class="form-group col-sm-2 form_input">
+        <select class="form-control" id="realName">
+            <option></option>
+        </select>
+    </div>
+    <a class="" id="proje_search"><img src="${request.contextPath}/statics/image/rsousu.svg" alt="">搜索</a>
+    <a class="" id="proje_add" ><img src="${request.contextPath}/statics/image/tianjia.png" alt="">&nbsp;新增</a>
+    <a class="" id="pandect" ><img src="${request.contextPath}/statics/image/yanjing.svg" alt="">&nbsp;总览</a>
+</div>
 
 
-  <div class="table_m" id="rrapp"  style="height: auto;max-height: 75%;">
-      <ul>
-          <li>项目编号</li>
-          <li>项目名称</li>
-          <li>用户</li>
-          <li>总装机数量</li>
-          <li>网关数量</li>
-          <li>故障数量</li>
-          <li>报警数量</li>
-          <li>项目描述</li>
-          <li>操作</li>
-      </ul>
-      <table border="1" id="div">
+<div class="table_m" id="rrapp"  style="height: auto;max-height: 75%;">
+    <ul>
+        <li>项目编号</li>
+        <li>项目名称</li>
+        <li>用户</li>
+        <li>总装机数量</li>
+        <li>网关数量</li>
+        <li>故障数量</li>
+        <li>报警数量</li>
+        <li>项目描述</li>
+        <li>操作</li>
+    </ul>
+    <table border="1" id="div">
 
-      </table>
-  </div>
+    </table>
+</div>
 <!--分页-->
-  <div class="box">
-      <div id="pagination3" class="page fl"></div>
-  </div>
+<div class="box">
+    <div id="pagination3" class="page fl"></div>
+</div>
 
 <!--  添加-->
-  <div class="shade_project">
-      <div class="shade_a shade_add_project"></div>
-      <div class="shade_b_project">
-          <div class="Bian_j">新增项目<span class="glyphicon glyphicon-remove guan_shc shade_add_project" ></span></div>
-          <div class="mistake">
-              <span class="glyphicon glyphicon-pencil cu_m"></span>输入不能为空
-              <span class="glyphicon glyphicon-remove wrong"></span>
-          </div>
-          <span class="sha_span">
+<div class="shade_project">
+    <div class="shade_a shade_add_project"></div>
+    <div class="shade_b_project">
+        <div class="Bian_j">新增项目<span class="glyphicon glyphicon-remove guan_shc shade_add_project" ></span></div>
+        <div class="mistake">
+            <span class="glyphicon glyphicon-pencil cu_m"></span>输入不能为空
+            <span class="glyphicon glyphicon-remove wrong"></span>
+        </div>
+        <span class="sha_span">
             <p> <span  style="color: red">*</span>项目名称：</p>
             <input type="text" placeholder="请填写" class="pro_name">
         </span>
@@ -81,38 +101,38 @@
                 </select>
             </div>
         </span>
-          <!--<span class="sha_span">-->
-            <!--<p> <span  style="color: red">*</span>项目描述：</p>-->
-            <!--<input type="text" placeholder="请填写" class="pro_s">-->
+        <!--<span class="sha_span">-->
+        <!--<p> <span  style="color: red">*</span>项目描述：</p>-->
+        <!--<input type="text" placeholder="请填写" class="pro_s">-->
         <!--</span>-->
 
-          <span class="sha_span" style="width: 100%;display: inline-block;">
+        <span class="sha_span" style="width: 100%;display: inline-block;">
             <p style="width: 16%"> <span  style="color: red">*</span>项目描述：</p>
-              <!--<input type="text" placeholder="请填写" class="pro_s_b">-->
+            <!--<input type="text" placeholder="请填写" class="pro_s_b">-->
               <textarea rows="10" cols="20"  placeholder="请填写" class="pro_s_b" style="width: 72%;height: 70px"></textarea>
           </span>
 
-          <div class="sha_buttom">
-              <input type="button" value="确定" id="project_confirm">
-              <input type="button" value="取消" class="shade_add_project">
-          </div>
-      </div>
-  </div>
+        <div class="sha_buttom">
+            <input type="button" value="确定" id="project_confirm">
+            <input type="button" value="取消" class="shade_add_project">
+        </div>
+    </div>
+</div>
 
 <!--  修改-->
-  <div class="shade_modifier">
-      <div class="shade_a shade_modifier_project"></div>
-      <div class="shade_b_modifier">
-          <div class="Bian_j">编辑项目<span class="glyphicon glyphicon-remove guan_shc shade_modifier_project" ></span></div>
-          <div class="mistake">
-              <span class="glyphicon glyphicon-pencil cu_m"></span>输入不能为空
-              <span class="glyphicon glyphicon-remove wrong"></span>
-          </div>
-          <span class="sha_span">
+<div class="shade_modifier">
+    <div class="shade_a shade_modifier_project"></div>
+    <div class="shade_b_modifier">
+        <div class="Bian_j">编辑项目<span class="glyphicon glyphicon-remove guan_shc shade_modifier_project" ></span></div>
+        <div class="mistake">
+            <span class="glyphicon glyphicon-pencil cu_m"></span>输入不能为空
+            <span class="glyphicon glyphicon-remove wrong"></span>
+        </div>
+        <span class="sha_span">
             <p> <span  style="color: red">*</span>项目名称：</p>
             <input type="text" placeholder="请填写" class="pro_name_b">
         </span>
-          <span class="sha_span">
+        <span class="sha_span">
             <p><span  style="color: red">*</span>使用者：</p>
             <div class="form-group col-sm-2 " style="width:55%;padding-left:0;padding-right:0;">
                 <select class="form-control"  id="select1_b" >
@@ -120,19 +140,19 @@
                 </select>
             </div>
         </span>
-          <span class="sha_span" style="width: 100%;display: inline-block;">
+        <span class="sha_span" style="width: 100%;display: inline-block;">
             <p style="width: 16%"> <span  style="color: red">*</span>项目描述：</p>
             <!--<input type="text" placeholder="请填写" class="pro_s_b">-->
               <textarea rows="10" cols="20"  placeholder="请填写" class="pro_s_b" style="width: 72%;height: 70px"></textarea>
           </span>
 
-          <div class="sha_buttom">
-              <input type="button" value="确定" id="confirm_x" >
-              <input type="button" value="取消" class="shade_modifier_project">
-          </div>
-      </div>
-  </div>
-  <script src="${request.contextPath}/statics/js/modules/project/project_index.js"></script>
+        <div class="sha_buttom">
+            <input type="button" value="确定" id="confirm_x" >
+            <input type="button" value="取消" class="shade_modifier_project">
+        </div>
+    </div>
+</div>
+<script src="${request.contextPath}/statics/js/modules/project/project_index.js"></script>
 
 </body>
 

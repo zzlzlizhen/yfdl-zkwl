@@ -47,6 +47,7 @@ $(function () {
         $(this).siblings().children("p").addClass("clicka").removeClass("ida")
         ida=$(this).children("p").attr('id');
         //调用地图
+        $("#nav_a").html("")
         map(ida)
 
     })
@@ -66,6 +67,7 @@ $(function () {
             type:"get",
             data:{},
             success: function(res){
+                console.log(res)
                 var html=""
                 for(var i=0; i< res.data.length; i++){
                     html+=

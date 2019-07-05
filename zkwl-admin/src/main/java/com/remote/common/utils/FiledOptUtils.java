@@ -32,7 +32,6 @@ public class FiledOptUtils {
             Object value = method.invoke(o, new Object[] {});
             return value;
         } catch (Exception e) {
-
             return null;
         }
     }

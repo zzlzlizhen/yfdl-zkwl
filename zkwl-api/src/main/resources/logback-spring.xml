@@ -20,7 +20,7 @@
 
 
     <!-- 定义log日志文件位置，INFO_FILE ERROR_FILE会引用 -->
-    <property name="LOG_HOME" value="apiLogs"/>
+    <property name="LOG_HOME" value="logs"/>
     <!-- %m输出的信息,%p日志级别,%t线程名,%d日期,%c类的全名,%i索引【从数字0开始递增】 -->
     <!-- 定义控制台输出数据格式 -->
     <property name="consoleLayoutPattern"

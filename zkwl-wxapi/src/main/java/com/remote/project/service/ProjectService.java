@@ -5,6 +5,8 @@ import com.github.pagehelper.PageInfo;
 import com.remote.project.entity.ProjectEntity;
 import com.remote.project.entity.ProjectQuery;
 
+import java.util.List;
+
 /*
  * @Author zhangwenping
  * @Description 项目信息
@@ -28,4 +30,21 @@ public interface ProjectService {
      * @return pageInfo<projectEntity>
      **/
     PageInfo<ProjectEntity> queryProjectByUserIds(ProjectQuery projectQuery);
+    /*
+     * @Author chengpunan
+     * @Description 删除项目
+     * @Date 16:47 2019/7/3
+     * @Param
+     * @return
+     **/
+    boolean delProject(List<String> projectList, Long userId);
+
+    /*
+     * @Author zhangwenping
+     * @Description 修改项目
+     * @Date 15:08 2019/6/3
+     * @Param projectEntity
+     * @return boolean
+     **/
+    boolean updateProject(ProjectEntity projectEntity);
 }

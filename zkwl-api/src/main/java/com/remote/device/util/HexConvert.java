@@ -150,9 +150,7 @@ public class HexConvert {
     public static DeviceInfo BinaryToDeviceInfo(byte[] bytes)  {
         DeviceInfo deviceInfo = new DeviceInfo();
         try{
-            for (int i = 0 ; i < bytes.length;i++){
-                System.out.print(bytes[i]+",");
-            }
+
             int dataLen = 0;
             int cmdID = 0;
             int devType = 0;
@@ -164,20 +162,24 @@ public class HexConvert {
                 newBytes[l] = bytes[l] & 0xff;
             }
 
-
             int i=0;
 
             dataLen =newBytes[i++];
             dataLen +=newBytes[i++]<<8;
 
-            cmdID =newBytes[i++];
-            cmdID +=newBytes[i++]<<8;
+            int newByte[] = new int[dataLen];
+            for (int j = 0 ; j < newByte.length;j++){
+                newByte[j] = newBytes[j];
+            }
 
-            nextId =newBytes[i++];
-            nextId +=newBytes[i++]<<8;
+            cmdID =newByte[i++];
+            cmdID +=newByte[i++]<<8;
 
-            devType =newBytes[i++];
-            devType +=newBytes[i++]<<8;
+            nextId =newByte[i++];
+            nextId +=newByte[i++]<<8;
+
+            devType =newByte[i++];
+            devType +=newByte[i++]<<8;
 
 
 
@@ -219,11 +221,11 @@ public class HexConvert {
             int value = 0;
             dataLen = (dataLen - 56) / 4;
             for(int j=0;j<dataLen;j++){
-                key = newBytes[i++];
-                key += newBytes[i++]<<8;
+                key = newByte[i++];
+                key += newByte[i++]<<8;
                 keyList.add(key);
-                value = newBytes[i++];
-                value += newBytes[i++]<<8;
+                value = newByte[i++];
+                value += newByte[i++]<<8;
                 valueList.add(value);
             }
             deviceInfo.setKey(keyList);

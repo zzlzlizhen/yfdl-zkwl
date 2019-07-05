@@ -22,13 +22,13 @@
     </resultMap>
 
     <sql id="Base_Column_List" >
-    mouth_id, device_code, discharge_capacity, charging_capacity, charging_current, discharge_current,discharge_current,battery_voltage,ambient_temperature,
-    internal_temperature,visitors_flowrate,induction_frequency,meteorological,create_time,fillings_number,discharge_number
+    year_id, device_code, discharge_capacity, charging_capacity, charging_current, discharge_current,discharge_current,battery_voltage,ambient_temperature,
+    internal_temperature,visitors_flowrate,induction_frequency,create_time,fillings_number,discharge_number
     </sql>
 
-    <select id="queryHistoryYear" resultType="java.lang.Integer">
+    <select id="queryHistoryYear" resultMap="BaseResultMap">
         SELECT
-            count(1)
+        <include refid="Base_Column_List"/>
         FROM
             history_year
         where device_code = #{deviceCode}
@@ -47,7 +47,7 @@
           induction_frequency = induction_frequency + #{historyYear.inductionFrequency},
           fillings_number = fillings_number + #{historyYear.fillingsNumber},
           discharge_number = discharge_number + #{historyYear.dischargeNumber}
-          where device_code = #{historyYear.deviceCode} and year(create_time) = #{historyYear.year} and month(create_time) = #{historyYear.month}
+          where year_id = #{historyYear.yearId}
     </update>
     
 

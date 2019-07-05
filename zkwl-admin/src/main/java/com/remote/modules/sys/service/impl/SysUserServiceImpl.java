@@ -126,9 +126,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	 * */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public void updatebaseInfo(SysUserEntity user) {
+	public void updatebaseInfo(SysUserEntity user,Long userId) {
 		this.baseMapper.update(user,
-				new QueryWrapper<SysUserEntity>().eq("user_id", user.getUserId()));
+				new QueryWrapper<SysUserEntity>().eq("user_id", userId));
 		//保存用户与角色关系
 		sysUserRoleService.saveOrUpdate(user.getUserId(), user.getRoleIdList());
 	}

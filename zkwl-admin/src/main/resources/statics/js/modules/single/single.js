@@ -29,6 +29,7 @@ $(function(){
     $("#pa").html(character+">")
     $("#pb").html(groupName)
 
+
     //搜索
     $("#proje_search").click(function(){
         var sing_id=$("#sing_id").val()
@@ -147,12 +148,14 @@ $(function(){
                     } else  {
                         light = light;
                     }
+
+
                     html += "<tr>\n" +
                         "<td id=" + res.data.list[i].deviceId + " style=\"width:4%;\"> <input type= \"checkbox\" class=\"checkbox_in checkbox_i\"> </td>\n" +
                         "<td class='li_deviceCode'>" + res.data.list[i].deviceCode + "</td>\n" +
                         "<td id='r_namem'>" + res.data.list[i].deviceName + "</td>\n" +
                         "<td class='li_deviceType' id=" + res.data.list[i].projectId + ">" + res.data.list[i].deviceType + "</td>\n" +
-                        "<td>" + photocellState + "</td>\n" +
+                        "<td class='grod' id="+res.data.list[i].groupId+">" + photocellState + "</td>\n" +
                         "<td>" + batteryState + "</td>\n" +
                         "<td>" + loadState + "</td>\n" +
                         "<td>" + res.data.list[i].signalState + "</td>\n" +
@@ -165,13 +168,14 @@ $(function(){
                         "<div class=\"move\" data-state=" + res.data.list[i].onOff + "></div> \n" +
                         "<div class=\"btnSwitch btn1\">ON</div> \n" +
                         "<div class=\"btnSwitch btn2 \">OFF</div> \n" +
-                        "</div> " +
-                        "</td>\n" +
+                        "</div>" +
+                        "</td>\n"+
                         "<td>" + res.data.list[i].updateTime + "</td>\n" +
                         "<td id=" + res.data.list[i].deviceId + ">" +
-                        "<a class='particulars'><span class=\"glyphicon glyphicon-search\"></span></a>\n" +
-                        "<a href=\"#\" class='ma_p' id="+res.data.list[i].longitude+","+res.data.list[i].latitude+"><span class=\"glyphicon glyphicon-picture\"></span></a>\n" +
-                        "<a  class='deleteq'><span class=\"glyphicon glyphicon-trash\"></span></a>\n" +
+                        "<a class='particulars_a' ><img src='/remote-admin/statics/image/r_kongzhi.svg' alt='' class='r_erkongzhi'></a>\n" +
+                        "<a class='particulars'><img src='/remote-admin/statics/image/bianji.png' alt=''></a>\n" +
+                        "<a href=\"#\" class='ma_p' id="+res.data.list[i].longitude+","+res.data.list[i].latitude+"><img src='/remote-admin/statics/image/ditu.svg' alt=''style='width: 25px;height:25px;'></a>\n" +
+                        "<a  class='deleteq'><img src='/remote-admin/statics/image/shanchu.png' alt=''></a>\n" +
                         "</td>\n" +
                         "</tr>"
                 }
@@ -180,6 +184,18 @@ $(function(){
                 $(".ma_p").click(function(){
                     var longitude=$(this).attr("id")
                     var searchUrl=encodeURI('../equipment/equipment.html?longitude='+longitude)
+                    location.href =searchUrl;
+                })
+                //控制面板
+                $(".particulars_a").click(function(){
+                    var deviceCode=$(this).parent().siblings(".li_deviceCode").html();
+                    var grod=$(this).parent().siblings(".grod").attr('id');
+                    var deviceId=$(this).parent().attr('id');
+                    console.log(deviceCode)
+                    console.log(grod)
+                    console.log(deviceId)
+
+                    var searchUrl=encodeURI('../control/control.html?deviceCode='+deviceCode+"&grod="+grod+"&deviceId="+deviceId)
                     location.href =searchUrl;
                 })
                 //移动分组删除
@@ -366,11 +382,11 @@ $(function(){
                     var r_namem = $(this).parent().siblings("#r_namem").html();
                     projectId = $(this).parent().siblings(".li_deviceType").attr("id");
                     $(".pro_s_b").val(r_namem)
-                    console.log(r_namem)
                     fen(projectId)
                 })
                 $("#confirm_x").click(function(){
-                    var pro_s_b=$(".pro_s_b").val()
+                    var pro_s_b=$(".pro_s_b").val();
+                    var groupId=$("#select1_b option:selected").attr("id");
                     if(pro_s_b == ""){
                         $(".mistake").css("display","block")
                         return
@@ -441,13 +457,28 @@ $(function(){
 //    新增设备
     $("#add_single").click(function(){
         $(".shade_project,.shade_b_project").css("display","block");
+        $.ajax({
+            url:baseURL + 'fun/group/queryGroupNoPage?projectId='+Id,
+            contentType: "application/json;charset=UTF-8",
+            type:"get",
+            data:{},
+            success: function(res) {
+                var html=""
+                for (var i = 0; i < res.data.length; i++) {
+                    html += "<option class='option opti_a' id="+res.data[i].groupId+">"+res.data[i].groupName+"</option>\n"
+                }
+                $("#select1,#select1_b").append(html)
+            }
+        })
     })
+
     $(".shade_add_project").click(function(){
         $(".shade_project,.shade_b_project").css("display","none")
     })
     $("#project_confirm").click(function(){
         var pro_name=$(".pro_name").val()
         var pro_s=$(".pro_s").val()
+        var groupId=$("#select1 option:selected").attr("id");
         if(pro_name =="" || pro_s==""){
             $(".mistake").css("display","block")
             return

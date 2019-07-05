@@ -26,9 +26,7 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
 import java.net.InetSocketAddress;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.remote.device.util.MapKey.mapKey;
@@ -39,7 +37,6 @@ import static com.remote.device.util.MapKey.mapKey;
  * @Version 1.0
  **/
 @Component
-@RabbitListener(queues = "CalonDirectQueue")//CalonDirectQueue为队列名称
 public class ServerHandler extends ChannelInboundHandlerAdapter {
     UpdateVersion updateVersion  = null;
     private Integer count = 0;
@@ -50,19 +47,19 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
      */
     private static final ConcurrentHashMap<String, ChannelHandlerContext> CHANNEL_MAP = new ConcurrentHashMap<>();
 
+    @RabbitListener(queues = "CalonDirectQueue")//CalonDirectQueue为队列名称
     @RabbitHandler
     public void process(String str) {
-        push(str);
-    }
-
-    private void push(String str) {
         if(!"".equals(str)){
+            log.info("MQ消费消息："+str);
             JSONObject jsonObject = JSONObject.parseObject(str);
             DeviceEntity deviceEntity = JSONObject.toJavaObject(jsonObject, DeviceEntity.class);
             //代表操作设备
             onWhile(deviceEntity);
         }
     }
+
+
     //代表操作设备
     private void onWhile(DeviceEntity deviceEntity){
         List<Integer> list = new ArrayList<>();
@@ -98,7 +95,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     }
     /**
      * @param ctx
-     * @author xiongchuan on 2019/4/28 16:10
      * @DESCRIPTION: 有客户端连接服务器会触发此函数
      * @return: void
      */
@@ -112,6 +108,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
         //获取连接通道唯一标识
         ChannelId channelId = ctx.channel().id();
+
         System.out.println();
         //如果map中不包含此连接，就保存连接
 
@@ -157,60 +154,117 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        int cmdId = 0;
+        int length = 0;
         ByteBuf buf = (ByteBuf)msg;
         byte[] bytes = new byte[buf.readableBytes()];
+
+        StringBuffer sb = new StringBuffer();
         buf.readBytes(bytes);
+
+        for (int i = 0 ; i < bytes.length;i++){
+            sb.append(bytes[i]).append(",");
+        }
+        log.info("收到客户端报文......16进制：");
+        log.info("【" + ctx.channel().id() + "】" + " :" + sb.toString());
         buf.resetReaderIndex();
+        //判断数据长度
+        int newBytes[] = new int[bytes.length];
+        for (int l=0;l< bytes.length;l++){
+            newBytes[l] = bytes[l] & 0xff;
+        }
+        if(newBytes.length <= 3){
+            log.info("发送的数据长度小于3");
+            ctx.close();
+            CHANNEL_MAP.remove(ctx.channel().id().asShortText());
+            return;
+        }
+        cmdId =newBytes[2];
+        cmdId +=newBytes[3]<<8;
+        //cmdId 5 或者 6 代表是正确数据
+        if(cmdId == 5){
+            length = 200;
+        }else if(cmdId == 6 || cmdId == 8){
+            length = 56;
+        }
 
-        //转换为对象
-        DeviceInfo deviceInfo = HexConvert.BinaryToDeviceInfo(bytes);
-        if(deviceInfo == null){
-            log.info("数据格式不正确");
-            ctx.close();
-            CHANNEL_MAP.remove(ctx.channel().id().asShortText());
-            return;
-        }
-        if(StringUtils.isEmpty(deviceInfo.getDevSN()) || StringUtils.isEmpty(deviceInfo.getDevKey()) || StringUtils.isEmpty(deviceInfo.getDevType())){
-            log.info("数据格式不正确");
-            ctx.close();
-            CHANNEL_MAP.remove(ctx.channel().id().asShortText());
-            return;
-        }
-        //把连接放到redis中
-        CacheUtils cacheUtils = (CacheUtils)SpringUtils.getBean("cacheUtils");
-        cacheUtils.set(deviceInfo.getDevSN(),ctx.channel().id().asShortText());
+        if(bytes.length == length){
+            //转换为对象
+            DeviceInfo deviceInfo = HexConvert.BinaryToDeviceInfo(bytes);
+            if(deviceInfo == null){
+                log.info("deviceInfo解析为空");
+                ctx.close();
+                CHANNEL_MAP.remove(ctx.channel().id().asShortText());
+                return;
+            }
+            if(StringUtils.isEmpty(deviceInfo.getDevSN()) || StringUtils.isEmpty(deviceInfo.getDevKey()) || StringUtils.isEmpty(deviceInfo.getDevType())){
+                log.info("SN或DevKey或DevType为空");
+                ctx.close();
+                CHANNEL_MAP.remove(ctx.channel().id().asShortText());
+                return;
+            }
+            //把连接放到redis中
+            CacheUtils cacheUtils = (CacheUtils)SpringUtils.getBean("cacheUtils");
+            cacheUtils.set(deviceInfo.getDevSN(),ctx.channel().id().asShortText());
 
-        log.info("收到客户端报文......");
-        log.info("【" + ctx.channel().id() + "】" + " :" + JSONObject.toJSONString(deviceInfo));
-        //解密
-        if(StringUtils.isEmpty(deviceInfo.getDevSN()) && StringUtils.isEmpty(deviceInfo.getDevKey())){
-            log.info("密钥和SN号为空");
-            ctx.close();
-            CHANNEL_MAP.remove(ctx.channel().id().asShortText());
-            return;
-        }
-        String encrypt = Utils.encrypt(deviceInfo.getDevSN());
+            log.info("收到客户端报文......");
+            log.info("【" + ctx.channel().id() + "】" + " :" + JSONObject.toJSONString(deviceInfo));
+            //解密
+            if(StringUtils.isEmpty(deviceInfo.getDevSN()) && StringUtils.isEmpty(deviceInfo.getDevKey())){
+                log.info("密钥和SN号为空");
+                ctx.close();
+                CHANNEL_MAP.remove(ctx.channel().id().asShortText());
+                return;
+            }
+            String encrypt = Utils.encrypt(deviceInfo.getDevSN());
 
-        if(!encrypt.equals(deviceInfo.getDevKey())){
-            log.info("解密失败");
-            ctx.close();
-            CHANNEL_MAP.remove(ctx.channel().id().asShortText());
-            return;
-        }
-        /**
-         *  下面可以解析数据，保存数据，生成返回报文，将需要返回报文写入write函数
-         *
-         */
-        if(deviceInfo.getCmdID().equals(new Integer(5))){
-            //5终端发送需要上报的类型值 拿到客户端向服务端返回的设备信息做处理
-            dataAnalysis(deviceInfo);
-        }else if(deviceInfo.getCmdID().equals(new Integer(6))){
-            //更新版本
-            updateVersion(deviceInfo, ctx.channel().id());
+            if(!encrypt.equals(deviceInfo.getDevKey())){
+                log.info("解密失败");
+                ctx.close();
+                CHANNEL_MAP.remove(ctx.channel().id().asShortText());
+                return;
+            }
+            /**
+             *  下面可以解析数据，保存数据，生成返回报文，将需要返回报文写入write函数
+             *
+             */
+            if(deviceInfo.getCmdID().equals(new Integer(5))){
+                //5终端发送需要上报的类型值 拿到客户端向服务端返回的设备信息做处理
+                dataAnalysis(deviceInfo);
+            }else if(deviceInfo.getCmdID().equals(new Integer(6))){
+                //更新版本
+                updateVersion(deviceInfo, ctx.channel().id());
+            }else if(deviceInfo.getCmdID().equals(new Integer(8))){
+                //更新时间
+                updateTime(deviceInfo, ctx);
+            }
+        }else{
+            log.info("数据长度有误"+sb.toString());
         }
 
     }
-
+    //当前时刻
+    private  void updateTime(DeviceInfo deviceInfo,ChannelHandlerContext ctx) {
+        Calendar now = Calendar.getInstance();
+        String encrypt = Utils.encrypt(deviceInfo.getDevSN());
+        DeviceInfo result = new DeviceInfo(9,0,encrypt,deviceInfo.getDevType(),deviceInfo.getDevSN());
+        List<Integer> value = new ArrayList<>();
+        List<Integer> key = new ArrayList<>();
+        result.setValue(value);
+        key.add(1);
+        key.add(2);
+        key.add(3);
+        result.setKey(key);
+        value.add(now.get(Calendar.HOUR_OF_DAY));
+        value.add(now.get(Calendar.MINUTE));
+        value.add(now.get(Calendar.SECOND));
+        result.setDataLen(value.size());
+        log.info("当前时刻："+JSONObject.toJSONString(result));
+        byte[] bytes = HexConvert.hexStringToBytes(result);
+        ByteBuf byteBuf = Unpooled.copiedBuffer(bytes);
+        Channel channel = ctx.channel();
+        channel.writeAndFlush(byteBuf);
+    }
 
     private void updateVersion(DeviceInfo deviceInfo,ChannelId channelId)throws Exception {
         ChannelHandlerContext ctx = CHANNEL_MAP.get(channelId.asShortText());
@@ -398,12 +452,15 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         if (evt instanceof IdleStateEvent) {
             IdleStateEvent event = (IdleStateEvent) evt;
             if (event.state() == IdleState.READER_IDLE) {
+                CHANNEL_MAP.remove(ctx.channel().id().asShortText());
                 log.info("Client: " + socketString + " READER_IDLE 读超时");
                 ctx.disconnect();
             } else if (event.state() == IdleState.WRITER_IDLE) {
+                CHANNEL_MAP.remove(ctx.channel().id().asShortText());
                 log.info("Client: " + socketString + " WRITER_IDLE 写超时");
                 ctx.disconnect();
             } else if (event.state() == IdleState.ALL_IDLE) {
+                CHANNEL_MAP.remove(ctx.channel().id().asShortText());
                 log.info("Client: " + socketString + " ALL_IDLE 总超时");
                 ctx.disconnect();
             }
@@ -418,7 +475,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
 
-        System.out.println();
         ctx.close();
         CHANNEL_MAP.remove(ctx.channel().id().asShortText());
         log.info(ctx.channel().id() + " 发生了错误,此连接被关闭" + "此时连通数量: " + CHANNEL_MAP.size());

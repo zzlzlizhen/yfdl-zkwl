@@ -1,6 +1,7 @@
 package com.remote.device.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.remote.advancedsetting.AdvancedSettingEntity;
 import lombok.Data;
 
 import java.util.Date;
@@ -13,7 +14,7 @@ import java.util.List;
  **/
 @Data
 @TableName("fun_device")
-public class DeviceEntity {
+public class DeviceEntity  extends AdvancedSettingEntity{
     /**
      * 设备id
      */
@@ -95,9 +96,9 @@ public class DeviceEntity {
      */
     private Date createTime;
     /**
-     * 修改人id
+     * 修改人
      */
-    private Long updateUser;
+    private String updateUser;
     /**
      * 修改时间
      */

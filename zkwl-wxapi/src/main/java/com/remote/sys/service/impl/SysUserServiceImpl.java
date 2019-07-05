@@ -42,7 +42,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
         String status = (String)params.get("status");
         String uid = (String)params.get("userId");
         String allParentId =(String)params.get("allParentId");
-        long userId = Long.parseLong(params.get("curCserId")+"") ;//当前登录用户id
+        long userId = Long.parseLong(params.get("curUserId")+"") ;//当前登录用户id
 
         IPage<SysUserEntity> page = this.page(new Query<SysUserEntity>().getPage(params), new QueryWrapper<SysUserEntity>().like(StringUtils.isNotBlank(username),"username", username)
                         .like(StringUtils.isNotBlank(realName),"real_name", realName)

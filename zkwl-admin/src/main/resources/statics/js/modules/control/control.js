@@ -29,11 +29,19 @@ $(function(){
     var href = showWindowHref();
     //设备编号
     var deviceCode=href['deviceCode'];
-    var partition=deviceCode.split(",");
-    console.log(partition[1])
+    //设备id
+    var grod=href['grod'];
+    //分组id
+    var deviceId=href['deviceId'];
+    console.log("控制")
+    console.log(deviceCode)
+    console.log(grod)
+    console.log(deviceId)
+
+
 
     //判断高级设置页面针对是单台设备还是多台设备（做处理）
-    if(partition[1] == undefined ){
+    if(deviceCode != "" ){
         var myDate = new Date;
         var ms = (1000 * 60 * 60 * 24 * 30)
         var date1 = new Date(myDate.getTime() - ms);
@@ -157,10 +165,23 @@ $(function(){
         $(".option_a>.option").hide().eq($(this).index()).show();
         //另一种方法: $("div").eq($(".tab li").index(this)).addClass("on").siblings().removeClass('on');
     });
+
+
+    //数据渲染
+    // $.ajax({
+    //     url:baseURL + 'advancedsetting/settingInfo?projectId='+deviceStatus,
+    //     contentType: "application/json;charset=UTF-8",
+    //     type:"POST",
+    //     data: {},
+    //     success: function(res){
+    //         console.log(res)
+    //     }
+    // });
     //取值
     $("#r_bttn").click(function () {
         var r_btn_l = $("#r_btn_l input[type='radio']:checked").val();
         var r_btne_l = $("#r_btne_l input[type='radio']:checked").val();
+
         var r_l_p = $("#r_Load_power").val();
         var r_teml = $("#d414").val();
         var r_temlr = $("#d4141").val();
@@ -266,10 +287,6 @@ $(function(){
             }
         });
     })
-
-
-
-
 
 
 

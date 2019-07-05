@@ -1,4 +1,5 @@
 $(function () {
+
     var pages
     var pageSize //每页条数
     var pageNum //数据返回第几页
@@ -18,9 +19,11 @@ $(function () {
         type:"get",
         data:{},
         success: function(res) {
+            console.log("用户信息")
+            console.log(res.user)
             var html=""
-            for( var i=0 ;i<=res.realName.length;i++){
-                html+="<option>"+res.realName[i]+"</option>"
+            for( var i=0 ;i< res.user.length;i++){
+                html+="<option id="+res.user[i].userId+">"+res.user[i].realName+"</option>"
             }
             $("#realName,#select1,#select1_b").append(html)
         }
@@ -73,10 +76,10 @@ $(function () {
                      "<td class='callPoliceCount'>"+res.data.list[i].callPoliceCount+"</td>\n" +
                      "<td>"+projectDesc+"</td>\n" +
                      "<td id="+res.data.list[i].projectId+">\n" +
-                     "<a href=\"#\" class='modifier'><span class=\"glyphicon glyphicon-pencil\"></span></a>\n" +
-                     "<a href=\"#\" class='particulars'><span class=\"glyphicon glyphicon-search\"></span></a>\n" +
-                     "<a href=\"#\" class='ma_p' id="+res.data.list[i].longitude+","+res.data.list[i].latitude+"><span class=\"glyphicon glyphicon-picture\"></span></a>\n" +
-                     "<a href=\"#\" class='deleteq'><span class=\"glyphicon glyphicon-trash\"></span></a>\n" +
+                     "<a href=\"#\" class='modifier'><img src='/remote-admin/statics/image/bianji.png' alt=''></span></a>\n" +
+                     "<a href=\"#\" class='ma_p' id="+res.data.list[i].longitude+","+res.data.list[i].latitude+"><img src='/remote-admin/statics/image/ditu2.svg' alt='' style='width: 25px;height:25px;'></a>\n" +
+                     "<a href=\"#\" class='deleteq'><img src='/remote-admin/statics/image/shanchu.png' alt=''></a>\n" +
+                     "<a href=\"#\" class='particulars'><div class='r_chakan' ><i style='font-style:normal'>查看<img  class='r_chakan_img' src='/remote-admin/statics/image/youjiantou.svg' alt=''></div></a>\n" +
                      "</td>\n" +
                      "</tr>"
                 }
@@ -112,8 +115,9 @@ $(function () {
                 $("#confirm_x").click(function(){
                     var pro_name_b= $(".pro_name_b").val()
                     var pro_s_b= $(".pro_s_b").val()
-                    var select_b=$("#select1_b option:selected").text()
+                    var select_b=$("#select1_b option:selected").attr("id");
 
+                     console.log(select_b)
                     //正则  丸子
                     if(pro_name_b ==""||select_b=="") {
                         $(".mistake").css("display","block")
@@ -216,5 +220,6 @@ $(function () {
      })
 
 })
+
 
 

@@ -2,6 +2,7 @@
 package com.remote.modules.sys.controller;
 import cn.hutool.core.util.StrUtil;
 import com.remote.common.annotation.SysLog;
+import com.remote.common.utils.CollectionUtils;
 import com.remote.common.utils.DateUtils;
 import com.remote.common.utils.PageUtils;
 import com.remote.common.utils.R;
@@ -37,15 +38,18 @@ public class SysUserController extends AbstractController {
 	@RequestMapping("/nameList")
 	public R list(@RequestParam Map<String, Object> params){
 		List<SysUserEntity> sysUserEntities = sysUserService.queryUserList(params,getUser());
-		List<String> realName = new ArrayList<String>();
+	/*	List<String> realName = new ArrayList<String>();
         for(SysUserEntity sysUserEntity:sysUserEntities){
         	if(sysUserEntity.getRealName().equals("")){
         		realName.add("");
 			}else{
 				realName.add(sysUserEntity.getRealName());
 			}
-        }
-        return R.ok().put("realName",realName);
+        }*/
+	    if(CollectionUtils.isEmpty(sysUserEntities)){
+	    	return R.ok("用户信息不存在");
+		}
+        return R.ok().put("user",sysUserEntities);
 	}
 	/**
 	 * 当前用户跟下级用户
@@ -195,7 +199,7 @@ public class SysUserController extends AbstractController {
 	@RequestMapping(value = "/updateBaseInfo",method = RequestMethod.POST)
 	@RequiresPermissions("sys:user:update")
 	public R updateBaseInfo(SysUserEntity user){
-		SysUserEntity sysUserEntity = sysUserService.queryByIdEAndM(user.getUserId());
+		SysUserEntity sysUserEntity = sysUserService.queryByIdEAndM(getUserId());
 
 		if(sysUserEntity != null){
 			if(!StringUtils.isBlank(user.getEmail())&&!StringUtils.isBlank(sysUserEntity.getEmail())){
@@ -209,7 +213,7 @@ public class SysUserController extends AbstractController {
 				}
 			}
 		}
-		sysUserService.updatebaseInfo(user);
+		sysUserService.updatebaseInfo(user,getUserId());
 		return R.ok();
 	}
 

@@ -8,7 +8,7 @@
 /*头部*/
 .navbar_m{background:#fff !important;color:#000 !important;}
 /*表格样式*/
-.content_Y{padding:20px 30px 0px 30px;background: rgba(242, 242, 242, 1);}
+.content_Y{padding:20px 30px 0px 30px;background: #F7F8FA;}
 /*引入页面*/
 .con_tent{background:#fff; padding: 0px !important;}
 .if_rame_m{width:100%;min-height:200px;overflow:visible;}
@@ -94,3 +94,36 @@
     padding: 2px 5px;
     border-radius: 4px;
 }
+
+
+
+
+/*修改*/
+
+.r_touling{
+    width: 20px;height: 20px;border-radius: 50%;background: #ccc;vertical-align: middle;display: inline-block;margin-right: 5px;
+}
+
+
+
+.r_ioc{
+    background: url('/remote-admin/statics/image/bianji.svg');
+    display: block;
+    width: 20px;
+    height: 20px;
+    background-size: 100%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

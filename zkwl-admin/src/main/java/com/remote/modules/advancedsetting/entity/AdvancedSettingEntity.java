@@ -1,7 +1,10 @@
 package com.remote.modules.advancedsetting.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.models.auth.In;
+import jdk.nashorn.internal.ir.IdentNode;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -18,10 +21,6 @@ import java.util.Date;
 @TableName("advanced_setting")
 public class AdvancedSettingEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	/**
-	 * 
-	 */
 	@TableId
 	private Long id;
 	/**
@@ -35,11 +34,11 @@ public class AdvancedSettingEntity implements Serializable {
 	/**
 	 * 开灯时刻
 	 */
-	private String timeTurnOn;
+	private Integer timeTurnOn;
 	/**
 	 * 关灯时刻
 	 */
-	private String timeTurnOff;
+	private Integer timeTurnOff;
 	/**
 	 * 1时段时长
 	 */
@@ -156,10 +155,12 @@ public class AdvancedSettingEntity implements Serializable {
 	 * 充电温度范围
 	 */
 	private Integer tempCharge;
+
 	/**
 	 * 放电温度范围
 	 */
 	private Integer tempDisCharge;
+
 	/**
 	 * 巡检时间
 	 */
@@ -174,9 +175,9 @@ public class AdvancedSettingEntity implements Serializable {
 	private Integer inductionLightOnDelay;
 
 	/**
-	 * 项目id
+	 * 设备code
 	 * */
-	private String projectId;
+	private String deviceCode;
 	/**
 	 * 组id
 	 * */

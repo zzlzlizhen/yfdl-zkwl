@@ -134,4 +134,8 @@ public class DeviceEntity {
     private String updateUserName;
 
     private String cityName;
+
+    private Long userId;
+
+    private String userName;
 }

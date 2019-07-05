@@ -28,4 +28,31 @@ public interface DeviceMapper extends BaseMapper<DeviceEntity> {
      * @return List<DeviceEntity>
      **/
     List<DeviceEntity> queryDevice(@Param("deviceQuery") DeviceQuery deviceQuery);
+
+    /*
+     * @Author zhangwenping
+     * @Description 删除设备
+     * @Date 11:41 2019/6/5
+     * @Param deviceQuery
+     * @return int
+     **/
+    int deleteDevice(@Param("deviceQuery")DeviceQuery deviceQuery);
+
+    /*
+     * @Author zhangwenping
+     * @Description 修改设备
+     * @Date 11:41 2019/6/5
+     * @Param deviceEntity
+     * @return int
+     **/
+    int updateById(DeviceEntity deviceEntity);
+
+    /*
+     * @Author zhagnwenping
+     * @Description 批量开关灯
+     * @Date 10:08 2019/6/24
+     * @Param deviceQuery
+     * @return int
+     **/
+    int updateOnOffByIds(@Param("deviceQuery")DeviceQuery deviceQuery);
 }

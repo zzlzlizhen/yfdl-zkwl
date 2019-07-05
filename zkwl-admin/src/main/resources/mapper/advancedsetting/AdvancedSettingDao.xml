@@ -43,7 +43,7 @@
         <result property="inspectionTime" column="inspection_time"/>
         <result property="inductionSwitch" column="induction_switch"/>
         <result property="inductionLightOnDelay" column="Induction_light_on_delay"/>
-        <result property="projectId" column="pro_group_id"/>
+        <result property="deviceCode" column="device_code"/>
         <result property="groupId" column="group_id"/>
         <result property="uid" column="uid"/>
         <result property="createTime" column="create_time"/>

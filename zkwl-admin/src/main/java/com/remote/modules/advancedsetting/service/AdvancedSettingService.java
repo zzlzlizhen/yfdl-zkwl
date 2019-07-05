@@ -18,6 +18,6 @@ public interface AdvancedSettingService extends IService<AdvancedSettingEntity> 
 
     PageUtils queryPage(Map<String, Object> params);
 
-    AdvancedSettingEntity queryByProGroupId(String projectId,String groupId);
+    AdvancedSettingEntity queryByProGroupId(String deviceCode,String groupId);
 }
 

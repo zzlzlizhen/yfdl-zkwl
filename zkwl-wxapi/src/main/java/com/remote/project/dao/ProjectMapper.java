@@ -23,4 +23,21 @@ public interface ProjectMapper extends BaseMapper<ProjectEntity> {
      * @return List<ProjectEntity>
      **/
     List<ProjectEntity> queryProjectByUserIds(@Param("projectQuery") ProjectQuery projectQuery);
+    /*
+     * @Author zhangwenping
+     * @Description 删除项目
+     * @Date 13:34 2019/6/3
+     * @Param projectCodes
+     * @return int
+     **/
+    int delProject(@Param("projectList")List<String> projectList, @Param("updateUser")Long updateUser, @Param("updateTime")Date updateTime);
+
+    /*
+     * @Author zhangwenping
+     * @Description 根据项目id修改项目信息
+     * @Date 15:13 2019/6/3
+     * @Param projectentity
+     * @return int
+     **/
+    int updateProjectById(ProjectEntity projectEntity);
 }

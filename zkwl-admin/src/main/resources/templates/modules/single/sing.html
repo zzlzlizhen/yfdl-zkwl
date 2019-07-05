@@ -8,6 +8,22 @@
     <link rel="stylesheet" href="${request.contextPath}/statics/css/jquery_page.css">
     <script src="${request.contextPath}/statics/js/jquery.min.js"></script>
     <script src="${request.contextPath}/statics/js/modules/project/jquery_page.js"></script>
+    <style>
+
+        .table_m table tr td:last-child {
+            width: 13.111%;
+        }
+        .table_grouping_d table tr td, .table_grouping_d ul li {
+            width: 6.8%;
+        }
+        .table_m table tr td a:first-child{
+            margin-left: 11%;
+        }
+        .table_m table tr td a{
+            margin-left: 8%;
+        }
+
+    </style>
 </head>
 <body>
 <div class="hear">
@@ -32,8 +48,8 @@
             <option>5</option>
         </select>
     </div>
-    <a class="btn btn-primary btn_m gl_bt" id="proje_search"><i class="glyphicon glyphicon-search gl_fu"></i>搜索</a>
-    <a class="btn btn-primary btn_m" id="add_single">新增设备</a>
+    <a class="btn btn-primary btn_m gl_bt r_top_fon" id="proje_search"><i class="glyphicon glyphicon-search gl_fu"></i>搜索</a>
+    <a class="btn btn-primary btn_m r_top_fon" id="add_single">新增设备</a>
 </div>
 <!--    表格-->
 <div class="table_m table_grouping_d" id="rrapp" style="height:auto;max-height: 60%;">
@@ -82,7 +98,7 @@
         </div>
         <span class="sha_span">
                 <p> <span  style="color: red">*</span>设备编号：</p>
-                <input type="text" placeholder="请填写" class="pro_name">
+                <input type="text" placeholder="LADG+SN" class="pro_name">
             </span>
         <span class="sha_span">
                 <p> <span  style="color: red">*</span>设备名称：</p>
@@ -92,7 +108,7 @@
                 <p><span  style="color: red">*</span>设备分组：</p>
                 <div class="form-group col-sm-2 " style="width:55%;padding-left:0;padding-right:0;">
                     <select class="form-control" id="select1" >
-
+                        <option></option>
                     </select>
                 </div>
             </span>
@@ -121,7 +137,7 @@
                 <p><span  style="color: red">*</span>设备分组：</p>
                 <div class="form-group col-sm-2 " style="width:55%;padding-left:0;padding-right:0;">
                     <select class="form-control"  id="select1_b" >
-
+                        <option></option>
                     </select>
                 </div>
             </span>

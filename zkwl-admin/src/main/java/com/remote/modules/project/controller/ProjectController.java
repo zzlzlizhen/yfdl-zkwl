@@ -89,6 +89,7 @@ public class ProjectController  extends AbstractController {
         SysUserEntity user = getUser();
         projectEntity.setUpdateTime(new Date());
         projectEntity.setUpdateUser(user.getUserId());
+        projectEntity.setCreateUser(Long.valueOf(projectEntity.getExclusiveUser()));
         boolean flag = projectService.updateProject(projectEntity);
         if(!flag){
             return R.error(400,"修改项目失败");
