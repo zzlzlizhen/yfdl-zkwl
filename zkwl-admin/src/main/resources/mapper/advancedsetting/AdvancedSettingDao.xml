@@ -1,59 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.remote.modules.message.dao.AdvancedSettingDao">
-
-	<!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.remote.modules.advancedsetting.entity.AdvancedSettingEntity" id="advancedSettingMap">
-        <result property="id" column="id"/>
-        <result property="loadWorkMode" column="load_work_mode"/>
-        <result property="powerLoad" column="power_load"/>
-        <result property="timeTurnOn" column="time_turn_on"/>
-        <result property="timeTurnOff" column="time_turn_off"/>
-        <result property="time1" column="time1"/>
-        <result property="time2" column="time2"/>
-        <result property="time3" column="time3"/>
-        <result property="time4" column="time4"/>
-        <result property="time5" column="time5"/>
-        <result property="timeDown" column="time_down"/>
-        <result property="powerPeople1" column="power_people1"/>
-        <result property="powerPeople2" column="power_people2"/>
-        <result property="powerPeople3" column="power_people3"/>
-        <result property="powerPeople4" column="power_people4"/>
-        <result property="powerPeople5" column="power_people5"/>
-        <result property="powerDawnPeople" column="power_dawn_people"/>
-        <result property="powerSensor1" column="power_sensor1"/>
-        <result property="powerSensor2" column="power_sensor2"/>
-        <result property="powerSensor3" column="power_sensor3"/>
-        <result property="powerSensor4" column="power_sensor4"/>
-        <result property="powerSensor5" column="power_sensor5"/>
-        <result property="powerSensorDown" column="power_sensor_down"/>
-        <result property="savingSwitch" column="saving_switch"/>
-        <result property="autoSleepTime" column="auto_sleep_time"/>
-        <result property="vpv" column="VPV"/>
-        <result property="ligntOnDuration" column="lignt_on_duration"/>
-        <result property="pvSwitch" column="pv_switch"/>
-        <result property="batType" column="bat_type"/>
-        <result property="batStringNum" column="bat_string_num"/>
-        <result property="volOverDisCharge" column="vol_over_dis_charge"/>
-        <result property="volCharge" column="vol_charge"/>
-        <result property="iCharge" column="i_charge"/>
-        <result property="tempCharge" column="temp_charge"/>
-        <result property="tempDisCharge" column="temp_dis_charge"/>
-        <result property="inspectionTime" column="inspection_time"/>
-        <result property="inductionSwitch" column="induction_switch"/>
-        <result property="inductionLightOnDelay" column="Induction_light_on_delay"/>
-        <result property="deviceCode" column="device_code"/>
-        <result property="groupId" column="group_id"/>
-        <result property="uid" column="uid"/>
-        <result property="createTime" column="create_time"/>
-        <result property="updateTime" column="update_time"/>
-        <result property="updateUser" column="update_user"/>
-        <result property="firDownPower" column="fir_down_power"/>
-        <result property="twoDownPower" column="two_down_power"/>
-        <result property="threeDownPower" column="three_down_power"/>
-        <result property="firReducAmplitude" column="fir_reduc_amplitude"/>
-        <result property="twoReducAmplitude" column="two_reduc_amplitude"/>
-        <result property="threeDownPower" column="three_reduc_amplitude"/>
-    </resultMap>
+<mapper namespace="com.remote.modules.advancedsetting.dao.AdvancedSettingDao">
+    <sql id="colums">
+        id as id,
+        load_work_mode as loadWorkMode,
+        power_load as powerLoad,
+        time_turn_on as timeTurnOn,
+        time_turn_off as timeTurnOff,
+        time1 as time1,
+        time2 as time2,
+        time3 as time3,
+        time4 as time4,
+        time5 as time5,
+        time_down as timeDown,
+        power_sensor1 as powerSensor1,
+        power_sensor2 as powerSensor2,
+        power_sensor3 as powerSensor3,
+        power_sensor4 as powerSensor4,
+        power_sensor5 as powerSensor5,
+        power_sensor_down as powerSensorDown,
+        saving_switch as savingSwitch,
+        auto_sleep_time as autoSleepTime,
+        VPV as vpv,
+        lignt_on_duration as ligntOnDuration,
+        pv_switch as pvSwitch,
+        bat_type as batType,
+        bat_string_num as batStringNum,
+        vol_over_dis_charge as volOverDisCharge,
+        vol_charge as volCharge,
+        i_charge as iCharge,
+        temp_charge as tempCharge,
+        temp_dis_charge as tempDisCharge,
+        inspection_time as inspectionTime,
+        induction_switch as inductionSwitch,
+        Induction_light_on_delay as inductionLightOnDelay,
+        device_code as deviceCode,
+        group_id as groupId,
+        uid as uid,
+        create_time as createTime,
+        update_time as updateTime,
+        update_user as updateUser,
+        fir_down_power as firDownPower,
+        two_down_power as twoDownPower,
+        three_down_power as threeDownPower,
+        fir_reduc_amplitude as firReducAmplitude,
+        two_reduc_amplitude as twoReducAmplitude,
+        three_reduc_amplitude as threeDownPower
+    </sql>
+    <select id="queryByGroupId" resultType="com.remote.modules.advancedsetting.entity.AdvancedSettingEntity">
+          select <include refid="colums"/> from advanced_setting where group_id = #{groupId}
+    </select>
 </mapper>

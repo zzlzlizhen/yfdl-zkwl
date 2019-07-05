@@ -54,13 +54,15 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             log.info("MQ消费消息："+str);
             JSONObject jsonObject = JSONObject.parseObject(str);
             DeviceEntity deviceEntity = JSONObject.toJavaObject(jsonObject, DeviceEntity.class);
-            //代表操作设备
+            //操作设备和设备升级
             onWhile(deviceEntity);
         }
     }
 
 
-    //代表操作设备
+
+
+    //操作设备和设备升级
     private void onWhile(DeviceEntity deviceEntity){
         List<Integer> list = new ArrayList<>();
         List<Integer> value = new ArrayList<>();
@@ -73,14 +75,23 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                 if(CHANNEL_MAP.get(channelId) != null){
                     ChannelHandlerContext ctx = CHANNEL_MAP.get(channelId);
                     String encrypt = Utils.encrypt(deviceSN);
-                    //需要客户端的设备信息
-                    DeviceInfo result = new DeviceInfo(4,0,encrypt,deviceEntity.getDeviceType(),deviceSN);
-                    list.addAll(deviceEntity.getKey());
-                    value.addAll(deviceEntity.getValue());
-                    result.setKey(list);
-                    result.setValue(value);
-                    result.setDataLen(list.size());
-                    log.info("操作设备："+JSONObject.toJSONString(result));
+                    DeviceInfo result = null;
+                    if(deviceEntity.getStatus().equals(new Integer(2))){
+                        //需要客户端的设备信息
+                        result = new DeviceInfo(4,0,encrypt,deviceEntity.getDeviceType(),deviceSN);
+                        list.addAll(deviceEntity.getKey());
+                        value.addAll(deviceEntity.getValue());
+                        result.setKey(list);
+                        result.setValue(value);
+                        result.setDataLen(list.size());
+                        log.info("操作设备"+deviceSN+"："+JSONObject.toJSONString(result));
+                    }else if(deviceEntity.getStatus().equals(new Integer(1))){
+                        result = new DeviceInfo(2,deviceEntity.getVersion(),encrypt,deviceEntity.getDeviceType(),deviceSN);
+                        result.setKey(list);
+                        result.setValue(value);
+                        result.setDataLen(list.size());
+                        log.info("设备升级"+deviceSN+"："+JSONObject.toJSONString(result));
+                    }
                     byte[] bytes = HexConvert.hexStringToBytes(result);
                     ByteBuf byteBuf = Unpooled.copiedBuffer(bytes);
                     Channel channel = ctx.channel();
@@ -135,7 +146,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         String clientIp = insocket.getAddress().getHostAddress();
 
         ChannelId channelId = ctx.channel().id();
-
+        log.info("客户端关闭连接:");
         //包含此客户端才去删除
         if (CHANNEL_MAP.get(channelId.asShortText()) != null) {
             //删除连接

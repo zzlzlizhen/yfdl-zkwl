@@ -46,7 +46,7 @@ public interface ProjectService {
      * @Param projectEntity
      * @return boolean
      **/
-    boolean updateProject(ProjectEntity projectEntity);
+    boolean updateProject(ProjectEntity projectEntity) throws Exception;
     /*
      * @Author zhangwenping
      * @Description 查询项目不分页

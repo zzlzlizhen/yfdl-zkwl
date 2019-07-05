@@ -12,23 +12,7 @@ import java.util.Map;
 
 public class testAdvanced {
     private static final String baseURL="127.0.0.1:8085/remote-admin";
-    private static final String CURRENT_COOKIE = "JSESSIONID=88633c5d-2c90-4e1e-bdd1-44874dc09b6d";
-    @Test
-    public void testAdvancedSave(){
-        String url = baseURL + "/advancedsetting/save";
-        Map<String,Object> map= new HashMap<String,Object>();
-     /*   map.put("deptId","2");*/
-        map.put("projectId","16b26934-6d1b-4149-80b6-ad94b0d40f35");
-        map.put("groupId","0");
-        map.put("loadWorkMode",1);
-        map.put("powerLoad",50);
-        map.put("powerPeople1",70);
-        String result3= HttpRequest.post(url)
-                .header(Header.COOKIE, CURRENT_COOKIE)
-                .form(map)
-                .execute().body();
-        System.out.println(result3);
-    }
+    private static final String CURRENT_COOKIE = "JSESSIONID=17e37a32-20de-4b70-8035-fac892a650f7";
     @Test
     public void testChange(){
         String url = baseURL + "/fun/device/change";
@@ -51,10 +35,22 @@ public class testAdvanced {
         System.out.println(result3);
     }
     @Test
-    public void testAdvancedUpdate(){
-        String url = baseURL + "/advancedsetting/update";
+    public void updateGroup(){
+        String url = baseURL + "/advancedsetting/updateGroup";
         Map<String,Object> map = new HashMap<String,Object>();
-        map.put("id","1");
+        map.put("groupId","52027ee5-ba61-4c32-8342-f233fd3ab19a");
+        map.put("loadWorkMode",3);
+        map.put("powerLoad",5);
+        map.put("powerPeople1",5);
+        String result4 = HttpRequest.post(url).header(Header.COOKIE,CURRENT_COOKIE).form(map).execute().body();
+        System.out.println(result4);
+    }
+    @Test
+    public void updateDevice(){
+        String url = baseURL + "/advancedsetting/updateDevice";
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("groupId","52027ee5-ba61-4c32-8342-f233fd3ab19a");
+        map.put("deviceCode","1133545");
         map.put("loadWorkMode",2);
         map.put("powerLoad",55);
         map.put("powerPeople1",75);

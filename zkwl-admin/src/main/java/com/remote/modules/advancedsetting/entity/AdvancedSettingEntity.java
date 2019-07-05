@@ -3,6 +3,7 @@ package com.remote.modules.advancedsetting.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import io.swagger.models.auth.In;
 import jdk.nashorn.internal.ir.IdentNode;
 import lombok.Data;

@@ -30,7 +30,7 @@ public interface GroupService {
      * @Param groupList,projectId
      * @return String
      **/
-    String deleteGroup(List<String> groupList,String projectId);
+    String deleteGroup(List<String> groupList,String projectId) throws Exception;
 
     /*
      * @Author zhangwenping

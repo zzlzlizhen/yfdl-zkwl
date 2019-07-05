@@ -17,7 +17,7 @@ public interface DeviceService {
      * @Param deviceQuery
      * @return PageInfo<DeviceEntity>
      **/
-    PageInfo<DeviceEntity> queryDevice(DeviceQuery deviceQuery);
+    PageInfo<DeviceEntity> queryDevice(DeviceQuery deviceQuery) throws Exception;
     /*
      * @Author zhangwenping
      * @Description 添加设备
@@ -25,7 +25,7 @@ public interface DeviceService {
      * @Param deviceEntity
      * @return boolean
      **/
-    boolean addDevice(DeviceEntity deviceEntity);
+    boolean addDevice(DeviceEntity deviceEntity) throws Exception;
     /*
      * @Author zhangwenping
      * @Description 删除设备
@@ -49,7 +49,7 @@ public interface DeviceService {
      * @Param deviceEntity
      * @return boolean
      **/
-    boolean updateById(DeviceEntity deviceEntity);
+    boolean updateById(DeviceEntity deviceEntity) throws Exception;
 
     /*
      * @Author zhangwenping
@@ -92,4 +92,13 @@ public interface DeviceService {
      * @return
      **/
     int updateOnOffByIds(DeviceQuery deviceQuery);
+
+    /**
+     * 通过设备code查询组id
+     * */
+    String queryByDevCode(String deviceCode);
+    /**
+     * 通过组id查询所有的设备code
+     * */
+    List<String> queryByGroupId(@Param("groupId")String groupId);
 }

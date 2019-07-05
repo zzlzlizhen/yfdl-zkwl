@@ -134,4 +134,6 @@ public class DeviceEntity {
     private String updateUserName;
 
     private String cityName;
+
+    private Integer version;
 }

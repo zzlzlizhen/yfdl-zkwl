@@ -107,6 +107,8 @@ public class DeviceEntity  extends AdvancedSettingEntity{
      * 修改状态
      */
     private boolean change;
+    //版本号
+    private Integer version;
     //设备编号
     private List<String> deviceCodes;
     //蓄电池余量
@@ -140,4 +142,6 @@ public class DeviceEntity  extends AdvancedSettingEntity{
     private double dischargeCapacitySum;
     //运行天数
     private Integer runDay;
+    //1代表设备升级    2 代表操作设备
+    private Integer status;
 }

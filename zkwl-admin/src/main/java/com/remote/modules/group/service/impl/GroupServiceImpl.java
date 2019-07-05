@@ -94,7 +94,7 @@ public class GroupServiceImpl implements GroupService {
 
 
     @Override
-    public String deleteGroup(List<String> groupList,String projectId) {
+    public String deleteGroup(List<String> groupList,String projectId) throws Exception {
         StringBuffer sb = new StringBuffer();
         //查询所有分组信息
         GroupQuery groupQuery = new GroupQuery();

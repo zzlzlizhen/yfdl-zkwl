@@ -59,7 +59,7 @@ public class GroupController extends AbstractController {
     }
 
     @RequestMapping(value = "/delete", method= RequestMethod.GET)
-    public R deleteGroup(String groupIds,String projectId){
+    public R deleteGroup(String groupIds,String projectId) throws Exception {
         SysUserEntity user = getUser();
         List<String> groupList = Arrays.asList(groupIds.split(","));
         String msg = groupService.deleteGroup(groupList, projectId);

@@ -157,16 +157,17 @@ $(function(){
                     if(signalState == null){
                         signalState=""
                     }else if(signalState == 0){
-                        signalState="-0"
+                        signalState="<img src='/remote-admin/statics/image/rxinhao-7.svg' alt='' style='display: inline-block;width: 29px;height: 27px' class='xinhao'>"
                     }else if(signalState == 1){
-                        signalState="-1"
+                        signalState="<img src='/remote-admin/statics/image/rxinhao_8.svg' alt='' style='display: inline-block;width: 29px;height: 27px' class='xinhao'>"
                     }else if(2 <= signalState <= 30){
-                        signalState="-2"
+                        signalState="<img src='/remote-admin/statics/image/rxinhao-10.svg' alt='' style='display: inline-block;width: 29px;height: 27px' class='xinhao'>"
                     }else if(31 <= signalState <= 51){
-                        signalState="-31"
+                        signalState="<img src='/remote-admin/statics/image/rxinhao_2.svg' alt='' style='  display: inline-block;width: 29px;height: 27px' class='xinhao'>"
                     }else if(52 <= signalState <= 99){
-                        signalState="-99"
+                        signalState="<img src='/remote-admin/statics/image/zhuyi.png' alt='' >"
                     }
+
                     html += "<tr>\n" +
                         "<td id="+res.data.list[i].deviceId+" style=\"width:4%;\"> <input type= \"checkbox\" name='clk' class=\"checkbox_in  checkbox_i\"> </td>\n" +
                         "<td id='r_nm'>"+res.data.list[i].deviceCode+"</td>\n" +

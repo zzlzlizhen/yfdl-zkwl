@@ -28,6 +28,8 @@ public class DataUtils implements Serializable {
     private String groupId;
     //用于项目操作
     private String projectId;
-
-
+    //用于区分是升级还是操作  1设备升级  2操作设备
+    private Integer status;
+    //更新版本号
+    private Integer version;
 }

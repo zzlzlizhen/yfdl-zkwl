@@ -38,7 +38,7 @@ public class DeviceController extends AbstractController {
     private RabbitTemplate template;
 
     @RequestMapping(value = "/queryDevice", method= RequestMethod.POST)
-    public R queryDevice(@RequestBody DeviceQuery deviceQuery){
+    public R queryDevice(@RequestBody DeviceQuery deviceQuery) throws Exception {
         PageInfo<DeviceEntity> pageInfo = deviceService.queryDevice(deviceQuery);
         if(pageInfo != null){
             return R.ok(pageInfo);
@@ -76,7 +76,7 @@ public class DeviceController extends AbstractController {
 
 
     @RequestMapping(value = "/add", method= RequestMethod.POST)
-    public R queryDevice(@RequestBody DeviceEntity deviceEntity){
+    public R queryDevice(@RequestBody DeviceEntity deviceEntity) throws Exception {
         SysUserEntity user = getUser();
         deviceEntity.setCreateUser(user.getUserId());
         deviceEntity.setIsDel(0);
@@ -131,7 +131,7 @@ public class DeviceController extends AbstractController {
     }
 
     @RequestMapping(value = "/updateDevice", method= RequestMethod.POST)
-    public R updateDevice(@RequestBody DeviceEntity deviceEntity){
+    public R updateDevice(@RequestBody DeviceEntity deviceEntity) throws Exception {
         SysUserEntity user = getUser();
         deviceEntity.setUpdateUser(user.getUserId());
         deviceEntity.setUpdateTime(new Date());

@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.remote.common.enums.CommunicationEnum;
 import com.remote.common.enums.FaultlogEnum;
+import com.remote.common.utils.ValidateUtils;
 import com.remote.modules.device.dao.DeviceMapper;
 import com.remote.modules.device.entity.DeviceEntity;
 import com.remote.modules.device.entity.DeviceQuery;
@@ -21,6 +22,7 @@ import com.remote.modules.sys.entity.SysUserEntity;
 import com.remote.modules.sys.service.SysUserService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,7 +58,8 @@ public class DeviceServiceImpl implements DeviceService {
     private ProjectMapper projectMapper;
 
     @Override
-    public PageInfo<DeviceEntity> queryDevice(DeviceQuery deviceQuery) {
+    public PageInfo<DeviceEntity> queryDevice(DeviceQuery deviceQuery) throws Exception {
+        ValidateUtils.validate(deviceQuery,Arrays.asList("projectId"));
         PageHelper.startPage(deviceQuery.getPageNum(),deviceQuery.getPageSize());
         List<DeviceEntity> list = deviceMapper.queryDevice(deviceQuery);
         GroupQuery groupQuery = new GroupQuery();
@@ -78,7 +81,8 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public boolean addDevice(DeviceEntity deviceEntity) {
+    public boolean addDevice(DeviceEntity deviceEntity) throws Exception {
+        ValidateUtils.validate(deviceEntity,Arrays.asList("deviceCode","deviceName"));
         String deviceCode = deviceEntity.getDeviceCode();
         //目前只有一种产品，2G 日后在添加其他产品
         deviceEntity.setCommunicationType(CommunicationEnum.NORMAL.getCode());
@@ -103,33 +107,8 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public boolean updateById(DeviceEntity deviceEntity) {
-//        StringBuffer sb = new StringBuffer("");
-//        String userName = deviceEntity.getUpdateUserName();
-//        if(StringUtils.isNotEmpty(deviceEntity.getLightingDuration())){
-//            sb.append("亮灯时长,");
-//        }
-//        if(StringUtils.isNotEmpty(deviceEntity.getMorningHours())){
-//            sb.append("晨亮时长,");
-//        }
-//        if(StringUtils.isNotEmpty(deviceEntity.getLight())){
-//            sb.append("亮度,");
-//        }
-//        if(deviceEntity.getOnOff() != null){
-//            sb.append("开关,");
-//        }
-//        if(!"".equals(sb.toString())){
-//            FaultlogEntity faultlogEntity = new FaultlogEntity();
-//            faultlogEntity.setProjectId(deviceEntity.getProjectId());
-//            faultlogEntity.setFaultLogId(UUID.randomUUID().toString());
-//            faultlogEntity.setDeviceId(deviceEntity.getDeviceId());
-//            faultlogEntity.setCreateTime(new Date());
-//            faultlogEntity.setCreateUserId(deviceEntity.getCreateUser());
-//            faultlogEntity.setLogStatus(FaultlogEnum.OPERATIONALLOG.getCode());
-//            String logStr = sb.substring(0, sb.length() - 1);
-//            faultlogEntity.setFaultLogDesc(logStr);
-//            faultlogService.addFaultlog(faultlogEntity);
-//        }
+    public boolean updateById(DeviceEntity deviceEntity) throws Exception {
+        ValidateUtils.validate(deviceEntity,Arrays.asList("deviceId"));
         return deviceMapper.updateById(deviceEntity) > 0 ? true : false;
     }
 
@@ -220,4 +199,13 @@ public class DeviceServiceImpl implements DeviceService {
         return deviceMapper.updateOnOffByIds(deviceQuery);
     }
 
+    @Override
+    public String queryByDevCode(String deviceCode) {
+        return deviceMapper.queryByDevCode(deviceCode);
+    }
+
+    @Override
+    public List<String> queryByGroupId(String groupId) {
+        return this.deviceMapper.queryByGroupId(groupId);
+    }
 }

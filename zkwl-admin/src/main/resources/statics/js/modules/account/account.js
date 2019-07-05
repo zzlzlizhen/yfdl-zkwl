@@ -52,7 +52,7 @@ $(function () {
                         offClass = "btn_fath clearfix  toogle on";
                     }
                     if(res.page.list[i].status == 1 &&  dead > Tima ){
-                        state="有效期"
+                        state="<img src='/remote-admin/statics/image/zhengchang.png' alt=''>"
                     }else{
                         state="<img src='/remote-admin/statics/image/yichang.png' alt=''>"
                     }
@@ -70,8 +70,8 @@ $(function () {
                         "<div class=\"switch\" > \n" +
                         "<div class='" + offClass + "'  id=" + res.page.list[i].userId + "> \n" +
                         "<div class=\"move\"  data-state=" + res.page.list[i].status + "></div> \n" +
-                        "<div class=\"btnSwitch btn1\">停用</div> \n" +
-                        "<div class=\"btnSwitch btn2 \">启用</div> \n" +
+                        "<div class=\"btnSwitch btn1\">关</div> \n" +
+                        "<div class=\"btnSwitch btn2 \">开</div> \n" +
                         "</div> " +
                         "</td>\n" +
                         "<td class='r_typ'>" + res.page.list[i].mobile + "</td>\n" +

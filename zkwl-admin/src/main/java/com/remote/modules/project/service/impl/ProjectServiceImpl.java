@@ -3,6 +3,7 @@ package com.remote.modules.project.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.remote.common.enums.DeviceEnum;
+import com.remote.common.utils.ValidateUtils;
 import com.remote.modules.device.entity.DeviceEntity;
 import com.remote.modules.device.entity.DeviceQuery;
 import com.remote.modules.device.service.DeviceService;
@@ -118,7 +119,8 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public boolean updateProject(ProjectEntity projectEntity) {
+    public boolean updateProject(ProjectEntity projectEntity) throws Exception {
+        ValidateUtils.validate(projectEntity,Arrays.asList("projectId"));
         return projectMapper.updateProjectById(projectEntity) > 0 ? true : false;
     }
 

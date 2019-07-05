@@ -3,6 +3,7 @@ package com.remote.modules.advancedsetting.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.remote.modules.advancedsetting.entity.AdvancedSettingEntity;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 
@@ -13,5 +14,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface AdvancedSettingDao extends BaseMapper<AdvancedSettingEntity> {
-	
+    AdvancedSettingEntity queryByGroupId(@Param("groupId") String groupId);
 }

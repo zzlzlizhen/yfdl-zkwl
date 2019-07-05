@@ -85,7 +85,7 @@ public class ProjectController  extends AbstractController {
     }
 
     @RequestMapping(value = "/update", method= RequestMethod.POST)
-    public R update(@RequestBody ProjectEntity projectEntity){
+    public R update(@RequestBody ProjectEntity projectEntity) throws Exception {
         SysUserEntity user = getUser();
         projectEntity.setUpdateTime(new Date());
         projectEntity.setUpdateUser(user.getUserId());

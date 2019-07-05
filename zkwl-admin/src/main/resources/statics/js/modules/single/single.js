@@ -148,7 +148,28 @@ $(function(){
                     } else  {
                         light = light;
                     }
+                    //信号状态
+                    var signalState=res.data.list[i].signalState
+                    if(signalState == null){
+                        signalState=""
+                    }else if(signalState == 0){
+                        signalState="-0"
+                    }else if(signalState == 1){
+                        signalState="-1"
+                    }else if(2 <= signalState <= 30){
+                        signalState="-2"
+                    }else if(31 <= signalState <= 51){
+                        signalState="-31"
+                    }else if(52 <= signalState <= 99){
+                        signalState="-99"
+                    }
 
+                    var updateTime=res.data.list[i].updateTime
+                    if(updateTime == null){
+                        updateTime=""
+                    }else{
+                        updateTime=updateTime
+                    }
 
                     html += "<tr>\n" +
                         "<td id=" + res.data.list[i].deviceId + " style=\"width:4%;\"> <input type= \"checkbox\" class=\"checkbox_in checkbox_i\"> </td>\n" +
@@ -158,7 +179,7 @@ $(function(){
                         "<td class='grod' id="+res.data.list[i].groupId+">" + photocellState + "</td>\n" +
                         "<td>" + batteryState + "</td>\n" +
                         "<td>" + loadState + "</td>\n" +
-                        "<td>" + res.data.list[i].signalState + "</td>\n" +
+                        "<td>" + signalState + "</td>\n" +
                         "<td>" + runState + "</td>\n" +
                         "<td>" + light + "</td>\n" +
                         "<td>" + communicationType + "</td>\n" +
@@ -170,7 +191,7 @@ $(function(){
                         "<div class=\"btnSwitch btn2 \">OFF</div> \n" +
                         "</div>" +
                         "</td>\n"+
-                        "<td>" + res.data.list[i].updateTime + "</td>\n" +
+                        "<td>" + updateTime + "</td>\n" +
                         "<td id=" + res.data.list[i].deviceId + ">" +
                         "<a class='particulars_a' ><img src='/remote-admin/statics/image/r_kongzhi.svg' alt='' class='r_erkongzhi'></a>\n" +
                         "<a class='particulars'><img src='/remote-admin/statics/image/bianji.png' alt=''></a>\n" +
