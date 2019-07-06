@@ -84,15 +84,7 @@ public class MailController extends AbstractController{
         checkEmailAndMob(mobile,securityCode,"isMobile","bindMobile");
         return R.ok();
     }
-    /**
-     * 找回密码
-     * */
-    @RequestMapping("/checkRePwdMobile")
-    @ResponseBody
-    public R checkRePwdMobile(String mobile,String securityCode){
-        checkEmailAndMob(mobile,securityCode,"isMobile","rePwdMobile");
-        return R.ok();
-    }
+
     /**
      * 绑定邮箱
      * */
@@ -102,54 +94,8 @@ public class MailController extends AbstractController{
         checkEmailAndMob(email,securityCode,"isEmail","bindEmail");
         return R.ok();
     }
-    /**
-     * 找回密码
-     * */
-    @RequestMapping(value="/checkRePwdEmail")
-    @ResponseBody
-    public R checkRePwdEmail(String email,String securityCode){
-        checkEmailAndMob(email,securityCode,"isEmail","rePwdEmail");
-        return R.ok();
-    }
-    /**
-     * 通过邮箱加类型发送验证码 并保存到数据库中
-     * */
-    @RequestMapping(value = "/sendForPwd")
-    public R sendRePwd(String contact,String fPwdType){
-        /**
-         * 邮箱发送验证码 找回密码
-         * */
-        if("isEmail".equals(fPwdType)){//1邮箱忘记密码
-            boolean flag = checkBindEmail(contact,"isEmail");
-            if(!flag){
-                return R.error("该邮箱不存在");
-            }
-            String securityCode = StringUtils.getSecurityCode(6);
 
-            SendEmailSecurityCode sendEmailSecurityCode = SendSecurityCodeUtils.buildSendEmailSecurityCode(sendEmailConfig,contact,securityCode,"2");
-            R r = sendEmailService.sendEmailSecurityCode(sendEmailSecurityCode);
-            if(!r.isOK()){
-                return R.error("邮件发送失败");
-            }
-            saveSecurity(contact,"rePwdEmail",securityCode);
-            return R.ok();
-        }else{
-            //如果忘记密码类型为手机忘记密码
-            boolean flag = checkBindEmail(contact,"isMobile");
-            if(!flag){
-                R.error("手机号不存在");
-            }
-            String securityCode = StringUtils.getSecurityCode(6);
-            SendPhoneSecurityCode sendPhoneSecurityCode = SendSecurityCodeUtils.bulidSendPhoneSecurityCode(sendPhoneConfig,contact,securityCode,"2");
-            R r = sendSmsService.sendSmsSecurityCode(sendPhoneSecurityCode);
-            if(!r.isOK()){
-                R.error("手机发送失败");
-            }
-            saveSecurity(contact,"rePwdMobile",securityCode);
-            return R.ok();
 
-        }
-    }
 
     /**
      *保存验证码
@@ -161,17 +107,9 @@ public class MailController extends AbstractController{
             securityEntity.setType("bindEmail");
             securityEntity.setEmail(contact);
             content = getUser().getUsername() + "绑定邮箱";
-        }else if("rePwdEmail".equals(sendSecurityType)){//邮箱找回密码
-            securityEntity.setType("rePwdEmail");
-            securityEntity.setEmail(contact);
-            content = getUser().getUsername() + "邮箱找回密码";
         }else if("bindMobile".equals(sendSecurityType)){//绑定手机
             securityEntity.setType("bindMobile");
             content = getUser().getUsername() + "绑定手机";
-            securityEntity.setPhone(contact);
-        }else if("rePwdMobile".equals(sendSecurityType)){//手机号找回密码
-            securityEntity.setType("rePwdMobile");
-            content = getUser().getUsername() + "手机找回密码";
             securityEntity.setPhone(contact);
         }
         securityEntity.setContent(content);

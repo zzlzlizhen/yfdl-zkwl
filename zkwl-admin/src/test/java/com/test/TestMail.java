@@ -57,7 +57,7 @@ public class TestMail {
     }
     @Test
     public void testSendForPwd(){
-        String url = baseURL + "/contact/sendForPwd?contact=1648925727@qq.com&fPwdType=isEmail";
+        String url = baseURL + "/repwd/sendForPwd?contact=1648925727@qq.com&fPwdType=isEmail";
         String result4= HttpRequest.get(url)
                 .header(Header.COOKIE, CURRENT_COOKIE)
                 .execute().body();

@@ -28,6 +28,7 @@
   <script src="${request.contextPath}/statics/libs/ajaxupload.js"></script>
     [endif]-->
 </head>
+
 <!-- ADD THE CLASS layout-boxed TO GET A BOXED LAYOUT -->
 <body class="hold-transition skin-blue sidebar-mini body_m">
 <!-- Site wrapper -->
@@ -45,7 +46,6 @@
           </a>
           <div class="navbar-custom-menu" style="margin-top:7px;">
             <ul class="nav navbar-nav">
-
                 <li><a  href="#modules/informa/informa.html" class="navbar_m r_lingdan_l" style="padding: 0;margin-top: 10px;margin-right: 10px;" ><img src="${request.contextPath}/statics/image/tongzhi.png" alt=""></a></li>
                 <!--样式修改-->
                 <li id="nav_a">
@@ -139,7 +139,6 @@
               <div class="J_fan">基本设置<span class="glyphicon glyphicon-remove wrong_a"></span></div>
               <!--<img src="${request.contextPath}/statics/image/blue.png" id="r_header_img" >-->
               <span class="sha_span preview">
-                    <p><span  style="color: red">*</span>头像：</p>
                     <img id="pic" style="width:50px;height:50px;border-radius:50%;background: red;" src="">
                      <a class="btn btn-primary" id="upload" style="margin-left: 20px;background: #fff;color:#ccc;border:1px solid #ccc;margin-top: 123px;margin-left: -64px;" >上传文件</a>
                     <input id="headUrl" type="hidden">
@@ -177,7 +176,7 @@
                   </div>
               </div>
               <div class="confirm">
-                  <input type="button"  value="修改密码" >
+                  <input type="button" @click="updatePassword"  value="修改密码" >
                   <input type="button"  value="更新信息" id="r_tijiao">
               </div>
           </div>

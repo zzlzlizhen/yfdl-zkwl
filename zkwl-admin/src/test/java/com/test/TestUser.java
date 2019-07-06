@@ -8,8 +8,8 @@ import java.util.Map;
 
 public class TestUser {
 
-    public static final String URL = "http://127.0.0.1:8080/remote-admin";
-    public static final String CURRENT_COOKIE = "JSESSIONID=b4e4d710-d488-45e9-828a-eabf579e22b2";
+    public static final String URL = "http://127.0.0.1:8085/remote-admin";
+    public static final String CURRENT_COOKIE = "JSESSIONID=6a1c7934-97a1-43e5-9baf-8efd40bf0440";
     @Test
     public void infoTest(){
         String url = URL + "/sys/user/info";
@@ -78,5 +78,14 @@ public class TestUser {
         map.put("email","1648925727@qq.com");
         String result4 = HttpRequest.post(url).header(Header.COOKIE,CURRENT_COOKIE).form(map).execute().body();
         System.out.println(result4);
+    }
+
+    @Test
+    public void updatePwd(){
+        String url = URL + "/sys/user/updatePwd";
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("username","zsm2");
+        map.put("password","123456");
+        HttpRequest.post(url).form(map).execute().body();
     }
 }

@@ -229,5 +229,23 @@ public class SysUserController extends AbstractController {
 		user.setRoleIdList(roleIdList);
 		return R.ok().put("user", user);
 	}
+	/**
+	 * 修改用户状态
+	 * */
+	@RequestMapping(value = "/updatePwd",method = RequestMethod.POST)
+	public R updatePwd(String username, String password){
+		if(StringUtils.isBlank(username) || StringUtils.isBlank(password)){
+			return R.error("密码不能为空");
+		}
+        String slat =  sysUserService.selectSlat(username);
+		if(StringUtils.isNotBlank(slat)){
+            password = ShiroUtils.sha256(password, slat);
+        }
 
+		boolean falg = sysUserService.updateUserName(username,password);
+		if(!falg){
+			R.error("修改失败");
+		}
+		return R.ok();
+	}
 }

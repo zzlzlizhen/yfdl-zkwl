@@ -253,4 +253,23 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 		return this.baseMapper.selectOne(new QueryWrapper<SysUserEntity>().eq("user_id",userId).eq("type",1).or().eq("is_bind_mtype",1));
 	}
 
+	@Override
+	public boolean updateUserName(String username, String password) {
+
+		SysUserEntity userEntity = new SysUserEntity();
+		userEntity.setPassword(password);
+		return this.update(userEntity,
+				new QueryWrapper<SysUserEntity>().eq("username", username));
+	}
+
+	@Override
+	public String selectSlat(String username) {
+		return this.sysUserDao.selectSlat(username);
+	}
+
+	@Override
+	public Long getUidByContact(String contact) {
+		return this.sysUserDao.getUidByContact(contact);
+	}
+
 }

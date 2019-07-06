@@ -30,394 +30,97 @@ html,body{width:100% !important;height:100% !important;margin:0;padding:0;font-s
 .da_te{width:137px;height:35px !important;float:left;border-radius: 4px; border:1px solid #ccc;margin-top:2%;text-indent: 10px;}
 
 /*负载*/
-.r-load{
-    width: 49.5%;
-    height: 395px;
-    float: left;
-    background: #fff; ;
+.r-load{width: 49.5%;height: 340px;float: left;background: #fff;}
+.r-heade,.r-Lamp-head{width: 100%;height:37px ;float:left;background: #5bc0de;border: 1px solid #00acd6;line-height:37px;text-indent:25px}
+.r-content{width:100%;float:left;height:auto;}
+.le-con{width:50%;font-size: 12px;float: left;margin: 3% 0px 0px 0%;background: #fff;}
+.le-con > p{width: 100%;display:block;height: 50px;line-height: 50px;}
+.le-con > div{display: flex;align-items: center;height: 50px;}
+.r-bt > input{display: inline-block;}
+.le-con span{width:83px;height:100%;float: left;line-height: 50px;margin:0px 3% 0px 6%;}
 
-}
-.r-heade,.r-Lamp-head{
-    width: 100%;
-    height:37px ;
-    background: #5bc0de;
-    border: 1px solid #00acd6;
-    line-height:37px;
-    text-indent:25px
-}
-.r-content{
-    padding: 30px;
-}
-.le-con{
-    width:47%;
-    font-size: 14px;
-    float: left;
-    }
-.le-con > p{
-    width: 100%;
-    display: inline-block;
-    height: 50px;
-    line-height: 50px;
-}
-.le-con > div{
-    display: flex;
-    align-items: center;
-    height: 50px;
-}
-.r-bt > input{
-    display: inline-block;
-}
-.le-con span{
-    color: red;
-}
-
-.rg-con{
-    width:47%;
-    font-size: 14px;
-    float: right;
-    background: #fff;
-}
-.r-Lamp{
-    width:49.5%;
-    font-size: 14px;
-    float: left;
-    background: #fff;
-}
-.rg-con > p{
-    width: 100%;
-    display: inline-block;
-    height: 50px;
-    line-height: 50px;
-}
-.rg-con > div{
-    display: flex;
-    align-items: center;
-    height: 50px;
-}
-.r-bt > input{
-    display: inline-block;
-}
-.rg-con span{
-    color: red;
-}
+.rg-con{width:50%;font-size: 12px;float: right;background: #fff;margin: 3% 0% 0px 0px;}
+.r-Lamp{width:49.5%;font-size: 12px;float: left;background: #fff;}
+.rg-con > p{width: 100%;display: inline-block;height: 50px;line-height: 50px;}
+.rg-con > div{display: flex;align-items: center;height: 50px;}
+.r-bt > input{display: inline-block;}
+.rg-con span{width:85px;float:left;height:100%;line-height: 50px;border-right:1px;margin-right:3%;}
 /*时间增值框*/
 
-.container{
-    margin-right:0px;
-    float: right;
-    width:90px;
-    height: 37px;
-
-}
-.r-container{
-    margin-left: 0px;
-}
-.r-bt > input{
-    margin-left: 20px;
-}
-
-
+.container{float: left;width:15%;height: 37px;padding:0;margin:0px 10px 0px 1%;}
+.container_a{width:47%;height:70%;float:left;margin-left:1%;}
+.r-container{margin-left: 0px;}
+.r-bt > input{margin-left:10px;}
 
 /*数值增值器*/
-
-spinner {
-    width: 100px;
-}
-.spinner input {
-    text-align: right;
-}
-.input-group-btn-vertical {
-    position: relative;
-    white-space: nowrap;
-    width: 1%;
-    vertical-align: middle;
-    display: table-cell;
-}
-.input-group-btn-vertical > .btn {
-    display: block;
-    float: none;
-    width: 100%;
-    max-width: 100%;
-    padding: 8px;
-    margin-left: -1px;
-    position: relative;
-    border-radius: 0;
-}
-.input-group-btn-vertical > .btn:first-child {
-    border-top-right-radius: 4px;
-}
-.input-group-btn-vertical > .btn:last-child {
-    margin-top: -2px;
-    border-bottom-right-radius: 4px;
-}
-.input-group-btn-vertical i{
-    position: absolute;
-    top: 0;
-    left: 4px;
-}
-
-
-
+spinner {width: 100px;}
+.spinner input {text-align: right;}
+.input-group-btn-vertical {position: relative;white-space: nowrap;width: 1%;vertical-align: middle;display: table-cell;}
+.input-group-btn-vertical > .btn {display: block;float: none;width: 100%;max-width: 100%;padding: 8px;margin-left: -1px;position: relative;border-radius: 0;}
+.input-group-btn-vertical > .btn:first-child {border-top-right-radius: 4px;}
+.input-group-btn-vertical > .btn:last-child {margin-top: -2px;border-bottom-right-radius: 4px;}
+.input-group-btn-vertical i{position: absolute;top: 0;left: 4px;}
 /*蓄电池*/
-
-.r-Battery-tw{
-    width: 49.5%;
-    height: 420px;
-    float: right;
-    background: #fff; ;
-
-}
-.r-Battery-tw-con{
-    padding: 30px;
-}
-
-
+.m_in{margin: 2% 1% 0px 1%;width:44%;}
+.r-Battery-tw{width: 49.5%;height: 420px;float: right;background: #fff;}
 
 /*光电池*/
-
-.r-Battery{
-    width: 49.5%;
-    height: 394px;
-    float: right;
-    background: #fff; ;
-
-}
-
-.r-Battery-lef{
-    width:46%;
-    font-size: 14px;
-    float: left;
-}
-.r-Battery-lef > p{
-    width: 100%;
-    display: inline-block;
-
-}
-.r-Battery-lef > div{
-    /*display: flex;*/
-    /*align-items: center;*/
-    height: 50px;
-    margin-top: 7px;
-}
-.r-bt > input{
-    display: inline-block;
-}
-.r-Battery-lef span{
-
-}
-
-.r-Battery-reg{
-    width:43%;
-    font-size: 14px;
-    float: right;
-}
-.r-Battery-reg > p{
-    width: 100%;
-    display: inline-block;
-    height: 50px;
-}
+.r-Battery{width: 49.5%;height: 210px;float: right;background: #fff;}
+.r-Battery-lef{width:50%;font-size:12px;float: left;margin:3% 0px 0px 0px;}
+.r-Battery-lef > p{width: 100%;display: inline-block;}
+.r-Battery-lef > div{height: 50px;width:100%;float:left;}
+.r-bt > input{display: inline-block;}
+.che_gua{margin-top:5% !important;}
+.r-Battery-reg{width:50%;font-size:12px;float: right;margin:3% 0px 0px 0px;background: #fff;}
+.r-Battery-reg > p{width: 100%;display: inline-block;height: 50px;}
 .r-Battery-reg > div{
     /*display: flex;*/
     /*align-items: center;*/
     height: 50px;
 }
-.r-bt > input{
-    display: inline-block;
-}
-.r-Battery-reg span{
+.r-bt > input{display: inline-block;}
+.r-Battery-reg span{width:81px;height: 100%;float: left;line-height: 50px;margin-right:3%;}
+.r-Battery-rge > p{width: 100%;display: inline-block;}
+.r-Battery-rge > div{height: 50px;margin-top: 7px;}
+.r-bt > input{display: inline-block;}
+.r-Battery-rge{width:49.5%;font-size: 14px;float: right;margin-top:3%;}
+.r-Battery-rge > p{width: 100%;display: inline-block;height: 50px;}
+.r-Battery-rge > div{height: 50px;}
 
-    float: left;
-}
-
-.r-Battery-rge > p{
-    width: 100%;
-    display: inline-block;
-
-}
-.r-Battery-rge > div{
-    /*display: flex;*/
-    /*align-items: center;*/
-    height: 50px;
-    margin-top: 7px;
-}
-.r-bt > input{
-    display: inline-block;
-}
-
-
-.r-Battery-rge{
-    width:49.5%;
-    font-size: 14px;
-    float: right;
-}
-.r-Battery-rge > p{
-    width: 100%;
-    display: inline-block;
-    height: 50px;
-}
-.r-Battery-rge > div{
-    /*display: flex;*/
-    /*align-items: center;*/
-    height: 50px;
-}
-.r-bt > input{
-    display: inline-block;
-}
-.r-Battery-rge span{
-    float: left;
-}
-.r-Battery-rge span>i{
-color: red;
-}
-
-
-
-
-
-
-
-
-
-
+.r-bt > input{display: inline-block;}
+.r-Battery-rge span{float: left;line-height:40px;width:110px;}
+.r-Battery-rge span>i{color: red;}
 
 /*进度条内容*/
-.r-Lamp-head>span{
-    display: inline-block;
-    text-align: center;
-}
-.r-lights{
-    width: 20%;
-}
-.r-Someone,.r-Unmanned{
-    width: 35%;
-}
-.r-Lamp-Progress{
-    width: 100%;
-    font-size: 14px;
-    padding: 30px;
-}
-.r-Lamp-Progress>div{
-    width: 100%;
-    height:42px ;
-    line-height: 42px;
-    clear: both;
-}
-.r-Lamp i{
-    color: red;
-    font-style:normal;
-    margin-right: 3px;
-}
-.r-Lamp>div>span>i{
-    color: red;
-}
-
+.r-Lamp-head>span{display: inline-block;}
+.r-lights{width: auto;float: left;text-align: left;}
+.r-Someone,.r-Unmanned{width:20%;margin-left:11%}
+.r-Lamp-Progress{width: 100%;font-size: 12px;float:left;}
+.r-Lamp-Progress>div{width: 100%;height:31px ;line-height:31px;float:left;clear: both;background: #fff;margin-top: 2.3%;}
+.r-Lamp i{color: red;font-style:normal;margin-right: 3px;}
+.r-Lamp>div>span>i{color: red;}
 
 /*进度条*/
-
-.progress{
-    float: left;
-    width: 25%;
-    height: 8px;
-    margin-top: 5px;
-    margin-left: 30px;
-}
-
-/*float: right;*/
-
-
+.progress{float: left;width: 25%;height: 8px;margin-top: 5px;margin-left: 30px;}
 
 /*底部按钮*/
-.r-bom-btn{
-    width: 100%;
-    height: 94px;
-    background: #ffffff;
-    clear: both;
-    position: absolute;
-    bottom: 0;
-}
-.r-bom-btn span{
-    display: inline-block;
-    width:82px ;
-    height: 34px;
-    border-radius: 4px;
-    background: #00acd6;
-    line-height: 34px;
-    text-align: center;
-    color: #ffffff;
-
-
-}
-.r-bom-btn div{
-    width: 200px;
-    float: right;
-    margin-right: 100px;
-    margin-top: 35px;
-}
-
-
-.r-Battery-lef>div >p{
-    float: right;
-    font-size: 12px;
-    margin-left: 10px;
-}
-
+.r-bom-btn{width: 100%;height: 94px;background: #ffffff;clear: both;position: absolute;bottom: 0;}
+.r-bom-btn span{display: inline-block;width:82px ;height: 34px;border-radius: 4px;background: #00acd6;line-height: 34px;text-align: center;color: #ffffff;}
+.r-bom-btn div{width: 200px;float: right;margin-right: 100px;margin-top: 35px;}
+.r-Battery-lef>div >p{font-size: 12px;margin:5% 0px 0px 2%;float: left;}
 /*.sha_buttom,.sha_buttom_delete{width:100%;height:50px; position: absolute;bottom: 0;border-top:1px solid #ccc;}*/
 /*.sha_buttom input,.sha_buttom_delete input{width:55px;height:30px;border-radius: 5px;background: rgba(24, 144, 255, 1);color:#fff;line-height:30px;float:right;margin:1.7% 4% 0px 0px ;border:0;}*/
 
-
-
 /*进度条*/
-
-.r-Lamp-Progress div p{
-    width: 12%;
-    float: left;
-    margin-left: 1%;
-}
-
-
-.r-Lamp-Progress div>span{
-    float: left;
-}
-
-
-.r-Lamp-Progress div>.progress{
-    float: left;
-    margin-top: 19px;
-}
-
-
-
-
-.r-Battery-lef div span{
-    float: left;
-}
-
-.r-Battery-lef span>i,.r-Battery-reg i{
-    color:red;
-}
-
+.r-Lamp-Progress div p{width:auto;float: left;margin-left: 1%;}
+.r-Lamp-Progress div>span{float: left;width:78px;height:100%;margin-left: 3%;}
+.r-Lamp-Progress div>.progress{float: left;margin-top: 19px;}
+.r-Battery-lef div span{width:85px;height: 100%;float: left;line-height: 50px;margin:0px 3% 0px 6%;}
+.r-Battery-lef span>i,.r-Battery-reg i{color:red;}
+.de_i{margin-left:14% !important;}
 /*丸子*/
-
-.progres{
-    width: 24%;
-    float: left;
-    margin-top: 18px;
-    margin-left: 5%;
-}
-
-.demo-slider{
-    line-height: 10px;
-}
-
-
-#r_inpl_one,#r_inpl_tw{
-    line-height: 28px;
-}
-
-
-.r_i{
-   line-height: 32px;width: 3%;
-}
-.r_ie{
-    line-height: 21px;width: 3%;
-}
+.progres{width:24%;float: left;margin-top:1.7%;margin-left:4%;}
+.demo-slider{line-height: 10px;}
+#r_inpl_one,#r_inpl_tw{line-height: 28px;}
+.r_i{line-height: 32px;width: 3%;}
+.r_ie{line-height: 21px;width: 3%;}

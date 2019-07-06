@@ -81,8 +81,21 @@ public class HistoryServiceImpl implements HistoryService {
                 }
             }else{
                 log.info("月表没有统计，添加月表年表历史数据");
-                int insert1 = historyMouthMapper.insert(historyMouth);
-                return historyYearMapper.insert(historyYear);
+                historyMouthMapper.insert(historyMouth);
+                Date date = historyMouth.getCreateTime();
+                String year=String.format("%tY", date);
+                String mon=String .format("%tm", date);
+                List<HistoryYear> historyYears = historyYearMapper.queryHistoryYear(historyYear.getDeviceCode(), year, mon);
+                if(historyYears != null && historyYears.size() > 0){
+                    historyYear.setYear(year);
+                    historyYear.setMonth(mon);
+                    historyYear.setYearId(historyYears.get(0).getYearId());
+                    log.info("月表中没有数据，年表中有数据修改年表历史数据");
+                    return historyYearMapper.updateHistroyByCode(historyYear);
+                }else{
+                    log.info("月表中没有数据，年表中有数据年表中没有数据，添加年表历史数据");
+                    return historyYearMapper.insert(historyYear);
+                }
             }
         }
         return 0;

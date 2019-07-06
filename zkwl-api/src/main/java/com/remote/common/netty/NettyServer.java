@@ -42,7 +42,7 @@ public class NettyServer implements Runnable{
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         protected void initChannel(SocketChannel sc) throws Exception {
                             // 超时处理
-                            sc.pipeline().addLast(new IdleStateHandler(60,0,0,TimeUnit.SECONDS));
+                            sc.pipeline().addLast(new IdleStateHandler(300,0,0,TimeUnit.SECONDS));
                             /**
                              * 自定义ChannelInboundHandlerAdapter
                              */

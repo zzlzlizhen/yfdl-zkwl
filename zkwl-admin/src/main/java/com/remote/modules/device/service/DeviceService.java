@@ -8,6 +8,7 @@ import com.remote.modules.sys.entity.SysUserEntity;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.LongSummaryStatistics;
 import java.util.Map;
 
 public interface DeviceService {
@@ -102,12 +103,28 @@ public interface DeviceService {
      * 通过组id查询所有的设备code
      * */
     List<String> queryByGroupId(@Param("groupId")String groupId);
+    /*
+     * @Author zhangwenping
+     * @Description 修改创建人
+     * @Date 18:32 2019/7/5
+     * @Param deviceQuery
+     * @return int
+     **/
+    int updateUserDevice(DeviceQuery deviceQuery);
     /**
      * 通过当前用户id查询所有子孙用户的设备数量
      * */
-    Integer getDeviceCount(List<Long> curUser);
+    Integer getDeviceCount(List<Long> userIds);
     /**
      * 通过当前用户所有用户的userIds查询故障数
      * */
-    Integer getDevFailNum(List<Long> curUser);
+    Integer getDevFailNum(List<Long> userIds);
+    /**
+     * 通过所有用户id查询出所有的设备codes
+     * */
+    List<String> getDeviceCode(List<Long> userIds);
+    /**
+     * 通过所有用户获取设备信息
+     * */
+    List<DeviceEntity> getDeviceInfoList(List<Long> userIds);
 }

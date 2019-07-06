@@ -3,8 +3,10 @@
 .body_m{background-color: rgba(242, 242, 242, 1) !important;}
 .wrapper_w{background:#fff !important;}
 /*侧边栏样式*/
-.logo_m{background-color: rgba(0, 40, 77, 1) !important; height:60px !important;}
-.main-sidebar_m{background-color: rgba(0, 21, 41, 1) !important;padding-top:60px;}
+.logo_m{background-color:#0ECCC2 !important; height:60px !important;}
+.main-sidebar_m{background: url('/remote-admin/statics/image/rbeijingsix.png')!important;padding-top:60px;}
+.skin-blue .wrapper, .skin-blue .main-sidebar, .skin-blue .left-side{background: url('/remote-admin/statics/image/rbeijingsix.png')!important;}
+.skin-blue .sidebar-menu > li:hover > a, .skin-blue .sidebar-menu > li.active > a{background:rgba(0, 0, 0, 0);}
 /*头部*/
 .navbar_m{background:#fff !important;color:#000 !important;}
 /*表格样式*/

@@ -55,7 +55,13 @@
     </select>
 
     <select id="getTotalDischarge" resultType="java.lang.Double">
-        select sum(discharge_capacity) from history_day where device_code in #{deviceCodes}
+        select sum(discharge_capacity) from history_day where 1=1
+        <if test="deviceCodes !=null and deviceCodes.size()!= 0">
+            and device_code in
+            <foreach collection="deviceCodes" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
     </select>
 
     <delete id="deleteBatchDay">

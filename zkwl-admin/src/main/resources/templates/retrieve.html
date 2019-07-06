@@ -18,15 +18,26 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   </head>
   <body>
-   <div>
+   <div class="retr">
        <div>
-           <input type="text">
+           <span>邮箱/手机号：</span>
+           <input type="text" placeholder="请输入邮箱/手机号" id="email">
        </div>
        <div>
-           <input type="text">
+           <span>验证码：</span>
+           <input type="text" value=" " style="width:100px;">
+           <input id="btne" value="获取验证码" onclick="sendemail_a()"></input>
        </div>
-
+       <button class="Que">确定</button>
    </div>
+   <div class="retr_a">
+       <div>
+           <span>新密码：</span>
+           <input type="text" placeholder="请输入新密码" id="new">
+       </div>
+       <button class="Que_a">确定</button>
+   </div>
+
   </body>
     <script src="${request.contextPath}/statics/libs/jquery.min.js"></script>
     <script src="${request.contextPath}/statics/libs/vue.min.js"></script>
@@ -35,7 +46,138 @@
     <script src="${request.contextPath}/statics/libs/fastclick.min.js"></script>
     <script src="${request.contextPath}/statics/libs/app.js"></script>
     <script type="text/javascript">
+         $(function(){
+             function getQueryStringByName(name) {
+                 var result = location.search.match(new RegExp("[\?\&]" + name + "=([^\&]+)", "i"));
+                 if (result == null || result.length < 1) {
+                     return "";
+                 }
+                 return result[1];
+             }
+             var user=getQueryStringByName("username")
 
+             $(".Que_a").click(function(){
+                 var New=$("#new").val()
+                 $.ajax({
+                     url:'http://localhost:8080/remote-admin/sys/user/updatePwd',
+                     type: "post",
+                     data:
+                         "&username="+user +
+                         "&password="+ New
+                      ,
+                     success: function (res) {
+                         console.log(JSON.stringify(res));
+                         if (res.code == "200") {
+                             console.log("修改成功")
+                             console.log(res)
+                             $(".retr").show()
+                             $(".retr_a").hide()
+                         }
+                     }
+                 })
+             })
+
+             var countdown=60;
+         })
+         function sendemail_a() {
+             console.log("111111111")
+             var email=$("#email").val()
+             var reg = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;
+             var Shou=/^1[3456789]\d{9}$/
+             if(reg.test(email)) {
+                 alert("邮箱格式对");
+                 yan(email,"isEmail");
+                 You()
+             }else if(Shou.test(email)){
+                 alert("手机格式对");
+                 yan(email,"isMobile");
+                 Shou_a()
+             }else{
+                 alert("邮箱格式不对");
+                 return false;
+             }
+         }
+         //    验证码
+         function yan(contact,fPwdType){
+             console.log("22222")
+             var obj = $("#btne");
+             countdown=60
+             settime(obj);
+             $.ajax({
+                 url:'http://localhost:8080/remote-admin/repwd/sendForPwd?contact='+contact+"&fPwdType="+fPwdType,
+                 type: "get",
+                 data:{},
+                 success: function (res) {
+                     console.log(JSON.stringify(res));
+                     if (res.code == "200") {
+                         console.log(res)
+                     }
+                 }
+             })
+         }
+         function You() {
+             console.log("邮箱")
+             $(".Que").click(function(){
+                 var securityCode=$("#btne").val();
+                 var email_a=$("#email").val();
+                 $.ajax({
+                     url: 'http://localhost:8080/remote-admin/repwd/checkRePwdEmail?email='+ email_a+"&securityCode="+securityCode,
+                     type: "get",
+                     data:{},
+                     success: function (res) {
+                         console.log(JSON.stringify(res));
+                         if (res.code == "200") {
+                             console.log("邮箱验证正确")
+                           $(".Que").click(function(){
+                               $(".retr").hide()
+                               $(".retr_a").show()
+                           })
+                         }
+                     }
+                 })
+             })
+         }
+
+         function Shou_a() {
+             console.log("手机")
+             $(".Que").click(function(){
+                 var securityCode=$("#btne").val();
+                 var email_a=$("#email").val();
+                 $.ajax({
+                     url:  'http://localhost:8080/remote-admin/repwd/checkRePwdMobile?mobile='+ email_a+"&securityCode="+securityCode,
+                     type: "get",
+                     data:{},
+                     success: function (res) {
+                         console.log(JSON.stringify(res));
+                         if (res.code == "200") {
+                             console.log("手机验证正确")
+                             $(".Que").click(function(){
+                                 $(".retr").hide()
+                                 $(".retr_a").show()
+                             })
+                         }
+                     }
+                 })
+             })
+         }
+
+         function settime(obja) { //发送验证码倒计时
+             if (countdown == 0) {
+                 obja.attr('disabled',false);
+                 //obj.removeattr("disabled");
+                 obja.val("获取验证码");
+                 countdown = 60;
+                 return;
+             } else {
+                 obja.attr('disabled',true);
+                 obja.val("重新发送(" + countdown + ")");
+                 countdown--;
+             }
+             setTimeout(function() {
+                     settime(obja) }
+                 ,1000)
+         }
+         //倒计时60秒
 
     </script>
 </html>

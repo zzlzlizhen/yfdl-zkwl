@@ -187,8 +187,8 @@ $(function(){
                         "<div class=\"switch\"> \n" +
                         "<div class='" + offClass + "' id=" + res.data.list[i].deviceId + " > \n" +
                         "<div class=\"move\" data-state=" + res.data.list[i].onOff + "></div> \n" +
-                        "<div class=\"btnSwitch btn1\">ON</div> \n" +
-                        "<div class=\"btnSwitch btn2 \">OFF</div> \n" +
+                        "<div class=\"btnSwitch btn1\">关</div> \n" +
+                        "<div class=\"btnSwitch btn2 \">开</div> \n" +
                         "</div>" +
                         "</td>\n"+
                         "<td>" + updateTime + "</td>\n" +

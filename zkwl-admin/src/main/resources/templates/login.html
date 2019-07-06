@@ -111,7 +111,7 @@ var vm = new Vue({
 			});
 		},
         retrieve:function(event){
-            location.href ='retrieve.html';
+            window.open('retrieve.html?username='+vm.username);
         }
 	}
 });

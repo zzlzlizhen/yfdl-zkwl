@@ -21,10 +21,21 @@
     .table_m table tr td a {
         margin-left: 4%;
     }
+
+    @media screen and (min-width:800px) and (max-width:1300px){
+        .table_m table tr td:last-child {
+            width: 22.311%;
+        }
+        .table_grouping_z table tr td, .table_grouping_z ul li {
+            width: 12.1%;
+        }
+    }
+
+
 </style>
 <body>
     <div class="hear">
-        <p>当前位置>项目管理></p><p class="p" id="p_a"></p><p class="p" id="p_b">分组管理</p>
+        <p><img src="${request.contextPath}/statics/image/dingwei.png" alt="">项目管理></p><p class="p" id="p_a"></p><p class="p" id="p_b">分组管理</p>
     </div>
     <div class="project_he" >
         <span class="hear_w">组名：</span>

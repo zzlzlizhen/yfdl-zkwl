@@ -29,13 +29,15 @@ $(function(){
     var href = showWindowHref();
     //设备编号
     var deviceCode=href['deviceCode'];
-    //设备id
-    var grod=href['grod'];
     //分组id
+    var grod=href['grod'];
+    //设备id
     var deviceId=href['deviceId'];
-    console.log("控制")
+    console.log("Code")
     console.log(deviceCode)
+    console.log("分组id")
     console.log(grod)
+    console.log("设备id")
     console.log(deviceId)
 
 
@@ -167,21 +169,23 @@ $(function(){
     });
 
 
-    //数据渲染
-    // $.ajax({
-    //     url:baseURL + 'advancedsetting/settingInfo?projectId='+deviceStatus,
-    //     contentType: "application/json;charset=UTF-8",
-    //     type:"POST",
-    //     data: {},
-    //     success: function(res){
-    //         console.log(res)
-    //     }
-    // });
+    //高级设置数据渲染
+    $.ajax({
+        url:baseURL + 'advancedsetting/queryDevAdvInfo?deviceCode='+deviceCode+"&groupId="+grod,
+        contentType: "application/json;charset=UTF-8",
+        type:"GET",
+        data: {},
+        success: function(res){
+            console.log("高级设置参数获取")
+            console.log(res)
+        }
+    });
     //取值
     $("#r_bttn").click(function () {
         var r_btn_l = $("#r_btn_l input[type='radio']:checked").val();
+        console.log("+++++")
+        console.log(r_btn_l)
         var r_btne_l = $("#r_btne_l input[type='radio']:checked").val();
-
         var r_l_p = $("#r_Load_power").val();
         var r_teml = $("#d414").val();
         var r_temlr = $("#d4141").val();
@@ -253,34 +257,57 @@ $(function(){
 
 
         $.ajax({
-            url:baseURL + 'advancedsetting/update',
+            url:baseURL + 'advancedsetting/updateDevice ',
             contentType: "application/json;charset=UTF-8",
             type:"POST",
             data:
+                "&deviceCode="+ deviceCode + //设备code
+                "&groupId="+ grod + //分组id
+                "&loadWorkMode="+ r_btn_l + //负载工作模式
 
-                "&loadWorkMode=" + r_btn_l +
-                // "&realName=" + pro_s_b +
-                "&exclusiveUser=" + r_Load_power +
-                "&timeTurnOn=" + r_teml +
-                "&timeTurnOff=" + r_temlr +
-                "&time1=" + r_one_teml +
-                "&time2=" + r_teml_sv +
-                "&time3=" + r_teml_th +
-                "&time4=" + r_teml_ng +
-                "&time5=" + r_teml_fif +
-                "&timeDown=" + r_teml_el+
-                "&powerDawnPeople=" + r_wen14+
-                "&powerPeople1=" + r_btn_l +
-                "&powerPeople2=" + r_wen6+
-                 "&powerPeople3=" + r_wen8+
-                 "&powerPeople4=" + r_wen10+
-                "&powerPeople5=" + r_wen12+
-                "&powerDawnPeople=" + slideTest13+
-                "&powerSensor1=" + slideTest5
-                // "&time3=" + r_teml_th +
-                // "&time4=" + r_teml_ng +
-                // "&time5=" + r_teml_fif +
-                // "&timeDown=" + r_teml_el
+                "&powerLoad="+ "" +//负载功率
+                "&timeTurnOn="+ "" + //开灯时刻
+                "&timeTurnOff="+ "" + //关灯时刻
+                "&time1="+ "" +//1时段时长
+                "&time2="+ "" +//2时段时长
+                "&time3="+ "" +//3时段时长
+                "&time4="+ "" +//4时段时长
+                "&time5="+ "" +//5时段时长
+                "&timeDown="+ "" +//晨亮时段时长
+                "&powerPeople1="+ "" +//时段1 有人功率
+                "&powerPeople2="+ "" +//时段2 有人功率
+                "&powerPeople3="+ "" +//时段3 有人功率
+                "&powerPeople4="+ "" +//时段4 有人功率
+                "&powerPeople5="+ "" +//时段5 有人功率
+                "&powerDawnPeople="+ "" +//晨亮 有人功率
+                "&powerSensor1="+ "" +//时段1 无人功率
+                "&powerSensor2="+ "" +//时段2 无人功率
+                "&powerSensor3="+ "" +//时段3无人功率
+                "&powerSensor4="+ "" +//时段4 无人功率
+                "&powerSensor5="+ "" +//时段5 无人功率
+                "&powerSensorDown="+ "" +//晨亮 无人功率
+                "&savingSwitch="+ "" + //节能开关
+                "&autoSleepTime="+ "" + //自动休眠时间长度
+                "&vpv="+ "" + //光控电压
+                "&ligntOnDuration="+ "" +//光控延迟时间长度
+                "&pvSwitch="+ "" +//光控关灯开灯
+                "&batType="+ "" + // 电池类型 0:未设置；1：胶体电池；2：铅酸电池； 3磷酸铁锂电池；4：三元锂电池
+                "&batStringNum="+ "" +//电池串数
+                "&volOverDisCharge="+ "" + //过放电压
+                "&volCharge="+ "" +//充电电压
+                "&tempCharge="+ "" +//充电温度范围(最大值和最小值做高八位低八位处理)
+                "&tempDisCharge="+ "" +//放电温度范围（最大值和最小值做高八位低八位处理)）
+                "&inspectionTime="+ "" +//巡检时间
+                "&inductionSwitch="+ "" +//感应开关
+                "&inductionLightOnDelay="+ "" +//感应后的亮灯延时
+
+                "&icharge="+ "" + //充电电流
+                "&firDownPower="+ "" + //一阶降压功率
+                "&twoDownPower="+ "" + //二阶降压功率
+                "&threeDownPower="+ "" + //三阶降压功率
+                "&firReducAmplitude="+ "" + //一阶降功率幅度
+                "&twoReducAmplitude="+ "" + //二阶降功率幅度
+                "&threeReducAmplitude="+ "" //三阶降功率幅度
                 ,
             success: function(res){
                 window.location.reload()

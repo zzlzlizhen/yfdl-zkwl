@@ -219,6 +219,9 @@ $(function () {
          $(".shade_modifier,.shade_b_modifier").css("display","none")
      })
 
+
+    console.log( document.body.clientHeight )
+
 })
 
 

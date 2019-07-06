@@ -149,6 +149,7 @@ public class DeviceServiceImpl implements DeviceService {
         return null;
     }
 
+
     @Override
     public int updateOnOffByIds(DeviceQuery deviceQuery) {
         List<DeviceEntity> deviceEntityList = new ArrayList<>();
@@ -203,17 +204,37 @@ public class DeviceServiceImpl implements DeviceService {
         return this.deviceMapper.queryByGroupId(groupId);
     }
 
+    @Override
+    public int updateUserDevice(DeviceQuery deviceQuery) {
+        return deviceMapper.updateUserDevice(deviceQuery);
+    }
+
     /**
      * 通过当前用户id查询所有用户的设备数量
      * */
     @Override
-    public Integer getDeviceCount(List<Long> curUid) {
+    public Integer getDeviceCount(List<Long> curUids) {
 
-        return this.deviceMapper.getDeviceCount(curUid);
+        return this.deviceMapper.getDeviceCount(curUids);
+    }
+
+    /**
+     * 通过用户id
+     * */
+    @Override
+    public Integer getDevFailNum(List<Long> curUserIds) {
+        return this.deviceMapper.getDevFailNum(curUserIds);
     }
 
     @Override
-    public Integer getDevFailNum(List<Long> curUser) {
-        return this.deviceMapper.getDevFailNum(curUser);
+    public List<String> getDeviceCode(List<Long> userIds) {
+        return this.deviceMapper.getDeviceCode(userIds);
+    }
+    /**
+     * 通过所有用户id获取当前设备信息
+     * */
+    @Override
+    public List<DeviceEntity> getDeviceInfoList(List<Long> userIds){
+        return this.deviceMapper.getDeviceInfoList(userIds);
     }
 }

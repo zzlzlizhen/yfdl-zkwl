@@ -3,13 +3,13 @@
 html,body{width:100% !important;height:100% !important;margin:0;padding:0;font-size:12px;}
 ul,li,ol{list-style:none;display: block}
 /*css功能样式*/
-.hear{width:100%;height:60px;float:left;line-height:60px;font-size: 14px;line-height: 8%;padding-top: 8px;}
+.hear{width:100%;height:60px;float:left;line-height:60px;font-size: 14px;-line-height: 8%;-padding-top: 8px;}
 .project_he{width:100%;height:115px;float:left;background: #ffffff;border-top:10px solid #F7F8FA;border-bottom:10px solid #F7F8FA;}
 .hear_w{width:auto;height:100%;float:left;line-height: 90px;margin-left:1%;}
-.form_input{  margin-bottom: 0px !important; padding: 0px !important;width:11% !important;;height:100%;margin-top:26px;}
+.form_input{  margin-bottom: 0px !important; padding: 0px !important;width:11% !important;margin-top:26px;}
 
 /*按钮样式*/
-.btn_m{ background: rgba(24, 144, 255, 1) !important; border:rgba(24, 144, 255, 1) !important;margin:26px 0px 0px 0.5%; padding:7px 8px !important;}
+.btn_m{ background: rgba(24, 144, 255, 1) !important; border:rgba(24, 144, 255, 1) !important;margin:26px 0px 0px 0.5%;}
 
 /*表格*/
 .table_m{width:96%;height:auto;max-height:61%;float:left;margin-left:2%; display: list-item !important;list-style:none !important;
@@ -18,7 +18,7 @@ ul,li,ol{list-style:none;display: block}
 
 .table_m ul{width:100%;height:45px;float:left;border-top: 1px solid #ccc;list-style:none !important;margin:0;padding:0; background:#27E2D4;}
 .table_m ul li{width:10.611111%;height:100%;float:left;border:0px; border-right:1px solid #ccc;line-height: 40px;text-align: center;list-style:none !important;
-    font-size:15px; background: rgba(255, 255, 255, 0);font-weight: bold}
+    font-size:15px; background: rgba(255, 255, 255, 0);font-weight: bold;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
 
 .table_m table{width:100%;height:100%; border:0px;}
 .table_m table tr{width:100%;height:45px;float:left;border-top: 1px solid #ccc;}
@@ -98,6 +98,7 @@ thead>th{text-align: center !important;}
 .btn1{float: left;font-size: 12px !important;}
 .btn2{float: right;font-size: 12px !important;}
 .btnSwitch{height: 30px;width: 50%;border:none;line-height: 30px;font-size: 15px;text-align: center;z-index: 1;}
+.btn{padding: 0 !important;}
 .move{z-index: 100;
     width: 35%;
     border-radius: 20px;
@@ -121,7 +122,7 @@ thead>th{text-align: center !important;}
 /*分组*/
 .weather{height: 135px; position: relative;}
 .gl_fu{margin:4px 2px 0px 0px !important;}
-.gl_bt{padding:5.5px 8px !important;}
+.gl_bt{padding:1.5px 8px !important;}
 .hear_weather{width:277px;height:100%;float:left;text-align: left}
 .hear_project{width: 80%;
     height: 34%;
@@ -145,9 +146,10 @@ thead>th{text-align: center !important;}
 .gross_d{ color:#7e72f2}
 .gross_alarm>img{width:78px;height:78px;float:left;margin:8% 0px 0px 7%;}
 .gross span{width:70%;height:20px;float:left;font-size:16px;text-indent:0px;line-height: 20px;color: #333333;margin:-33% 37px 0px 56.5%;}
-.gross div{width:auto;height:auto;font-size:32px;text-indent: 0px;font-weight: bold;position: absolute;top:20%;left:66%;}
+.gross div{width:auto;height:auto;font-size:32px;text-indent: 0px;font-weight: bold;position: absolute;top:-3%;left:66%;}
 .gross_map{width:60%;height:60%;right:-2%;position: absolute;bottom: 0;}
-.hear_map{width:67%;height:30%;background:rgba(24, 144, 255, 1);text-align: center;line-height:45px;color:#fff;font-size:14px;
+.hear_map{width:67%;height:41px;  background: url('/remote-admin/statics/image/fenzu-1.png')no-repeat center !important;
+    background-size:100% 41px !important;text-align: center;line-height:41px;color:#fff;font-size:14px;color: #008E8E;
     text-indent: 0;margin-top:15.9%;cursor: pointer}
 .status{width:80px;height:25px;position: absolute;right:0;top:0;background: rgba(26, 188, 156, 1);line-height:25px;
     text-align: center;font-size:14px;text-indent: 0;color:#fff;border-radius:0px 0px 0px 10px;}
@@ -285,7 +287,7 @@ thead>th{text-align: center !important;}
 .facility div{width:55%;height:100%;line-height: 45px;margin:0px 3% ;float: left;color:#ccc;}
 .facility p{width:24%;height:100%;line-height: 45px;float: left;color:#ccc;}
 /*项目管理顶部*/
-.hear p{width: auto;height:100%;float: left;}
+.hear>p{width: auto;height:100%;float: left;line-height: 60px}
 .p{margin:0;text-indent: 0;}
 
 
@@ -438,11 +440,11 @@ thead>th{text-align: center !important;}
 .project_he>a{
     text-decoration: none;
     width: 7%;
-    height: 45px;
+    height: 34px;
     display: inline-block;
-    line-height: 47px;
+    line-height: 34px;
     text-align: center;
-    margin-top: 23px;
+    margin-top: 26px;
     margin-left:1%;
     font-size: 15px;
     vertical-align: middle;
@@ -455,9 +457,9 @@ thead>th{text-align: center !important;}
     height: 22px;
     margin-top: -2px;
 }
-.rcxc{
-    margin-top: -4px;
-}
+/*.rcxc{*/
+    /*margin-top: -4px;*/
+/*}*/
 #proje_add>img{
     display: inline-block;
     width: 23px;
@@ -469,34 +471,39 @@ thead>th{text-align: center !important;}
     width: 23px;
     height: 22px;
 }
+#proje_search{
+    background: url('${request.contextPath}/statics/image/kuang-3.png')no-repeat center ;
+    background-size: 100% 34px !important ;
+    /*width: 7%;*/
+    /*height: 45px;*/
+    /*display: inline-block;*/
+    /*line-height: 45px;*/
+    /*text-align: center;*/
+    /*margin-top: 23px;*/
+    /*margin-left: 30px;*/
+    /*font-size: 14px;*/
+}
 .main-sidebar,.main-sidebar_m {
-    background: url("/remote-admin/statics/image/qietuimg_01.gif")!important;
-    background-repeat:no-repeat !important;
-    background-size:auto;
+    background: url("/remote-admin/statics/image/qietuimg_01.gif")no-repeat center!important;
+    background-size:100% 34px !important;
 }
 .r_bu_sou1 img{
     display: inline-block;
 }
 
 .project_he>a:hover{
-    background: url('/remote-admin/statics/image/fenzu-1.png') !important;
-    background-size: 100% !important;
-    background-repeat:no-repeat !important;
-    background-size:auto;
+    background: url('/remote-admin/statics/image/fenzu-1.png')no-repeat center !important;
+    background-size:100% 34px !important;
+
+}
+.project_he>a{
+    background: url('/remote-admin/statics/image/sousuo-1.png')no-repeat center !important;
+    background-size:100% 34px !important;
 
 }
 .project_he>a{
     background: url('/remote-admin/statics/image/sousuo-1.png') !important;
-    background-size:100% !important;
-    background-repeat:no-repeat;
-    background-size:auto;
-
-}
-.project_he>a{
-    background: url('/remote-admin/statics/image/sousuo-1.png')100% !important;
-    background-size: 100% !important ;
-    background-size:auto;
-    background-repeat:no-repeat !important;
+    background-size: 100% 34px !important ;
 
 }
 
@@ -521,7 +528,7 @@ thead>th{text-align: center !important;}
     margin-left: 8px;display: inline-block;width: 13px;height: 13px;
 }
 .content_Y,.hear{
-    background:#fffffff !important;
+    background:#ffffff !important;
 }
 .r_xiugai_six_tu{
     width: 25px;
@@ -529,16 +536,16 @@ thead>th{text-align: center !important;}
     float: left;
     writing-mode: vertical-rl;
     letter-spacing: 5px;
-    background: url("");
-    background: red;
+    background: url("/remote-admin/statics/image/r_zhengchangsiz.png");
     text-align: center;
-    line-height: 30px;
+    line-height:27px;
+    color: #ffffff;
 }
 
 .hear_city>div{
     float: left;
     margin-left: 10%;
-    width: 75%;
+    width: 128%;
 }
 .hear_city>div:nth-child(2){
     margin-top: 5px;
@@ -564,19 +571,8 @@ thead>th{text-align: center !important;}
     width: 46px;height: 39px
 }
 
-/*@media screen and (min-width: 800px) {*/
-    /*.gross {*/
-        /*width: 5%;*/
-        /*height: 84%;*/
-        /*float: left;*/
-        /*border-radius: 5px;*/
-        /*overflow: hidden;*/
-        /*margin: 0.7% 0.5% 0px 0px;*/
-        /*position: relative;*/
-    /*}*/
-/*}*/
 
-@media screen and (max-width:800px){
+@media screen and (min-width:800px) and (max-width:1300px){
 
         .gross {
             width: 10%;
@@ -588,20 +584,75 @@ thead>th{text-align: center !important;}
             position: relative;
         }
         .gross>img{
-            width: 100%;
-            height: 89%;
+            width: 68px;
+            height: 68px;
         }
         .gross span{
             font-size: 12px;
-            margin: 0;
-            float: unset;
-            line-height: 0;
+            /*margin: 0;*/
+            /*float: unset;*/
+            /*line-height: 0;*/
         }
         .gross div{
-            top: 20%;
+            top: -3%;
             left: 90%;
             font-size: 14px;
         }
+    .hear_project{
+        font-size: 16px;
+    }
+    .hear_city{
+        font-size: 12px;
+    }
+    .hear_weather{
+        width: 245px;
+    }
+
+    .hear_w{
+        font-size: 12px;
+        margin-left: 0.5%;
+    }
+    .form_input{
+        width: 6% !important;
+        height: auto;
+    }
+    .form-control{
+        font-size: 12px;
+    }
+    .project_he > a{
+        width: 8%;
+        font-size: 12px;
+        margin-left: 0.5%;
+    }
+
+    #proje_search{
+        font-size: 12px;
+    }
+    .table_m ul li{
+        font-size: 12px;
+    }
+    .table_m_Z table tr td, .table_m_Z ul li {
+        width: 8.2% !important;
+    }
+    .switch {
+        width: 76%;
+        margin: 0px 0px 0 10%;
+    }
+
+    .table_m table tr td {
+        width: 9.611%;
+    }
+
+    .table_m ul li {
+        width: 9.611%;
+    }
+
+    /*.table_m table tr td:last-child {*/
+        /*width: 15.111%;*/
+    /*}*/
+
+
+
 
 
     }

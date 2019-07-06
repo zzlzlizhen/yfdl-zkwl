@@ -62,22 +62,19 @@
             <div class="r-content">
                 <div class="le-con">
                     <p class="r-bt" id="r_btn_l" style="margin: 0;">
-                        <span>*</span>
-                        负载工作模式：
+                        <span>*负载工作模式</span>
                         <input name="sex" type="radio" value="0" checked="checked"/>定时模式
                         <input name="sex" type="radio" value="1"/>光控模式
                     </p>
                     <div>
-                        <span>*</span>
-                        开灯时刻：
+                        <span>*开灯时刻</span>
                         <input type="text" class="Wdate" id="d414"
                                onclick="WdatePicker({dateFmt:'H:mm:ss',minDate:'8:00:00',maxDate:'11:30:00'})" style=" display: inline-block;
-                                       width: 184px; height: 35px; border: 1px solid #ccc; border-radius: 4px; margin-left: 52px;"/>
+                                       width: 47%; height: 35px; border: 1px solid #ccc; border-radius: 4px; margin-left:1%;"/>
                     </div>
 
                     <div>
-                        <span>*</span>
-                        1时段时长：
+                        <span>*1时段时长</span>
                         <div class="container">
                             <div class="input-group spinner">
                                 <input type="text" class="form-control" value="42" id="r_one_teml">
@@ -105,8 +102,7 @@
                     </div>
 
                     <div>
-                        <span>*</span>
-                        3时段时长：
+                        <span>* 3时段时长</span>
                         <div class="container">
                             <div class="input-group spinner">
                                 <input type="text" class="form-control" value="42" id="r_teml_th">
@@ -134,8 +130,7 @@
                     </div>
 
                     <div>
-                        <span>*</span>
-                        5时段时长：
+                        <span>*5时段时长</span>
                         <div class="container">
                             <div class="input-group spinner">
                                 <input type="text" class="form-control" value="42" id="r_teml_fif">
@@ -162,17 +157,11 @@
                         分钟
                     </div>
                 </div>
+
                 <div class="rg-con">
-                    <p class="r-bt" id="r_btne_l" style="margin: 0;">
-                        <span>*</span>
-                        负载工作模式：
-                        <input name="sex" type="radio" value="0" checked="checked"/>定时模式
-                        <input name="sex" type="radio" value="1"/>光控模式
-                    </p>
                     <div class="r-bt">
-                        <span>*</span>
-                        负载功率：
-                        <div class="container">
+                        <span>* 负载功率</span>
+                        <div class="container_a">
                             <div class="input-group spinner">
                                 <input type="text" class="form-control" value="42" id="r_Load_power">
                                 <div class="input-group-btn-vertical">
@@ -183,19 +172,16 @@
                                 </div>
                             </div>
                         </div>
-                        小时
                     </div>
                     <!--id="d414" 报错-->
                     <div>
-                        <span>*</span>
-                        关灯时刻：
+                        <span>*关灯时刻</span>
                         <input type="text" class="Wdate rda" id="d4141"
                                onclick="WdatePicker({dateFmt:'H:mm:ss',minDate:'8:00:00',maxDate:'11:30:00'})" style=" display: inline-block;
-                                       width: 184px; height: 35px; border: 1px solid #ccc; border-radius: 4px; margin-left: 42px;"/>
+                                       width:47%; height: 35px; border: 1px solid #ccc; border-radius: 4px; margin-left:1%;"/>
                     </div>
                     <div>
-                        <span>*</span>
-                        2时段时长：
+                        <span>*2时段时长</span>
                         <div class="container">
                             <div class="input-group spinner">
                                 <input type="text" class="form-control" value="42" id="r_teml_sv">
@@ -223,8 +209,7 @@
                     </div>
 
                     <div>
-                        <span>*</span>
-                        4时段时长：
+                        <span>*4时段时长</span>
                         <div class="container">
                             <div class="input-group spinner">
                                 <input type="text" class="form-control" value="42" id="r_teml_ng">
@@ -252,8 +237,7 @@
                     </div>
 
                     <div>
-                        <span>*</span>
-                        晨亮时段时长：
+                        <span>*晨亮时段时长</span>
                         <div class="container">
                             <div class="input-group spinner">
                                 <input type="text" class="form-control" value="42" id="r_teml_el">
@@ -289,9 +273,8 @@
             <div class="r-content">
                 <div class="r-Battery-lef">
                     <div>
-                        <span><i>*</i></span>
-                        光控电压：
-                        <div class="container">
+                        <span>*光控电压</span>
+                        <div class="container" style="width:42%;margin:2.1% 0px 0px 2%;">
                             <div class="input-group spinner">
                                 <input type="text" class="form-control" value="42" id="r_teml_tgl">
                                 <div class="input-group-btn-vertical">
@@ -302,27 +285,26 @@
                         </div>
                     </div>
                     <div>
-                        <span><i>*</i>开灯延时(min)</span>
-                        <div class="progres" style="margin-top: 9px;width: 42%;">
-                            <div id="slideTest1" class="demo-slider" style="height: 50px;" lay-percent="70%"></div>
+                        <span>*开灯延时(min)</span>
+                        <div class="progres" style="margin-top:6.5%;width:34%;">
+                            <div id="slideTest1" class="demo-slider" style="height:10px;" lay-percent="70%"></div>
                         </div>
-                        <p>40% 完成</p>
+                        <p>40%</p>
                     </div>
 
                 </div>
                 <div class="r-Battery-reg">
                     <p class="r-bt" id="r_btl_th">
-                        <span><i>*</i></span>
-                        光控关灯开关：
-                        <input name="sex" type="radio" checked="checked" value="0"/>开
-                        <input name="sex" type="radio" value="1"/>关
+                        <span>*光控关灯开关</span>
+                        <input name="sex" type="radio" class="che_gua" checked="checked" value="0"/>开
+                        <input name="sex" type="radio" class="che_gua" value="1"/>关
                     </p>
                     <div>
-                        <span><i>*</i> 负载功率：</span>
-                        <div class="progres" style="margin-top: 9px;width: 42%;">
-                            <div id="slideTest2" class="demo-slider" style="height: 50px;"></div>
+                        <span>*负载功率</span>
+                        <div class="progres" style="margin-top:5.5%;width:34%;">
+                            <div id="slideTest2" class="demo-slider" style="height:10px;"></div>
                         </div>
-                        <p style="float: right;">40% 完成</p>
+                        <p style="margin:4.5% 0px 0px 2%;width: auto;float:left;">40%</p>
                     </div>
                 </div>
             </div>
@@ -334,8 +316,8 @@
             <div class="r-Battery-tw-con">
                 <div class="r-Battery-lef">
                     <div>
-                        <span> <i class="r_ie">*</i></span>电池串数：
-                        <div class="container">
+                        <span> <i class="r_ie">*</i>电池串数</span>
+                        <div class="container" style="width:44%;margin-top:2%;">
                             <div class="input-group spinner">
                                 <input type="text" class="form-control" value="42" id="r_teml_forl">
                                 <div class="input-group-btn-vertical">
@@ -346,20 +328,23 @@
                         </div>
                     </div>
                     <div>
-                        <span> <i class="r_i">*</i></span>过放电压(V)：<input type="" value="000" id="r_inpl_one">X8
+                        <span> <i class="r_i">*</i>过放电压(V)</span><input type="" value="000" class="m_in"  id="r_inpl_one">X8
                     </div>
                     <div>
-                        <span> <i class="r_i">*</i></span>充电电流(A)：<input type="" value="1111" id="r_inpl_tw">
+                        <span> <i class="r_i">*</i>超压类型(v)</span><input type="" value="1111"  class="m_in" >
                     </div>
                     <div>
-                        <span> <i class="r_i">*</i>充电温度范围：</span>
-                        <p>40% 完成</p>
-                        <div class="progres" style="margin-top: 9px;width:42%;">
-                            <div id="slideTest3" class="demo-slider" style="height: 50px;"></div>
+                        <span> <i class="r_i">*</i>充电电流(A)</span><input type="" value="1111"  class="m_in" id="r_inpl_tw">
+                    </div>
+                    <div>
+                        <span> <i class="r_i">*</i>充电温度范围</span>
+                        <div class="progres" style="margin-top: 6%;width: 34%;margin-left: 2.4%;">
+                            <div id="slideTest3" class="demo-slider" style="height: 10px;"></div>
                         </div>
+                        <p>40%</p>
                     </div>
                     <div style="line-height: 34px;clear: both;">
-                        <span><i>*</i>巡检时间：</span>
+                        <span><i>*</i>巡检时间</span>
                         <div class="container" style="float:left;">
                             <div class="input-group spinner">
                                 <input type="text" class="form-control" value="42" id="r_teml_thgl">
@@ -369,7 +354,7 @@
                                 </div>
                             </div>
                         </div>
-                        <p style="float:left;">小时</p>
+                        <p style="float:left;margin: 0;">小时</p>
                         <div class="container r-container" style="float:left;">
                             <div class="input-group spinner">
                                 <input type="text" class="form-control" value="42" id="r_teml_thel">
@@ -379,15 +364,15 @@
                                 </div>
                             </div>
                         </div>
-                        <p style="float:left;">分钟</p>
+                        <p style="float:left;margin: 0;">分钟</p>
                     </div>
                 </div>
 
                 <div class="r-Battery-rge">
                     <div>
-                        <span><i class="r_ie">*</i></span>电池类型：
-                        <div class="form-group col-sm-2 " style="width:40%;padding-left:0;padding-right:0;float: right;">
-                            <select class="form-control" id="r_select_b" style="width: 65%;">
+                        <span><i class="r_ie">*</i>电池类型</span>
+                        <div class="form-group col-sm-2 " style="width:44%;padding:0;margin:0;">
+                            <select class="form-control" id="r_select_b">
                                 <option>三元锂</option>
                                 <option>2年</option>
                                 <option>3年</option>
@@ -397,116 +382,118 @@
                         </div>
                     </div>
                     <div>
-                        <span style="float: left;"> <i>*</i>充电电压(V)：</span><input type="" style="float: left;line-height: 28px">X8
+                        <span style="float: left;"> <i>*</i>充电电压(V)</span><input type="" style="float: left;line-height:28px;margin-top:2%;">X8
                     </div>
                     <div>
-                        <span> <i>*</i>放电温度范围(C)：</span>
-                        <div class="progres" style="margin-top: 9px;width: 41%;">
-                            <div id="slideTest17" class="demo-slider" style="height: 50px;"></div>
+                        <span style="float: left;"> <i>*</i>过放返回电压(V)</span><input type="" style="float: left;line-height:28px;margin-top:2%;">X8
+                    </div>
+                    <div>
+                        <span style="float: left;"> <i>*</i>充电结束电流(A)</span><input type="" style="float: left;line-height:28px;margin-top:2%;">
+                    </div>
+                    <div>
+                        <span> <i>*</i>放电温度范围(C)</span>
+                        <div class="progres" style="margin:4% 0px 0px 2%;width:35%;">
+                            <div id="slideTest17" class="demo-slider" style="height:10px;"></div>
                         </div>
-                        <p style="float: right">40% 完成</p>
+                        <p>40</p>
                     </div>
                 </div>
 
             </div>
         </div>
         <!--4444444-->
-        <div class="r-Lamp" style="height:620px">
+        <div class="r-Lamp" style="height:486px">
             <div class="r-Lamp-head">
                 <span class="r-lights">关灯时段</span>
                 <span class="r-Someone">有人功率</span>
-                <span class="r-Unmanned">无人功率</span>
+                <span class="r-Unmanned" style="margin-left:21%;">无人功率</span>
             </div>
             <div class="r-Lamp-Progress">
                 <div>
-                    <span> <i>*</i>灯亮时段1：</span>
+                    <span> <i>*</i>灯亮时段1</span>
+                    <div class="progres">
+                        <div id="slideTest4" class="demo-slider" style="height:10px;"></div>
+                    </div>
+                    <p>40%</p>
+                    <div class="progres de_i">
+                        <div id="slideTest5" class="demo-slider " style="height:10px;"></div>
+                    </div>
+                    <p>40%</p>
+                </div>
+                <div>
+                    <span> <i>*</i>灯亮时段2</span>
+                    <div class="progres">
+                        <div id="slideTest6" class="demo-slider" style="height:10px;"></div>
+                    </div>
+                    <p>40%</p>
+                    <div class="progres de_i">
+                        <div id="slideTest7" class="demo-slider " style="height:10px;"></div>
+                    </div>
+                    <p>40%</p>
+                </div>
+                <div>
+                    <span> <i>*</i>灯亮时段3</span>
+                    <div class="progres">
+                        <div id="slideTest8" class="demo-slider" style="height:10px;"></div>
+                    </div>
+                    <p>40%</p>
+                    <div class="progres de_i">
+                        <div id="slideTest9" class="demo-slider " style="height:10px;"></div>
+                    </div>
+                    <p>40%</p>
+                </div>
+                <div>
+                    <span> <i>*</i>灯亮时段4</span>
+                    <div class="progres">
+                        <div id="slideTest10" class="demo-slider" style="height:10px;"></div>
+                    </div>
+                    <p>40%</p>
+                    <div class="progres de_i">
+                        <div id="slideTest11" class="demo-slider " style="height:10px;"></div>
+                    </div>
+                    <p>40%</p>
+                </div>
+                <div>
+                    <span> <i>*</i>灯亮时段5</span>
+                    <div class="progres">
+                        <div id="slideTest12" class="demo-slider" style="height:10px;"></div>
+                    </div>
+                    <p>40%</p>
+                    <div class="progres de_i">
+                        <div id="slideTest16" class="demo-slider " style="height:10px;"></div>
+                    </div>
+                    <p>40%</p>
+                </div>
+                <div>
+                    <span> <i>*</i>晨亮时段</span>
+                    <div class="progres">
+                        <div id="slideTest13" class="demo-slider" style="height:10px;"></div>
+                    </div>
+                    <p>40%</p>
+                    <div class="progres de_i">
+                        <div id="slideTest14" class="demo-slider " style="height:10px;"></div>
+                    </div>
+                    <p>40%</p>
+                </div>
 
-                    <div class="progres">
-                        <div id="slideTest4" class="demo-slider" style="height: 50px;"></div>
+                <div style="height:50px;">
+                    <span style="width:81px;margin-top:0.5%;"> <i>*</i>节能智能开关</span>
+                    <div class="form-group col-sm-2 " style="width:29%;padding:0;margin:0;">
+                        <select class="form-control" id="rc_select_b" style="width:100%;margin-left: 8%;">
+                            <option>1年</option>
+                            <option>2年</option>
+                            <option>3年</option>
+                            <option>4年</option>
+                            <option>5年</option>
+                        </select>
                     </div>
-                    <p>40% 完成</p>
-                    <div class="progres">
-                        <div id="slideTest5" class="demo-slider" style="height: 50px;"></div>
+                    <div style="width:46%;float: left;">
+                        <span style="float:left;width:22%;height:100%;margin:1% 0px 0px 10%;"> <i style="">*</i>自动休眠时间</span>
+                        <div class="progres" style="width:53%;margin-top:4.4%;">
+                            <div id="slideTest15" class="demo-slider" style="height:10px;"></div>
+                        </div>
+                        <p style="float:left;">40%</p>
                     </div>
-                    <p>40% 完成</p>
-                </div>
-                <div>
-                    <span> <i>*</i>灯亮时段2：</span>
-                    <div class="progres">
-                        <div id="slideTest6" class="demo-slider" style="height: 50px;"></div>
-                    </div>
-                    <p>40% 完成</p>
-                    <div class="progres">
-                        <div id="slideTest7" class="demo-slider" style="height: 50px;"></div>
-                    </div>
-                    <p>40% 完成</p>
-                </div>
-                <div>
-                    <span> <i>*</i>灯亮时段3：</span>
-                    <div class="progres">
-                        <div id="slideTest8" class="demo-slider" style="height: 50px;"></div>
-                    </div>
-                    <p>40% 完成</p>
-                    <div class="progres">
-                    <div id="slideTest9" class="demo-slider" style="height: 50px;"></div>
-                </div>
-                    <p>40% 完成</p>
-                </div>
-                <div>
-                    <span> <i>*</i>灯亮时段4：</span>
-                    <div class="progres">
-                        <div id="slideTest10" class="demo-slider" style="height: 50px;"></div>
-                    </div>
-                    <p>40% 完成</p>
-                    <div class="progres">
-                        <div id="slideTest11" class="demo-slider" style="height: 50px;"></div>
-                    </div>
-                    <p>40% 完成</p>
-                </div>
-                <div>
-                    <span> <i>*</i>灯亮时段5：</span>
-                    <div class="progres">
-                        <div id="slideTest12" class="demo-slider" style="height: 50px;"></div>
-                    </div>
-                    <p>40% 完成</p>
-                    <div class="progres">
-                        <div id="slideTest16" class="demo-slider" style="height: 50px;"></div>
-                    </div>
-                    <p>40% 完成</p>
-                </div>
-                <div>
-                    <span> <i>*</i>晨亮时段：</span>
-                    <div class="progres">
-                        <div id="slideTest13" class="demo-slider" style="height: 50px;"></div>
-                    </div>
-                    <p>40% 完成</p>
-                    <div class="progres">
-                        <div id="slideTest14" class="demo-slider" style="height: 50px;"></div>
-                    </div>
-                    <p>40% 完成</p>
-                </div>
-            </div>
-            <!--<div style="height: 50px;width: 300px">-->
-                <!--<div id="slideTest16" class="demo-slider" style="height: 50px;"></div>-->
-            <!--</div>-->
-            <div style="padding-left: 30px">
-
-                <span style="float: left"> <i>*</i>节能智能开关：</span>
-                <div class="form-group col-sm-2 " style="width: 35%;padding-left: 0;padding-right: 0;margin-top: -20px;">
-                    <select class="form-control" id="rc_select_b" style="width: 81%;margin-top: 13px;float: right;">
-                        <option>1年</option>
-                        <option>2年</option>
-                        <option>3年</option>
-                        <option>4年</option>
-                        <option>5年</option>
-                    </select>
-                </div>
-                <div style=" width: 46%;float: right;">
-                    <span style="float: left;"> <i style="">*</i>自动休眠时间：</span>
-                    <div class="progres">
-                        <div id="slideTest15" class="demo-slider" style="height: 50px;"></div>
-                    </div>
-                    <p style="float:left;">40% 完成</p>
                 </div>
             </div>
         </div>

@@ -74,7 +74,7 @@ public class AdvancedSettingServiceImpl extends ServiceImpl<AdvancedSettingDao, 
      * */
     @Override
     public AdvancedSettingEntity queryByProGroupId(String deviceCode,String groupId) {
-        return this.baseMapper.selectOne(new QueryWrapper<AdvancedSettingEntity>().eq("device_code",deviceCode).or().eq("group_id",groupId));
+        return this.baseMapper.selectOne(new QueryWrapper<AdvancedSettingEntity>().eq("device_code",deviceCode).eq("group_id",groupId));
     }
 
 }

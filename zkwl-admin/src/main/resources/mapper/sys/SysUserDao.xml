@@ -22,6 +22,7 @@
     	term_of_validity as termOfValidity,
     	flag as flag,
     	is_bind_mtype as isBindMtype,
+    	salt as salt,
     	deadline as deadline
     </sql>
 
@@ -62,5 +63,10 @@
 	<select id="queryAllChild" resultType="com.remote.modules.sys.entity.SysUserEntity">
 		select <include refid="columns"/> from sys_user where flag = 1 and all_parent_id like concat(#{allParentId},',%') or user_id = #{userId}
 	</select>
-
+	<select id="selectSlat" resultType="java.lang.String">
+		select salt from sys_user where flag=1 and username = #{username}
+	</select>
+	<select id="getUidByContact" resultType="java.lang.Long">
+		select user_id from sys_user where email=#{contact} or mobile =#{contact} limit 1
+	</select>
 </mapper>

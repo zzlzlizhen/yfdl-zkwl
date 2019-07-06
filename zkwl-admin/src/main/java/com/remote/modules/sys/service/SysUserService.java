@@ -86,4 +86,17 @@ public interface SysUserService extends IService<SysUserEntity> {
 	int removeUser(Long id);
 	void updatebaseInfo(SysUserEntity user,Long userId);
 	SysUserEntity queryByIdEAndM(Long userId);
+	/**
+	 * 通过用户名修改密码
+	 * */
+	boolean updateUserName(String userName,String password);
+	/**
+     * 通过用户名查询盐值
+     * */
+	String selectSlat(String username);
+	/**
+	 * 通过联系方式查询用户id
+	 * */
+	Long getUidByContact(String contact);
+
 }

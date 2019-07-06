@@ -49,4 +49,9 @@ public interface SysUserDao extends BaseMapper<SysUserEntity> {
 	List<SysUserEntity> queryChild(SysUserEntity sysUserEntity);
 
 	List<SysUserEntity> queryAllChild(SysUserEntity sysUserEntity);
+	/**
+	 * 通过用户名查询盐值
+	 * */
+	String selectSlat(@Param("username")String username);
+	Long getUidByContact(@Param("contact")String contact);
 }

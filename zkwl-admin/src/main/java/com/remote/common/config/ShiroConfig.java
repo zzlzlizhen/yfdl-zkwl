@@ -77,6 +77,10 @@ public class ShiroConfig {
         filterMap.put("/login.html", "anon");
         filterMap.put("/retrieve.html", "anon");
         filterMap.put("/sys/login", "anon");
+        filterMap.put("/sys/user/updatePwd/**", "anon");
+        filterMap.put("/repwd/sendForPwd/**", "anon");
+        filterMap.put("/repwd/checkRePwdMobile/**", "anon");
+        filterMap.put("/repwd/checkRePwdEmail/**", "anon");
         filterMap.put("/favicon.ico", "anon");
         filterMap.put("/captcha.jpg", "anon");
         filterMap.put("/sys/mqtt/**", "anon");

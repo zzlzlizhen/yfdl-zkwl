@@ -121,7 +121,19 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public boolean updateProject(ProjectEntity projectEntity) throws Exception {
         ValidateUtils.validate(projectEntity,Arrays.asList("projectId"));
-        return projectMapper.updateProjectById(projectEntity) > 0 ? true : false;
+        int i = projectMapper.updateProjectById(projectEntity);
+        if(i > 0){
+            DeviceQuery deviceQuery = new DeviceQuery();
+            deviceQuery.setProjectId(projectEntity.getProjectId());
+            List<DeviceEntity> deviceEntities = deviceService.queryDeviceNoPage(deviceQuery);
+            List<String> deviceIds = deviceEntities.parallelStream().map(deviceEntity -> deviceEntity.getDeviceId()).collect(Collectors.toCollection(ArrayList::new));
+            String exclusiveUser = projectEntity.getExclusiveUser();
+            deviceQuery.setUpdateTime(new Date());
+            deviceQuery.setCreateUser(Long.valueOf(exclusiveUser));
+            deviceQuery.setUpdateUser(projectEntity.getCreateUser());
+            return deviceService.updateUserDevice(deviceQuery) > 0 ? true : false;
+        }
+        return false;
     }
 
     @Override
