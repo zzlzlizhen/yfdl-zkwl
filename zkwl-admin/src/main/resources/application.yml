@@ -4,13 +4,10 @@ server:
     uri-encoding: UTF-8
     max-threads: 1000
     min-spare-threads: 30
-  port: 8085
+  port: 8080
   servlet:
     context-path: /remote-admin
-
 spring:
-  thymeleaf:
-    prefix: classpath:/templates/
   profiles:
     active: dev
   jackson:
@@ -24,6 +21,8 @@ spring:
   freemarker:
     suffix: .html
     request-context-attribute: request
+  thymeleaf:
+    prefix: classpath:/templates/
   mail:
     host: smtp.163.com
     username: 15810669164@163.com
@@ -38,6 +37,9 @@ spring:
           starttls:
             enable: true
             required: true
+  messages:
+    basename:  classpath:/i18n/messages
+    encoding: utf-8
 renren:
   cluster: false  #集群配置  true集群环境   false单机环境，还需打开pom.xml里的spring-session-data-redis注释
   globalSessionTimeout: 3600   #单机环境，session过期时间为60分钟
