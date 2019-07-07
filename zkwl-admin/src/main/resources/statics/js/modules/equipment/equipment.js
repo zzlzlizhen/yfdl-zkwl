@@ -93,13 +93,12 @@ $(function () {
                     arra=arr //总项目经纬度获取全局变量
                 }
                 m_p(deviceStatus,arra)
-
+                $(".nav_pro_v").attr("t","0")
                 $(".nav_pro_v").click(function(){
-                    var pro_je=$(this).parent().attr('id');
-                    if($("#"+pro_je+"1").html() != ""){
-                         $("#"+pro_je+"1").html("")
-                        return
-                    }else {
+                   var pro_je=$(this).parents(".pro_li").attr("id")
+                    if( $(this).attr("t")=="0"){
+                        $(this).parents(".pro_li").siblings().find(".nav_pro_v").attr("t","0")
+                        $(this).parents(".pro_li").siblings().find(".nav_gro").hide().empty()
                         $.ajax({
                             url: baseURL + 'fun/group/queryGroupIdNoPage?projectId=' + pro_je,
                             contentType: "application/json;charset=UTF-8",
@@ -116,22 +115,19 @@ $(function () {
                                         "</div>\n" +
                                         "<ul class=\"nav_gro_b\" id="+res.data[i].groupId+"2"+">\n" +
                                         "</ul>"
-                                        "</li>\n"
+                                    "</li>\n"
 
                                     var locon={y:res.data[i].longitude,x:res.data[i].latitude,title:"L",con:res.data[i].deviceCount+"台设备",branch:res.data[i].groupName}
                                     arr.push(locon) //push经纬度
                                 }
-                                $("#" + pro_je + "1").append(htmla)
+                                $("#" + pro_je + "1").show().append(htmla)
                                 arra=arr //分组经纬度获取全局变量
                                 m_p(deviceStatus,arra)
 
-                            //    分组下设备
+                                //    分组下设备
                                 $(".nav_pro_v_b").click(function(){
                                     var groupId=$(this).parent().attr('id');
-                                    if( $("#" + groupId + "2").html() != ""){
-                                        $("#" + groupId + "2").html("")
-                                        return
-                                    }else{
+                                    if( $("#" + groupId + "2").html() == ""){
                                         $.ajax({
                                             url: baseURL + 'fun/device/getDeviceByGroupIdNoPage?groupId=' + groupId,
                                             contentType: "application/json;charset=UTF-8",
@@ -230,7 +226,6 @@ $(function () {
                                                     })
                                                 }
 
-
                                                 //单台设备
                                                 var par_id
                                                 $(".nav_bb").click(function () {
@@ -243,26 +238,38 @@ $(function () {
                                                     var locon={y:$(this).attr("id"),x:$(this).children(".nav_pro_p").attr("id"),branch:$(this).children(".nav_pro_she").html()}
                                                     arr.push(locon)
                                                     arra=arr
-
                                                     //单台设备详情右侧
-
                                                     zhuang(pro_je,groupId,par_id)
-
                                                     //调用地图
                                                     m_p(deviceStatus,arra)
                                                     //日志信息
                                                     fu(par_id)
-
                                                 })
 
                                             }
                                         });
+                                    }else{
+                                        $("#" + groupId + "2").html("")
+                                        return
                                     }
 
                                 })
-                            //    分组下设备结束
+                                //    分组下设备结束
                             }
                         });
+                        $(this).attr("t","1")
+                    }else{
+                        $(this).attr("t","0")
+                        $("#" + pro_je + "1").empty().hide()
+
+                    }
+                    var pro_je=$(this).parent().attr('id');
+                    if($("#"+pro_je+"1").html() == ""){
+                         $("#"+pro_je+"1").html("")
+                        return
+                    }else {
+
+
                     }
                 })
             //    项目下分组

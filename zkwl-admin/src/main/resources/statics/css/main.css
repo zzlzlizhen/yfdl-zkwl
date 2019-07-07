@@ -66,14 +66,12 @@ tbody > tr > th {font-weight: normal; }
 
 
 
-@media screen and (max-width:1131px) {
+@media screen and (max-width:1100px) {
     body,html{
-        width: 1024px !important;
+        width: 1131px !important;
         overflow-x:visible;
     }
-    .table_m,.hear,project_he{
-        width: 1024px;
-    }
+
     .hear_w{
         width: 60px;
     }
@@ -87,12 +85,6 @@ tbody > tr > th {font-weight: normal; }
         width: 100% !important;
     }
 
-    .project_he{
-        width: 1024px;
-    }
-
-
-
     .gross {
         width: 13%;
         height: 59%;
@@ -103,27 +95,30 @@ tbody > tr > th {font-weight: normal; }
         position: relative;
     }
     .gross>img{
-        width: 68px;
-        height: 68px;
+        width: 68px !important;
+        height: 68px  !important;
     }
     .gross span{
         font-size: 12px !important;
-        margin: -21% 37px 0px 45.5% !important;
+        margin: -29% 37px 0px 51.5% !important;
 
     }
     .gross div{
-        top: -3% !important;
-        left: 74% !important;
+        top: -15% !important;
+        left: 65% !important;
         font-size: 12px !important;
     }
     .r_rdi{
         width: 13%;
     }
 
+    .gross_a>span{
+        margin: -27% 37px 0px 53.5% !important;
+    }
 
-
-
-
+    .dra_spa, .dra_p{
+        margin: 1% 0px 0px 10% !important;
+    }
 
 
 

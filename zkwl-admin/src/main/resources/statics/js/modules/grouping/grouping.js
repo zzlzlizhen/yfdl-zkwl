@@ -173,7 +173,7 @@ $(function(){
                         "<td id='r_nm'>"+res.data.list[i].deviceCode+"</td>\n" +
                         "<td style=\"width:10%;\" id='r_namem'>"+res.data.list[i].deviceName+"</td>\n" +
                         "<td class='grod' id="+res.data.list[i].groupId+">"+res.data.list[i].groupName+"</td>\n" +
-                        "<td>"+res.data.list[i].deviceType+"</td>\n" +
+                        "<td class='type'>"+res.data.list[i].deviceType+"</td>\n" +
                         "<td>"+photocellState+" </td>\n" +
                         "<td>"+batteryState+"</td>\n" +
                         "<td>"+loadState+"</td>\n" +
@@ -205,14 +205,40 @@ $(function(){
                 $(".particulars_a").click(function(){
                     var deviceCode=$(this).parent().siblings("#r_nm").html();
                     var grod=$(this).parent().siblings(".grod").attr('id');
-                    var searchUrl=encodeURI('../control/control.html?deviceCode='+deviceCode+"&grod="+grod)
+                    var type=$(this).parent().siblings(".type").html();
+                    var searchUrl=encodeURI('../control/control.html?deviceCode='+deviceCode+"&grod="+grod+"&type="+type)
                     location.href =searchUrl;
                 })
 
                 //移动分组删除
                 var arr=[]
+                //全选
+                $('#checkbox[name="all"]').click(function(){
+                    arr=[]
+                    if($(this).is(':checked')){
+                        $('input[name="clk"]').each(function(){
+                            $(this).prop("checked",true);
+                            var devId=$(this).parent().attr('id');
+                            console.log("全选1")
+                            console.log(devId)
+                            arr.push(devId)
+                            console.log(arr)
 
-                $(".checkbox_i").click(function () {
+                            var len=arr.length;
+                            $("#mo_sp").html(len+"项")
+                            $(".move_a").show()
+                        });
+                    }else{
+                        $('input[name="clk"]').each(function(){
+                            $(this).prop("checked",false);
+                            var devId=$(this).parent().attr('id');
+                            console.log("全选2")
+                            console.log(devId)
+                        });
+                    }
+                });
+                //单选
+                $('.checkbox_i[name="clk"]').click(function () {
                     var che_c=$(this).prop('checked');
                     if(che_c == true){
                         $("#checkbox[name=all]:checkbox").prop('checked', true);

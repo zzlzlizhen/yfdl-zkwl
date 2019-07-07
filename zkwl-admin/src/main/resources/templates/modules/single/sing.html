@@ -23,6 +23,15 @@
             margin-left: 8%;
         }
 
+        @media screen and (max-width:1100px) {
+            .table_m table tr td a:first-child {
+                margin-left: 4%;
+            }
+            .table_m table tr td:last-child {
+                width: 14.111%;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -76,10 +85,23 @@
 
 <!-- 移动分组-->
 <div class="move_a">
+    <img src="${request.contextPath}/statics/image/zhuyi.png" alt="">
     <div>已选择</div>
     <span id="mo_sp"></span>
-    <input type="button" class="deleteAll" value="删除">
-    <input type="button" class="mobile_pac" value="移动分组" >
+    <p  class="r_span">
+        <img src="${request.contextPath}/statics/image/shanchu-1.png" alt="">
+        <!--<input type=""value="删除">-->
+        <i class="deleteAll" >删除</i>
+    </p>
+    <p  class="r_span">
+        <img src="${request.contextPath}/statics/image/yidong.png" alt="">
+        <!--<input type="" value="移动分组" >-->
+        <i class="mobile_pac" style=" font-style:normal">移动分组</i>
+    </p>
+    <!--<div>已选择</div>-->
+    <!--<span id="mo_sp"></span>-->
+    <!--<input type="button" class="deleteAll" value="删除">-->
+    <!--<input type="button" class="mobile_pac" value="移动分组" >-->
 </div>
 <!--分页-->
 <div class="box">

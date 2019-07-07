@@ -172,7 +172,7 @@ $(function(){
                     }
 
                     html += "<tr>\n" +
-                        "<td id=" + res.data.list[i].deviceId + " style=\"width:4%;\"> <input type= \"checkbox\" class=\"checkbox_in checkbox_i\"> </td>\n" +
+                        "<td id=" + res.data.list[i].deviceId + " style=\"width:4%;\"> <input type= \"checkbox\" name='clk' class=\"checkbox_in checkbox_i\"> </td>\n" +
                         "<td class='li_deviceCode'>" + res.data.list[i].deviceCode + "</td>\n" +
                         "<td id='r_namem'>" + res.data.list[i].deviceName + "</td>\n" +
                         "<td class='li_deviceType' id=" + res.data.list[i].projectId + ">" + res.data.list[i].deviceType + "</td>\n" +
@@ -211,16 +211,34 @@ $(function(){
                 $(".particulars_a").click(function(){
                     var deviceCode=$(this).parent().siblings(".li_deviceCode").html();
                     var grod=$(this).parent().siblings(".grod").attr('id');
-                    var deviceId=$(this).parent().attr('id');
-                    console.log(deviceCode)
-                    console.log(grod)
-                    console.log(deviceId)
+                    var type=$(this).parent().siblings(".li_deviceType").html();
 
-                    var searchUrl=encodeURI('../control/control.html?deviceCode='+deviceCode+"&grod="+grod+"&deviceId="+deviceId)
+                    var searchUrl=encodeURI('../control/control.html?deviceCode='+deviceCode+"&grod="+grod+"&type="+type)
                     location.href =searchUrl;
                 })
                 //移动分组删除
                 var arr=[]
+                //全选
+                $('#checkbox[name="all"]').click(function(){
+                    arr=[]
+                    if($(this).is(':checked')){
+                        $('input[name="clk"]').each(function(){
+                            $(this).prop("checked",true);
+                            var devId=$(this).parent().attr('id');
+                            arr.push(devId)
+
+                            var len=arr.length;
+                            $("#mo_sp").html(len+"项")
+                            $(".move_a").show()
+                        });
+                    }else{
+                        $('input[name="clk"]').each(function(){
+                            $(this).prop("checked",false);
+                            var devId=$(this).parent().attr('id');
+                        });
+                    }
+                });
+                //单选
                 $(".checkbox_i").click(function () {
                     var che_c=$(this).prop('checked');
                     if(che_c == true){
@@ -371,10 +389,10 @@ $(function(){
                         contentType: "application/json;charset=UTF-8",
                         type:"POST",
                         data: JSON.stringify({
-                            "deviceCodes": ass, //需要修改的设备code
+                            "deviceCodes": ass, //需要修改的设备code   /0
                             "qaKey": ["onOff"], //需要修改的参数键
                             "value": value, //需要修改的参数值
-                            "deviceType": li_deviceType //设备类型
+                            "deviceType": li_deviceType //设备类型   /1
                         }),
                         success: function(res) {
                           console.log(res)

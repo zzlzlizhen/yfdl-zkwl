@@ -74,7 +74,7 @@ $(function () {
                         faultCount =faultCount
                     }
                     html += "<tr>\n" +
-                        "<td id=" + res.data.list[i].groupId + " style=\"width:4%;\"> <input type= \"checkbox\" class=\"checkbox_in checkbox_i\"> </td>\n" +
+                        "<td id=" + res.data.list[i].groupId + " style=\"width:4%;\"> <input type= \"checkbox\"  name='clk' class=\"checkbox_in checkbox_i\"> </td>\n" +
                         "<td class='groupName'>" + res.data.list[i].groupName + "</td>\n" +
                         "<td>" + res.data.list[i].groupName + "</td>\n" +
                         "<td>" + deviceCount + "</td>\n" +
@@ -109,6 +109,32 @@ $(function () {
                 })
                 //移动分组删除
                 var arr=[]
+                //全选
+                $('#checkbox[name="all"]').click(function(){
+                    arr=[]
+                    if($(this).is(':checked')){
+                        $('input[name="clk"]').each(function(){
+                            $(this).prop("checked",true);
+                            var devId=$(this).parent().attr('id');
+                            console.log("组全选1")
+                            console.log(devId)
+                            arr.push(devId)
+                            console.log(arr)
+
+                            var len=arr.length;
+                            $("#mo_sp").html(len+"项")
+                            $(".move_a").show()
+                        });
+                    }else{
+                        $('input[name="clk"]').each(function(){
+                            $(this).prop("checked",false);
+                            var devId=$(this).parent().attr('id');
+                            console.log("组全选2")
+                            console.log(devId)
+                        });
+                    }
+                });
+                //单选
                 $(".checkbox_i").click(function () {
                     var che_c=$(this).prop('checked');
                     if(che_c == true){
@@ -265,11 +291,6 @@ $(function () {
     $(".shade_modifier_project").click(function(){
         $(".shade_modifier,.shade_b_modifier").css("display","none")
     })
-
-
-
-
-
 
 
 })

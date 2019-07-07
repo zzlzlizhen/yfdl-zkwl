@@ -66,8 +66,8 @@ public class AdvancedSettingController extends AbstractController{
         String groupId = advancedSetting.getGroupId();
         String devCode = advancedSetting.getDeviceCode();
         if(StringUtils.isBlank(devCode)||"0".equals(devCode)&&StringUtils.isNotBlank(groupId)){
-            advancedSetting.setDeviceCode("0");
-            AdvancedSettingEntity advancedSettingEntity = advancedSettingService.queryByDevGroupId(devCode,groupId);
+             advancedSetting.setDeviceCode("0");
+            AdvancedSettingEntity advancedSettingEntity = advancedSettingService.queryByDevGroupId(advancedSetting.getDeviceCode(),groupId);
             advancedSetting.setUpdateUser(getUser().getRealName());
             advancedSetting.setUid(getUserId());
             if(advancedSettingEntity != null){
