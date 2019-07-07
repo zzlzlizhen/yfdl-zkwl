@@ -35,7 +35,7 @@
 .ea_a{width:35% !important; border:1px solid #1890FF !important;color:#1890FF;margin-left:3%;}
 .confirm{width:100%;height:60px; position: absolute;bottom: 0;border-top:1px solid #ccc;}
 .confirm input{width:80px;height:30px;border-radius: 4px; background:#1890FF;margin:2.5% 4% 0px 0px;float:right;border:0;color: #fff; }
-.J_fan{width:100%;height:45px;border-bottom: 1px solid #ccc;line-height:45px;text-indent: 15px;font-weight: bold;}
+.J_fan{width:100%;height:45px;border-bottom: 1px solid #ccc;line-height:45px;text-indent: 15px;font-weight: bold;background: #27E2D4;text-align: center}
 .wrong,.wrong_a{float:right;margin:3% 2% 0px 0px; cursor: pointer;}
 .wrong_a{margin-top:2%;}
 .import_a{margin:5% 0px 0px 8%;}
@@ -120,7 +120,48 @@
 
 
 
-
+.rquebei{
+    background: url('/remote-admin/statics/image/sousuo-1.png')no-repeat center;
+    width: 99px;
+    height: 45px;
+    float: left;
+    line-height: 45px;
+    text-align: center;
+    background-size: 100%;
+    margin-left: 30%;
+}
+.rqubtn{
+    background: url('/remote-admin/statics/image/sousuo-1.png')no-repeat center;
+    width: 99px;
+    height: 45px;
+    float: left;
+    line-height: 45px;
+    text-align: center;
+    background-size: 100%;
+    margin-left: 10%;
+}
+.rqubtn:hover{
+    background: url('/remote-admin/statics/image/fenzu-1.png')no-repeat center;
+    background-size:100%  !important;
+}
+.rquebei:hover{
+    background: url('/remote-admin/statics/image/fenzu-1.png')no-repeat center;
+    background-size:100% !important;
+}
+.rquebeis{
+    background: url('/remote-admin/statics/image/sousuo-1.png')no-repeat center;
+    width: 99px;
+    height: 45px;
+    float: left;
+    line-height: 45px;
+    text-align: center;
+    background-size: 100%;
+    margin-left: 42%;
+}
+.rquebeis:hover{
+    background: url('/remote-admin/statics/image/fenzu-1.png')no-repeat center;
+    background-size:100% !important;
+}
 
 
 

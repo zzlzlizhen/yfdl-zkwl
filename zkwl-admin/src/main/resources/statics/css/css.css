@@ -6,7 +6,8 @@ ul,li,ol{list-style:none;display: block}
 .hear{width:100%;height:60px;float:left;line-height:60px;font-size: 14px;-line-height: 8%;-padding-top: 8px;}
 .project_he{width:100%;height:115px;float:left;background: #ffffff;border-top:10px solid #F7F8FA;border-bottom:10px solid #F7F8FA;}
 .hear_w{width:auto;height:100%;float:left;line-height: 90px;margin-left:1%;}
-.form_input{  margin-bottom: 0px !important; padding: 0px !important;width:11% !important;margin-top:26px;}
+.form_input{  margin-bottom: 0px !important; padding: 0px !important;width:11% !important;margin-top:26px;
+    float: left;}
 
 /*按钮样式*/
 .btn_m{ background: rgba(24, 144, 255, 1) !important; border:rgba(24, 144, 255, 1) !important;margin:26px 0px 0px 0.5%;}
@@ -53,7 +54,7 @@ ul,li,ol{list-style:none;display: block}
 .shade_a,.shade_a_delete,.shade_a_new{width:100%;height:100%;background: #999; opacity: 0.5;float:left;}
 .shade_b,.shade_b_delete,.shade_b_new,.shade_b_project,.shade_b_modifier,.shade_b_yi{width:600px;height:380px; position: absolute; z-index: 99999;top:50%;left:50%;margin:-190px 0px 0px -300px;background: #fff;display: none;}
 .shade_b_delete{width:400px;height:300px;margin:-150px 0px 0px -200px;}
-.Bian_j,.Bian_j_delete{width:100%;float:left;height:50px;text-indent: 20px;font-size:14px;line-height: 50px;border-bottom: 1px solid #ccc;color:#333;}
+.Bian_j,.Bian_j_delete{width:100%;float:left;height:50px;text-indent: 20px;font-size:14px;line-height: 50px;border-bottom: 1px solid #ccc;color:#333;background:#27E2D4;text-align: center }
 .Bian_P{width:auto;height:auto;float:left;line-height: 50px;color:#333;font-size:14px;text-indent: 20px;}
 .mistake{width:90%;height:30px;border-radius: 5px;border:1px solid red;float:left;margin:3% 0px 0px 5%;text-indent: 10px;line-height: 30px;display: none;}
 .mistake span:first-child{
@@ -125,11 +126,11 @@ thead>th{text-align: center !important;}
 .gl_bt{padding:1.5px 8px !important;}
 .hear_weather{width:277px;height:100%;float:left;text-align: left}
 .hear_project{width: 80%;
-    height: 34%;
+    height: 45px;
     float: left;
     margin-left: 10%;
     text-indent: 0;
-    line-height: 117%;
+    line-height: 45px;
     font-size: 22px;}
 .hear_city{text-indent: 0;
     line-height: 7px;
@@ -270,14 +271,6 @@ thead>th{text-align: center !important;}
 
 /*丸子*/
 
-
-
-
-
-
-
-
-
 .pro_list{width:94%;height:68%;float:left;margin:3% 0px 0px 3%;overflow-x: hidden;overflow-y: scroll;}
 .pro_list::-webkit-scrollbar {
     display: none;
@@ -315,9 +308,7 @@ thead>th{text-align: center !important;}
 }
 .r_llis ,.r_op{height:100%;}
 .r_op>ul,.r_llis>ul{height:91% !important; }
-/*.r_op>ul::-webkit-scrollbar,.r_llis>ul::-webkit-scrollbar {*/
-/*display: none;*/
-/*}*/
+
 .tab {width:100%;height:82px;float:left;margin:0;padding:0;list-style:none;overflow:hidden;border-bottom: 10px solid rgba(242, 242, 242, 1);background: #ffffff;}
 .tab li {float:left;width:6%;height:50%;color:#666;font-size:14px;text-align:center;line-height:30px;cursor:pointer;margin:1.1% 0px 0px 2%;}
 .on {display:block;}
@@ -507,22 +498,8 @@ thead>th{text-align: center !important;}
 
 }
 
-/*#proje_search{*/
-/*background: url('/remote-admin/statics/image/sousuo-1.png')!important;*/
-/*background-size: 100% !important;*/
-/*}*/
-/*.btn_m_new{*/
-/*background: url('/remote-admin/statics/image/sousuo-1.png')!important;*/
-/*background-size: 100% !important;*/
-/*}*/
-/*.project_he>a:hover{*/
-/*background: url('/remote-admin/statics/image/fenzu-1.png')!important;*/
-/*background-size: 100% !important;*/
-/*}*/
-
-
 .r_chakan{
-    display: inline-block;background: #27E2D4;width:70px ;height:29px;border-radius: 11px;color: #ffffff;line-height: 29px;'><i style='font-style:normal
+    display: inline-block;background: #27E2D4;   width: 70px;height:29px;border-radius: 11px;color: #ffffff;line-height: 29px;'><i style='font-style:normal
 }
 .r_chakan_img{
     margin-left: 8px;display: inline-block;width: 13px;height: 13px;
@@ -572,68 +549,91 @@ thead>th{text-align: center !important;}
 }
 
 
-@media screen and (min-width:800px) and (max-width:1300px){
 
-        .gross {
-            width: 10%;
-            height: 59%;
-            float: left;
-            border-radius: 5px;
-            overflow: hidden;
-            margin: 3.7% 0.5% 0px 0px;
-            position: relative;
-        }
-        .gross>img{
-            width: 68px;
-            height: 68px;
-        }
-        .gross span{
-            font-size: 12px;
-            /*margin: 0;*/
-            /*float: unset;*/
-            /*line-height: 0;*/
-        }
-        .gross div{
-            top: -3%;
-            left: 90%;
-            font-size: 14px;
-        }
-    .hear_project{
-        font-size: 16px;
+@media screen and (min-width:1500px) {
+    .table_m table tr td {
+        width: 10.611%;
     }
-    .hear_city{
+    .table_m ul li {
+        width:10.611%;
+    }
+    .form_input{
+        width: 7% !important;
+    }
+}
+
+@media screen and (min-width:800px) and (max-width:1500px) {
+    .gross {
+        width: 13%;
+        height: 59%;
+        float: left;
+        border-radius: 5px;
+        overflow: hidden;
+        margin: 3.7% 0.5% 0px 0px;
+        position: relative;
+    }
+    .gross > img {
+        width: 68px;
+        height: 68px;
+    }
+    .gross span {
+        font-size: 12px;
+        margin: -21% 37px 0px 45.5%;
+    }
+    .form_input{
+        width: 7% !important;
+    }
+    .gross div {
+        top: -3%;
+        left: 63%;
         font-size: 12px;
     }
-    .hear_weather{
+    .r_rdi {
+        width: 13% !important;
+    }
+    .hear_project {
+        font-size: 16px;
+    }
+    .hear_city {
+        font-size: 12px;
+    }
+
+    .hear_weather {
         width: 245px;
     }
 
-    .hear_w{
+    .hear_w {
         font-size: 12px;
         margin-left: 0.5%;
     }
-    .form_input{
+
+    .form_input {
         width: 6% !important;
         height: auto;
     }
-    .form-control{
+
+    .form-control {
         font-size: 12px;
     }
-    .project_he > a{
+
+    .project_he > a {
         width: 8%;
         font-size: 12px;
         margin-left: 0.5%;
     }
 
-    #proje_search{
+    #proje_search {
         font-size: 12px;
     }
-    .table_m ul li{
+
+    .table_m ul li {
         font-size: 12px;
     }
+
     .table_m_Z table tr td, .table_m_Z ul li {
         width: 8.2% !important;
     }
+
     .switch {
         width: 76%;
         margin: 0px 0px 0 10%;
@@ -647,48 +647,43 @@ thead>th{text-align: center !important;}
         width: 9.611%;
     }
 
-    /*.table_m table tr td:last-child {*/
-        /*width: 15.111%;*/
-    /*}*/
-
-
-
-
+    project_he {
+        width: 123%;
 
     }
+    .form_input{
+        width: 4% !important;
+    }
+}
 
 
-/*@media screen and (min-width:1000px){*/
+.rquebei{
+     background: url('/remote-admin/statics/image/sousuo-1.png')no-repeat center;
+     width: 99px;
+     height: 45px;
+     float: left;
+     line-height: 45px;
+     text-align: center;
+     background-size: 100%;
+     margin-left: 30%;
+ }
 
-    /*.gross {*/
-        /*width: 10%;*/
-        /*height: 59%;*/
-        /*float: left;*/
-        /*border-radius: 5px;*/
-        /*overflow: hidden;*/
-        /*margin: 3.7% 0.5% 0px 0px;*/
-        /*position: relative;*/
-    /*}*/
-    /*.gross>img{*/
-        /*width: 100%;*/
-        /*height: 89%;*/
-    /*}*/
-    /*.gross span{*/
-        /*font-size: 12px;*/
-        /*margin: 0;*/
-        /*float: unset;*/
-        /*line-height: 0;*/
-    /*}*/
-    /*.gross div{*/
-        /*top: 20%;*/
-        /*left: 90%;*/
-        /*font-size: 14px;*/
-    /*}*/
-
-
-/*}*/
-
-
-
-
+.rqubtn{
+    background: url('/remote-admin/statics/image/sousuo-1.png')no-repeat center;
+    width: 99px;
+    height: 45px;
+    float: left;
+    line-height: 45px;
+    text-align: center;
+    background-size: 100%;
+    margin-left: 10%;
+}
+.rqubtn:hover{
+    background: url('/remote-admin/statics/image/fenzu-1.png')no-repeat center;
+    background-size:100%  !important;
+}
+.rquebei:hover{
+    background: url('/remote-admin/statics/image/fenzu-1.png')no-repeat center;
+    background-size:100% !important;
+}
 

@@ -12,12 +12,12 @@ import java.util.Map;
 
 public class testAdvanced {
     private static final String baseURL="127.0.0.1:8085/remote-admin";
-    private static final String CURRENT_COOKIE = "JSESSIONID=17e37a32-20de-4b70-8035-fac892a650f7";
+    private static final String CURRENT_COOKIE = "JSESSIONID=176b9505-dab5-4c1d-82fd-0806c991c435";
     @Test
     public void testChange(){
         String url = baseURL + "/fun/device/change";
         Map<String,Object> map= new HashMap<String,Object>();
-        map.put("projectId","0339c920-ea0b-4e4d-80fc-e22e25b5751a");
+        map.put("groupId","0339c920-ea0b-4e4d-80fc-e22e25b5751a");
         List<String> qaKey = new ArrayList<String>();
         qaKey.add("loadWorkMode");
         qaKey.add("powerLoad");

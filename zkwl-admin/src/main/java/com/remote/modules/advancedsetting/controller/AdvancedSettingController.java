@@ -16,6 +16,7 @@ import com.remote.modules.device.service.DeviceService;
 import com.remote.modules.sys.controller.AbstractController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,7 +35,7 @@ public class AdvancedSettingController extends AbstractController{
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @RequestMapping(value = "/list",method = RequestMethod.GET)
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = advancedSettingService.queryPage(params);
         return R.ok().put("page", page);
@@ -43,7 +44,7 @@ public class AdvancedSettingController extends AbstractController{
     /**
      * 组高级设置信息查看接口
      */
-    @RequestMapping("/settingInfo")
+    @RequestMapping(value = "/settingInfo",method = RequestMethod.GET)
     public R info(String groupId){
         if(StringUtils.isNotBlank(groupId)){
             String deviceCode = "0";
@@ -60,7 +61,7 @@ public class AdvancedSettingController extends AbstractController{
     /**
      * 修改组的高级设置
      */
-    @RequestMapping("/updateGroup")
+    @RequestMapping(value = "/updateGroup",method = RequestMethod.POST)
     public R update(AdvancedSettingEntity advancedSetting){
         String groupId = advancedSetting.getGroupId();
         String devCode = advancedSetting.getDeviceCode();
@@ -98,7 +99,7 @@ public class AdvancedSettingController extends AbstractController{
     /**
      * 查询设备的信息时，必须传组id跟设备code
      */
-    @RequestMapping("/queryDevAdvInfo")
+    @RequestMapping(value = "/queryDevAdvInfo",method = RequestMethod.GET)
     public R queryDevAdvInfo(String groupId,String deviceCode){
         //设备code不为空并且设备code不等于0
         if(StringUtils.isNotBlank(groupId)&&StringUtils.isNotBlank(deviceCode)){
@@ -117,7 +118,7 @@ public class AdvancedSettingController extends AbstractController{
     /**
      * 更改设备高级设置 组id跟设备code必传
      */
-    @RequestMapping("/updateDevice")
+    @RequestMapping(value = "/updateDevice",method = RequestMethod.POST)
     public R updateDevice(AdvancedSettingEntity advancedSetting){
         String deviceCode = advancedSetting.getDeviceCode();
         if(StringUtils.isNotBlank(advancedSetting.getGroupId())&&StringUtils.isNotBlank(deviceCode)&&!"0".equals(deviceCode)){

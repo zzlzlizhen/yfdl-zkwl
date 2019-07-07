@@ -45,7 +45,7 @@ public class AdvancedSettingServiceImpl extends ServiceImpl<AdvancedSettingDao, 
      * */
     @Override
     public AdvancedSettingEntity queryByGroupId(String groupId) {
-        return this.queryByProGroupId("0",groupId);
+        return this.queryByDevOrGroupId(groupId,"0");
     }
 
     /**
@@ -74,7 +74,14 @@ public class AdvancedSettingServiceImpl extends ServiceImpl<AdvancedSettingDao, 
      * */
     @Override
     public AdvancedSettingEntity queryByProGroupId(String deviceCode,String groupId) {
-        return this.baseMapper.selectOne(new QueryWrapper<AdvancedSettingEntity>().eq("device_code",deviceCode).eq("group_id",groupId));
+        return this.baseMapper.selectOne(new QueryWrapper<AdvancedSettingEntity>().eq("device_code",deviceCode).or().eq("group_id",groupId));
+    }
+    /**
+     * 通过组id或者是设备code查询高级设置信息
+     * */
+    @Override
+    public AdvancedSettingEntity queryByDevOrGroupId(String groupId,String deviceCode) {
+        return this.baseMapper.selectOne(new QueryWrapper<AdvancedSettingEntity>().eq("group_id",groupId).eq("device_code",deviceCode));
     }
 
 }

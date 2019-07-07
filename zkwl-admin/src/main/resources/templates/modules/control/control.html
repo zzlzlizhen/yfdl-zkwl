@@ -63,8 +63,8 @@
                 <div class="le-con">
                     <p class="r-bt" id="r_btn_l" style="margin: 0;">
                         <span>*负载工作模式</span>
-                        <input name="sex" type="radio" value="0" checked="checked"/>定时模式
-                        <input name="sex" type="radio" value="1"/>光控模式
+                        <input name="sex" class="r_btn_l" type="radio" value="0" checked="checked"/>定时模式
+                        <input name="sex" class="r_btn_l" type="radio" value="1"/>光控模式
                     </p>
                     <div>
                         <span>*开灯时刻</span>
@@ -296,11 +296,11 @@
                 <div class="r-Battery-reg">
                     <p class="r-bt" id="r_btl_th">
                         <span>*光控关灯开关</span>
-                        <input name="sex" type="radio" class="che_gua" checked="checked" value="0"/>开
-                        <input name="sex" type="radio" class="che_gua" value="1"/>关
+                        <input name="sex" type="radio" class="che_gua r_btl_th" checked="checked" value="0"/>开
+                        <input name="sex" type="radio" class="che_gua r_btl_th" value="0"/>关
                     </p>
                     <div>
-                        <span>*负载功率</span>
+                        <span>*关灯延时(min)</span>
                         <div class="progres" style="margin-top:5.5%;width:34%;">
                             <div id="slideTest2" class="demo-slider" style="height:10px;"></div>
                         </div>
@@ -373,16 +373,16 @@
                         <span><i class="r_ie">*</i>电池类型</span>
                         <div class="form-group col-sm-2 " style="width:44%;padding:0;margin:0;">
                             <select class="form-control" id="r_select_b">
-                                <option>三元锂</option>
-                                <option>2年</option>
-                                <option>3年</option>
-                                <option>4年</option>
-                                <option>5年</option>
+                                <option class="0"></option>
+                                <option class="1">胶体电池</option>
+                                <option class="2">铅酸电池</option>
+                                <option class="3">磷酸铁锂电池</option>
+                                <option class="4">三元锂电池</option>
                             </select>
                         </div>
                     </div>
                     <div>
-                        <span style="float: left;"> <i>*</i>充电电压(V)</span><input type="" style="float: left;line-height:28px;margin-top:2%;">X8
+                        <span style="float: left;"> <i>*</i>充电电压(V)</span><input type="" id="chong" style="float: left;line-height:28px;margin-top:2%;">X8
                     </div>
                     <div>
                         <span style="float: left;"> <i>*</i>过放返回电压(V)</span><input type="" style="float: left;line-height:28px;margin-top:2%;">X8
@@ -416,7 +416,7 @@
                     </div>
                     <p>40%</p>
                     <div class="progres de_i">
-                        <div id="slideTest5" class="demo-slider " style="height:10px;"></div>
+                        <div id="slideTest5" class="demo-slider" style="height:10px;"></div>
                     </div>
                     <p>40%</p>
                 </div>
@@ -427,7 +427,7 @@
                     </div>
                     <p>40%</p>
                     <div class="progres de_i">
-                        <div id="slideTest7" class="demo-slider " style="height:10px;"></div>
+                        <div id="slideTest7" class="demo-slider" style="height:10px;"></div>
                     </div>
                     <p>40%</p>
                 </div>
@@ -479,20 +479,14 @@
                 <div style="height:50px;">
                     <span style="width:81px;margin-top:0.5%;"> <i>*</i>节能智能开关</span>
                     <div class="form-group col-sm-2 " style="width:29%;padding:0;margin:0;">
-                        <select class="form-control" id="rc_select_b" style="width:100%;margin-left: 8%;">
-                            <option>1年</option>
-                            <option>2年</option>
-                            <option>3年</option>
-                            <option>4年</option>
-                            <option>5年</option>
-                        </select>
+                      <input type="text" class="demo-slider" value="" placeholder="自定义" id="custom">
                     </div>
                     <div style="width:46%;float: left;">
                         <span style="float:left;width:22%;height:100%;margin:1% 0px 0px 10%;"> <i style="">*</i>自动休眠时间</span>
                         <div class="progres" style="width:53%;margin-top:4.4%;">
                             <div id="slideTest15" class="demo-slider" style="height:10px;"></div>
                         </div>
-                        <p style="float:left;">40%</p>
+                        <p style="float:left;">40min</p>
                     </div>
                 </div>
             </div>
@@ -506,9 +500,53 @@
         <!--设置结束-->
     </div>
 
+
     <!--彻底结束-->
 </div>
+<div class="shade_project">
+    <div class="shade_a shade_add_project"></div>
+    <div class="shade_b_project">
+        <div class="Bian_j">新增项目<span class="glyphicon glyphicon-remove shade_add_project" ></span></div>
+        <div class="jei">
+            <span>一阶：</span>
+            <div class="progres">
+                <div id="slideTest_a" class="demo-slider" style="height:10px;"></div>
+            </div>
+            <p class="pro_p">40V</p>
+            <div class="progres">
+                <div id="slideTest_b" class="demo-slider " style="height:10px;"></div>
+            </div>
+            <p class="pro_p">40%</p>
+        </div>
+        <div class="jei">
+            <span>二阶：</span>
+            <div class="progres">
+                <div id="slideTest_c" class="demo-slider" style="height:10px;"></div>
+            </div>
+            <p class="pro_p">40V</p>
+            <div class="progres">
+                <div id="slideTest_d" class="demo-slider " style="height:10px;"></div>
+            </div>
+            <p class="pro_p">40%</p>
+        </div>
+        <div class="jei">
+            <span>三阶：</span>
+            <div class="progres">
+                <div id="slideTest_e" class="demo-slider" style="height:10px;"></div>
+            </div>
+            <p class="pro_p">40V</p>
+            <div class="progres">
+                <div id="slideTest_f" class="demo-slider " style="height:10px;"></div>
+            </div>
+            <p class="pro_p">40%</p>
+        </div>
 
+        <div class="sha_buttom">
+            <div id="project_confirm"  class="rquebei" >确定</div>
+            <div  class="shade_add_project rqubtn"  >取消</div>
+        </div>
+    </div>
+</div>
 </body>
 <script src="${request.contextPath}/statics/js/modules/control/My97DatePicker/WdatePicker.js"></script>
 <script>
@@ -585,6 +623,30 @@
         });
         slider.render({
             elem: '#slideTest17'
+            ,theme: '#1E9FFF' //主题色
+        });
+        slider.render({
+            elem: '#slideTest_a'
+            ,theme: '#1E9FFF' //主题色
+        });
+        slider.render({
+            elem: '#slideTest_b'
+            ,theme: '#1E9FFF' //主题色
+        });
+        slider.render({
+            elem: '#slideTest_c'
+            ,theme: '#1E9FFF' //主题色
+        });
+        slider.render({
+            elem: '#slideTest_d'
+            ,theme: '#1E9FFF' //主题色
+        });
+        slider.render({
+            elem: '#slideTest_e'
+            ,theme: '#1E9FFF' //主题色
+        });
+        slider.render({
+            elem: '#slideTest_f'
             ,theme: '#1E9FFF' //主题色
         });
     });

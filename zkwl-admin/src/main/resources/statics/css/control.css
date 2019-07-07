@@ -54,7 +54,7 @@ html,body{width:100% !important;height:100% !important;margin:0;padding:0;font-s
 
 /*数值增值器*/
 spinner {width: 100px;}
-.spinner input {text-align: right;}
+.spinner input {text-align: left;padding: 3px 3px;}
 .input-group-btn-vertical {position: relative;white-space: nowrap;width: 1%;vertical-align: middle;display: table-cell;}
 .input-group-btn-vertical > .btn {display: block;float: none;width: 100%;max-width: 100%;padding: 8px;margin-left: -1px;position: relative;border-radius: 0;}
 .input-group-btn-vertical > .btn:first-child {border-top-right-radius: 4px;}
@@ -124,3 +124,25 @@ spinner {width: 100px;}
 #r_inpl_one,#r_inpl_tw{line-height: 28px;}
 .r_i{line-height: 32px;width: 3%;}
 .r_ie{line-height: 21px;width: 3%;}
+
+/*自定义弹窗*/
+.shade_project{width:100%;height:100%;position: absolute; z-index:9999;top:0; display: none;}
+.shade_a{width:100%;height:100%;background: #999; opacity: 0.5;float:left;}
+.shade_b_project{width:600px;height:380px; position: absolute; z-index: 99999;top:50%;left:50%;margin:-190px 0px 0px -300px;background: #fff;}
+.Bian_j{width:100%;float:left;height:50px;text-indent: 20px;font-size:14px;line-height: 50px;border-bottom: 1px solid #ccc;color:#333;background:#27E2D4;text-align: center;display: none;}
+
+.sha_buttom{width:100%;height:50px; position: absolute;bottom: 0;border-top:1px solid #ccc;}
+.sha_buttom >div{width:70px;height:35px;border:1px solid #ccc;border-radius: 4px;text-align: center;line-height: 35px;float:left;}
+.jei{width:80%;height:40px;float:left;margin:3% 0px 0px 10%;}
+.jei span{width:44px;height:100%;float:left;line-height: 40px;}
+.jei .progres{width:30% !important;height:100% !important;float:left;margin-top:0;}
+.jei>.progres>.demo-slider{margin-top:15%;}
+.pro_p{float:left;margin-top:3%;}
+
+
+
+
+
+
+
+

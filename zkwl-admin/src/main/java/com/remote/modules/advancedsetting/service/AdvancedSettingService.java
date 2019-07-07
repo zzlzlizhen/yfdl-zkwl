@@ -26,6 +26,6 @@ public interface AdvancedSettingService extends IService<AdvancedSettingEntity> 
     boolean upadateAdvanceSteingById(AdvancedSettingEntity advancedSettingEntity,Long advSetId);
     boolean updateAdvance(Long advSetId,AdvancedSettingEntity advancedSettingEntity);
     AdvancedSettingEntity queryByDevGroupId(String deviceCode,String groupId);
-
+    AdvancedSettingEntity queryByDevOrGroupId(String groupId,String deviceCode);
 }
 

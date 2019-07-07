@@ -102,9 +102,9 @@ $(function () {
                     location.href =searchUrl;
                 })
                 $(".modifier_a").click(function(){
-                    var deviceId=$(this).parent().attr('id');
-                    console.log(deviceId)
-                    var searchUrl=encodeURI('../control/control.html?deviceCode='+""+"&grod="+""+"&deviceId="+deviceId)
+                    var grod=$(this).parent().attr('id');
+                    console.log(grod)
+                    var searchUrl=encodeURI('../control/control.html?deviceCode='+""+"&grod="+grod)
                     location.href =searchUrl;
                 })
                 //移动分组删除

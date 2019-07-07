@@ -205,8 +205,7 @@ $(function(){
                 $(".particulars_a").click(function(){
                     var deviceCode=$(this).parent().siblings("#r_nm").html();
                     var grod=$(this).parent().siblings(".grod").attr('id');
-                    var deviceId=$(this).parent().attr('id');
-                    var searchUrl=encodeURI('../control/control.html?deviceCode='+deviceCode+"&grod="+grod+"&deviceId="+deviceId)
+                    var searchUrl=encodeURI('../control/control.html?deviceCode='+deviceCode+"&grod="+grod)
                     location.href =searchUrl;
                 })
 
