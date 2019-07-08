@@ -4,7 +4,7 @@ server:
     uri-encoding: UTF-8
     max-threads: 1000
     min-spare-threads: 30
-  port: 8080
+  port: 8086
   servlet:
     context-path: /remote-admin
 spring:
@@ -38,7 +38,7 @@ spring:
             enable: true
             required: true
   messages:
-    basename:  classpath:/i18n/messages
+    basename:  i18n/messages
     encoding: utf-8
 renren:
   cluster: false  #集群配置  true集群环境   false单机环境，还需打开pom.xml里的spring-session-data-redis注释

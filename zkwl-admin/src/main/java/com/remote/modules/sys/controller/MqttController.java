@@ -38,8 +38,8 @@ public class MqttController extends AbstractController{
 	@ResponseBody
 	@RequestMapping("/pub")
 	public R list(@RequestParam Map<String, Object> params){
-		String projectId = "16b26934-6d1b-4149-80b6-ad94b0d40f35";
-		AdvancedSettingEntity advancedSettingEntity = advancedSettingService.queryByProGroupId(projectId,"0");
+		String groupId = "1cbc10c8-1e06-4507-b1c5-8db72c344f3b";
+		AdvancedSettingEntity advancedSettingEntity = advancedSettingService.queryByDevOrGroupId(groupId,"0");
 		String json = JSON.toJSONString(advancedSettingEntity,true);
 		System.out.print(json);
 		params.put("message",json);

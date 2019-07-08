@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhangwenping
@@ -131,5 +132,10 @@ public class HistoryServiceImpl implements HistoryService {
     @Override
     public Double getTotalDischarge(List<String> deviceCode) {
         return historyDayMapper.getTotalDischarge(deviceCode);
+    }
+
+    @Override
+    public List<Map<Object, Object>> getDischargeCapacity(List<Long> userIds) {
+        return historyDayMapper.getDischargeCapacity(userIds);
     }
 }

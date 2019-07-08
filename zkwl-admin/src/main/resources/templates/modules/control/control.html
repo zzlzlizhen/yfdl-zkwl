@@ -69,7 +69,7 @@
                     <div>
                         <span>*开灯时刻</span>
                         <input type="text" class="Wdate" id="d414"
-                               onclick="WdatePicker({dateFmt:'H:mm:ss',minDate:'8:00:00',maxDate:'11:30:00'})" style=" display: inline-block;
+                               onclick="WdatePicker({dateFmt:'H:mm:ss',minDate:'0:00:00',maxDate:'23:59:56'})" style=" display: inline-block;
                                        width: 47%; height: 35px; border: 1px solid #ccc; border-radius: 4px; margin-left:1%;"/>
                     </div>
 
@@ -177,7 +177,7 @@
                     <div>
                         <span>*关灯时刻</span>
                         <input type="text" class="Wdate rda" id="d4141"
-                               onclick="WdatePicker({dateFmt:'H:mm:ss',minDate:'8:00:00',maxDate:'11:30:00'})" style=" display: inline-block;
+                               onclick="WdatePicker({dateFmt:'H:mm:ss',minDate:'00:00:00',maxDate:'23:59:59'})" style=" display: inline-block;
                                        width:47%; height: 35px; border: 1px solid #ccc; border-radius: 4px; margin-left:1%;"/>
                     </div>
                     <div>
@@ -328,7 +328,7 @@
                         </div>
                     </div>
                     <div>
-                        <span> <i class="r_i">*</i>过放电压(V)</span><input type="" value="000" class="m_in"  id="r_inpl_one">X8
+                        <span> <i class="r_i">*</i>过放电压(V)</span><input type="" value="000"  class="m_in"  id="r_inpl_one">X8
                     </div>
                     <div>
                         <span> <i class="r_i">*</i>超压类型(v)</span><input type="" value="1111"  class="m_in" >
@@ -337,9 +337,16 @@
                         <span> <i class="r_i">*</i>充电电流(A)</span><input type="" value="1111"  class="m_in" id="r_inpl_tw">
                     </div>
                     <div>
-                        <span> <i class="r_i">*</i>充电温度范围</span>
+                        <span> <i class="r_i">*</i>充电温度最高</span>
                         <div class="progres" style="margin-top: 6%;width: 34%;margin-left: 2.4%;">
                             <div id="slideTest3" class="demo-slider" style="height: 10px;"></div>
+                        </div>
+                        <p>40%</p>
+                    </div>
+                    <div>
+                        <span> <i class="r_i">*</i>充电温度最底</span>
+                        <div class="progres" style="margin-top: 6%;width: 34%;margin-left: 2.4%;">
+                            <div id="slideTest0" class="demo-slider" style="height: 10px;"></div>
                         </div>
                         <p>40%</p>
                     </div>
@@ -382,18 +389,19 @@
                         </div>
                     </div>
                     <div>
-                        <span style="float: left;"> <i>*</i>充电电压(V)</span><input type="" id="chong" style="float: left;line-height:28px;margin-top:2%;">X8
+                        <span style="float: left;"> <i>*</i>充电电压(V)</span><input type="" id="chong" value="0" style="float: left;line-height:28px;margin-top:2%;">X8
                     </div>
                     <div>
-                        <span style="float: left;"> <i>*</i>过放返回电压(V)</span><input type="" style="float: left;line-height:28px;margin-top:2%;">X8
-                    </div>
-                    <div>
-                        <span style="float: left;"> <i>*</i>充电结束电流(A)</span><input type="" style="float: left;line-height:28px;margin-top:2%;">
-                    </div>
-                    <div>
-                        <span> <i>*</i>放电温度范围(C)</span>
+                        <span> <i>*</i>放电温度最高(C)</span>
                         <div class="progres" style="margin:4% 0px 0px 2%;width:35%;">
                             <div id="slideTest17" class="demo-slider" style="height:10px;"></div>
+                        </div>
+                        <p>40</p>
+                    </div>
+                    <div>
+                        <span> <i>*</i>放电温度最低(C)</span>
+                        <div class="progres" style="margin:4% 0px 0px 2%;width:35%;">
+                            <div id="slideTest25" class="demo-slider" style="height:10px;"></div>
                         </div>
                         <p>40</p>
                     </div>
@@ -565,13 +573,14 @@
             elem: '#slideTest2'
             ,theme: '#1E9FFF' //主题色
         });
-        slider.render({
-            elem: '#slideTest3'
-            ,theme: '#1E9FFF' //主题色
-        });
+        // slider.render({
+        //     elem: '#slideTest3'
+        //     ,theme: '#1E9FFF' //主题色
+        // });
         slider.render({
             elem: '#slideTest4'
             ,theme: '#1E9FFF' //主题色
+            ,input: true //输入框
         });
         slider.render({
             elem: '#slideTest5'
@@ -648,6 +657,54 @@
         slider.render({
             elem: '#slideTest_f'
             ,theme: '#1E9FFF' //主题色
+        });
+        slider.render({
+            elem: '#slideTest0'
+            ,theme: '#1E9FFF' //主题色
+        });
+        slider.render({
+            elem: '#slideTest9'
+            ,theme: '#1E9FFF' //主题色
+        });
+        slider.render({
+            elem: '#slideTest3'
+            ,value: 0 //初始值
+            ,min:-44
+            ,range: true //范围选择
+            ,theme: '#1E9FFF' //主题色
+            ,change: function(vals){
+                $('#test-slider-tips2').html('开始值：'+ vals[0] + '、结尾值：'+ vals[100]);
+            }
+        });
+        slider.render({
+            elem: '#slideTest0'
+            ,value: 0 //初始值
+            ,min:-44
+            ,range: true //范围选择
+            ,theme: '#1E9FFF' //主题色
+            ,change: function(vals){
+                $('#test-slider-tips2').html('开始值：'+ vals[0] + '、结尾值：'+ vals[100]);
+            }
+        });
+        slider.render({
+            elem: '#slideTest17'
+            ,value: 0 //初始值
+            ,min:-44
+            ,range: true //范围选择
+            ,theme: '#1E9FFF' //主题色
+            ,change: function(vals){
+                $('#test-slider-tips2').html('开始值：'+ vals[0] + '、结尾值：'+ vals[100]);
+            }
+        });
+        slider.render({
+            elem: '#slideTest25'
+            ,value: 0 //初始值
+            ,min:-44
+            ,range: true //范围选择
+            ,theme: '#1E9FFF' //主题色
+            ,change: function(vals){
+                $('#test-slider-tips2').html('开始值：'+ vals[0] + '、结尾值：'+ vals[100]);
+            }
         });
     });
 </script>

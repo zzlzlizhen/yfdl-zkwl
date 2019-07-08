@@ -3,6 +3,7 @@ package com.remote.modules.history.service;
 import com.remote.modules.history.entity.QueryHistory;
 
 import java.util.List;
+import java.util.Map;
 
 
 public interface HistoryService {
@@ -55,4 +56,9 @@ public interface HistoryService {
      * 通过当前用户的所有设备codes获取总放电量
      * */
     Double getTotalDischarge(List<String> deviceCode);
+    /**
+     * 通过用户ids获取每月总放电量
+     * */
+    List<Map<Object,Object>> getDischargeCapacity(List<Long> userIds);
+
 }

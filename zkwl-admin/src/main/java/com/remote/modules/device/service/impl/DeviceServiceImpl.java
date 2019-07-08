@@ -86,14 +86,9 @@ public class DeviceServiceImpl implements DeviceService {
         String deviceCode = deviceEntity.getDeviceCode();
         //目前只有一种产品，2G 日后在添加其他产品
         deviceEntity.setCommunicationType(CommunicationEnum.NORMAL.getCode());
+        deviceEntity.setDeviceType("1");
         String deviceType = deviceCode.substring(0, 4);
-        if(DEVICE_TYPE.get(deviceType) != null){
-            deviceEntity.setDeviceType(DEVICE_TYPE.get(deviceType).toString());
-            return deviceMapper.insert(deviceEntity) > 0 ? true : false;
-        }else{
-            return false;
-        }
-
+        return deviceMapper.insert(deviceEntity) > 0 ? true : false;
     }
 
     @Override
@@ -140,7 +135,7 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public List<Map<String,Integer>> queryCountGroupByCity(Long userId) {
+    public List<Map<Object,Object>> queryCountGroupByCity(Long userId) {
         List<SysUserEntity> userList = sysUserService.queryAllLevel(userId);
         if(CollectionUtils.isNotEmpty(userList)){
             List<Long> userIds = userList.parallelStream().map(sysUserEntity -> sysUserEntity.getUserId()).collect(Collectors.toCollection(ArrayList::new));
@@ -234,7 +229,7 @@ public class DeviceServiceImpl implements DeviceService {
      * 通过所有用户id获取当前设备信息
      * */
     @Override
-    public List<DeviceEntity> getDeviceInfoList(List<Long> userIds){
+    public List<Map<Object,Object>> getDeviceInfoList(List<Long> userIds){
         return this.deviceMapper.getDeviceInfoList(userIds);
     }
 }

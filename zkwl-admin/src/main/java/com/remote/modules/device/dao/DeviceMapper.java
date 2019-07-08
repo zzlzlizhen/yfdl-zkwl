@@ -60,7 +60,7 @@ public interface DeviceMapper extends BaseMapper<DeviceEntity> {
      * @Param projectIds
      * @return List<DeviceEntity>
      **/
-    List<Map<String,Integer>> queryDeviceGroupByCity(@Param("userIds") List<Long> userIds);
+    List<Map<Object,Object>> queryDeviceGroupByCity(@Param("userIds") List<Long> userIds);
     /*
      * @Author zhagnwenping
      * @Description 批量开关灯
@@ -102,6 +102,6 @@ public interface DeviceMapper extends BaseMapper<DeviceEntity> {
     /**
      * 通过当前用户的所拥有的userIds查询设备信息
      * */
-    List<DeviceEntity> getDeviceInfoList(@Param("userIds")List<Long> userIds);
+    List<Map<Object,Object>> getDeviceInfoList(@Param("userIds")List<Long> userIds);
 }
 

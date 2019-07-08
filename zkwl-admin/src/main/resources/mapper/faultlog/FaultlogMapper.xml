@@ -14,15 +14,16 @@
         <result property="faultLogDesc" column="fault_log_desc"/>
         <result property="createTime" column="create_time"/>
         <result property="groupId" column="group_id"/>
+        <result property="faultStatus" column="fault_status"/>
     </resultMap>
 
     <sql id="Base_Column_List" >
-    fault_log_id,create_user,fault_log_name,project_id,device_id,log_status,fault_log_desc,create_time,group_id
+    fault_log_id,create_user,fault_log_name,project_id,device_id,log_status,fault_log_desc,create_time,group_id,fault_status
     </sql>
 
     <select id="queryFaultlogByDeviceId" resultMap="BaseResultMap" >
         SELECT
-        fault_log_desc,create_time,device_id,group_id
+        fault_log_desc,create_time,device_id,group_id,fault_status
         FROM
         fun_fault_log
         <where>

@@ -27,8 +27,15 @@ public class OverViewEntity {
      * 故障率
      * */
     private String FailRate;
-    List<Map<String,Integer>> cuntGroupByCity;
-    List<DeviceEntity> deviceInfoList;
+    /**
+     * 各城市路灯数
+     * */
+    List<Map<Object,Object>> cuntGroupByCity;
+    List<Map<Object,Object>> deviceInfoList;
+    /**
+     * 每月放电量
+     * */
+    List<Map<Object,Object>> totalDc;
 
     public Integer getLampsNum() {
         return lampsNum;
@@ -70,19 +77,27 @@ public class OverViewEntity {
         FailRate = failRate;
     }
 
-    public List<Map<String, Integer>> getCuntGroupByCity() {
+    public List<Map<Object, Object>> getCuntGroupByCity() {
         return cuntGroupByCity;
     }
 
-    public void setCuntGroupByCity(List<Map<String, Integer>> cuntGroupByCity) {
+    public void setCuntGroupByCity(List<Map<Object, Object>> cuntGroupByCity) {
         this.cuntGroupByCity = cuntGroupByCity;
     }
 
-    public List<DeviceEntity> getDeviceInfoList() {
+    public List<Map<Object, Object>> getDeviceInfoList() {
         return deviceInfoList;
     }
 
-    public void setDeviceInfoList(List<DeviceEntity> deviceInfoList) {
+    public void setDeviceInfoList(List<Map<Object, Object>> deviceInfoList) {
         this.deviceInfoList = deviceInfoList;
+    }
+
+    public List<Map<Object, Object>> getTotalDc() {
+        return totalDc;
+    }
+
+    public void setTotalDc(List<Map<Object, Object>> totalDc) {
+        this.totalDc = totalDc;
     }
 }

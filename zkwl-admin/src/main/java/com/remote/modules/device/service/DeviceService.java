@@ -85,7 +85,7 @@ public interface DeviceService {
      * @Param userId
      * @return  List<DeviceEntity>
      **/
-    List<Map<String,Integer>> queryCountGroupByCity(Long userId);
+    List<Map<Object,Object>> queryCountGroupByCity(Long userId);
     /*
      * @Author chengpunan
      * @Description //TODO
@@ -126,5 +126,5 @@ public interface DeviceService {
     /**
      * 通过所有用户获取设备信息
      * */
-    List<DeviceEntity> getDeviceInfoList(List<Long> userIds);
+    List<Map<Object,Object>> getDeviceInfoList(List<Long> userIds);
 }

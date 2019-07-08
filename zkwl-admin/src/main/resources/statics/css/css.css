@@ -535,14 +535,15 @@ thead>th{text-align: center !important;}
     float: left;
     margin-left: 10%;
     width: 128%;
+    margin-top: 5px;
 }
 .hear_city>div:nth-child(2){
-    margin-top: 5px;
+    margin-top: 9px;
 }
 .r_sox_ioc{
     display: inline-block;float: left;margin-top: -9px;
 }
-.r_sdx_box{float: left;width: 78%;margin-left: 10%;margin-top: 5px;}
+.r_sdx_box{float: left;width: 78%;margin-left: 10%;margin-top: 9px;}
 .r_scx_img{display: inline-block;width: 20px;height:20px;float: left;margin-top: -5px;" id="img}
 .r_yun_sx{display: inline-block;width: 20px;height:20px;float: left;margin-top: -5px;}
 
@@ -671,9 +672,7 @@ thead>th{text-align: center !important;}
         width: 123%;
 
     }
-    .form_input{
-        width: 4% !important;
-    }
+
     .dra_spa, .dra_p{
         margin: 1% 0px 0px 21%;
     }

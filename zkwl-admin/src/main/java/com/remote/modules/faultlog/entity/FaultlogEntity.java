@@ -22,4 +22,5 @@ public class FaultlogEntity {
     private String faultLogDesc;
     private Date createTime;
     private String groupId;
+    private String faultStatus;
 }

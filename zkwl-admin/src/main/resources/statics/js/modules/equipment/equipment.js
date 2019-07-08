@@ -25,9 +25,16 @@ $(function () {
 //    抽屉
     $("#drawer_img").click(function(){
         if($("#drawer").attr("class") == "drawer"){
-            $("#drawer").addClass("drawer_hid")
+            $("#drawer").addClass("drawer_hid");
         }else{
             $("#drawer").removeClass("drawer_hid")
+        }
+    })
+    $("#drawer_img_par").click(function(){
+        if($("#drawer_par").attr("class") == "drawer"){
+            $("#drawer_par").addClass("drawer_hid")
+        }else{
+            $("#drawer_par").removeClass("drawer_hid")
         }
     })
 //总览
@@ -86,6 +93,8 @@ $(function () {
                 }
 
                 $("#nav_a").append(html);
+                //隐藏弹窗
+                $("#drawer,#drawer_par").hide();
                 if(ass != undefined){
                     arra = ass  //单个项目
                     ass = undefined
@@ -119,7 +128,8 @@ $(function () {
 
                                     var locon={y:res.data[i].longitude,x:res.data[i].latitude,title:"L",con:res.data[i].deviceCount+"台设备",branch:res.data[i].groupName}
                                     arr.push(locon) //push经纬度
-                                }
+                                } //隐藏弹窗
+                                $("#drawer,#drawer_par").hide();
                                 $("#" + pro_je + "1").show().append(htmla)
                                 arra=arr //分组经纬度获取全局变量
                                 m_p(deviceStatus,arra)
@@ -127,6 +137,8 @@ $(function () {
                                 //    分组下设备
                                 $(".nav_pro_v_b").click(function(){
                                     var groupId=$(this).parent().attr('id');
+                                    $("#drawer_par").hide();
+                                    $("#drawer").show();
                                     if( $("#" + groupId + "2").html() == ""){
                                         $.ajax({
                                             url: baseURL + 'fun/device/getDeviceByGroupIdNoPage?groupId=' + groupId,
@@ -166,7 +178,7 @@ $(function () {
                                                 $("#" + groupId + "2").append(htmlb);
                                                 arra=arr //经纬度获取全局变量
                                                 m_p(deviceStatus,arra) //地图
-                                                f_en(pro_je,groupId)   //控制分组
+                                                f_en(pro_je,groupId,1)   //控制分组
 
                                                 // 滑动按钮
                                                 $(".toogle").click(function () {
@@ -231,13 +243,12 @@ $(function () {
                                                 $(".nav_bb").click(function () {
                                                     arr=[]
                                                     arra=[]
-                                                    console.log(deviceStatus+"单台设备")
-                                                    console.log(arra)
                                                     par_id=$(this).parent(".pro_li_a").attr('id')
-
                                                     var locon={y:$(this).attr("id"),x:$(this).children(".nav_pro_p").attr("id"),branch:$(this).children(".nav_pro_she").html()}
                                                     arr.push(locon)
                                                     arra=arr
+                                                    $("#drawer").hide();
+                                                    $("#drawer_par").show();
                                                     //单台设备详情右侧
                                                     zhuang(pro_je,groupId,par_id)
                                                     //调用地图
@@ -249,7 +260,7 @@ $(function () {
                                             }
                                         });
                                     }else{
-                                        $("#" + groupId + "2").html("")
+                                        $("#" + groupId + "2").html("");
                                         return
                                     }
 

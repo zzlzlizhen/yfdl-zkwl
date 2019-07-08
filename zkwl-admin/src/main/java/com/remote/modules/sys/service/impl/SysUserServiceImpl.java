@@ -10,6 +10,7 @@ import com.remote.common.annotation.DataFilter;
 import com.remote.common.utils.Constant;
 import com.remote.common.utils.PageUtils;
 import com.remote.common.utils.Query;
+import com.remote.modules.project.service.ProjectService;
 import com.remote.modules.sys.dao.SysUserDao;
 import com.remote.modules.sys.entity.SysUserEntity;
 import com.remote.modules.sys.service.SysDeptService;
@@ -43,6 +44,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	private SysDeptService sysDeptService;
 	@Autowired
 	private SysUserDao sysUserDao;
+	@Autowired
+	private ProjectService projectService;
 
 	@Override
 	public List<Long> queryAllMenuId(Long userId) {
@@ -52,6 +55,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	@Override
 	@DataFilter(subDept = true, user = false)
 	public PageUtils queryPage(Map<String, Object> params,SysUserEntity currentUser) {
+
 		String username = (String)params.get("username");
 		String realName = (String) params.get("realName");
 		String status = (String)params.get("status");

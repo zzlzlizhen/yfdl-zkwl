@@ -277,4 +277,11 @@ public class ProjectServiceImpl implements ProjectService {
         }
         return projectEntity;
     }
+
+    @Override
+    public int queryProjectByUserCount(Long userId) {
+        ProjectQuery projectQuery = new ProjectQuery();
+        projectQuery.setUserIds(Arrays.asList(userId));
+        return projectMapper.queryProjectByUserIds(projectQuery).size();
+    }
 }

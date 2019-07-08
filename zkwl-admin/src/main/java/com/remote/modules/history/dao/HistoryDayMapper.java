@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface HistoryDayMapper extends BaseMapper<HistoryDay> {
@@ -38,4 +39,5 @@ public interface HistoryDayMapper extends BaseMapper<HistoryDay> {
      * 通过当前用户所有用户的设备codes查询总放电量
      * */
     Double getTotalDischarge(@Param("deviceCodes") List<String> deviceCodes);
+    List<Map<Object,Object>> getDischargeCapacity(@Param("userIds")List<Long> userIds);
 }

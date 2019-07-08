@@ -300,7 +300,7 @@
     <select id="getDeviceCount" resultType="java.lang.Integer">
         select count(device_id) from fun_device where is_del = 0
         <if test="userIds !=null and userIds.size()!= 0">
-          and update_user in
+          and create_user in
             <foreach collection="userIds" index="index" item="item" open="(" separator="," close=")">
                 #{item}
             </foreach>
@@ -309,7 +309,7 @@
     <select id="getDevFailNum" resultType="java.lang.Integer">
         select count(device_id) from fun_device where device_status = 3 and is_del = 0
         <if test="userIds !=null and userIds.size()!= 0">
-            and update_user in
+            and create_user in
             <foreach collection="userIds" index="index" item="item" open="(" separator="," close=")">
                 #{item}
             </foreach>
@@ -318,16 +318,16 @@
     <select id="getDeviceCode" resultType="java.lang.String">
         select device_code as deviceCode from fun_device where is_del = 0
         <if test="userIds !=null and userIds.size()!= 0">
-            and update_user in
+            and create_user in
             <foreach collection="userIds" index="index" item="item" open="(" separator="," close=")">
                 #{item}
             </foreach>
         </if>
     </select>
-    <select id="getDeviceInfoList" resultType="com.remote.modules.device.entity.DeviceEntity">
-        select <include refid="Base_Column_List"/> from fun_device where is_del = 0
+    <select id="getDeviceInfoList" resultType="java.util.HashMap">
+        select longitude,latitude  from fun_device where is_del = 0
         <if test="userIds !=null and userIds.size()!= 0">
-            and update_user in
+            and create_user in
             <foreach collection="userIds" index="index" item="item" open="(" separator="," close=")">
                 #{item}
             </foreach>

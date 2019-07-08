@@ -52,8 +52,9 @@ public class OverViewController extends AbstractController{
         overViewEntity.setLightingArea(getLightArea(userIds));
         //总放电量（碳排放量）
         overViewEntity.setReduCarbonEmi(getTotalDischarge(deviceCodes)*0.875);
-        /*overViewEntity.setCuntGroupByCity(queryCountGroupByCity());*/
+        overViewEntity.setCuntGroupByCity(queryCountGroupByCity());
         overViewEntity.setDeviceInfoList(getDeviceInfoList(userIds));
+        overViewEntity.setTotalDc(getDischargeCapacity(userIds));
         return R.ok().put("info",overViewEntity);
     }
     /**
@@ -89,15 +90,21 @@ public class OverViewController extends AbstractController{
     /**
      *获取当前用户
      * */
-    List<Map<String,Integer>> queryCountGroupByCity(){
+    List<Map<Object,Object>> queryCountGroupByCity(){
         return  deviceService.queryCountGroupByCity(getUserId());
     }
 
     /**
      * 获取所有的设备信息
      * */
-    List<DeviceEntity> getDeviceInfoList(List<Long> userIds){
+    List<Map<Object,Object>> getDeviceInfoList(List<Long> userIds){
         return deviceService.getDeviceInfoList(userIds);
+    }
+    /**
+     * 获取所有的放电量
+     * */
+    List<Map<Object,Object>> getDischargeCapacity(List<Long> userIds){
+        return historyService.getDischargeCapacity(userIds);
     }
 
 }

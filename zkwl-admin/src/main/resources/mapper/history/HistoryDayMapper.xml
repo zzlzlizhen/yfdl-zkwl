@@ -67,4 +67,19 @@
     <delete id="deleteBatchDay">
         delete from history_day where create_time &lt; date_add(curdate(),INTERVAL -1 month)
     </delete>
+    <select id="getDischargeCapacity" resultType="java.util.HashMap">
+        SELECT
+            DATE_FORMAT(b.create_time,'%Y-%m') as mouth,
+                SUM(b.discharge_capacity) as totalDC
+            FROM `remote-power`.fun_device a,`remote-power`.history_year b
+            WHERE a.device_code=b.device_code
+                AND b.create_time BETWEEN YEAR(NOW()) AND NOW()
+            <if test="userIds !=null and userIds.size()!= 0">
+                and a.create_user in
+                <foreach collection="userIds" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            GROUP BY DATE_FORMAT(b.create_time,'%Y-%m');
+    </select>
 </mapper>

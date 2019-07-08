@@ -53,36 +53,141 @@
       </div>
    </div>
 
+
+<!--侧边抽屉2-->
+<div class="drawer" id="drawer_par">
+    <div class="drawer_right">
+        <img src="${request.contextPath}/statics/image/jszg.svg" class="drawer_img" id="drawer_img_par"/>
+    </div>
+    <div class="drawer_left">
+        <span class="dra_spa">运行天数：</span>
+        <p class="dra_p r_di_top">1212</p>
+        <span class="dra_spa">通讯方式：</span>
+        <p class="dra_p r_di_top">21212</p>
+        <span class="dra_spa">硬件版本</span>
+        <p class="dra_p r_di_top">21212</p>
+        <span class="dra_spa">软件版本</span>
+        <p class="dra_p r_di_top">21212</p>
+
+        <div class="convention con_Xu">
+            <span class="con_span">蓄电池</span>
+            <ul>
+                <li>
+                    <img src="${request.contextPath}/statics/image/alarm.svg"/>
+                    <span>电池状态</span>
+                    <p class="battery_a_par">正常</p>
+                </li>
+                <li>
+                    <img src="${request.contextPath}/statics/image/alarm.svg"/>
+                    <span>电池余量</span>
+                    <p class="battery_b_par">30%</p>
+                </li>
+                <li style="border:0;">
+                    <img src="${request.contextPath}/statics/image/alarm.svg"/>
+                    <span>电池电压(v)</span>
+                    <p  class="battery_c_par">100.5</p>
+                </li>
+            </ul>
+        </div>
+        <div class="convention con_Gu">
+            <span class="con_span">光电池</span>
+            <ul>
+                <li>
+                    <img src="${request.contextPath}/statics/image/alarm.svg"/>
+                    <span>光电池状态</span>
+                    <p class="battery_d_par">正常</p>
+                </li>
+                <li>
+                    <img src="${request.contextPath}/statics/image/alarm.svg"/>
+                    <span>光电池电压(v)</span>
+                    <p class="battery_e_par">正常</p>
+                </li>
+                <li>
+                    <img src="${request.contextPath}/statics/image/alarm.svg"/>
+                    <span>充电电流(A)</span>
+                    <p class="battery_f_par">正常</p>
+                </li>
+                <li style="border:0;">
+                    <img src="${request.contextPath}/statics/image/alarm.svg"/>
+                    <span>充电功率(w)</span>
+                    <p class="battery_g_par">正常</p>
+                </li>
+            </ul>
+        </div>
+        <div class="convention con_Gu">
+            <span class="con_span">负载</span>
+            <ul>
+                <li>
+                    <img src="${request.contextPath}/statics/image/alarm.svg"/>
+                    <span>负载状态</span>
+                    <p class="battery_h_par">正常</p>
+                </li>
+                <li>
+                    <img src="${request.contextPath}/statics/image/alarm.svg"/>
+                    <span>负载电压(v)</span>
+                    <p class="battery_i_par">正常</p>
+                </li>
+                <li>
+                    <img src="${request.contextPath}/statics/image/alarm.svg"/>
+                    <span>负载功率(w)</span>
+                    <p class="battery_l_par">正常</p>
+                </li>
+                <li style="border:0;">
+                    <img src="${request.contextPath}/statics/image/alarm.svg"/>
+                    <span>负载电流(w)</span>
+                    <p class="battery_o_par">正常</p>
+                </li>
+            </ul>
+        </div>
+        <div class="convention">
+            <span class="con_span">常规设置</span>
+            <div class="con_an">
+                <span class="con_an_span">开/关/自动：</span>
+                <div class="form-group form_con_an" id="in_p_par">
+                    <input type="radio" class="control-label con_la in_put" id="richang_par" style="margin-left:5%" value="0" name="categorypar" checked/>开
+                    <input type="radio" class="control-label con_la in_put" id="dae_par" value="1" name="categorypar" />关
+                    <input type="radio" class="control-label con_la in_put" id="dae_a_par" value="2" name="categorypar" />自动
+                </div>
+            </div>
+            <div class="con_an">
+                <span class="con_an_span">亮度：</span>
+                <!--<div class="scroll" id="scrolla">-->
+                <!--<div class="bar" id="bara"></div>-->
+                <!--<div class="mask" id="maska"></div>-->
+                <!--</div>-->
+                <div class="progres  proso" style="margin-top: 21px;width: 42%;">
+                    <div id="slideTest1_par" class="demo-slider" contenteditable="true"  lay-percent="70%"></div>
+                </div>
+                <p id="pa_par" class="pa"></p>
+            </div>
+            <div class="con_an">
+                <span class="con_an_span">亮灯时长：</span>
+                <div class="progres proso" style="margin-top: 21px;width: 42%;">
+                    <div id="slideTest2_par" class="demo-slider" contenteditable="true"  lay-percent="70%"></div>
+                </div>
+                <p id="pb_par" class="pa"></p>
+            </div>
+            <div class="con_an">
+                <span class="con_an_span">晨亮时长：</span>
+                <div class="progres proso" style="margin-top: 21px;width: 42%;">
+                    <div id="slideTest3_par" class="demo-slider" contenteditable="true"  lay-percent="70%"></div>
+                </div>
+                <p id="pc_par" class="pa"></p>
+            </div>
+        </div>
+        <div class="con_an_a">
+            <input type="button" value="操作日志" id="operation_par">
+            <input type="button" value="故障日志" id="malfunction_par">
+            <input type="button" value="控制面板" id="hear_control_par">
+        </div>
+    </div>
+</div>
     <!--侧边抽屉-->
-    <div class="drawer" id="drawer">
+    <div class="drawer" id="drawer" >
         <div class="drawer_right">
             <img src="${request.contextPath}/statics/image/jszg.svg" class="drawer_img" id="drawer_img"/>
         </div>
         <div class="drawer_left">
-<!--            <div class="drawe_S">-->
-<!--              <ul>-->
-<!--                  <li>-->
-<!--                      <div>111</div>-->
-<!--                      <img src="${request.contextPath}/statics/image/alarm.svg"/>-->
-<!--                      <span>装机数</span>-->
-<!--                  </li>-->
-<!--                  <li>-->
-<!--                      <div>111</div>-->
-<!--                      <img src="${request.contextPath}/statics/image/alarm.svg"/>-->
-<!--                      <span>网关数</span>-->
-<!--                  </li>-->
-<!--                  <li>-->
-<!--                      <div>111</div>-->
-<!--                      <img src="${request.contextPath}/statics/image/alarm.svg"/>-->
-<!--                      <span>报警数</span>-->
-<!--                  </li>-->
-<!--                  <li style="border:0;">-->
-<!--                      <div>111</div>-->
-<!--                      <img src="${request.contextPath}/statics/image/alarm.svg"/>-->
-<!--                      <span>故障数</span>-->
-<!--                  </li>-->
-<!--              </ul>-->
-<!--            </div>-->
             <span class="dra_spa">运行天数：</span>
             <p class="dra_p r_di_top">1212</p>
             <span class="dra_spa">通讯方式：</span>
@@ -167,9 +272,9 @@
                 <div class="con_an">
                     <span class="con_an_span">开/关/自动：</span>
                     <div class="form-group form_con_an" id="in_p">
-                        <input type="radio" class="control-label in_put" id="richang" style="margin-left:5%" value="0" name="category" checked/>开
-                        <input type="radio" class="control-label in_put" id="dae" value="1" name="category" />关
-                        <input type="radio" class="control-label in_put" id="dae_a" value="2" name="category" />自动
+                        <input type="radio" class="control-label con_lb in_put" id="richang" style="margin-left:5%" value="0" name="category" checked/>开
+                        <input type="radio" class="control-label con_lb in_put" id="dae" value="1" name="category" />关
+                        <input type="radio" class="control-label con_lb in_put" id="dae_a" value="2" name="category" />自动
                     </div>
                 </div>
                 <div class="con_an">
@@ -204,8 +309,10 @@
                 <input type="button" value="控制面板" id="hear_control">
             </div>
         </div>
-
     </div>
+
+
+
 
 <!--新增设备-->
 <div class="shade_project">

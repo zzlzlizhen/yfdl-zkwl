@@ -61,7 +61,7 @@ spinner {width: 100px;}
 .input-group-btn-vertical > .btn:last-child {margin-top: -2px;border-bottom-right-radius: 4px;}
 .input-group-btn-vertical i{position: absolute;top: 0;left: 4px;}
 /*蓄电池*/
-.m_in{margin: 2% 1% 0px 1%;width:44%;}
+.m_in{margin: 2% 1% 0px 1%;width:44%;line-height: 28px;}
 .r-Battery-tw{width: 49.5%;height: 420px;float: right;background: #fff;}
 
 /*光电池*/
@@ -120,7 +120,7 @@ spinner {width: 100px;}
 .de_i{margin-left:14% !important;}
 /*丸子*/
 .progres{width:24%;float: left;margin-top:1.7%;margin-left:4%;}
-.demo-slider{line-height: 10px;}
+.demo-slider{line-height: 28px;}
 #r_inpl_one,#r_inpl_tw{line-height: 28px;}
 .r_i{line-height: 32px;width: 3%;}
 .r_ie{line-height: 21px;width: 3%;}
@@ -132,7 +132,7 @@ spinner {width: 100px;}
 .Bian_j{width:100%;float:left;height:50px;text-indent: 20px;font-size:14px;line-height: 50px;border-bottom: 1px solid #ccc;color:#333;background:#27E2D4;text-align: center;display: none;}
 
 .sha_buttom{width:100%;height:50px; position: absolute;bottom: 0;border-top:1px solid #ccc;}
-.sha_buttom >div{width:70px;height:35px;border:1px solid #ccc;border-radius: 4px;text-align: center;line-height: 35px;float:left;}
+.sha_buttom >div{border-radius: 4px;text-align: center;float:left;}
 .jei{width:80%;height:40px;float:left;margin:3% 0px 0px 10%;}
 .jei span{width:44px;height:100%;float:left;line-height: 40px;}
 .jei .progres{width:30% !important;height:100% !important;float:left;margin-top:0;}
@@ -141,8 +141,33 @@ spinner {width: 100px;}
 
 
 
+/*阶段*/
 
-
-
-
-
+.rquebei{
+    background: url('/remote-admin/statics/image/sousuo-1.png')no-repeat center;
+    width: 99px;
+    height: 45px;
+    float: left;
+    line-height: 45px;
+    text-align: center;
+    background-size: 100%;
+    margin-left: 30%;
+}
+.rqubtn{
+    background: url('/remote-admin/statics/image/sousuo-1.png')no-repeat center;
+    width: 99px;
+    height: 45px;
+    float: left;
+    line-height: 45px;
+    text-align: center;
+    background-size: 100%;
+    margin-left: 10%;
+}
+.rqubtn:hover{
+    background: url('/remote-admin/statics/image/fenzu-1.png')no-repeat center;
+    background-size:100%  !important;
+}
+.rquebei:hover{
+    background: url('/remote-admin/statics/image/fenzu-1.png')no-repeat center;
+    background-size:100% !important;
+}
