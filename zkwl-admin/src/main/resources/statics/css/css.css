@@ -101,9 +101,9 @@ thead>th{text-align: center !important;}
 .btnSwitch{height: 30px;width: 50%;border:none;line-height: 30px;font-size: 15px;text-align: center;z-index: 1;}
 .btn{padding: 0 !important;}
 .move{z-index: 100;
-    width: 35%;
+    width:40%;
     border-radius: 20px;
-    height: 72%;
+    height: 58%;
     position: absolute;
     cursor: pointer;
     border: 1px solid #828282;
@@ -208,16 +208,19 @@ thead>th{text-align: center !important;}
 .nav_n_a::-webkit-scrollbar {
     display: none;
 }
-.nav_a{width:100%;height:auto;float:left;list-style:none;margin:0;padding:0;}
-.nav_a>li{width:90%;height:auto;float:left;margin-left:5%;list-style:none; }
+.nav_a{width:100%;height:auto;float:left;list-style:none;margin:0;padding:0;;}
+.nav_a>li{width:90%;height:auto;float:left;margin-left:5%;list-style:none;margin-top: 10px ;color: #ffffff;
+   ;background:rgba(39,226,212,0.5) ;border-radius: 8px;}
 .nav_pro_v,.nav_pro_v_b{width:100%;height:40px;border-bottom:1px dashed #ccc;cursor: pointer;float:left;}
-.nav_project{width:40%;height:100%;float:left;line-height: 40px;font-size:16px;font-weight: bold;margin-right:6%;}
-.nav_pro_p,.nav_pro_s{width:auto;height:100%;line-height: 40px;font-size:13px;display: block;float:left;}
+.nav_pro_v{padding: 0 14px;}
+.nav_project{width:40%;height:100%;float:left;line-height: 40px;font-size:12px;font-weight: bold;margin-right:6%;}
+.nav_pro_p,.nav_pro_s{width:auto;height:100%;line-height: 40px;font-size:12px;display: block;float:left;}
+.nav_gro{width:99%;height:auto;float:left;border-radius:0px 0px 8px 8px;background:rgba(255,255,255,0.9);color: #333333;margin-left: 0.5%;margin-bottom: 0.5%;}
 .nav_pro_s{float:right;margin-right:3%;}
-.nav_gro,.nav_gro_b{width:100%;height:auto;float:left;margin:0;padding: 0;}
+.nav_gro_b{width:100%;height:auto;float:left;margin:0;padding: 0;}
 .pro_li_a{width: 100%;margin: 0;list-style:none;}
-.nav_pro_fen,.nav_pro_she{width:40%;margin-right:6%;font-size:14px;text-indent:8px;}
-.nav_pro_she{font-weight: 500;font-size: 13px;text-indent:15px;}
+.nav_pro_fen,.nav_pro_she{width:40%;margin-right:6%;font-size:12px;text-indent:8px;}
+.nav_pro_she{font-weight: 500;font-size: 12px;text-indent:15px;}
 /*地图侧边抽屉*/
 .drawer{width:40%;height:76%;position: absolute;right:-38%;bottom:0%; transition: all 1.5s ease-in;z-index: 9;}
 .drawer_hid{transition: all 1.5s ease-in;right: 0;}

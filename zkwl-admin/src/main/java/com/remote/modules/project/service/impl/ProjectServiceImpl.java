@@ -60,6 +60,19 @@ public class ProjectServiceImpl implements ProjectService {
             projectQuery.setUserIds(transform);
             PageHelper.startPage(projectQuery.getPageNum(),projectQuery.getPageSize());
             List<ProjectEntity> list = projectMapper.queryProjectByUserIds(projectQuery);
+
+            Map<Long,String> userMap = new HashMap<>();
+            List<SysUserEntity> userLists = sysUserService.queryUserByUserIds(transform);
+            if(CollectionUtils.isNotEmpty(userLists)){
+                for (SysUserEntity sysUserEntity : userLists){
+                    userMap.put(sysUserEntity.getUserId(),sysUserEntity.getUsername());
+                }
+            }
+            for (ProjectEntity projectEntity : list){
+                if(projectEntity.getExclusiveUser() != null){
+                    projectEntity.setExclusiveUserName(userMap.get(projectEntity.getExclusiveUser()));
+                }
+            }
             //统计总装机/故障/报警数量
             statisticsData(list);
             //封装经纬度
@@ -127,9 +140,9 @@ public class ProjectServiceImpl implements ProjectService {
             deviceQuery.setProjectId(projectEntity.getProjectId());
             List<DeviceEntity> deviceEntities = deviceService.queryDeviceNoPage(deviceQuery);
             List<String> deviceIds = deviceEntities.parallelStream().map(deviceEntity -> deviceEntity.getDeviceId()).collect(Collectors.toCollection(ArrayList::new));
-            String exclusiveUser = projectEntity.getExclusiveUser();
+            Long exclusiveUser = projectEntity.getExclusiveUser();
             deviceQuery.setUpdateTime(new Date());
-            deviceQuery.setCreateUser(Long.valueOf(exclusiveUser));
+            deviceQuery.setCreateUser(exclusiveUser);
             deviceQuery.setUpdateUser(projectEntity.getCreateUser());
             return deviceService.updateUserDevice(deviceQuery) > 0 ? true : false;
         }
@@ -280,8 +293,14 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public int queryProjectByUserCount(Long userId) {
+        List<SysUserEntity> userList = sysUserService.queryAllLevel(userId);
         ProjectQuery projectQuery = new ProjectQuery();
-        projectQuery.setUserIds(Arrays.asList(userId));
-        return projectMapper.queryProjectByUserIds(projectQuery).size();
+        if(CollectionUtils.isNotEmpty(userList)){
+            List<Long> transform = userList.parallelStream().map(sysUserEntity -> sysUserEntity.getUserId()).collect(Collectors.toCollection(ArrayList::new));
+            projectQuery.setUserIds(transform);
+            List<ProjectEntity> list = projectMapper.queryProjectByUserIds(projectQuery);
+            return list.size();
+        }
+        return 0;
     }
 }

@@ -54,4 +54,12 @@ public interface SysUserDao extends BaseMapper<SysUserEntity> {
 	 * */
 	String selectSlat(@Param("username")String username);
 	Long getUidByContact(@Param("contact")String contact);
+	/*
+	 * @Author zhangwenping
+	 * @Description 根据ids查询详情
+	 * @Date 9:48 2019/7/9
+	 * @Param userIds
+	 * @return List<SysUserEntity>
+	 **/
+    List<SysUserEntity> queryUserByUserIds(@Param("userIds")List<Long> userIds);
 }

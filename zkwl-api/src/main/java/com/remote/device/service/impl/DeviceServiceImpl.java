@@ -45,13 +45,15 @@ public class DeviceServiceImpl implements DeviceService {
         //解析经纬度
         String latitudeInt = commonEntity.getLatitudeInt();//纬度整数
         String latitudeH = commonEntity.getLatitudeH();
+        int i = Integer.valueOf(latitudeH) << 16;
         String latitudeL = commonEntity.getLatitudeL();
-        deviceEntity.setLatitude(latitudeInt+"."+latitudeH+latitudeL);
+        deviceEntity.setLatitude(latitudeInt+"."+i+latitudeL);
 
         String longitudeInt = commonEntity.getLongitudeInt();//经度整数
         String longitudeH = commonEntity.getLongitudeH();
+        int h = Integer.valueOf(longitudeH) << 16;
         String longitudeL = commonEntity.getLongitudeL();
-        deviceEntity.setLongitude(longitudeInt+"."+longitudeH+longitudeL);
+        deviceEntity.setLongitude(longitudeInt+"."+h+longitudeL);
 
 
         //负载状态 loadState  蓄电池状态 batteryState 光电池状态  photocellState

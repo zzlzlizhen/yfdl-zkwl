@@ -223,4 +223,8 @@ public class AdvancedSettingEntity implements Serializable {
 	* 三阶降功率幅度
 	* */
 	private Integer threeReducAmplitude;
+	/**
+	 * 开关灯延时时间
+	 * */
+	private Integer switchDelayTime;
 }

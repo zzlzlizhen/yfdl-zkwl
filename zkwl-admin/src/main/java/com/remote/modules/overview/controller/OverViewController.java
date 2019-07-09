@@ -54,7 +54,7 @@ public class OverViewController extends AbstractController{
         overViewEntity.setReduCarbonEmi(getTotalDischarge(deviceCodes)*0.875);
         overViewEntity.setCuntGroupByCity(queryCountGroupByCity());
         overViewEntity.setDeviceInfoList(getDeviceInfoList(userIds));
-        overViewEntity.setTotalDc(getDischargeCapacity(userIds));
+        overViewEntity.setTotalDc(getDischargeCapacity(deviceCodes));
         return R.ok().put("info",overViewEntity);
     }
     /**
@@ -103,8 +103,8 @@ public class OverViewController extends AbstractController{
     /**
      * 获取所有的放电量
      * */
-    List<Map<Object,Object>> getDischargeCapacity(List<Long> userIds){
-        return historyService.getDischargeCapacity(userIds);
+    List<Map<Object,Object>> getDischargeCapacity(List<String> deviceCodes){
+        return historyService.getDischargeCapacity(deviceCodes);
     }
 
 }

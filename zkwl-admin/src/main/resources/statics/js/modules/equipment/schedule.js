@@ -8,105 +8,103 @@ function  zhuang(pro_je,groupId,par_id) {
         success: function (res) {
             console.log("单台设备")
             console.log(res)
-            var deviceCode=res.data.deviceCode;
-            var deviceType=res.data.deviceType;
-            $(".battery_a_par").html(res.data.batteryState);
-            $(".battery_b_par").html(res.data.batteryMargin);
-            $(".battery_c_par").html(res.data.batteryVoltage);
+            $(".battery_a").html(res.data.batteryState);
+            $(".battery_b").html(res.data.batteryMargin);
+            $(".battery_c").html(res.data.batteryVoltage);
 
-            $(".battery_d_par").html(res.data.photocellState);
-            $(".battery_e_par").html(res.data.photovoltaicCellVoltage);
-            $(".battery_f_par").html(res.data.chargingCurrent);
-            $(".battery_g_par").html(res.data.chargingPower);
+            $(".battery_d").html(res.data.photocellState);
+            $(".battery_e").html(res.data.photovoltaicCellVoltage);
+            $(".battery_f").html(res.data.chargingCurrent);
+            $(".battery_g").html(res.data.chargingPower);
 
-            $(".battery_h_par").html();
-            $(".battery_i_par").html(res.data.loadVoltage);
-            $(".battery_l_par").html(res.data.loadPower);
-            $(".battery_o_par").html(res.data.loadCurrent);
+            $(".battery_h").html();
+            $(".battery_i").html(res.data.loadVoltage);
+            $(".battery_l").html(res.data.loadPower);
+            $(".battery_o").html(res.data.loadCurrent);
             var luminance=res.data.light;
             var lian_g=res.data.lightingDuration;
             var chen_g=res.data.morningHours;
-            $("#slideTest1_par").children().children(".layui-slider-bar").width((luminance/$(".progres").width()*$(".progres").width())+"%");
-            $("#slideTest1_par").children().children(".layui-slider-tips").html(luminance)
-            $("#slideTest1_par .layui-slider-wrap").css('left', luminance/$(".progres").width()*$(".progres").width() + '%');
+            $("#slideTest1").children().children(".layui-slider-bar").width((luminance/$(".progres").width()*$(".progres").width())+"%");
+            $("#slideTest1").children().children(".layui-slider-tips").html(luminance)
+            $("#slideTest1 .layui-slider-wrap").css('left', luminance/$(".progres").width()*$(".progres").width() + '%');
 
-            $("#slideTest2_par").children().children(".layui-slider-bar").width((lian_g/$(".progres").width()*$(".progres").width())+"%");
-            $("#slideTest2_par").children().children(".layui-slider-tips").html(lian_g)
-            $("#slideTest2_par .layui-slider-wrap").css('left', lian_g/$(".progres").width()*$(".progres").width() + '%');
+            $("#slideTest2").children().children(".layui-slider-bar").width((lian_g/$(".progres").width()*$(".progres").width())+"%");
+            $("#slideTest2").children().children(".layui-slider-tips").html(lian_g)
+            $("#slideTest2 .layui-slider-wrap").css('left', lian_g/$(".progres").width()*$(".progres").width() + '%');
 
-            $("#slideTest3_par").children().children(".layui-slider-bar").width((chen_g/$(".progres").width()*$(".progres").width())+"%");
-            $("#slideTest3_par").children().children(".layui-slider-tips").html(chen_g)
-            $("#slideTest3_par .layui-slider-wrap").css('left', chen_g/$(".progres").width()*$(".progres").width() + '%');
+            $("#slideTest3").children().children(".layui-slider-bar").width((chen_g/$(".progres").width()*$(".progres").width())+"%");
+            $("#slideTest3").children().children(".layui-slider-tips").html(chen_g)
+            $("#slideTest3 .layui-slider-wrap").css('left', chen_g/$(".progres").width()*$(".progres").width() + '%');
 
             var youVal = res.data.onOff; // 1,2 把拿到的开关灯值赋给单选按钮
-            $("input[name='categorypar']").each(function(index) {
-                if ($("input[name='categorypar']").get(index).value == youVal) {
-                    $("input[name='categorypar']").get(index).checked = true;
+            $("input[name='category']").each(function(index) {
+                if ($("input[name='category']").get(index).value == youVal) {
+                    $("input[name='category']").get(index).checked = true;
                 }
             });
 
 
 
             //点击开关
-            $(".con_la").click(function(){
-                var category = $('input:radio[name="categorypar"]:checked').val();
-                var r_wen1 = $("#slideTest1_par").children().children(".layui-slider-bar").width();
-                var r_wen2 = $("#slideTest2_par").children().children(".layui-slider-bar").width();
-                var r_wen3 = $("#slideTest3_par").children().children(".layui-slider-bar").width();
+            $(".control-label").click(function(){
+                var category = $('input:radio[name="category"]:checked').val();
+                var r_wen1 = $("#slideTest1").children().children(".layui-slider-bar").width();
+                var r_wen2 = $("#slideTest2").children().children(".layui-slider-bar").width();
+                var r_wen3 = $("#slideTest3").children().children(".layui-slider-bar").width();
 
-                var r_wena =  r_wen1/$(".proso").width()*100
+                var r_wena =  r_wen1/$(".progres").width()*100
                 var r_wen_a = Math.ceil(r_wena);
-                var r_wenb =  r_wen2/$(".proso").width()*100
+                var r_wenb =  r_wen2/$(".progres").width()*100
                 var r_wen_b = Math.ceil(r_wenb);
-                var r_wenc =  r_wen3/$(".proso").width()*100
+                var r_wenc =  r_wen3/$(".progres").width()*100
                 var r_wen_c = Math.ceil(r_wenc);
-                equipment_b(pro_je,groupId,par_id,category,r_wen_a,r_wen_b,r_wen_c,deviceCode,deviceType,"1")
+                equipment_a(pro_je,groupId,par_id,category,r_wen_a,r_wen_b,r_wen_c)
 
             })
-        //    滑动单台亮度
-            $('#slideTest1_par').blur(function(){
-                var category = $('input:radio[name="categorypar"]:checked').val();
-                var r_wen1 = $("#slideTest1_par").children().children(".layui-slider-bar").width();
-                var r_wen2 = $("#slideTest2_par").children().children(".layui-slider-bar").width();
-                var r_wen3 = $("#slideTest3_par").children().children(".layui-slider-bar").width();
+            //    滑动单台亮度
+            $('#slideTest1').blur(function(){
+                var category = $('input:radio[name="category"]:checked').val();
+                var r_wen1 = $("#slideTest1").children().children(".layui-slider-bar").width();
+                var r_wen2 = $("#slideTest2").children().children(".layui-slider-bar").width();
+                var r_wen3 = $("#slideTest3").children().children(".layui-slider-bar").width();
 
-                var r_wena =  r_wen1/$(".proso").width()*100
+                var r_wena =  r_wen1/$(".progres").width()*100
                 var r_wen_a = Math.ceil(r_wena);
-                var r_wenb =  r_wen2/$(".proso").width()*100
+                var r_wenb =  r_wen2/$(".progres").width()*100
                 var r_wen_b = Math.ceil(r_wenb);
-                var r_wenc =  r_wen3/$(".proso").width()*100
+                var r_wenc =  r_wen3/$(".progres").width()*100
                 var r_wen_c = Math.ceil(r_wenc);
-                equipment_b(pro_je,groupId,par_id,category,r_wen_a,r_wen_b,r_wen_c,deviceCode,deviceType,"1")
+                equipment_a(pro_je,groupId,par_id,category,r_wen_a,r_wen_b,r_wen_c)
             })
             //    滑动亮灯时长
-            $('#slideTest2_par').blur(function(){
-                var category = $('input:radio[name="categorypar"]:checked').val();
-                var r_wen1 = $("#slideTest1_par").children().children(".layui-slider-bar").width();
-                var r_wen2 = $("#slideTest2_par").children().children(".layui-slider-bar").width();
-                var r_wen3 = $("#slideTest3_par").children().children(".layui-slider-bar").width();
+            $('#slideTest2').blur(function(){
+                var category = $('input:radio[name="category"]:checked').val();
+                var r_wen1 = $("#slideTest1").children().children(".layui-slider-bar").width();
+                var r_wen2 = $("#slideTest2").children().children(".layui-slider-bar").width();
+                var r_wen3 = $("#slideTest3").children().children(".layui-slider-bar").width();
 
-                var r_wena =  r_wen1/$(".proso").width()*100
+                var r_wena =  r_wen1/$(".progres").width()*100
                 var r_wen_a = Math.ceil(r_wena);
-                var r_wenb =  r_wen2/$(".proso").width()*100
+                var r_wenb =  r_wen2/$(".progres").width()*100
                 var r_wen_b = Math.ceil(r_wenb);
-                var r_wenc =  r_wen3/$(".proso").width()*100
+                var r_wenc =  r_wen3/$(".progres").width()*100
                 var r_wen_c = Math.ceil(r_wenc);
-                equipment_b(pro_je,groupId,par_id,category,r_wen_a,r_wen_b,r_wen_c,deviceCode,deviceType,"1")
+                equipment_a(pro_je,groupId,par_id,category,r_wen_a,r_wen_b,r_wen_c)
             })
             //    滑动晨亮时长
-            $('#slideTest3_par').blur(function(){
-                var category = $('input:radio[name="categorypar"]:checked').val();
-                var r_wen1 = $("#slideTest1_par").children().children(".layui-slider-bar").width();
-                var r_wen2 = $("#slideTest2_par").children().children(".layui-slider-bar").width();
-                var r_wen3 = $("#slideTest3_par").children().children(".layui-slider-bar").width();
+            $('#slideTest3').blur(function(){
+                var category = $('input:radio[name="category"]:checked').val();
+                var r_wen1 = $("#slideTest1").children().children(".layui-slider-bar").width();
+                var r_wen2 = $("#slideTest2").children().children(".layui-slider-bar").width();
+                var r_wen3 = $("#slideTest3").children().children(".layui-slider-bar").width();
 
-                var r_wena =  r_wen1/$(".proso").width()*100
+                var r_wena =  r_wen1/$(".progres").width()*100
                 var r_wen_a = Math.ceil(r_wena);
-                var r_wenb =  r_wen2/$(".proso").width()*100
+                var r_wenb =  r_wen2/$(".progres").width()*100
                 var r_wen_b = Math.ceil(r_wenb);
-                var r_wenc =  r_wen3/$(".proso").width()*100
+                var r_wenc =  r_wen3/$(".progres").width()*100
                 var r_wen_c = Math.ceil(r_wenc);
-                equipment_b(pro_je,groupId,par_id,category,r_wen_a,r_wen_b,r_wen_c,deviceCode,deviceType,"1")
+                equipment_a(pro_je,groupId,par_id,category,r_wen_a,r_wen_b,r_wen_c)
             })
 
 
@@ -118,9 +116,8 @@ function  zhuang(pro_je,groupId,par_id) {
 
 //控制分组
 function  f_en(pro_je,groupId) {
-
-    //点击开关
-    $(".con_lb").click(function(){
+//点击开关
+    $(".control-label").click(function(){
         var category = $('input:radio[name="category"]:checked').val();
         var r_wen1 = $("#slideTest1").children().children(".layui-slider-bar").width();
         var r_wen2 = $("#slideTest2").children().children(".layui-slider-bar").width();
@@ -132,7 +129,7 @@ function  f_en(pro_je,groupId) {
         var r_wen_b = Math.ceil(r_wenb);
         var r_wenc =  r_wen3/$(".progres").width()*100
         var r_wen_c = Math.ceil(r_wenc);
-        equipment_b(pro_je,groupId,"",category,r_wen_a,r_wen_b,r_wen_c,"",1)
+        equipment_b(pro_je,groupId,category,r_wen_a,r_wen_b,r_wen_c)
 
     })
     //    滑动单台亮度
@@ -148,7 +145,7 @@ function  f_en(pro_je,groupId) {
         var r_wen_b = Math.ceil(r_wenb);
         var r_wenc =  r_wen3/$(".progres").width()*100
         var r_wen_c = Math.ceil(r_wenc);
-        equipment_b(pro_je,groupId,"",category,r_wen_a,r_wen_b,r_wen_c,"",1)
+        equipment_b(pro_je,groupId,category,r_wen_a,r_wen_b,r_wen_c)
     })
     //    滑动亮灯时长
     $('#slideTest2').blur(function(){
@@ -163,7 +160,7 @@ function  f_en(pro_je,groupId) {
         var r_wen_b = Math.ceil(r_wenb);
         var r_wenc =  r_wen3/$(".progres").width()*100
         var r_wen_c = Math.ceil(r_wenc);
-        equipment_b(pro_je,groupId,"",category,r_wen_a,r_wen_b,r_wen_c,"",1)
+        equipment_b(pro_je,groupId,category,r_wen_a,r_wen_b,r_wen_c)
     })
     //    滑动晨亮时长
     $('#slideTest3').blur(function(){
@@ -178,43 +175,13 @@ function  f_en(pro_je,groupId) {
         var r_wen_b = Math.ceil(r_wenb);
         var r_wenc =  r_wen3/$(".progres").width()*100
         var r_wen_c = Math.ceil(r_wenc);
-        equipment_b(pro_je,groupId,"",category,r_wen_a,r_wen_b,r_wen_c,"",1)
+        equipment_b(pro_je,groupId,category,r_wen_a,r_wen_b,r_wen_c)
     })
-
 }
 //控制设备
-  function equipment_a(pro_je,groupId,par_id,category,r_wen_a,r_wen_b,r_wen_c) {
-      // $.ajax({
-      //     url: baseURL + 'fun/device/updateDevice',
-      //     contentType: "application/json;charset=UTF-8",
-      //     type:"POST",
-      //     data:JSON.stringify({
-      //         "projectId":pro_je,//项目id
-      //         "groupId":groupId,//分组id
-      //         "deviceId":par_id,//设备id
-      //         "lightingDuration":r_wen_b,//亮灯时长
-      //         "morningHours":r_wen_c,//晨亮时长
-      //         "light":r_wen_a,//亮度
-      //         "onOff": category,//开关
-      //     }),
-      //     success: function (res) {
-      //         console.log(res)
-      //         if(res.code == "200"){
-      //
-      //         }
-      //     }
-      //
-      // })
-  }
-function equipment_b(pro_je,groupId,par_id,category,r_wen_a,r_wen_b,r_wen_c,deviceCode,deviceType,par_a) {
-   var group
-    if(par_a == "1"){
-        group=""
-    }else{
-        group=groupId
-    }
+function equipment_a(pro_je,groupId,par_id,category,r_wen_a,r_wen_b,r_wen_c) {
     $.ajax({
-        url: baseURL + 'fun/device/updateOnOffByIds',
+        url: baseURL + 'fun/device/updateDevice',
         contentType: "application/json;charset=UTF-8",
         type:"POST",
         data:JSON.stringify({
@@ -232,24 +199,30 @@ function equipment_b(pro_je,groupId,par_id,category,r_wen_a,r_wen_b,r_wen_c,devi
 
             }
         }
+
     })
+}
+function equipment_b(pro_je,groupId,category,r_wen_a,r_wen_b,r_wen_c) {
     $.ajax({
-        url:baseURL + 'fun/device/change',
+        url: baseURL + 'fun/device/updateOnOffByIds',
         contentType: "application/json;charset=UTF-8",
         type:"POST",
-        data: JSON.stringify({
-            "deviceCodes":deviceCode, //需要修改的设备code   /0
-            "qaKey": ["onOff","light","lightingDuration","morningHours"], //需要修改的参数键
-            "value": [parseInt(category),parseInt(r_wen_a),parseInt(r_wen_b),parseInt(r_wen_c)], //需要修改的参数值
-            "deviceType":deviceType, //设备类型   /1
-            "groupId":group
+        data:JSON.stringify({
+            "projectId":pro_je,//项目id
+            "groupId":groupId,//分组id
+            "lightingDuration":r_wen_b,//亮灯时长
+            "morningHours":r_wen_c,//晨亮时长
+            "light":r_wen_a,//亮度
+            "onOff": category,//开关
         }),
+        success: function (res) {
+            console.log(res)
+            if(res.code == "200"){
 
-        success: function(res) {
-          console.log(res)
+            }
         }
-    })
 
+    })
 }
 // var scroll = document.getElementById('scrolla');
 // var bar = document.getElementById('bara');

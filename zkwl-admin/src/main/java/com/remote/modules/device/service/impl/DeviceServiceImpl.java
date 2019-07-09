@@ -59,7 +59,6 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public PageInfo<DeviceEntity> queryDevice(DeviceQuery deviceQuery) throws Exception {
-        ValidateUtils.validate(deviceQuery,Arrays.asList("projectId"));
         PageHelper.startPage(deviceQuery.getPageNum(),deviceQuery.getPageSize());
         List<DeviceEntity> list = deviceMapper.queryDevice(deviceQuery);
         GroupQuery groupQuery = new GroupQuery();

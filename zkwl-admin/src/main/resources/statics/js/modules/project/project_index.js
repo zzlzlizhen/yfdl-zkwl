@@ -54,6 +54,8 @@ $(function () {
                 "pageNum":pagesa
             },
             success: function(res){
+                console.log("11111111")
+                console.log(res)
                 pages=res.data.pages;
                 pageSize=res.data.pageSize;
                 pageNum=res.data.pageNum
@@ -69,12 +71,12 @@ $(function () {
                  html+=" <tr id="+res.data.list[i].projectId+">\n" +
                      "<td>"+res.data.list[i].projectCode+"</td>\n" +
                      "<td class='Na_me'>"+res.data.list[i].projectName+"</td>\n" +
-                     "<td class='exclusiveUser'>"+res.data.list[i].exclusiveUser+"</td>\n" +
+                     "<td class='exclusiveUser'>"+res.data.list[i].exclusiveUserName+"</td>\n" +
                      "<td class='sumCount'>"+res.data.list[i].sumCount+"</td>\n" +
                      "<td class='gatewayCount'>"+res.data.list[i].gatewayCount+"</td>\n" +
                      "<td class='faultCount'>"+res.data.list[i].faultCount+"</td>\n" +
                      "<td class='callPoliceCount'>"+res.data.list[i].callPoliceCount+"</td>\n" +
-                     "<td>"+projectDesc+"</td>\n" +
+                     "<td class='r_con_r'>"+projectDesc+"</td>\n" +
                      "<td id="+res.data.list[i].projectId+">\n" +
                      "<a href=\"#\" class='modifier'><img src='/remote-admin/statics/image/bianji.png' alt=''></span></a>\n" +
                      "<a href=\"#\" class='ma_p' id="+res.data.list[i].longitude+","+res.data.list[i].latitude+"><img src='/remote-admin/statics/image/ditu2.svg' alt='' style='width: 25px;height:25px;'></a>\n" +
@@ -111,6 +113,12 @@ $(function () {
                 $(".modifier").click(function(){
                     $(".shade_modifier,.shade_b_modifier").css("display","block");
                      proid=$(this).parent().attr('id');
+                    var r_por_num = $(this).parent().siblings(".Na_me").html();
+                    $(".pro_name_b").val(r_por_num);
+                    var r_por_numa = $(this).parent().siblings(".exclusiveUser").html();
+                    $(".r_con_r option:selected").text(r_por_numa);
+                    var r_por_num = $(this).parent().siblings(".Na_me").html();
+                    $(".pro_s_b").val(r_por_num);
                 })
                 $("#confirm_x").click(function(){
                     var pro_name_b= $(".pro_name_b").val()
@@ -175,7 +183,13 @@ $(function () {
         });
 
     }
-
+    //编辑
+    // $(".modifier").click(function () {
+    //     alert("lllllllllllllllllllllllllllll")
+    //     console.log("ppppppppppppppppppppppppppppppppppp")
+    //
+    //
+    // })
 
 // 新增//////////////////////////
    $("#proje_add").click(function(){
@@ -189,7 +203,8 @@ $(function () {
     $("#project_confirm").click(function(){
        var pro_name= $(".pro_name").val()
        var pro_s_b= $(".pro_s").val()
-       var select=$("#select1 option:selected").text()
+       var select=$("#select1 option:selected").attr("id");
+       console.log(select)
         //正则  丸子
         if(pro_name ==""||pro_s_b==""||select=="" ) {
             $(".mistake").css("display","block")
@@ -204,9 +219,11 @@ $(function () {
                     "exclusiveUser":select
                 }),
                 success: function(res){
-                 $(".pro_name").val("")
-                 $("#select1").val("")
-                  $(".pro_s_b").val("")
+                    console.log("res+++")
+                    console.log(res)
+                    $(".pro_name").val("")
+                    $("#select1").val("")
+                    $(".pro_s_b").val("")
                     window.location.reload()
                 }
             });

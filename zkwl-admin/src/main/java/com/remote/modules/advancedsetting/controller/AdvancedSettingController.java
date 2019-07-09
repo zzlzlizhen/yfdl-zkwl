@@ -63,6 +63,7 @@ public class AdvancedSettingController extends AbstractController{
      */
     @RequestMapping(value = "/updateGroup",method = RequestMethod.POST)
     public R update(AdvancedSettingEntity advancedSetting){
+        boolean falg = false;
         String groupId = advancedSetting.getGroupId();
         String devCode = advancedSetting.getDeviceCode();
         if(StringUtils.isBlank(devCode)||"0".equals(devCode)&&StringUtils.isNotBlank(groupId)){
@@ -72,10 +73,17 @@ public class AdvancedSettingController extends AbstractController{
             advancedSetting.setUid(getUserId());
             if(advancedSettingEntity != null){
                 advancedSetting.setUpdateTime(new Date());
-                advancedSettingService.updateById(advancedSetting);
+              /*  advancedSettingService.updateById(advancedSetting);*/
+                falg = advancedSettingService.updateAdvance(advancedSettingEntity.getId(),advancedSetting);
+                if(!falg){
+                    return R.error("更新数据失败");
+                }
             }else{
                 advancedSetting.setCreateTime(new Date());
-                advancedSettingService.save(advancedSetting);
+                falg = advancedSettingService.save(advancedSetting);
+                if(!falg){
+                    return R.error("保存数据失败");
+                }
             }
             List<String> deviceCodes = deviceService.queryByGroupId(groupId);
             if(CollectionUtils.isNotEmpty(deviceCodes)&&deviceCodes.size()>0){
@@ -120,6 +128,7 @@ public class AdvancedSettingController extends AbstractController{
      */
     @RequestMapping(value = "/updateDevice",method = RequestMethod.POST)
     public R updateDevice(AdvancedSettingEntity advancedSetting){
+        boolean falg = false;
         String deviceCode = advancedSetting.getDeviceCode();
         if(StringUtils.isNotBlank(advancedSetting.getGroupId())&&StringUtils.isNotBlank(deviceCode)&&!"0".equals(deviceCode)){
             AdvancedSettingEntity advSE = advancedSettingService.queryByDeviceCode(deviceCode);
@@ -127,11 +136,58 @@ public class AdvancedSettingController extends AbstractController{
             advancedSetting.setUpdateUser(getUser().getRealName());
             if(advSE != null){
                 advancedSetting.setUpdateTime(new Date());
-                advancedSettingService.updateById(advancedSetting);
+                falg = advancedSettingService.updateAdvance(advSE.getId(),advancedSetting);
+                if(!falg){
+                    return R.error("更新数据失败");
+                }
             }else{
                 advancedSetting.setCreateTime(new Date());
-                advancedSettingService.save(advancedSetting);
+                falg = advancedSettingService.save(advancedSetting);
+                if(!falg){
+                    return R.error("保存数据失败");
+                }
             }
+        }
+        return R.ok();
+    }
+
+    /**
+     * 对参数做数据验证
+     * */
+    public R initAdvSetEnt(AdvancedSettingEntity advSet){
+        if(advSet.getSwitchDelayTime() < 1 || advSet.getSwitchDelayTime() > 120){
+            R.error("开关灯延时时间应在1分钟到120分钟之间");
+        }
+        if(advSet.getInspectionTime() < 1 || advSet.getInspectionTime()>3600){
+            R.error("巡检时间应在1到3600分钟");
+        }
+       if(advSet.getTimeTurnOn() < 0 || advSet.getTimeTurnOn() > 1440){
+            R.error("开灯时刻应在0-24小时内");
+       }
+        if(advSet.getTimeTurnOff() < 0 || advSet.getTimeTurnOff() > 1440){
+            R.error("关灯时刻应在0-24小时内");
+        }
+        if(advSet.getTime1()<0 || advSet.getTime1() < 770){
+            R.error("一时段时常应该为0至12小时五十分钟");
+        }
+        if(advSet.getTime2()<0 || advSet.getTime2() < 770){
+            R.error("一时段时常应该为0至12小时五十分钟");
+        }
+        if(advSet.getTime3()<0 || advSet.getTime3() < 770){
+            R.error("一时段时常应该为0至12小时五十分钟");
+        }
+
+        if(advSet.getTime4()<0 || advSet.getTime4() < 770){
+            R.error("一时段时常应该为0至12小时五十分钟");
+        }
+        if(advSet.getTime5()<0 || advSet.getTime5() < 770){
+            R.error("一时段时常应该为0至12小时五十分钟");
+        }
+        if(advSet.getTimeDown()<0 || advSet.getTimeDown() < 770){
+            R.error("一时段时常应该为0至12小时五十分钟");
+        }
+        if(advSet.getInductionLightOnDelay() < 1 || advSet.getInductionLightOnDelay()>600){
+            R.error("人体感应后的亮灯延时应为1-600s");
         }
         return R.ok();
     }

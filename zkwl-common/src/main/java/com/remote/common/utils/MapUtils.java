@@ -21,6 +21,8 @@ public class MapUtils {
         /**
          * 高级设置
          * */
+
+        map.put("switchDelayTime",11);//开关灯延时时间
         map.put("inspectionTime",12);//巡检时间
         map.put("loadWorkMode",13); //负载工作模式
         map.put("powerLoad",14);//负载功率

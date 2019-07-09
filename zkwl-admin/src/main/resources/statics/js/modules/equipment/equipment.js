@@ -25,16 +25,9 @@ $(function () {
 //    抽屉
     $("#drawer_img").click(function(){
         if($("#drawer").attr("class") == "drawer"){
-            $("#drawer").addClass("drawer_hid");
+            $("#drawer").addClass("drawer_hid")
         }else{
             $("#drawer").removeClass("drawer_hid")
-        }
-    })
-    $("#drawer_img_par").click(function(){
-        if($("#drawer_par").attr("class") == "drawer"){
-            $("#drawer_par").addClass("drawer_hid")
-        }else{
-            $("#drawer_par").removeClass("drawer_hid")
         }
     })
 //总览
@@ -59,9 +52,9 @@ $(function () {
 
     })
 
- /*   console.log("ass++++++++" )
-    console.log(ass)
-*/
+    /*   console.log("ass++++++++" )
+       console.log(ass)
+   */
     map(0,ass)
     function map(deviceStatus,ass) {
         var ass //跳转
@@ -82,19 +75,16 @@ $(function () {
                         "<div class=\"nav_pro_v\" >\n" +
                         "<div class=\"nav_project\">"+res.data[i].projectName+"</div>\n" +
                         "<p class=\"nav_pro_p\">运行状态：正常</p>\n" +
-                        "<span  class=\"nav_pro_s\"><img src='/remote-admin/statics/image/jszg.svg' class=\"drawer_img_a\"/></span>\n" +
                         "</div>\n" +
                         "<ul class=\"nav_gro\" id="+res.data[i].projectId+"1"+">\n" +
                         "</ul>"
-                        "</li>\n"
+                    "</li>\n"
 
                     var locon={y:res.data[i].longitude,x:res.data[i].latitude,title:"L",con:res.data[i].sumCount+"台设备",branch:res.data[i].projectName}
                     arr.push(locon) //push经纬度
                 }
 
                 $("#nav_a").append(html);
-                //隐藏弹窗
-                $("#drawer,#drawer_par").hide();
                 if(ass != undefined){
                     arra = ass  //单个项目
                     ass = undefined
@@ -104,7 +94,7 @@ $(function () {
                 m_p(deviceStatus,arra)
                 $(".nav_pro_v").attr("t","0")
                 $(".nav_pro_v").click(function(){
-                   var pro_je=$(this).parents(".pro_li").attr("id")
+                    var pro_je=$(this).parents(".pro_li").attr("id")
                     if( $(this).attr("t")=="0"){
                         $(this).parents(".pro_li").siblings().find(".nav_pro_v").attr("t","0")
                         $(this).parents(".pro_li").siblings().find(".nav_gro").hide().empty()
@@ -128,8 +118,7 @@ $(function () {
 
                                     var locon={y:res.data[i].longitude,x:res.data[i].latitude,title:"L",con:res.data[i].deviceCount+"台设备",branch:res.data[i].groupName}
                                     arr.push(locon) //push经纬度
-                                } //隐藏弹窗
-                                $("#drawer,#drawer_par").hide();
+                                }
                                 $("#" + pro_je + "1").show().append(htmla)
                                 arra=arr //分组经纬度获取全局变量
                                 m_p(deviceStatus,arra)
@@ -137,8 +126,6 @@ $(function () {
                                 //    分组下设备
                                 $(".nav_pro_v_b").click(function(){
                                     var groupId=$(this).parent().attr('id');
-                                    $("#drawer_par").hide();
-                                    $("#drawer").show();
                                     if( $("#" + groupId + "2").html() == ""){
                                         $.ajax({
                                             url: baseURL + 'fun/device/getDeviceByGroupIdNoPage?groupId=' + groupId,
@@ -166,8 +153,8 @@ $(function () {
                                                         "<div class=\"switcha\" id=" + res.data[i].deviceCode + "> \n" +
                                                         "<div class='" + offClass + "' id=" + res.data[i].projectId + " > \n" +
                                                         "<div class=\"move\"  data-state=" + res.data[i].onOff + "></div> \n" +
-                                                        "<div class=\"btnSwitch btn1\">ON</div> \n" +
-                                                        "<div class=\"btnSwitch btn2 \">OFF</div> \n" +
+                                                        "<div class=\"btnSwitch btn1\"></div> \n" +
+                                                        "<div class=\"btnSwitch btn2 \"></div> \n" +
                                                         "</div> " +
                                                         "</div>\n" +
                                                         "</div>\n" +
@@ -178,7 +165,7 @@ $(function () {
                                                 $("#" + groupId + "2").append(htmlb);
                                                 arra=arr //经纬度获取全局变量
                                                 m_p(deviceStatus,arra) //地图
-                                                f_en(pro_je,groupId,1)   //控制分组
+                                                f_en(pro_je,groupId)   //控制分组
 
                                                 // 滑动按钮
                                                 $(".toogle").click(function () {
@@ -243,12 +230,13 @@ $(function () {
                                                 $(".nav_bb").click(function () {
                                                     arr=[]
                                                     arra=[]
+                                                    console.log(deviceStatus+"单台设备")
+                                                    console.log(arra)
                                                     par_id=$(this).parent(".pro_li_a").attr('id')
+
                                                     var locon={y:$(this).attr("id"),x:$(this).children(".nav_pro_p").attr("id"),branch:$(this).children(".nav_pro_she").html()}
                                                     arr.push(locon)
                                                     arra=arr
-                                                    $("#drawer").hide();
-                                                    $("#drawer_par").show();
                                                     //单台设备详情右侧
                                                     zhuang(pro_je,groupId,par_id)
                                                     //调用地图
@@ -260,7 +248,7 @@ $(function () {
                                             }
                                         });
                                     }else{
-                                        $("#" + groupId + "2").html("");
+                                        $("#" + groupId + "2").html("")
                                         return
                                     }
 
@@ -276,14 +264,14 @@ $(function () {
                     }
                     var pro_je=$(this).parent().attr('id');
                     if($("#"+pro_je+"1").html() == ""){
-                         $("#"+pro_je+"1").html("")
+                        $("#"+pro_je+"1").html("")
                         return
                     }else {
 
 
                     }
                 })
-            //    项目下分组
+                //    项目下分组
             }
         });
 
@@ -526,7 +514,7 @@ $(function () {
     //亮度条赋值
 
 
-        // $('input:radio[name="category"]:checked').val("2")
+    // $('input:radio[name="category"]:checked').val("2")
 
 
 

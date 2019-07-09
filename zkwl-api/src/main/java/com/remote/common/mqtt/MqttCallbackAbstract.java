@@ -44,7 +44,7 @@ public abstract class MqttCallbackAbstract implements MqttCallback {
             System.out.println("接收消息主题 : " + topic);
             System.out.println("接收消息Qos : " + message.getQos());
             System.out.println("接收消息内容 : " + new String(message.getPayload()));
-            //接受到的消息处理，可以根据不同的topic做不同的处理
+            //接受到的消息处理，可以根据不同的topic做不同的处理//历史数据处理
             this.exeuteSubMessage(topic,message);
         }catch (Exception e){
             e.printStackTrace();

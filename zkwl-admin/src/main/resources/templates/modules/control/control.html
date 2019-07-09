@@ -22,9 +22,26 @@
     <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
     <script src="${request.contextPath}/statics/js/jQuery.printa.js"></script>
 </head>
+<style>
+    .layui-slider{
+        margin-right: 40px!important;
+    }
+    .layui-slider-input{
+        border: none;
+        width: 26px;
+    }
+    .layui-input, .layui-textarea{
+        padding-left: 0;
+         }
+
+    .layui-slider-input-btn{
+        display: none !important
+    }
+</style>
 <body>
+
 <div class="hear">
-    当前位置>项目管理>北方动力海淀>查看
+    <img src="${request.contextPath}/statics/image/dingwei.png" alt="">项目管理>北方动力海淀>查看
 </div>
 <ul class="tab">
     <li class="cur">历史数据</li>
@@ -289,7 +306,7 @@
                         <div class="progres" style="margin-top:6.5%;width:34%;">
                             <div id="slideTest1" class="demo-slider" style="height:10px;" lay-percent="70%"></div>
                         </div>
-                        <p>40%</p>
+                        <p>%</p>
                     </div>
 
                 </div>
@@ -304,12 +321,11 @@
                         <div class="progres" style="margin-top:5.5%;width:34%;">
                             <div id="slideTest2" class="demo-slider" style="height:10px;"></div>
                         </div>
-                        <p style="margin:4.5% 0px 0px 2%;width: auto;float:left;">40%</p>
+                        <p style="margin:4.5% 0px 0px 2%;width: auto;float:left;">%</p>
                     </div>
                 </div>
             </div>
         </div>
-        <!--333333-->
         <!--蓄电池-->
         <div class="r-Battery-tw">
             <div class="r-heade">蓄电池</div>
@@ -341,14 +357,14 @@
                         <div class="progres" style="margin-top: 6%;width: 34%;margin-left: 2.4%;">
                             <div id="slideTest3" class="demo-slider" style="height: 10px;"></div>
                         </div>
-                        <p>40%</p>
+                        <p>%</p>
                     </div>
                     <div>
                         <span> <i class="r_i">*</i>充电温度最底</span>
                         <div class="progres" style="margin-top: 6%;width: 34%;margin-left: 2.4%;">
                             <div id="slideTest0" class="demo-slider" style="height: 10px;"></div>
                         </div>
-                        <p>40%</p>
+                        <p>%</p>
                     </div>
                     <div style="line-height: 34px;clear: both;">
                         <span><i>*</i>巡检时间</span>
@@ -396,14 +412,14 @@
                         <div class="progres" style="margin:4% 0px 0px 2%;width:35%;">
                             <div id="slideTest17" class="demo-slider" style="height:10px;"></div>
                         </div>
-                        <p>40</p>
+                        <p>%</p>
                     </div>
                     <div>
                         <span> <i>*</i>放电温度最低(C)</span>
                         <div class="progres" style="margin:4% 0px 0px 2%;width:35%;">
                             <div id="slideTest25" class="demo-slider" style="height:10px;"></div>
                         </div>
-                        <p>40</p>
+                        <p>%</p>
                     </div>
                 </div>
 
@@ -422,66 +438,66 @@
                     <div class="progres">
                         <div id="slideTest4" class="demo-slider" style="height:10px;"></div>
                     </div>
-                    <p>40%</p>
+                    <p>%</p>
                     <div class="progres de_i">
                         <div id="slideTest5" class="demo-slider" style="height:10px;"></div>
                     </div>
-                    <p>40%</p>
+                    <p>%</p>
                 </div>
                 <div>
                     <span> <i>*</i>灯亮时段2</span>
                     <div class="progres">
                         <div id="slideTest6" class="demo-slider" style="height:10px;"></div>
                     </div>
-                    <p>40%</p>
+                    <p>%</p>
                     <div class="progres de_i">
                         <div id="slideTest7" class="demo-slider" style="height:10px;"></div>
                     </div>
-                    <p>40%</p>
+                    <p>%</p>
                 </div>
                 <div>
                     <span> <i>*</i>灯亮时段3</span>
                     <div class="progres">
                         <div id="slideTest8" class="demo-slider" style="height:10px;"></div>
                     </div>
-                    <p>40%</p>
+                    <p>%</p>
                     <div class="progres de_i">
                         <div id="slideTest9" class="demo-slider " style="height:10px;"></div>
                     </div>
-                    <p>40%</p>
+                    <p>%</p>
                 </div>
                 <div>
                     <span> <i>*</i>灯亮时段4</span>
                     <div class="progres">
                         <div id="slideTest10" class="demo-slider" style="height:10px;"></div>
                     </div>
-                    <p>40%</p>
+                    <p>%</p>
                     <div class="progres de_i">
                         <div id="slideTest11" class="demo-slider " style="height:10px;"></div>
                     </div>
-                    <p>40%</p>
+                    <p>%</p>
                 </div>
                 <div>
                     <span> <i>*</i>灯亮时段5</span>
                     <div class="progres">
                         <div id="slideTest12" class="demo-slider" style="height:10px;"></div>
                     </div>
-                    <p>40%</p>
+                    <p>%</p>
                     <div class="progres de_i">
                         <div id="slideTest16" class="demo-slider " style="height:10px;"></div>
                     </div>
-                    <p>40%</p>
+                    <p>%</p>
                 </div>
                 <div>
                     <span> <i>*</i>晨亮时段</span>
                     <div class="progres">
                         <div id="slideTest13" class="demo-slider" style="height:10px;"></div>
                     </div>
-                    <p>40%</p>
+                    <p>%</p>
                     <div class="progres de_i">
                         <div id="slideTest14" class="demo-slider " style="height:10px;"></div>
                     </div>
-                    <p>40%</p>
+                    <p>%</p>
                 </div>
 
                 <div style="height:50px;">
@@ -494,7 +510,7 @@
                         <div class="progres" style="width:53%;margin-top:4.4%;">
                             <div id="slideTest15" class="demo-slider" style="height:10px;"></div>
                         </div>
-                        <p style="float:left;">40min</p>
+                        <p style="float:left;">min</p>
                     </div>
                 </div>
             </div>
@@ -520,33 +536,33 @@
             <div class="progres">
                 <div id="slideTest_a" class="demo-slider" style="height:10px;"></div>
             </div>
-            <p class="pro_p">40V</p>
+            <p class="pro_p">v</p>
             <div class="progres">
                 <div id="slideTest_b" class="demo-slider " style="height:10px;"></div>
             </div>
-            <p class="pro_p">40%</p>
+            <p class="pro_p">%</p>
         </div>
         <div class="jei">
             <span>二阶：</span>
             <div class="progres">
                 <div id="slideTest_c" class="demo-slider" style="height:10px;"></div>
             </div>
-            <p class="pro_p">40V</p>
+            <p class="pro_p">V</p>
             <div class="progres">
                 <div id="slideTest_d" class="demo-slider " style="height:10px;"></div>
             </div>
-            <p class="pro_p">40%</p>
+            <p class="pro_p">%</p>
         </div>
         <div class="jei">
             <span>三阶：</span>
             <div class="progres">
                 <div id="slideTest_e" class="demo-slider" style="height:10px;"></div>
             </div>
-            <p class="pro_p">40V</p>
+            <p class="pro_p">V</p>
             <div class="progres">
                 <div id="slideTest_f" class="demo-slider " style="height:10px;"></div>
             </div>
-            <p class="pro_p">40%</p>
+            <p class="pro_p">%</p>
         </div>
 
         <div class="sha_buttom">
@@ -568,10 +584,12 @@
         slider.render({
             elem: '#slideTest1'
             ,theme: '#1E9FFF' //主题色
+            ,input: true //输入框
         });
         slider.render({
             elem: '#slideTest2'
             ,theme: '#1E9FFF' //主题色
+            ,input: true //输入框
         });
         // slider.render({
         //     elem: '#slideTest3'
@@ -585,111 +603,137 @@
         slider.render({
             elem: '#slideTest5'
             ,theme: '#1E9FFF' //主题色
+            ,input: true //输入框
         });
         slider.render({
             elem: '#slideTest6'
             ,theme: '#1E9FFF' //主题色
+            ,input: true //输入框
         });
         slider.render({
             elem: '#slideTest7'
             ,theme: '#1E9FFF' //主题色
+            ,input: true //输入框
         });
         slider.render({
             elem: '#slideTest8'
             ,theme: '#1E9FFF' //主题色
+            ,input: true //输入框
         });
         slider.render({
             elem: '#slideTest9'
             ,theme: '#1E9FFF' //主题色
+            ,input: true //输入框
         });
         slider.render({
             elem: '#slideTest10'
             ,theme: '#1E9FFF' //主题色
+            ,input: true //输入框
         });
         slider.render({
             elem: '#slideTest11'
             ,theme: '#1E9FFF' //主题色
+            ,input: true //输入框
         });
         slider.render({
             elem: '#slideTest12'
             ,theme: '#1E9FFF' //主题色
+            ,input: true //输入框
         });
         slider.render({
             elem: '#slideTest13'
             ,theme: '#1E9FFF' //主题色
+            ,input: true //输入框
         });
         slider.render({
             elem: '#slideTest14'
             ,theme: '#1E9FFF' //主题色
+            ,input: true //输入框
         });
         slider.render({
             elem: '#slideTest15'
             ,theme: '#1E9FFF' //主题色
+            ,input: true //输入框
         });
         slider.render({
             elem: '#slideTest16'
             ,theme: '#1E9FFF' //主题色
+            ,input: true //输入框
         });
         slider.render({
             elem: '#slideTest17'
             ,theme: '#1E9FFF' //主题色
+            ,input: true //输入框
         });
         slider.render({
             elem: '#slideTest_a'
             ,theme: '#1E9FFF' //主题色
+            ,input: true //输入框
         });
         slider.render({
             elem: '#slideTest_b'
             ,theme: '#1E9FFF' //主题色
+            ,input: true //输入框
         });
         slider.render({
             elem: '#slideTest_c'
             ,theme: '#1E9FFF' //主题色
+            ,input: true //输入框
         });
         slider.render({
             elem: '#slideTest_d'
             ,theme: '#1E9FFF' //主题色
+            ,input: true //输入框
         });
         slider.render({
             elem: '#slideTest_e'
             ,theme: '#1E9FFF' //主题色
+            ,input: true //输入框
         });
         slider.render({
             elem: '#slideTest_f'
             ,theme: '#1E9FFF' //主题色
+            ,input: true //输入框
         });
         slider.render({
             elem: '#slideTest0'
             ,theme: '#1E9FFF' //主题色
+            ,input: true //输入框
         });
         slider.render({
             elem: '#slideTest9'
             ,theme: '#1E9FFF' //主题色
+            ,input: true //输入框
         });
         slider.render({
             elem: '#slideTest3'
-            ,value: 0 //初始值
+            ,value: [-10,10] //初始值
             ,min:-44
+            ,max:99
             ,range: true //范围选择
             ,theme: '#1E9FFF' //主题色
+            ,input: true //输入框
             ,change: function(vals){
-                $('#test-slider-tips2').html('开始值：'+ vals[0] + '、结尾值：'+ vals[100]);
+                $('#test-slider-tips2').html('开始值：'+ vals[1] + '、结尾值：'+ vals[2]);
             }
         });
         slider.render({
             elem: '#slideTest0'
-            ,value: 0 //初始值
+            ,value: [-10,10]//初始值
             ,min:-44
+            ,max:99
             ,range: true //范围选择
             ,theme: '#1E9FFF' //主题色
+            ,input: true //输入框
             ,change: function(vals){
                 $('#test-slider-tips2').html('开始值：'+ vals[0] + '、结尾值：'+ vals[100]);
             }
         });
         slider.render({
             elem: '#slideTest17'
-            ,value: 0 //初始值
+            ,value:[-10,10] //初始值
             ,min:-44
+            ,max:99
             ,range: true //范围选择
             ,theme: '#1E9FFF' //主题色
             ,change: function(vals){
@@ -698,8 +742,9 @@
         });
         slider.render({
             elem: '#slideTest25'
-            ,value: 0 //初始值
+            ,value: [-10,10] //初始值
             ,min:-44
+            ,max:99
             ,range: true //范围选择
             ,theme: '#1E9FFF' //主题色
             ,change: function(vals){

@@ -46,7 +46,8 @@
         three_down_power as threeDownPower,
         fir_reduc_amplitude as firReducAmplitude,
         two_reduc_amplitude as twoReducAmplitude,
-        three_reduc_amplitude as threeDownPower
+        three_reduc_amplitude as threeDownPower,
+        switch_delay_time as switchDelayTime
     </sql>
     <select id="queryByGroupId" resultType="com.remote.modules.advancedsetting.entity.AdvancedSettingEntity">
           select <include refid="colums"/> from advanced_setting where group_id = #{groupId}

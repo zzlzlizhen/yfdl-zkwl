@@ -11,6 +11,7 @@ import com.remote.modules.project.entity.ProjectQuery;
 import com.remote.modules.project.service.ProjectService;
 import com.remote.modules.sys.controller.AbstractController;
 import com.remote.modules.sys.entity.SysUserEntity;
+import com.remote.modules.sys.service.SysUserService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,9 @@ public class ProjectController  extends AbstractController {
     private ProjectService projectService;
 
     @Autowired
+    private SysUserService sysUserService;
+
+    @Autowired
     private DeviceService deviceService;
 
 
@@ -45,6 +49,8 @@ public class ProjectController  extends AbstractController {
         boolean flag = projectService.addProject(project);
         if(!flag){
             return R.error(400,"添加项目失败");
+        }else{
+            sysUserService.updateProCount(getUserId());
         }
         return R.ok();
     }
@@ -79,6 +85,8 @@ public class ProjectController  extends AbstractController {
             boolean flag = projectService.delProject(projectList,user.getUserId());
             if(!flag){
                 return R.error(400,"删除项目失败");
+            }else{
+                sysUserService.updateProCount(getUserId());
             }
         }
         return R.ok();
@@ -93,6 +101,8 @@ public class ProjectController  extends AbstractController {
         boolean flag = projectService.updateProject(projectEntity);
         if(!flag){
             return R.error(400,"修改项目失败");
+        }else{
+            sysUserService.updateProCount(getUserId());
         }
         return R.ok();
     }

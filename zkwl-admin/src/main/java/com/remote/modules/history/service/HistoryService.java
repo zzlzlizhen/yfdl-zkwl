@@ -59,6 +59,6 @@ public interface HistoryService {
     /**
      * 通过用户ids获取每月总放电量
      * */
-    List<Map<Object,Object>> getDischargeCapacity(List<Long> userIds);
+    List<Map<Object,Object>> getDischargeCapacity(List<String> deviceCodes);
 
 }

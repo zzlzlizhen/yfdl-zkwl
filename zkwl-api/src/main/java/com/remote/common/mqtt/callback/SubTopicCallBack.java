@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class SubTopicCallBack extends MqttCallbackAbstract {
 
     @Override
-    public void exeuteSubMessage(String topic, MqttMessage mqttMessage) throws Exception {
+    public void exeuteSubMessage(String topic, MqttMessage mqttMessage) throws Exception {//发布消息
         System.out.println(this.getClass().getName() + "----"+this);
     }
 

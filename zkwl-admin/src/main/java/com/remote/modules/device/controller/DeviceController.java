@@ -11,6 +11,7 @@ import com.remote.modules.device.entity.DeviceQuery;
 import com.remote.modules.device.service.DeviceService;
 import com.remote.modules.sys.controller.AbstractController;
 import com.remote.modules.sys.entity.SysUserEntity;
+import com.remote.modules.sys.service.SysUserService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,8 @@ public class DeviceController extends AbstractController {
 
     @Autowired
     private DeviceService deviceService;
+
+    @Autowired SysUserService sysUserService;
 
     @Autowired
     private RabbitTemplate template;
@@ -94,6 +97,8 @@ public class DeviceController extends AbstractController {
         boolean flag = deviceService.addDevice(deviceEntity);
         if(!flag){
             return R.error(400,"添加设备失败");
+        }else{
+            sysUserService.updateDevCount(user);
         }
         return R.ok();
     }
@@ -116,6 +121,8 @@ public class DeviceController extends AbstractController {
         boolean flag = deviceService.deleteDevice(deviceQuery);
         if(!flag){
             return R.error(400,"删除设备失败");
+        }else{
+            sysUserService.updateDevCount(getUser());
         }
         return R.ok();
     }
@@ -145,6 +152,8 @@ public class DeviceController extends AbstractController {
         boolean flag = deviceService.updateById(deviceEntity);
         if(!flag){
             return R.error(400,"修改设备失败");
+        }else{
+            sysUserService.updateDevCount(getUser());
         }
         return R.ok();
     }

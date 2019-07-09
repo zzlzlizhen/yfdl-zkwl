@@ -69,4 +69,16 @@
 	<select id="getUidByContact" resultType="java.lang.Long">
 		select user_id from sys_user where email=#{contact} or mobile =#{contact} limit 1
 	</select>
+
+	<select id="queryUserByUserIds" resultType="com.remote.modules.sys.entity.SysUserEntity">
+		select <include refid="columns"/> from sys_user where
+		<if test="userIds !=null and userIds.size()!= 0">
+		     user_id in
+			<foreach collection="userIds" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+	</select>
+
+
 </mapper>

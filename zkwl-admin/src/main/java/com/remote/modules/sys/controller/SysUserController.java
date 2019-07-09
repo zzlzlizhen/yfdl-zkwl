@@ -94,6 +94,12 @@ public class SysUserController extends AbstractController {
 	 * */
 	@RequestMapping("/status")
 	public R status(Long userId, Integer status){
+        if(userId == getUserId()){
+            return R.error("用户不能修改自身状态");
+        }
+        if(userId == 1l){
+            return R.error("超级用户状态不能修改");
+        }
 		boolean falg = sysUserService.updateStatus(userId,status);
 		if(!falg){
 			R.error("修改失败");
@@ -200,7 +206,6 @@ public class SysUserController extends AbstractController {
 	@RequiresPermissions("sys:user:update")
 	public R updateBaseInfo(SysUserEntity user){
 		SysUserEntity sysUserEntity = sysUserService.queryByIdEAndM(getUserId());
-
 		if(sysUserEntity != null){
 			if(!StringUtils.isBlank(user.getEmail())&&!StringUtils.isBlank(sysUserEntity.getEmail())){
 				if(!user.getEmail().equals(sysUserEntity.getEmail())){

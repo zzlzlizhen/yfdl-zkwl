@@ -10,6 +10,8 @@ import com.remote.common.annotation.DataFilter;
 import com.remote.common.utils.Constant;
 import com.remote.common.utils.PageUtils;
 import com.remote.common.utils.Query;
+import com.remote.modules.device.entity.DeviceEntity;
+import com.remote.modules.device.service.DeviceService;
 import com.remote.modules.project.service.ProjectService;
 import com.remote.modules.sys.dao.SysUserDao;
 import com.remote.modules.sys.entity.SysUserEntity;
@@ -18,16 +20,14 @@ import com.remote.modules.sys.service.SysUserRoleService;
 import com.remote.modules.sys.service.SysUserService;
 import com.remote.modules.sys.shiro.ShiroUtils;
 import javafx.animation.Interpolatable;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 
@@ -46,6 +46,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	private SysUserDao sysUserDao;
 	@Autowired
 	private ProjectService projectService;
+	@Autowired
+	private DeviceService deviceService;
 
 	@Override
 	public List<Long> queryAllMenuId(Long userId) {
@@ -276,4 +278,47 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 		return this.sysUserDao.getUidByContact(contact);
 	}
 
+	@Override
+	public List<SysUserEntity> queryUserByUserIds(List<Long> userIds) {
+		return sysUserDao.queryUserByUserIds(userIds);
+	}
+
+
+	@Override
+	public boolean updateProCount(Long curUid) {
+		SysUserEntity userEntity = new SysUserEntity();
+
+		Integer proCount = projectService.queryProjectByUserCount(curUid);
+		if(proCount == null){
+			proCount = 0;
+		}else{
+			proCount = proCount;
+		}
+		userEntity.setProjectCount(proCount);
+		return this.update(userEntity,
+				new QueryWrapper<SysUserEntity>().eq("user_id", curUid));
+	}
+	@Override
+	public boolean updateDevCount(SysUserEntity curUser) {
+		SysUserEntity userEntity = new SysUserEntity();
+		List<SysUserEntity> userEntityList =  queryAllChild(curUser);
+		List<Long> userIds = new ArrayList<Long>();
+		if(CollectionUtils.isNotEmpty(userEntityList)&&userEntityList.size()>0){
+			for(SysUserEntity sysUserEntity: userEntityList){
+				userIds.add(sysUserEntity.getUserId());
+			}
+			Integer devCount = null;
+			if(CollectionUtils.isNotEmpty(userIds)&&userIds.size()>0){
+				devCount = deviceService.getDeviceCount(userIds);
+				if(devCount == null){
+					devCount =0;
+				}else{
+					devCount = devCount;
+				}
+			}
+			userEntity.setDeviceCount(devCount);
+		}
+		return this.update(userEntity,
+				new QueryWrapper<SysUserEntity>().eq("user_id", curUser.getUserId()));
+	}
 }

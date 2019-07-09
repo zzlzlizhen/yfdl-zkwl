@@ -39,6 +39,19 @@ $(function(){
     var pageSize
     var pageNum
 
+    $.ajax({
+        url:baseURL + 'fun/group/queryGroupNoPage?projectId='+Id,
+        contentType: "application/json;charset=UTF-8",
+        type:"get",
+        data:{},
+        success: function(res) {
+            var html=""
+            for (var i = 0; i < res.data.length; i++) {
+                html += "<option class='option opti_a' id="+res.data[i].groupId+">"+res.data[i].groupName+"</option>\n"
+            }
+            $("#select1,#select1_b,#se_for").append(html)
+        }
+    })
     //搜索
     $("#proje_search").click(function(){
        var Se_id=$("#Se_id").val();
@@ -427,26 +440,26 @@ $(function(){
     $("#add_equipments").click(function(){
         $(".shade_project,.shade_b_project").css("display","block");
         //添加设备-分组id
-        fen()
+        // fen()
     })
-    function fen(){
-        $.ajax({
-            url:baseURL + 'fun/group/queryGroupNoPage?projectId='+Id,
-            contentType: "application/json;charset=UTF-8",
-            type:"get",
-            data:{},
-            success: function(res) {
-                var html=""
-                for (var i = 0; i < res.data.length; i++) {
-                    html += "<option class='option opti_a' id="+res.data[i].groupId+">"+res.data[i].groupName+"</option>\n"
-                }
-                $("#select1,#select1_b").append(html)
-            }
-        })
-    }
+    // function fen(){
+    //     $.ajax({
+    //         url:baseURL + 'fun/group/queryGroupNoPage?projectId='+Id,
+    //         contentType: "application/json;charset=UTF-8",
+    //         type:"get",
+    //         data:{},
+    //         success: function(res) {
+    //             var html=""
+    //             for (var i = 0; i < res.data.length; i++) {
+    //                 html += "<option class='option opti_a' id="+res.data[i].groupId+">"+res.data[i].groupName+"</option>\n"
+    //             }
+    //             $("#select1,#select1_b").append(html)
+    //         }
+    //     })
+    // }
     $(".shade_add_project").click(function(){
         $(".shade_project,.shade_b_project").css("display","none");
-        $("#select1,#select1_b").html("")
+        // $("#select1,#select1_b").html("")
     })
 
 
@@ -484,7 +497,7 @@ $(function(){
 //编辑去弹窗/////////////////////////////////
     $(".shade_modifier_project").click(function(){
         $(".shade_modifier,.shade_b_modifier").css("display","none")
-        $("#select1,#select1_b").html("")
+        // $("#select1,#select1_b").html("")
     })
 
 //分组管理

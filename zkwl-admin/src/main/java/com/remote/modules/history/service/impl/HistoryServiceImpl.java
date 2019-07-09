@@ -135,7 +135,7 @@ public class HistoryServiceImpl implements HistoryService {
     }
 
     @Override
-    public List<Map<Object, Object>> getDischargeCapacity(List<Long> userIds) {
-        return historyDayMapper.getDischargeCapacity(userIds);
+    public List<Map<Object, Object>> getDischargeCapacity(List<String> deviceCodes) {
+        return historyDayMapper.getDischargeCapacity(deviceCodes);
     }
 }

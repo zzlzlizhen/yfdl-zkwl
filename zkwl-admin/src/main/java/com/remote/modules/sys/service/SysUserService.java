@@ -98,5 +98,21 @@ public interface SysUserService extends IService<SysUserEntity> {
 	 * 通过联系方式查询用户id
 	 * */
 	Long getUidByContact(String contact);
+	/*
+	 * @Author zhangwenping
+	 * @Description 根据ids查询详情
+	 * @Date 9:47 2019/7/9
+	 * @Param userIds
+	 * @return List<SysUserEntity>
+	 **/
+	List<SysUserEntity> queryUserByUserIds(List<Long> userIds);
+	/**
+	 * 通过当前用户id修改项目数量
+	 * */
+	boolean updateProCount(Long curUid);
 
+	/**
+	 * 通过当前用户id修改设备数量
+	 * */
+	boolean updateDevCount(SysUserEntity curUser);
 }

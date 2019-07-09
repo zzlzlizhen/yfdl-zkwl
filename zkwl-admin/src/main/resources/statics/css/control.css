@@ -1,6 +1,6 @@
 html,body{width:100% !important;height:100% !important;margin:0;padding:0;font-size:12px;background: rgba(242, 242, 242, 1)}
 /*css功能样式*/
-.hear{width:100%;height:8%;float:left;border-bottom: 10px solid rgba(242, 242, 242, 1);text-indent: 25px;line-height:60px;font-size:18px;background: #fff;}
+.hear{width:100%;height: 60px;float:left;border-bottom: 10px solid rgba(242, 242, 242, 1);text-indent: 25px;line-height:60px;background: #fff;line-height: 60px;font-size: 14px}
 .project_he{width:100%;height:11.5%;float:left;border-bottom: 10px solid rgba(242, 242, 242, 1);}
 .hear_w{width:auto;height:auto;float:left;margin:2.7% 0px 0px 2.5%;font-size:14px;}
 .form_input{  margin-bottom: 0px !important; padding: 0px !important;width:11% !important;;height:100%;margin-top:26px;}
@@ -12,7 +12,7 @@ html,body{width:100% !important;height:100% !important;margin:0;padding:0;font-s
 .option::-webkit-scrollbar {
     display: none;
 }
-.tab {width:100%;height:10%;float:left;margin:0;padding:0;list-style:none;overflow:hidden;border-bottom: 10px solid rgba(242, 242, 242, 1);background: #fff;}
+.tab {width:100%;height: 65px;float:left;margin:0;padding:0;list-style:none;overflow:hidden;border-bottom: 10px solid rgba(242, 242, 242, 1);background: #fff;}
 .tab li {float:left;width:6%;height:50%;color:#666;font-size:14px;text-align:center;line-height:30px;cursor:pointer;margin:1.1% 0px 0px 2%;}
 .on {display:block;}
 .tab li.cur {border-bottom: 2px solid rgba(24, 144, 255, 1);}
@@ -79,14 +79,14 @@ spinner {width: 100px;}
     height: 50px;
 }
 .r-bt > input{display: inline-block;}
-.r-Battery-reg span{width:81px;height: 100%;float: left;line-height: 50px;margin-right:3%;}
+.r-Battery-reg span{width:82px;height: 100%;float: left;line-height: 50px;margin-right:3%;}
 .r-Battery-rge > p{width: 100%;display: inline-block;}
 .r-Battery-rge > div{height: 50px;margin-top: 7px;}
 .r-bt > input{display: inline-block;}
 .r-Battery-rge{width:49.5%;font-size: 14px;float: right;margin-top:3%;}
 .r-Battery-rge > p{width: 100%;display: inline-block;height: 50px;}
 .r-Battery-rge > div{height: 50px;}
-
+.layui-slider-input-txt input{text-align: right;}
 .r-bt > input{display: inline-block;}
 .r-Battery-rge span{float: left;line-height:40px;width:110px;}
 .r-Battery-rge span>i{color: red;}
