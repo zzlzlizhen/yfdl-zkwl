@@ -93,7 +93,7 @@ $(function () {
                     var ele = $(this).children(".move");
                     Id_a = $(this).attr("id");
                     if (ele.attr("data-state") == "1") {
-                        ele.animate({left: "0"}, 300, function () {
+                        ele.animate({left: "10%"}, 300, function () {
                             ele.attr("data-state", "0");
                             var state = 0
                             aaa(state, username, Id_a)

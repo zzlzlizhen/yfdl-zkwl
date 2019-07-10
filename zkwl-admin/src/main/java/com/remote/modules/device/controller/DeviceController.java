@@ -2,6 +2,8 @@ package com.remote.modules.device.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
+import com.remote.common.enums.AllEnum;
+import com.remote.common.enums.RunStatusEnum;
 import com.remote.common.utils.DataUtils;
 import com.remote.common.utils.R;
 import com.remote.common.utils.StringUtils;
@@ -88,11 +90,12 @@ public class DeviceController extends AbstractController {
     public R queryDevice(@RequestBody DeviceEntity deviceEntity) throws Exception {
         SysUserEntity user = getUser();
         deviceEntity.setCreateUser(user.getUserId());
-        deviceEntity.setIsDel(0);
+        deviceEntity.setIsDel(AllEnum.NO.getCode());
         deviceEntity.setCreateName(user.getUsername());
         deviceEntity.setCreateTime(new Date());
         deviceEntity.setDeviceId(UUID.randomUUID().toString());
-        deviceEntity.setOnOff(0);
+        deviceEntity.setOnOff(AllEnum.NO.getCode());
+        deviceEntity.setRunState(RunStatusEnum.OFFLINE.getCode());
         deviceEntity.setSignalState(0);
         boolean flag = deviceService.addDevice(deviceEntity);
         if(!flag){

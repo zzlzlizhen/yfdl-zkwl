@@ -3,6 +3,7 @@ package com.remote.modules.project.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.remote.common.enums.DeviceEnum;
+import com.remote.common.enums.RunStatusEnum;
 import com.remote.common.utils.ValidateUtils;
 import com.remote.modules.device.entity.DeviceEntity;
 import com.remote.modules.device.entity.DeviceQuery;
@@ -12,6 +13,7 @@ import com.remote.modules.group.service.GroupService;
 import com.remote.modules.project.dao.ProjectMapper;
 import com.remote.modules.project.entity.ProjectEntity;
 import com.remote.modules.project.entity.ProjectQuery;
+import com.remote.modules.project.entity.ProjectResult;
 import com.remote.modules.project.service.ProjectService;
 import com.remote.modules.sys.entity.SysUserEntity;
 import com.remote.modules.sys.service.SysUserService;
@@ -302,5 +304,72 @@ public class ProjectServiceImpl implements ProjectService {
             return list.size();
         }
         return 0;
+    }
+
+    @Override
+    public ProjectResult queryProjectById(String projectId,String groupId) {
+        List<Map<String,Integer>> deviceMapList = new ArrayList<>();
+        List<Map<String,BigDecimal>> deviceScaleList = new ArrayList<>();
+        ProjectResult projectResult = new ProjectResult();
+        Map<String,Integer> deviceMap = new HashMap<>();
+        Map<String,BigDecimal> deviceScale = new HashMap<>();
+        Integer sumCount = 0;
+        deviceMap.put(RunStatusEnum.NORAML.getName(),0);
+        deviceMap.put(RunStatusEnum.WARNING.getName(),0);
+        deviceMap.put(RunStatusEnum.FAULT.getName(),0);
+        deviceMap.put(RunStatusEnum.OFFLINE.getName(),0);
+        List<DeviceEntity> deviceList = deviceService.queryRunStateCount(projectId, groupId);
+        if(CollectionUtils.isNotEmpty(deviceList)){
+            for(DeviceEntity deviceEntity : deviceList){
+                sumCount += deviceEntity.getCounts();
+                if(deviceEntity.getRunState() == RunStatusEnum.NORAML.getCode()){
+                    deviceMap.put(RunStatusEnum.NORAML.getName(),deviceEntity.getCounts());
+                }
+                if(deviceEntity.getRunState() == RunStatusEnum.WARNING.getCode()){
+                    deviceMap.put(RunStatusEnum.WARNING.getName(),deviceEntity.getCounts());
+                }
+                if(deviceEntity.getRunState() == RunStatusEnum.FAULT.getCode()){
+                    deviceMap.put(RunStatusEnum.FAULT.getName(),deviceEntity.getCounts());
+                }
+                if(deviceEntity.getRunState() == RunStatusEnum.OFFLINE.getCode()){
+                    deviceMap.put(RunStatusEnum.OFFLINE.getName(),deviceEntity.getCounts());
+                }
+            }
+        }
+        projectResult.setSumCount(sumCount);
+        projectResult.setDeviceCount(sumCount);
+        if(sumCount == 0 ){
+            BigDecimal bigDecimal = new BigDecimal(0);
+            deviceScale.put(RunStatusEnum.NORAML.getName(),bigDecimal);
+            deviceScale.put(RunStatusEnum.WARNING.getName(),bigDecimal);
+            deviceScale.put(RunStatusEnum.FAULT.getName(),bigDecimal);
+            deviceScale.put(RunStatusEnum.OFFLINE.getName(),bigDecimal);
+        }else{
+            Integer integer = deviceMap.get(RunStatusEnum.NORAML.getName());
+            Integer integer1 = deviceMap.get(RunStatusEnum.WARNING.getName());
+            Integer integer2 = deviceMap.get(RunStatusEnum.FAULT.getName());
+            Integer integer3 = deviceMap.get(RunStatusEnum.OFFLINE.getName());
+            deviceScale.put(RunStatusEnum.NORAML.getName(),new BigDecimal(integer).divide(new BigDecimal(sumCount),2,BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)));
+            deviceScale.put(RunStatusEnum.WARNING.getName(),new BigDecimal(integer1).divide(new BigDecimal(sumCount),2,BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)));
+            deviceScale.put(RunStatusEnum.FAULT.getName(),new BigDecimal(integer2).divide(new BigDecimal(sumCount),2,BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)));
+            deviceScale.put(RunStatusEnum.OFFLINE.getName(),new BigDecimal(integer3).divide(new BigDecimal(sumCount),2,BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)));
+        }
+        Set<Map.Entry<String, Integer>> entries = deviceMap.entrySet();
+        for (Map.Entry<String, Integer> entry : entries){
+            Map<String,Integer> temp = new HashMap<>();
+            temp.put(entry.getKey(),entry.getValue());
+            deviceMapList.add(temp);
+        }
+
+        Set<Map.Entry<String, BigDecimal>> entries1 = deviceScale.entrySet();
+        for (Map.Entry<String, BigDecimal> entry : entries1){
+            Map<String,BigDecimal> temp = new HashMap<>();
+            temp.put(entry.getKey(),entry.getValue());
+            deviceScaleList.add(temp);
+        }
+
+        projectResult.setDeviceMap(deviceMapList);
+        projectResult.setDeviceScale(deviceScaleList);
+        return projectResult;
     }
 }

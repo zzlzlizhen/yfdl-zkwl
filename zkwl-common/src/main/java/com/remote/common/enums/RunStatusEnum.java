@@ -4,7 +4,8 @@ package com.remote.common.enums;
 public enum RunStatusEnum {
     NORAML("正常",1),
     WARNING("警告",2),
-    FAULT("故障",3);
+    FAULT("故障",3),
+    OFFLINE("离线",4);
 
     private String name;
     private int code;

@@ -101,6 +101,7 @@ $(function () {
                     var searchUrl=encodeURI('../equipment/equipment.html?longitude='+longitude)
                     location.href =searchUrl;
                 })
+
                 $(".modifier_a").click(function(){
                     var grod=$(this).parent().attr('id');
                     console.log(grod)

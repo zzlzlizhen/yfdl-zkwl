@@ -34,11 +34,6 @@ $(function () {
     $("#pandect").click(function () {
         window.open("../pandect/pandect.html")
     })
-//控制面板
-    $("#hear_control").click(function(){
-        location.href ='../control/control.html';
-    })
-
 
 //    单选
     var ida
@@ -52,9 +47,6 @@ $(function () {
 
     })
 
-    /*   console.log("ass++++++++" )
-       console.log(ass)
-   */
     map(0,ass)
     function map(deviceStatus,ass) {
         var ass //跳转
@@ -147,7 +139,7 @@ $(function () {
                                                     }
                                                     htmlb += "<li class='pro_li_a' id="+res.data[i].deviceId+">\n" +
                                                         "<div class=\"nav_pro_v_b nav_bb\" id="+res.data[i].longitude+">\n" +
-                                                        "<div class=\"nav_project nav_pro_she\">设备名称："+res.data[i].deviceName+"</div>\n" +
+                                                        "<div class=\"nav_project nav_pro_she\"  id="+res.data[i].groupId+">设备名称："+res.data[i].deviceName+"</div>\n" +
                                                         "<p class=\"nav_pro_p\" id="+res.data[i].latitude+">运行状态："+ res.data[i].runState+"</p>\n" +
                                                         "<div class=\"swa\" id=" + res.data[i].deviceType + "> \n" +
                                                         "<div class=\"switcha\" id=" + res.data[i].deviceCode + "> \n" +
@@ -166,6 +158,7 @@ $(function () {
                                                 arra=arr //经纬度获取全局变量
                                                 m_p(deviceStatus,arra) //地图
                                                 f_en(pro_je,groupId)   //控制分组
+                                                history("",groupId,"")//历史数据、高级设置
 
                                                 // 滑动按钮
                                                 $(".toogle").click(function () {
@@ -175,9 +168,9 @@ $(function () {
                                                     var li_deviceType=$(this).parent().parent().attr("id");
                                                     var ele = $(this).children(".move");
                                                     if (ele.attr("data-state") == "1") {
-                                                        ele.animate({left: "0"}, 300, function () {
+                                                        ele.animate({left: "15%"}, 300, function () {
                                                             ele.attr("data-state", "0");
-                                                            var value=["0"]
+                                                            var value=[0]
                                                             off(li_deviceCode,value,li_deviceType,deviceId,projectId)
                                                         });
                                                         $(this).removeClass("on").addClass("off");
@@ -185,7 +178,7 @@ $(function () {
                                                     } else if (ele.attr("data-state") == "0") {
                                                         ele.animate({left: '50%'}, 300, function () {
                                                             ele.attr("data-state", "1");
-                                                            var value=["1"]
+                                                            var value=[1]
                                                             off(li_deviceCode,value,li_deviceType,deviceId,projectId)
                                                         });
                                                         $(this).removeClass("off").addClass("on");
@@ -202,7 +195,8 @@ $(function () {
                                                             "deviceCodes": ass, //需要修改的设备code
                                                             "qaKey": ["onOff"], //需要修改的参数键
                                                             "value": value, //需要修改的参数值
-                                                            "deviceType": li_deviceType //设备类型
+                                                            "deviceType": li_deviceType, //设备类型
+                                                            "status": 2
                                                         }),
                                                         success: function(res) {
                                                             console.log("1111")
@@ -232,8 +226,10 @@ $(function () {
                                                     arra=[]
                                                     console.log(deviceStatus+"单台设备")
                                                     console.log(arra)
-                                                    par_id=$(this).parent(".pro_li_a").attr('id')
-
+                                                    par_id=$(this).parent(".pro_li_a").attr('id');
+                                                    var type=$(this).children(".swa").attr('id');
+                                                    var deviceCode=$(this).children().children(".switcha").attr('id');
+                                                    var groId=$(this).children(".nav_pro_she").attr('id');
                                                     var locon={y:$(this).attr("id"),x:$(this).children(".nav_pro_p").attr("id"),branch:$(this).children(".nav_pro_she").html()}
                                                     arr.push(locon)
                                                     arra=arr
@@ -243,6 +239,8 @@ $(function () {
                                                     m_p(deviceStatus,arra)
                                                     //日志信息
                                                     fu(par_id)
+                                                    //历史数据、高级设置
+                                                    history (deviceCode,groId,type)
                                                 })
 
                                             }
@@ -293,52 +291,25 @@ $(function () {
             var color  //背景颜色
 
             var marker
-            var a=new BMap.Icon("/remote-admin/statics/image/a.svg", new BMap.Size(300,157))
-            var b=new BMap.Icon("/remote-admin/statics/image/b.svg", new BMap.Size(300,157))
-            var c=new BMap.Icon("/remote-admin/statics/image/c.svg", new BMap.Size(300,157))
-            var d=new BMap.Icon("/remote-admin/statics/image/d.svg", new BMap.Size(300,157))
-            var e=new BMap.Icon("/remote-admin/statics/image/e.svg", new BMap.Size(300,157))
-            // var changeMarks = [a,b,c,d,e];
-            // var marks=""
-            // for(var i=0;i<marks.length;i++) {
-            //     // 将此标示放入地图
-            //     map.addOverlay(marks[i]);
-            //     //var markIndex = marks[i];
-            //     (function (i) {
-            //         marks[i].addEventListener("click", function (e) {
-            //             for (var j = 0; j < marks.length; j++) {
-            //                 if (j == i) {
-            //                     //alert("i = " + i);
-            //                     var n = j + 1;
-            //                     doClick(n);
-            //                     // 当鼠标点击这个标示的时候，标示的颜色改
-            //                     map.addOverlay(changeMarks[j]);
-            //                 } else {
-            //                     map.removeOverlay(changeMarks[j]);
-            //                 }
-            //             }
-            //         });
-            //     })(i);
-            // }
+            var a=new BMap.Icon("/remote-admin/statics/image/a.svg", new BMap.Size(32,32))
+            var b=new BMap.Icon("/remote-admin/statics/image/b.svg", new BMap.Size(32,32))
+            var c=new BMap.Icon("/remote-admin/statics/image/c.svg", new BMap.Size(32,32))
+            var d=new BMap.Icon("/remote-admin/statics/image/d.svg", new BMap.Size(32,32))
+            var e=new BMap.Icon("/remote-admin/statics/image/e.svg", new BMap.Size(32,32))
             if(deviceStatus == "0"){
                 xy=arra;//全部
-                marker = new BMap.Marker(point,{icon :a});
                 color='#4783E7';
             }else if(deviceStatus == "1"){
                 xy=arra ;//正常
-                marker = new BMap.Marker(point,{icon :b});
                 color='#00FF7F';
             }else if(deviceStatus == "2"){
                 xy=arra;//报警
-                marker = new BMap.Marker(point,{icon :c});
                 color='#FFD700';
             }else if(deviceStatus == "3"){
                 xy=arra;//故障
-                marker = new BMap.Marker(point,{icon :d});
                 color='#FF0000';
             }else if(deviceStatus == "4"){
                 xy=arra;//离线
-                marker = new BMap.Marker(point,{icon :e});
                 color='#696969';
             }
             console.log("是不是")
@@ -347,11 +318,22 @@ $(function () {
 
             var mapPoints =xy;//经纬度定位
             var i = 0;
-            map.addOverlay(marker);
+            //map.addOverlay(marker);
             map.enableScrollWheelZoom(true);//开启鼠标滚动
             // 函数 创建多个标注
             function markerFun (points,label,infoWindows) {
                 var markers = new BMap.Marker(points);
+                if(deviceStatus == "0"){
+                    markers = new BMap.Marker(points,{icon :a});
+                }else if(deviceStatus == "1"){
+                    markers = new BMap.Marker(points,{icon :b});
+                }else if(deviceStatus == "2"){
+                    markers = new BMap.Marker(points,{icon :c});
+                }else if(deviceStatus == "3"){
+                    markers = new BMap.Marker(points,{icon :d});
+                }else if(deviceStatus == "4"){
+                    markers = new BMap.Marker(points,{icon :e});
+                }
                 map.addOverlay(markers);
                 markers.setLabel(label);
                 markers.addEventListener("click",function (event) {
@@ -397,12 +379,13 @@ $(function () {
                 type:"get",
                 data:{},
                 success: function(res){
+                    console.log(res)
                     var html=""
                     for(var i=0; i< res.data.length; i++){
                         html+="  <div class=\"facility\">\n" +
-                            "<span></span>\n" +
-                            "<div>"+res.data[i].faultLogDesc+"</div>\n" +
+                            "<span>放电异常</span>\n" +
                             "<p>"+res.data[i].createTime+"</p>\n" +
+                            "<div>"+res.data[i].faultLogDesc+"</div>\n" +
                             "</div>"
                     }
                     $("#pro_list").append(html)
@@ -416,6 +399,14 @@ $(function () {
     $(".shade_add_project").click(function(){
         $(".shade_project,.shade_b_project").css("display","none")
     })
+    function history(deviceCode,groupId,type){
+        console.log("++++++++++++++")
+        console.log(groupId)
+        $("#hear_control").click(function(){
+            var searchUrl=encodeURI('../control/control.html?deviceCode='+deviceCode+"&grod="+groupId+"&type="+type)
+            location.href =searchUrl;
+        })
+    }
 
     // // 百度地图API功能
     // var map = new BMap.Map("allmap");    // 创建Map实例
@@ -486,8 +477,6 @@ $(function () {
     // markerClusterer.setMaxZoom(13);
     // markerClusterer.setGridSize(100);
     // console.log(markerClusterer);
-
-
     // });
 
 //    丸子
@@ -508,15 +497,4 @@ $(function () {
         });
 
     });
-
-
-
-    //亮度条赋值
-
-
-    // $('input:radio[name="category"]:checked').val("2")
-
-
-
-
 });

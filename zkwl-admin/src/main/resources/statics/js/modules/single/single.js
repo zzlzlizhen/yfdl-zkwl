@@ -367,14 +367,14 @@ $(function(){
                     if (ele.attr("data-state") != "0") {
                         ele.animate({left: "0"}, 300, function () {
                             ele.attr("data-state", "0");
-                            var value=["0"]
+                            var value=[0]
                             off(li_deviceCode,value,li_deviceType,deviceId,projectId)
                         });
                         $(this).removeClass("on").addClass("off");
                     } else if (ele.attr("data-state") == "0") {
                         ele.animate({left: '50%'}, 300, function () {
                             ele.attr("data-state", "1");
-                            var value=["1"]
+                            var value=[1]
                             off(li_deviceCode,value,li_deviceType,deviceId,projectId)
                         });
                         $(this).removeClass("off").addClass("on");
@@ -392,7 +392,8 @@ $(function(){
                             "deviceCodes": ass, //需要修改的设备code   /0
                             "qaKey": ["onOff"], //需要修改的参数键
                             "value": value, //需要修改的参数值
-                            "deviceType": li_deviceType //设备类型   /1
+                            "deviceType": li_deviceType, //设备类型   /1
+                            "status": 2
                         }),
                         success: function(res) {
                           console.log(res)

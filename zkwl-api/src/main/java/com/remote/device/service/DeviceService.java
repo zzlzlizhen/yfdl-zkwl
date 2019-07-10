@@ -20,4 +20,13 @@ public interface DeviceService {
      * @return int
      **/
     int updateDeviceByCode(CommonEntity commonEntity,DeviceEntity deviceEntity);
+
+    /*
+     * @Author zhangwenping
+     * @Description 超时修改状态
+     * @Date 17:17 2019/7/9
+     * @Param deviceCode
+     * @return  int
+     **/
+    int updateDeviceTimeOutByCode(String deviceCode);
 }

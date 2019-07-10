@@ -42,7 +42,7 @@ public class MapUtils {
         map.put("powerPeople5",28);//5时段有人功率
         map.put("powerDawnPeople",29);//晨亮时段有人功率
         map.put("inductionSwitch",30);//人体感应功能开关
-        map.put("InductionLightOnDelay",31);//人体感应后的亮灯延时
+        map.put("inductionLightOnDelay",31);//人体感应后的亮灯延时
         map.put("powerSensor1",32);//1时段无人功率
         map.put("powerSensor2",33);//2时段无人功率
         map.put("powerSensor3",34);//3时段无人功率

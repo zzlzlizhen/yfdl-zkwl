@@ -291,6 +291,19 @@
             group by group_id
         </if>
     </select>
+
+
+    <select id="queryRunStateCount"  resultMap="BaseResultMap" >
+        select run_state,count(1) as counts from fun_device where is_del = 0
+        <if test="projectId !=null and projectId != ''">
+            and project_id = #{projectId}
+        </if>
+        <if test="groupId !=null and groupId != ''">
+            and group_id = #{groupId}
+        </if>
+        group by run_state
+    </select>
+
     <select id="queryByDevCode" resultType="java.lang.String">
         select group_id from fun_device where device_code=#{deviceCode} group by device_code
     </select>

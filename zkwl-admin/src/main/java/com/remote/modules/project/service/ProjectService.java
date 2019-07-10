@@ -3,6 +3,7 @@ package com.remote.modules.project.service;
 import com.github.pagehelper.PageInfo;
 import com.remote.modules.project.entity.ProjectEntity;
 import com.remote.modules.project.entity.ProjectQuery;
+import com.remote.modules.project.entity.ProjectResult;
 import com.remote.modules.sys.entity.SysUserEntity;
 
 import java.util.List;
@@ -72,4 +73,12 @@ public interface ProjectService {
      * @return int
      **/
     int queryProjectByUserCount(Long userId);
+    /*
+     * @Author zhangwenping
+     * @Description 查询地图右边信息
+     * @Date 16:58 2019/7/9
+     * @Param projectId groupId
+     * @return ProjectResult
+     **/
+    ProjectResult queryProjectById(String projectId,String groupId);
 }

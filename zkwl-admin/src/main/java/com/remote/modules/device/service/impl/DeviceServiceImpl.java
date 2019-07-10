@@ -203,6 +203,11 @@ public class DeviceServiceImpl implements DeviceService {
         return deviceMapper.updateUserDevice(deviceQuery);
     }
 
+    @Override
+    public List<DeviceEntity> queryRunStateCount(String projectId, String groupId) {
+        return deviceMapper.queryRunStateCount(projectId,groupId);
+    }
+
     /**
      * 通过当前用户id查询所有用户的设备数量
      * */

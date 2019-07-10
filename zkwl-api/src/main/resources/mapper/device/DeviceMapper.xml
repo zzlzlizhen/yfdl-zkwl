@@ -152,4 +152,11 @@
         </set>
         where device_code = #{deviceCode}
     </update>
+
+
+    <update id="updateDeviceTimeOutByCode" >
+        update fun_device set run_state = 4
+        where device_code = #{deviceCode}
+    </update>
+
 </mapper>

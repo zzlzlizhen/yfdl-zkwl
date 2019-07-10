@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Map;
 
 public class testAdvanced {
-    private static final String baseURL="127.0.0.1:8085/remote-admin";
-    private static final String CURRENT_COOKIE = "JSESSIONID=176b9505-dab5-4c1d-82fd-0806c991c435";
+    private static final String baseURL="127.0.0.1:8080/remote-admin";
+    private static final String CURRENT_COOKIE = "JSESSIONID=f66f11f7-96a0-4954-955d-cf87f8ce0c48";
     @Test
     public void testChange(){
         String url = baseURL + "/fun/device/change";
@@ -54,6 +54,25 @@ public class testAdvanced {
         map.put("loadWorkMode",2);
         map.put("powerLoad",55);
         map.put("powerPeople1",75);
+        String result4 = HttpRequest.post(url).header(Header.COOKIE,CURRENT_COOKIE).form(map).execute().body();
+        System.out.println(result4);
+    }
+
+    @Test
+    public void updateMqtt(){
+        String url = baseURL + "/sys/mqtt/dynamic_pub";
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("topic","test3");
+        map.put("message","哈哈哈");
+        String result4 = HttpRequest.post(url).header(Header.COOKIE,CURRENT_COOKIE).form(map).execute().body();
+        System.out.println(result4);
+    }
+    @Test
+    public void updateSubMqtt(){
+        String url = baseURL + "/sys/mqtt/pub";
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("topic","test3");
+        map.put("message","哈哈哈");
         String result4 = HttpRequest.post(url).header(Header.COOKIE,CURRENT_COOKIE).form(map).execute().body();
         System.out.println(result4);
     }

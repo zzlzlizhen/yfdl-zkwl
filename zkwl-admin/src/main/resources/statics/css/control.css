@@ -30,25 +30,30 @@ html,body{width:100% !important;height:100% !important;margin:0;padding:0;font-s
 .da_te{width:137px;height:35px !important;float:left;border-radius: 4px; border:1px solid #ccc;margin-top:2%;text-indent: 10px;}
 
 /*负载*/
-.r-load{width: 49.5%;height: 340px;float: left;background: #fff;}
-.r-heade,.r-Lamp-head{width: 100%;height:37px ;float:left;background: #5bc0de;border: 1px solid #00acd6;line-height:37px;text-indent:25px}
-.r-content{width:100%;float:left;height:auto;}
-.le-con{width:50%;font-size: 12px;float: left;margin: 3% 0px 0px 0%;background: #fff;}
+.r-load{width: 49.5%;height: 340px;float: left;}
+.r-heade,.r-Lamp-head{width: 100%;height:37px ;background: #D9F8F7;border: 1px solid #CCCCCC;line-height:37px;text-indent:25px;border-radius: 8px 8px 0 0;border-bottom: 0px;}
+.r-Battery-tw-con{border: 1px solid #CCCCCC;border-radius:0 0 8px 8px ;float: left;border-top: 0px;background: #fff;}
+.r-content{width:100%;float:left;height:auto;background: #fff;border: 1px solid #CCCCCC;border-radius: 0 0 8px 8px;padding-bottom: 17px;border-top: 0px;}
+.le-con{width:50%;font-size: 12px;float: left;margin: 3% 0px 0px 0%;}
 .le-con > p{width: 100%;display:block;height: 50px;line-height: 50px;}
 .le-con > div{display: flex;align-items: center;height: 50px;}
 .r-bt > input{display: inline-block;}
 .le-con span{width:83px;height:100%;float: left;line-height: 50px;margin:0px 3% 0px 6%;}
 
-.rg-con{width:50%;font-size: 12px;float: right;background: #fff;margin: 3% 0% 0px 0px;}
-.r-Lamp{width:49.5%;font-size: 12px;float: left;background: #fff;}
+.rg-con{width:50%;font-size: 12px;float: right;margin: 3% 0% 0px 0px;}
+.r-Lamp{width:49.5%;font-size: 12px;float: left;}
 .rg-con > p{width: 100%;display: inline-block;height: 50px;line-height: 50px;}
 .rg-con > div{display: flex;align-items: center;height: 50px;}
 .r-bt > input{display: inline-block;}
 .rg-con span{width:85px;float:left;height:100%;line-height: 50px;border-right:1px;margin-right:3%;}
 /*时间增值框*/
 
-.container{float: left;width:15%;height: 37px;padding:0;margin:0px 10px 0px 1%;}
-.container_a{width:47%;height:70%;float:left;margin-left:1%;}
+.container{float: left;
+    width: 37%;
+    height: 37px;
+    padding: 0;
+    margin: 0px 10px 0px 1%;}
+.container_a{width:48%;height:70%;float:left;margin-left:1%;}
 .r-container{margin-left: 0px;}
 .r-bt > input{margin-left:10px;}
 
@@ -62,10 +67,10 @@ spinner {width: 100px;}
 .input-group-btn-vertical i{position: absolute;top: 0;left: 4px;}
 /*蓄电池*/
 .m_in{margin: 2% 1% 0px 1%;width:44%;line-height: 28px;}
-.r-Battery-tw{width: 49.5%;height: 420px;float: right;background: #fff;}
+.r-Battery-tw{width: 49.5%;height: 420px;float: right;}
 
 /*光电池*/
-.r-Battery{width: 49.5%;height: 210px;float: right;background: #fff;}
+.r-Battery{width: 49.5%;height: 210px;float: right;}
 .r-Battery-lef{width:50%;font-size:12px;float: left;margin:3% 0px 0px 0px;}
 .r-Battery-lef > p{width: 100%;display: inline-block;}
 .r-Battery-lef > div{height: 50px;width:100%;float:left;}
@@ -95,8 +100,8 @@ spinner {width: 100px;}
 .r-Lamp-head>span{display: inline-block;}
 .r-lights{width: auto;float: left;text-align: left;}
 .r-Someone,.r-Unmanned{width:20%;margin-left:11%}
-.r-Lamp-Progress{width: 100%;font-size: 12px;float:left;}
-.r-Lamp-Progress>div{width: 100%;height:31px ;line-height:31px;float:left;clear: both;background: #fff;margin-top: 2.3%;}
+.r-Lamp-Progress{width: 100%;font-size: 12px;float:left;border: 1px solid #CCCCCC;border-radius: 0 0 8px 8px;border-top: 0px;background: #fff;}
+.r-Lamp-Progress>div{width: 100%;height:31px ;line-height:31px;float:left;clear: both;margin-top: 2.3%;}
 .r-Lamp i{color: red;font-style:normal;margin-right: 3px;}
 .r-Lamp>div>span>i{color: red;}
 
@@ -104,8 +109,9 @@ spinner {width: 100px;}
 .progress{float: left;width: 25%;height: 8px;margin-top: 5px;margin-left: 30px;}
 
 /*底部按钮*/
-.r-bom-btn{width: 100%;height: 94px;background: #ffffff;clear: both;position: absolute;bottom: 0;}
-.r-bom-btn span{display: inline-block;width:82px ;height: 34px;border-radius: 4px;background: #00acd6;line-height: 34px;text-align: center;color: #ffffff;}
+.r-bom-btn{width: 100%;height: 94px;background: #ffffff;clear: both;position: absolute;bottom: 0;z-index: 9999;}
+.r-bom-btn span{display: inline-block;width:82px ;height: 34px;border-radius: 4px;background: #00acd6;line-height: 34px;text-align: center;color: #ffffff;cursor: pointer}
+.r-bom-btn span:hover{background: #60f1e6;color:#999;}
 .r-bom-btn div{width: 200px;float: right;margin-right: 100px;margin-top: 35px;}
 .r-Battery-lef>div >p{font-size: 12px;margin:5% 0px 0px 2%;float: left;}
 /*.sha_buttom,.sha_buttom_delete{width:100%;height:50px; position: absolute;bottom: 0;border-top:1px solid #ccc;}*/
@@ -115,7 +121,7 @@ spinner {width: 100px;}
 .r-Lamp-Progress div p{width:auto;float: left;margin-left: 1%;}
 .r-Lamp-Progress div>span{float: left;width:78px;height:100%;margin-left: 3%;}
 .r-Lamp-Progress div>.progress{float: left;margin-top: 19px;}
-.r-Battery-lef div span{width:85px;height: 100%;float: left;line-height: 50px;margin:0px 3% 0px 6%;}
+.r-Battery-lef div span{width:97px;height: 100%;float: left;line-height: 50px;margin:0px 3% 0px 6%;}
 .r-Battery-lef span>i,.r-Battery-reg i{color:red;}
 .de_i{margin-left:14% !important;}
 /*丸子*/
@@ -170,4 +176,29 @@ spinner {width: 100px;}
 .rquebei:hover{
     background: url('/remote-admin/statics/image/fenzu-1.png')no-repeat center;
     background-size:100% !important;
+}
+
+
+
+/*行内*/
+.wd_hang{ display: inline-block;width: 48% !important; height: 35px !important; border: 1px solid #ccc !important; border-radius: 4px !important;
+    margin-left:1% !important;text-indent: 10px !important; }
+
+
+/*时间加减*/
+.r_sa_bx>div{
+    width: 16.5%;
+    height: 120px;
+    float: left;
+}
+.r_sa_bx>div>span{
+    font-size: 12px;
+    line-height: 32px;
+    width: 103.5%;
+    height:48px;
+    display: inherit;
+}
+.r_sa_bx{
+    float: left;
+    margin-left: 3%;
 }

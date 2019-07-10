@@ -23,4 +23,12 @@ public interface DeviceMapper extends BaseMapper<DeviceEntity> {
      * @return int
      **/
     int updateDeviceByCode(DeviceEntity deviceEntity);
+    /*
+     * @Author zhangwenping
+     * @Description 超时修改状态 离线
+     * @Date 17:18 2019/7/9
+     * @Param deviceCode
+     * @return int
+     **/
+    int updateDeviceTimeOutByCode(String deviceCode);
 }

@@ -87,6 +87,19 @@ public interface DeviceMapper extends BaseMapper<DeviceEntity> {
      * @return int
      **/
     int updateUserDevice(@Param("deviceQuery")DeviceQuery deviceQuery);
+
+
+
+    /*
+     * @Author zhagnwenping
+     * @Description 根据项目或者分组统计其下所有设备
+     * @Date 11:23 2019/6/18
+     * @Param projectId groupId
+     * @return List<DeviceEntity>
+     **/
+    List<DeviceEntity> queryRunStateCount(@Param("projectId")String projectId,@Param("groupId")String groupId);
+
+
     /**
      * 通过当前用户id查询所有子孙用户的设备数量
      * */

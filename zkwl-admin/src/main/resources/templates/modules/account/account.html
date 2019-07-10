@@ -15,6 +15,7 @@
             line-height: 33px;
         }
 
+
     </style>
 </head>
 <body>
@@ -95,8 +96,8 @@
             <input type="text" placeholder="请填写" id="acc_password">
         </span>
         <span class="sha_span">
-            <p><span  style="color: red">*</span>有效期：</p>
-            <div class="form-group col-sm-2 " style="width:55%;padding-left:0;padding-right:0;">
+            <p class="r_p" style="width: 29%;"><span  style="color: red">*</span>有效期：</p>
+            <div class="form-group col-sm-2 " style="width:70%;padding-left:0;padding-right:0;">
                 <select class="form-control" id="acc_select">
                     <option>1</option>
                     <option>2</option>
@@ -105,12 +106,6 @@
                     <option>5</option>
                 </select>
             </div>
-        </span>
-        <span class="sha_span preview">
-            <p><span  style="color: red">*</span>头像：</p>
-            <img id="pic" style="width:50px;height:50px;border-radius:50%;background: red;" src="">
-             <a class="btn btn-primary" id="upload" style="margin-left: 20px;background: #fff;color:#ccc;border:1px solid #ccc;" >上传文件</a>
-            <input id="headUrl" type="hidden">
         </span>
         <span class="sha_span">
             <p><span  style="color: red">*</span>邮箱：</p>
@@ -121,16 +116,21 @@
             <input type="text" placeholder="请填写" id="acc_call">
         </span>
         <span class="sha_span">
-            <p><span  style="color: red">*</span>role：</p>
-            <div class="form-group col-sm-2 " style="width:55%;padding-left:0;padding-right:0;">
-                <select class="form-control" id="role">
+            <p class="r_p" style="width: 29%;"><span  style="color: red">*</span>role：</p>
+            <div class="form-group col-sm-2 " style="width:70%;padding-left:0;padding-right:0;">
+                <select class="form-control" id="role" style="height: 40px">
                     <option value="1">超级管理者</option>
                     <option value="2">管理者</option>
                     <option value="3">使用者</option>
                 </select>
             </div>
         </span>
-
+        <span class="sha_span preview">
+            <p><span  style="color: red">*</span>头像：</p>
+            <img id="pic" style="width:50px;height:50px;border-radius:50%;background: red;" src="">
+             <a class="btn btn-primary" id="upload" style="margin-left: 20px;background: #fff;color:#ccc;border:1px solid #ccc;" >上传文件</a>
+            <input id="headUrl" type="hidden">
+        </span>
         <div class="sha_buttom">
 <!--            <input type="button" value="确定" id="confirm_Z" style="background: url("${request.contextPath}/statics/image/kuang-3.png")">-->
             <div id="confirm_Z" class="rquebei" >确定</div>
@@ -162,8 +162,8 @@
             <input type="text" placeholder="请填写" id="acc_password_b">
         </span>
         <span class="sha_span">
-            <p><span  style="color: red">*</span>有效期：</p>
-            <div class="form-group col-sm-2 " style="width:55%;padding-left:0;padding-right:0;">
+            <p class="r_p" style="width: 29%;"><span  style="color: red">*</span>有效期：</p>
+            <div class="form-group col-sm-2 " style="width:70%;padding-left:0;padding-right:0;">
                 <select class="form-control" id="acc_select_b">
                     <option>1年</option>
                     <option>2年</option>
@@ -181,12 +181,6 @@
         <!--</span>-->
         <!--<img id="pic" style="width:100px;height:100px;border-radius:50%;" src="">-->
         <!--<input id="upload" name="file" accept="image/*" type="file" style="display: none">-->
-        <span class="sha_span preview">
-            <p><span  style="color: red">*</span>头像：</p>
-            <img id="pice" style="width:50px;height:50px;border-radius:50%;background: red;" src="">
-             <a class="btn btn-primary" id="uploade" style="margin-left: 20px;background: #fff;color:#ccc;border:1px solid #ccc;" >上传文件</a>
-            <input id="headUrle" type="hidden">
-        </span>
         <span class="sha_span">
             <p><span  style="color: red">*</span>邮箱：</p>
             <input type="text" placeholder="请填写" id="acc_mailbox_b">
@@ -196,14 +190,20 @@
             <input type="text" placeholder="请填写" id="acc_call_b">
         </span>
         <span class="sha_span">
-            <p><span  style="color: red">*</span>role：</p>
-            <div class="form-group col-sm-2 " style="width:55%;padding-left:0;padding-right:0;">
+            <p class="r_p" style="width: 29%;"><span  style="color: red;">*</span>role：</p>
+            <div class="form-group col-sm-2 " style="width:70%;padding-left:0;padding-right:0;">
                 <select class="form-control" id="r_Ad_mod">
                     <option value="2">超级管理者</option>
                     <option value="1">管理者</option>
                     <option value="0">使用者</option>
                 </select>
             </div>
+        </span>
+        <span class="sha_span preview">
+            <p><span  style="color: red">*</span>头像：</p>
+            <img id="pice" style="width:50px;height:50px;border-radius:50%;background: red;" src="">
+             <a class="btn btn-primary" id="uploade" style="margin-left: 20px;background: #fff;color:#ccc;border:1px solid #ccc;" >上传文件</a>
+            <input id="headUrle" type="hidden">
         </span>
         <div class="sha_buttom">
 <!--            <input type="button" value="确定" id="sha_que_can" class="rquebei">-->

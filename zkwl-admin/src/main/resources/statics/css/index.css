@@ -29,13 +29,20 @@
 .nei_r img{background: #ccc;width:100px;height:100px;border-radius: 50%;float:left;margin:5% 0px 0px 300px;}
 .import{width:85%;height:auto;float:left;margin:4% 0px 0px 6%;}
 .import div{width:45%;height:60px;float:left;margin:3% 0px 0px 5%;}
-.import div span{width:100%;height:27px;float:left; font-weight: 500;color:#000 !important;}
-.import div input,.import div select{width:95%;height:28px;border-radius: 4px;overflow: hidden;background: 0;border:1px solid #ccc;float:left;text-indent: 5px;}
-.ea_b{width: 57% !important;}
-.ea_a{width:35% !important; border:1px solid #1890FF !important;color:#1890FF;margin-left:3%;}
+.import div span{width:100%;height:27px;float:left; font-weight: 500;color:#000 !important;font-size: 14px}
+.import div input,.import div select{width:95%;height:40px;border-radius: 4px;overflow: hidden;float:left;text-indent: 5px;border: 1px solid #ccc;}
+.ea_b{width: 71% !important;}
+.ea_a{width:22% !important; border:1px solid #1890FF !important;color:#1890FF;margin-left:3%;}
 .confirm{width:100%;height:60px; position: absolute;bottom: 0;border-top:1px solid #ccc;}
 .confirm input{width:80px;height:30px;border-radius: 4px; background:#1890FF;margin:2.5% 4% 0px 0px;float:right;border:0;color: #fff; }
-.J_fan{width:100%;height:45px;border-bottom: 1px solid #ccc;line-height:45px;text-indent: 15px;font-weight: bold;background: #27E2D4;text-align: center}
+.J_fan{width:100%;height:45px;border-bottom: 1px solid #ccc;line-height:45px;text-indent: 15px;font-weight: bold;background: #27E2D4;text-align: center;color: #FFFFFF;}
+#r_wen_fan{width: 419px;
+    height: 133px;
+    border-radius: 4px;
+    display: inline-block;
+    text-indent: 5px;
+    border: 1px solid #ccc;}
+
 .wrong,.wrong_a{float:right;margin:3% 2% 0px 0px; cursor: pointer;}
 .wrong_a{margin-top:2%;}
 .import_a{margin:5% 0px 0px 8%;}
@@ -71,11 +78,13 @@
     top: 50%;
     margin-top: -75px;
     margin-left:-157.5px;
-    background: blue;
+   -background: blue;
     z-index: 999999;
     font-size: 14px;
     padding: 30px;
     display: none;
+    border:1px solid #ccc;
+    background: #F7F8FA;
 }
 .r_lay>div>span,.r_lay_a>div>span{
     float: right;
@@ -131,7 +140,7 @@
     margin-left: 30%;
 }
 .rqubtn{
-    background: url('/remote-admin/statics/image/sousuo-1.png')no-repeat center;
+    background: url('/remote-admin/statics/image/r_quxiao.png')no-repeat center;
     width: 99px;
     height: 45px;
     float: left;
@@ -156,7 +165,7 @@
     line-height: 45px;
     text-align: center;
     background-size: 100%;
-    margin-left: 42%;
+    margin-left: 26%;
 }
 .rquebeis:hover{
     background: url('/remote-admin/statics/image/fenzu-1.png')no-repeat center;
@@ -165,6 +174,17 @@
 
 
 
+/*基本设置*/
+.ea_a{
+    background: url('/remote-admin/statics/image/r_kuang3.png')no-repeat center;
+    background-size:100% 100%;
+    cursor:pointer;
+    display:block;
+    color: #27E2D4;
+    line-height:0;
+    text-indent:-9999px;
+    border: 0 !important;
+}
 
 
 

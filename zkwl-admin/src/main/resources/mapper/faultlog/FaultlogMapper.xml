@@ -27,14 +27,15 @@
         FROM
         fun_fault_log
         <where>
+            1 = 1
             <if test="deviceId != null">
-                device_id = #{deviceId},
+               and device_id = #{deviceId}
             </if>
             <if test="logStatus != null">
-                log_status = #{logStatus},
+                and log_status = #{logStatus}
             </if>
             <if test="groupId != null">
-                group_id = #{groupId},
+                and group_id = #{groupId}
             </if>
         </where>
         order by create_time desc

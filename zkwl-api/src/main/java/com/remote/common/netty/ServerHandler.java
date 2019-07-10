@@ -216,7 +216,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             //把连接放到redis中
             CacheUtils cacheUtils = (CacheUtils)SpringUtils.getBean("cacheUtils");
             cacheUtils.set(deviceInfo.getDevSN(),ctx.channel().id().asShortText());
-
+            cacheUtils.set(ctx.channel().id().asShortText(),deviceInfo.getDevSN());
             log.info("收到客户端报文......");
             log.info("【" + ctx.channel().id() + "】" + " :" + JSONObject.toJSONString(deviceInfo));
             //解密
@@ -456,7 +456,9 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
-
+        //缓存中取出数据
+        CacheUtils cacheUtils = (CacheUtils)SpringUtils.getBean("cacheUtils");
+        String deviceCode = cacheUtils.get(ctx.channel().id().asShortText()).toString();
         String socketString = ctx.channel().remoteAddress().toString();
         if (evt instanceof IdleStateEvent) {
             IdleStateEvent event = (IdleStateEvent) evt;

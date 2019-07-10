@@ -125,4 +125,9 @@ public class ProjectController  extends AbstractController {
         }
         return R.error(400,"查询项目失败");
     }
+
+    @RequestMapping(value = "/queryProjectById", method= RequestMethod.GET)
+    public R queryProjectNoPage(String projectId,String groupId){
+        return R.ok(projectService.queryProjectById(projectId,groupId));
+    }
 }
