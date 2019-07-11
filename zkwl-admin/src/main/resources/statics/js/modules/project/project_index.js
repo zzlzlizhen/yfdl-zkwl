@@ -105,7 +105,8 @@ $(function () {
             // 地图定位
                 $(".ma_p").click(function(){
                     var longitude=$(this).attr("id")
-                    var searchUrl=encodeURI('../equipment/equipment.html?longitude='+longitude)
+                    var name=$(this).parent().siblings(".Na_me").html()
+                    var searchUrl=encodeURI('../equipment/equipment.html?longitude='+longitude+"&name="+name)
                     location.href =searchUrl;
                 })
             // 编辑
@@ -183,13 +184,6 @@ $(function () {
         });
 
     }
-    //编辑
-    // $(".modifier").click(function () {
-    //     alert("lllllllllllllllllllllllllllll")
-    //     console.log("ppppppppppppppppppppppppppppppppppp")
-    //
-    //
-    // })
 
 // 新增//////////////////////////
    $("#proje_add").click(function(){
@@ -219,8 +213,6 @@ $(function () {
                     "exclusiveUser":select
                 }),
                 success: function(res){
-                    console.log("res+++")
-                    console.log(res)
                     $(".pro_name").val("")
                     $("#select1").val("")
                     $(".pro_s_b").val("")
@@ -235,9 +227,6 @@ $(function () {
      $(".shade_modifier_project").click(function(){
          $(".shade_modifier,.shade_b_modifier").css("display","none")
      })
-
-
-    console.log( document.body.clientHeight )
 
 })
 

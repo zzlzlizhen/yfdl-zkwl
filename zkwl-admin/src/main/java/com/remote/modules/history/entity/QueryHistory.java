@@ -27,4 +27,5 @@ public class QueryHistory {
     private List<Double> inductionFrequencyList = new ArrayList<>();//感应次数
     private List<Double> meteorologicalList = new ArrayList<>();//气象信息
     private List<String> hours = new ArrayList<>();//小时
+    private List<String> newHours = new ArrayList<>();//时间
 }

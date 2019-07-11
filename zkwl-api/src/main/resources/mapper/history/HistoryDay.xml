@@ -27,6 +27,31 @@
     internal_temperature,visitors_flowrate,induction_frequency,meteorological,create_time,fillings_number,discharge_number
     </sql>
 
+    <select id="countHistoryDayByDeviceCode" resultType="java.lang.Integer">
+        SELECT
+          count(1)
+        FROM
+          history_day
+        where device_code = #{deviceCode}
+        and DATE_FORMAT(create_time,'%Y-%m-%d') = #{time}
+    </select>
 
 
+    <select id="queryDay" resultMap="BaseResultMap">
+        SELECT
+            sum(discharge_capacity) AS discharge_capacity,
+            sum(charging_capacity) AS charging_capacity,
+            sum(induction_frequency) AS induction_frequency,
+            sum(visitors_flowrate) AS visitors_flowrate,
+            sum(fillings_number) AS fillings_number,
+            sum(discharge_number) AS discharge_number,
+			TRUNCATE(avg(charging_current),2) AS charging_current,
+		    TRUNCATE(avg(discharge_current),2)  AS discharge_current,
+            TRUNCATE(avg(battery_voltage),2) AS battery_voltage,
+            TRUNCATE(avg(ambient_temperature),2)   AS ambient_temperature,
+            TRUNCATE(avg(internal_temperature),2)  AS internal_temperature
+        FROM history_day
+        where device_code = #{deviceCode}
+        and DATE_FORMAT(create_time,'%Y-%m-%d') = #{time}
+    </select>
 </mapper>

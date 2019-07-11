@@ -1,7 +1,7 @@
 package com.remote.device.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.remote.advancedsetting.entity.AdvancedSettingEntity;
+import com.remote.advancedsetting.AdvancedSettingEntity;
 import lombok.Data;
 
 import java.util.Date;

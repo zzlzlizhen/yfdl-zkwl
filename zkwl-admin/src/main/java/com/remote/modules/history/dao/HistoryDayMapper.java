@@ -40,4 +40,13 @@ public interface HistoryDayMapper extends BaseMapper<HistoryDay> {
      * */
     Double getTotalDischarge(@Param("deviceCodes") List<String> deviceCodes);
     List<Map<Object,Object>> getDischargeCapacity(@Param("deviceCodes") List<String> deviceCodes);
+
+    /*
+     * @Author zhangwenping
+     * @Description 查询分组信息
+     * @Date 14:30 2019/6/14
+     * @Param deviceCode time
+     * @return List<HistoryDay>
+     **/
+    List<HistoryDay> queryDeviceByCode(@Param("deviceCode") String deviceCode, @Param("time")String time);
 }

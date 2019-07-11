@@ -16,10 +16,12 @@ $(function () {
     }
     var href = showWindowHref();
     var longitude=href['longitude'];
+    var Name=href['name'];
     var ass
+    console.log(Name)
     if(longitude != undefined){
         var partition=longitude.split(",");
-        ass=[{y:partition[0],x:partition[1]}]
+        ass=[{y:partition[0],x:partition[1],branch: Name}]
     }
 
 //    抽屉
@@ -99,10 +101,16 @@ $(function () {
                                 arr=[]
                                 var htmla=""
                                 for (var i = 0; i < res.data.length; i++) {
+                                    var deviceCount=res.data[i].deviceCount
+                                    if (deviceCount == null ) {
+                                        deviceCount = "";
+                                    } else  {
+                                        deviceCount = res.data[i].deviceCount;
+                                    }
                                     htmla += "<li class='pro_li_a' id="+res.data[i].groupId+">\n" +
                                         "<div class=\"nav_pro_v_b\" >\n" +
                                         "<div class=\"nav_project nav_pro_fen\">"+ res.data[i].groupName+"分组</div>\n" +
-                                        "<p class=\"nav_pro_p\">设备数："+ res.data[i].deviceCount+"</p>\n" +
+                                        "<p class=\"nav_pro_p\">设备数："+ deviceCount+"</p>\n" +
                                         "</div>\n" +
                                         "<ul class=\"nav_gro_b\" id="+res.data[i].groupId+"2"+">\n" +
                                         "</ul>"
@@ -400,8 +408,6 @@ $(function () {
         $(".shade_project,.shade_b_project").css("display","none")
     })
     function history(deviceCode,groupId,type){
-        console.log("++++++++++++++")
-        console.log(groupId)
         $("#hear_control").click(function(){
             var searchUrl=encodeURI('../control/control.html?deviceCode='+deviceCode+"&grod="+groupId+"&type="+type)
             location.href =searchUrl;

@@ -139,6 +139,7 @@ function routerList(router, menuList){
 //点击弹窗
 $("#r_val_eml").click(function(){
     $(".r_lay").css("display","block")
+    $(".r_beise").css("display","block")
 })
 //点击获取验证码
 $("#btn").click(function(){
@@ -326,6 +327,7 @@ alert("输入不能为空")
 
 $("#r_val_pho").click(function(){
     $(".r_lay_a").css("display","block")
+    $(".r_beise").css("display","block")
 })
 //倒计时60秒
 var countdown=60;

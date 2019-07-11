@@ -184,7 +184,7 @@ $(function(){
                     html += "<tr>\n" +
                         "<td id="+res.data.list[i].deviceId+" style=\"width:4%;\"> <input type= \"checkbox\" name='clk' class=\"checkbox_in  checkbox_i\"> </td>\n" +
                         "<td id='r_nm'>"+res.data.list[i].deviceCode+"</td>\n" +
-                        "<td style=\"width:10%;\" id='r_namem'>"+res.data.list[i].deviceName+"</td>\n" +
+                        "<td style=\"width:10%;\" class='r_name' id='r_namem'>"+res.data.list[i].deviceName+"</td>\n" +
                         "<td class='grod' id="+res.data.list[i].groupId+">"+res.data.list[i].groupName+"</td>\n" +
                         "<td class='type'>"+res.data.list[i].deviceType+"</td>\n" +
                         "<td>"+photocellState+" </td>\n" +
@@ -209,8 +209,9 @@ $(function(){
                 $("#div").append(html);
                 // 地图定位
                 $(".ma_p").click(function(){
-                    var longitude=$(this).attr("id")
-                    var searchUrl=encodeURI('../equipment/equipment.html?longitude='+longitude)
+                    var longitude=$(this).attr("id");
+                    var name=$(this).parent().siblings(".r_name").html()
+                    var searchUrl=encodeURI('../equipment/equipment.html?longitude='+longitude+"&name="+name)
                     location.href =searchUrl;
                 })
 

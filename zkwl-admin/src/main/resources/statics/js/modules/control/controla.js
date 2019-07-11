@@ -95,6 +95,8 @@ $(function(){
     var inductionFrequencyList  //感应次数
     var meteorologicalList   //气象信息
     var hours
+    var newHours
+    var newH
     //根据年月日调取渲染数据表格
     function day(deviceCode,va_l){
         $.ajax({
@@ -116,7 +118,9 @@ $(function(){
                 inductionFrequencyList =res.data.inductionFrequencyList; //感应次数
                 meteorologicalList=res.data.meteorologicalList;   //气象信息
                 hours=res.data.hours; //X坐标
-                f(hours,dischargeCapacityList,chargingCapacityList,chargingCurrentList,dischargeCurrentList,batteryVoltageList,ambientTemperatureList,internalTemperatureList,visitorsFlowrateList,inductionFrequencyList,meteorologicalList)
+                newHours=res.data.newHours
+                newH="1"
+                f(hours,newHours,newH,dischargeCapacityList,chargingCapacityList,chargingCurrentList,dischargeCurrentList,batteryVoltageList,ambientTemperatureList,internalTemperatureList,visitorsFlowrateList,inductionFrequencyList,meteorologicalList)
             }
         })
     }
@@ -139,7 +143,9 @@ $(function(){
                 inductionFrequencyList =res.data.inductionFrequencyList; //感应次数
                 hours=res.data.hours; //X坐标
                 meteorologicalList=res.data.meteorologicalList;   //气象信息
-                f(hours,dischargeCapacityList,chargingCapacityList,chargingCurrentList,dischargeCurrentList,batteryVoltageList,ambientTemperatureList,internalTemperatureList,visitorsFlowrateList,inductionFrequencyList,meteorologicalList)
+                newHours=res.data.newHours;
+                newH="2"
+                f(hours,newHours,newH,dischargeCapacityList,chargingCapacityList,chargingCurrentList,dischargeCurrentList,batteryVoltageList,ambientTemperatureList,internalTemperatureList,visitorsFlowrateList,inductionFrequencyList,meteorologicalList)
             }
         })
     }
@@ -161,7 +167,9 @@ $(function(){
                 inductionFrequencyList =res.data.inductionFrequencyList; //感应次数
                 hours=res.data.hours; //X坐标
                 meteorologicalList=res.data.meteorologicalList;   //气象信息
-                f(hours,dischargeCapacityList,chargingCapacityList,chargingCurrentList,dischargeCurrentList,batteryVoltageList,ambientTemperatureList,internalTemperatureList,visitorsFlowrateList,inductionFrequencyList,meteorologicalList)
+                newHours=res.data.newHours;
+                newH="2"
+                f(hours,newHours,newH,dischargeCapacityList,chargingCapacityList,chargingCurrentList,dischargeCurrentList,batteryVoltageList,ambientTemperatureList,internalTemperatureList,visitorsFlowrateList,inductionFrequencyList,meteorologicalList)
             }
         })
     }
@@ -204,135 +212,13 @@ $(function(){
         if(deviceCode != ""){
             //设备高级设置数据渲染
             console.log("设备高级设置上传")
-            $.ajax({
-                url:baseURL + 'advancedsetting/queryDevAdvInfo?deviceCode='+deviceCode+"&groupId="+grod,
-                contentType: "application/json;charset=UTF-8",
-                type:"get",
-                data: {},
-                success: function(res){
-                    if(res.info == ""){
-                        return
-                    }else{
-                        console.log("设备高级设置参数获取1")
-                        console.log(res)
-                        $("#r_Load_power").val(res.info.powerLoad)// 负载功率
-                        var turnon=parseInt(res.info.timeTurnOn/60)
-                        var turnona=res.info.timeTurnOn-(turnon*60);
-                        var turnonb=turnon+":"+turnona
-                        $("#d414").val(turnonb) ; //开灯时刻
-                        var timeTurnOff=parseInt(res.info.timeTurnOff/60);
-                        var timeTurnOff_a=res.info.timeTurnOff-(timeTurnOff*60);
-                        var timeTurnOff_b=timeTurnOff+":"+timeTurnOff_a
-                        $("#d4141").val(timeTurnOff_b)
-                        var time1=parseInt(res.info.time1/60);
-                        var time1_a=res.info.time1-(time1*60);
-                        $("#r_one_teml").val(time1)   //一阶段
-                        $("#r_teml_tw").val(time1_a)
-                        var time2=parseInt(res.info.time2/60);
-                        var time2_a=res.info.time2-(time2*60);
-                        $("#r_teml_sv").val(time2)//二阶段
-                        $("#r_teml_eg").val(time2_a)
-                        var time3=parseInt(res.info.time3/60);
-                        var time3_a=res.info.time3-(time3*60);
-                        $("#r_teml_th").val(time3)//三阶段
-                        $("#r_teml_for").val(time3_a)
-                        var time4=parseInt(res.info.time4/60);
-                        var time4_a=res.info.time4-(time4*60);
-                        $("#r_teml_ng").val(time4)//4阶段
-                        $("#r_teml_te").val(time4_a)
-                        var time5=parseInt(res.info.time5/60);
-                        var time5_a=res.info.time5-(time5*60);
-                        $("#r_teml_fif").val(time5)//5阶段
-                        $("#r_teml_six").val(time5_a)
-                        var timeDown=parseInt(res.info.timeDown/60);
-                        var timeDown_a=res.info.timeDown-(timeDown*60);
-                        $("#r_teml_el").val(timeDown)//晨亮时段时长
-                        $("#r_teml_egl").val(timeDown_a)
-                        $("#r_teml_tgl").val(res.info.vpv)//光控电压
-                        $("").val()// 光控关灯开关......
-                        $("#r_teml_forl").val(res.info.batStringNum) //电池串数
-                        $("#r_select_b option").val(res.info.batType);//电池类型
-                        $("#r_inpl_one").val(res.info.volOverDisCharge/100);//过放电压
-                        $("#r_inpl_tw").val(res.info.icharge/100);//充电电流
-                        $("#r_inpl_one").val(res.info.volCharge/100);//充电电压
-
-                        var inspectionTime=parseInt(res.info.inspectionTime/60);
-                        var inspectionTime_a=res.info.inspectionTime-(inspectionTime*60);
-                        $("#r_teml_thgl").val(inspectionTime)//巡检
-                        $("#r_teml_thel").val(inspectionTime_a)
-                        console.log("亮灯时段1")
-                        console.log(res.info.powerPeople1)
-                        $("#slideTest4").children().children(".layui-slider-bar").css("width",res.info.powerPeople1+"%")//灯亮时段1有人
-                        $("#slideTest4").children().children(".layui-slider-wrap").css("left",res.info.powerPeople1+"%")
-                        $("#slideTest4").children().children().children(".layui-input").val(res.info.powerPeople1)
-                        $("#slideTest5").children().children(".layui-slider-bar").css("width",res.info.powerSensor1+"%")//灯亮时段1无人
-                        $("#slideTest5").children().children(".layui-slider-wrap").css("left",res.info.powerSensor1+"%")
-                        $("#slideTest5").children().children().children(".layui-input").val(res.info.powerSensor1)
-                        $("#slideTest6").children().children(".layui-slider-bar").css("width",res.info.powerPeople2+"%")//灯亮时段2有人
-                        $("#slideTest6").children().children(".layui-slider-wrap").css("left",res.info.powerPeople2+"%")
-                        $("#slideTest6").children().children().children(".layui-input").val(res.info.powerPeople2)
-                        $("#slideTest7").children().children(".layui-slider-bar").css("width",res.info.powerSensor2+"%")//灯亮时段2无人
-                        $("#slideTest7").children().children(".layui-slider-wrap").css("left",res.info.powerSensor2+"%")
-                        $("#slideTest7").children().children().children(".layui-input").val(res.info.powerSensor2)
-                        $("#slideTest8").children().children(".layui-slider-bar").css("width",res.info.powerPeople3+"%")//灯亮时段3有人
-                        $("#slideTest8").children().children(".layui-slider-wrap").css("left",res.info.powerPeople3+"%")
-                        $("#slideTest8").children().children().children(".layui-input").val(res.info.powerPeople3)
-                        $("#slideTest9").children().children(".layui-slider-bar").css("width",res.info.powerSensor3+"%")//灯亮时段3无人
-                        $("#slideTest9").children().children(".layui-slider-wrap").css("left",res.info.powerSensor3+"%")
-                        $("#slideTest9").children().children().children(".layui-input").val(res.info.powerSensor3)
-                        $("#slideTest10").children().children(".layui-slider-bar").css("width",res.info.powerPeople4+"%")//灯亮时段4有人
-                        $("#slideTest10").children().children(".layui-slider-wrap").css("left",res.info.powerPeople4+"%")
-                        $("#slideTest10").children().children().children(".layui-input").val(res.info.powerPeople4)
-                        $("#slideTest11").children().children(".layui-slider-bar").css("width",res.info.powerSensor4+"%")//灯亮时段4无人
-                        $("#slideTest11").children().children(".layui-slider-wrap").css("left",res.info.powerSensor4+"%")
-                        $("#slideTest11").children().children().children(".layui-input").val(res.info.powerSensor4)
-                        $("#slideTest12").children().children(".layui-slider-bar").css("width",res.info.powerPeople5+"%")//灯亮时段5有人
-                        $("#slideTest12").children().children(".layui-slider-wrap").css("left",res.info.powerPeople5+"%")
-                        $("#slideTest12").children().children().children(".layui-input").val(res.info.powerPeople5)
-                        $("#slideTest16").children().children(".layui-slider-bar").css("width",res.info.powerSensor5+"%")//灯亮时段5无人
-                        $("#slideTest16").children().children(".layui-slider-wrap").css("left",res.info.powerSensor5+"%")
-                        $("#slideTest16").children().children().children(".layui-input").val(res.info.powerSensor5)
-                        $("#slideTest13").children().children(".layui-slider-bar").css("width",res.info.powerDawnPeople+"%")//晨亮有人
-                        $("#slideTest13").children().children(".layui-slider-wrap").css("left",res.info.powerDawnPeople+"%")
-                        $("#slideTest13").children().children().children(".layui-input").val(res.info.powerDawnPeople)
-                        $("#slideTest14").children().children(".layui-slider-bar").css("width",res.info.powerSensorDown+"%")//晨亮无人
-                        $("#slideTest14").children().children(".layui-slider-wrap").css("left",res.info.powerSensorDown+"%")
-                        $("#slideTest14").children().children().children(".layui-input").val(res.info.powerSensorDown)
-                        $("#slideTest15").children().children(".layui-slider-bar").css("width",res.info.autoSleepTime+"%")//晨亮无人
-                        $("#slideTest15").children().children(".layui-slider-wrap").css("left",res.info.autoSleepTime+"%")
-                        $("#slideTest15").children().children().children(".layui-input").val(res.info.autoSleepTime)
-                        $("#slideTest_a").children().children(".layui-slider-bar").css("width",res.info.firDownPower+"%")//一阶前
-                        $("#slideTest_a").children().children(".layui-slider-wrap").css("left",res.info.firDownPower+"%")
-                        $("#slideTest_a").children().children().children(".layui-input").val(res.info.firDownPower)
-                        $("#slideTest_b").children().children(".layui-slider-bar").css("width",res.info.firReducAmplitude+"%")//一阶后
-                        $("#slideTest_b").children().children(".layui-slider-wrap").css("left",res.info.firReducAmplitude+"%")
-                        $("#slideTest_b").children().children().children(".layui-input").val(res.info.firReducAmplitude)
-                        $("#slideTest_c").children().children(".layui-slider-bar").css("width",res.info.twoDownPower+"%")//2阶前
-                        $("#slideTest_c").children().children(".layui-slider-wrap").css("left",res.info.twoDownPower+"%")
-                        $("#slideTest_c").children().children().children(".layui-input").val(res.info.twoDownPower)
-                        $("#slideTest_d").children().children(".layui-slider-bar").css("width",res.info.twoReducAmplitude+"%")//2阶后
-                        $("#slideTest_d").children().children(".layui-slider-wrap").css("left",res.info.twoReducAmplitude+"%")
-                        $("#slideTest_d").children().children().children(".layui-input").val(res.info.twoReducAmplitude)
-                        $("#slideTest_e").children().children(".layui-slider-bar").css("width",res.info.threeDownPower+"%")//3阶前
-                        $("#slideTest_e").children().children(".layui-slider-wrap").css("left",res.info.threeDownPower+"%")
-                        $("#slideTest_e").children().children().children(".layui-input").val(res.info.threeDownPower)
-                        $("#slideTest_f").children().children(".layui-slider-bar").css("width",res.info.threeReducAmplitude+"%")//3阶后
-                        $("#slideTest_f").children().children(".layui-slider-wrap").css("left",res.info.threeReducAmplitude+"%")
-                        $("#slideTest_f").children().children().children(".layui-input").val(res.info.threeReducAmplitude)
-                        $("#slideTest1").children().children(".layui-slider-bar").css("width",res.info.slideTest1+"%")//开关灯延时
-                        $("#slideTest1").children().children(".layui-slider-wrap").css("left",res.info.slideTest1+"%")
-                        $("#slideTest1").children().children().children(".layui-input").val(res.info.slideTest1)
-                        $("#slideTest_m").children().children(".layui-slider-bar").css("width",res.info.ligntOnDuration+"%")//光控延时时间
-                        $("#slideTest_m").children().children(".layui-slider-wrap").css("left",res.info.ligntOnDuration+"%")
-                        $("#slideTest_m").children().children().children(".layui-input").val(res.info.ligntOnDuration)
-                    }
-                }
-            });
+            var ur=baseURL + 'advancedsetting/queryDevAdvInfo?deviceCode='+deviceCode+"&groupId="+grod
+            url(ur)
             //设备保存值
             $("#r_bttn").click(function () {
                 //负载
                 var loadWorkMode = parseInt($("#select1_b option:selected").attr("class"));   //负载工作模式
-                var powerLoad = parseInt($("#r_Load_power").val()); //负载功率
+                var powerLoad = parseInt($("#r_Load_power").val()*100); //负载功率
                 var timeTurnOn=$("#d414").val(); //开灯时刻
                 var timeTurnON_a=timeTurnOn.split(":")
                 var timeTurnON_b=Number(timeTurnON_a[0]*60)+Number(timeTurnON_a[1])
@@ -346,18 +232,20 @@ $(function(){
                 var time5=Number($("#r_teml_fif").val())*60+Number($("#r_teml_six").val());//5时段时长
                 var timeDown= Number($("#r_teml_el").val())*60+Number($("#r_teml_egl").val());//晨亮时段时长
                 //关灯时段
-                var powerPeople1=parseInt($("#slideTest4").children().children(".layui-slider-bar").width()/$("#slideTest4").children(".layui-slider").width()*100); //时段1 有人功率
-                var powerPeople2=parseInt($("#slideTest6").children().children(".layui-slider-bar").width()/$("#slideTest6").children(".layui-slider").width()*100);//时段2 有人功率
-                var powerPeople3=parseInt($("#slideTest8").children().children(".layui-slider-bar").width()/$("#slideTest8").children(".layui-slider").width()*100); //时段3 有人功率
-                var powerPeople4=parseInt($("#slideTest10").children().children(".layui-slider-bar").width()/$("#slideTest10").children(".layui-slider").width()*100);//时段4 有人功率
-                var powerPeople5=parseInt($("#slideTest12").children().children(".layui-slider-bar").width()/$("#slideTest12").children(".layui-slider").width()*100);//时段5 有人功率
-                var powerDawnPeople=parseInt($("#slideTest13").children().children(".layui-slider-bar").width()/$("#slideTest13").children(".layui-slider").width()*100);//晨亮 有人功率
-                var powerSensor1=parseInt($("#slideTest5").children().children(".layui-slider-bar").width()/$("#slideTest5").children(".layui-slider").width()*100);//时段1 无人功率
-                var powerSensor2=parseInt($("#slideTest7").children().children(".layui-slider-bar").width()/$("#slideTest7").children(".layui-slider").width()*100);//时段2 无人功率
-                var powerSensor3=parseInt($("#slideTest9").children().children(".layui-slider-bar").width()/$("#slideTest9").children(".layui-slider").width()*100);//时段3无人功率
-                var powerSensor4=parseInt($("#slideTest11").children().children(".layui-slider-bar").width()/$("#slideTest11").children(".layui-slider").width()*100); //时段4 无人功率
-                var powerSensor5=parseInt($("#slideTest16").children().children(".layui-slider-bar").width()/$("#slideTest16").children(".layui-slider").width()*100);//时段5 无人功率
-                var powerSensorDown=parseInt($("#slideTest14").children().children(".layui-slider-bar").width()/$("#slideTest14").children(".layui-slider").width()*100); //晨亮 无人功率
+                var powerPeople1=parseInt($("#slideTest4").children().children(".layui-slider-bar").height()/$("#slideTest4").children(".layui-slider").height()*100); //时段1 有人功率
+                var powerPeople2=parseInt($("#slideTest12").children().children(".layui-slider-bar").height()/$("#slideTest12").children(".layui-slider").height()*100);//时段2 有人功率
+                var powerPeople3=parseInt($("#slideTest8").children().children(".layui-slider-bar").height()/$("#slideTest8").children(".layui-slider").height()*100); //时段3 有人功率
+                var powerPeople4=parseInt($("#slideTest10").children().children(".layui-slider-bar").height()/$("#slideTest10").children(".layui-slider").height()*100);//时段4 有人功率
+                var powerPeople5=parseInt($("#slideTest13").children().children(".layui-slider-bar").height()/$("#slideTest13").children(".layui-slider").height()*100);//时段5 有人功率
+                var powerDawnPeople=parseInt($("#slideTest6").children().children(".layui-slider-bar").height()/$("#slideTest6").children(".layui-slider").height()*100);//晨亮 有人功率
+
+                var powerSensor1=parseInt($("#slideTest5").children().children(".layui-slider-bar").height()/$("#slideTest5").children(".layui-slider").height()*100);//时段1 无人功率
+                var powerSensor2=parseInt($("#slideTest16").children().children(".layui-slider-bar").height()/$("#slideTest16").children(".layui-slider").height()*100);//时段2 无人功率
+                var powerSensor3=parseInt($("#slideTest9").children().children(".layui-slider-bar").height()/$("#slideTest9").children(".layui-slider").height()*100);//时段3无人功率
+                var powerSensor4=parseInt($("#slideTest11").children().children(".layui-slider-bar").height()/$("#slideTest11").children(".layui-slider").height()*100); //时段4 无人功率
+                var powerSensor5=parseInt($("#slideTest14").children().children(".layui-slider-bar").height()/$("#slideTest14").children(".layui-slider").height()*100);//时段5 无人功率
+                var powerSensorDown=parseInt($("#slideTest7").children().children(".layui-slider-bar").height()/$("#slideTest7").children(".layui-slider").height()*100); //晨亮 无人功率
+
                 var autoSleepTime=parseInt($("#slideTest15").children().children(".layui-slider-bar").width()/$("#slideTest15").children(".layui-slider").width()*100); //自动休眠时间长度
                 var savingSwitch=parseInt($("#custom option:selected").attr("class"));
                 var inductionLightOnDelay=parseInt($("#r_teml_ma").val())
@@ -365,19 +253,19 @@ $(function(){
                 var vpv=parseInt($("#r_teml_tgl").val());//光控电压
                 var pvSwitch=parseInt($("#r_btl_th>.r_btl_th[type='radio']:checked").val()); //光控关灯开灯
                 var batType=parseInt($("#r_select_b option:selected").attr("class"));// 电池类型
-                var switchDelayTime=parseInt($("#slideTest1").children().children(".layui-slider-bar").width()/$("#slideTest1").children(".layui-slider").width()*100);
+                var switchDelayTime=parseInt($("#slideTest1").children().children(".layui-slider-bar").width()/$("#slideTest1").children(".layui-slider").width()*100);//开关灯延时
                 var ligntOnDuration=parseInt($("#slideTest_m").children().children(".layui-slider-bar").width()/$("#slideTest_m").children(".layui-slider").width()*100);//光控延迟时间长度
                 //蓄电池
                 var batStringNum= parseInt($("#r_teml_forl").val())//电池串数
                 var volOverDisCharge=parseInt($("#r_inpl_one").val()*100)//过放电压
-
-                var volCharge=parseInt($("#chong").val())*100//充电电压
-                var tempCharge=parseInt($("#slideTest3").val()) //充电温度范围(最大值  做高八位低八位处理)
-                var tempDisCharge=parseInt($("#slideTest17").val()) //放电温度范围（最大值做高八位低八位处理)）
-                var tempCharge0=parseInt($("#slideTest0").val()) //充电温度范围(最小值做高八位低八位处理)
-                var tempDisCharge25=parseInt($("#slideTest25").val()) //放电温度范围（最小值做高八位低八位处理)）
+                var volCharge=parseInt($("#chong").val()*100)//充电电压
+                var tempCharge=parseInt($("#r_teml_thglr").val()) //充电温度范围(最大值  做高八位低八位处理)
+                var tempDisCharge=parseInt($("#r_teml_thglt").val()) //放电温度范围（最大值做高八位低八位处理)）
+                var tempCharge0=parseInt($("#r_teml_thelr").val()) //充电温度范围(最小值做高八位低八位处理)
+                var tempDisCharge25=parseInt($("#r_teml_thet").val()) //放电温度范围（最小值做高八位低八位处理)）
                 console.log("高")
                 console.log(tempCharge)
+
                 var newTempCharge = ((tempCharge& 0xFF)<<8) + (tempCharge0 & 0xFF);
                 var newTempDisCharge = ((tempDisCharge & 0xFF)<<8) + (tempDisCharge25 & 0xFF);
                 var inspectionTime=Number($("#r_teml_thgl").val())*60+Number($("#r_teml_thel").val()) //巡检时间
@@ -485,131 +373,12 @@ $(function(){
             })
         }else{
             console.log("分组高级设置上传");
-            $.ajax({
-                url:baseURL + 'advancedsetting/settingInfo?groupId='+grod,
-                contentType: "application/json;charset=UTF-8",
-                type:"get",
-                data: {},
-                success: function(res){
-                    console.log("分组高级设置参数获取")
-                    console.log(res)
-                    if(res.info != "") {
-                        $("#r_Load_power").val(res.info.powerLoad)// 负载功率
-                        var turnon = parseInt(res.info.timeTurnOn / 60)
-                        var turnona = res.info.timeTurnOn - (turnon * 60);
-                        var turnonb = turnon + ":" + turnona
-                        $("#d414").val(turnonb); //开灯时刻
-                        var timeTurnOff = parseInt(res.info.timeTurnOff / 60);
-                        var timeTurnOff_a = res.info.timeTurnOff - (timeTurnOff * 60);
-                        var timeTurnOff_b = timeTurnOff + ":" + timeTurnOff_a
-                        $("#d4141").val(timeTurnOff_b)
-                        var time1 = parseInt(res.info.time1 / 60);
-                        var time1_a = res.info.time1 - (time1 * 60);
-                        $("#r_one_teml").val(time1)   //一阶段
-                        $("#r_teml_tw").val(time1_a)
-                        var time2 = parseInt(res.info.time2 / 60);
-                        var time2_a = res.info.time2 - (time2 * 60);
-                        $("#r_teml_sv").val(time2)//二阶段
-                        $("#r_teml_eg").val(time2_a)
-                        var time3 = parseInt(res.info.time3 / 60);
-                        var time3_a = res.info.time3 - (time3 * 60);
-                        $("#r_teml_th").val(time3)//三阶段
-                        $("#r_teml_for").val(time3_a)
-                        var time4 = parseInt(res.info.time4 / 60);
-                        var time4_a = res.info.time4 - (time4 * 60);
-                        $("#r_teml_ng").val(time4)//4阶段
-                        $("#r_teml_te").val(time4_a)
-                        var time5 = parseInt(res.info.time5 / 60);
-                        var time5_a = res.info.time5 - (time5 * 60);
-                        $("#r_teml_fif").val(time5)//5阶段
-                        $("#r_teml_six").val(time5_a)
-                        var timeDown = parseInt(res.info.timeDown / 60);
-                        var timeDown_a = res.info.timeDown - (timeDown * 60);
-                        $("#r_teml_el").val(timeDown)//晨亮时段时长
-                        $("#r_teml_egl").val(timeDown_a)
-                        $("#r_teml_tgl").val(res.info.vpv)//光控电压
-                        $("").val()// 光控关灯开关......
-                        $("#r_teml_forl").val(res.info.batStringNum) //电池串数
-                        $("#r_select_b option").val(res.info.batType);//电池类型
-                        $("#r_inpl_one").val(res.info.volOverDisCharge / 100);//过放电压
-                        $("#r_inpl_tw").val(res.info.icharge / 100);//充电电流
-                        $("#r_inpl_one").val(res.info.volCharge / 100);//充电电压
-
-                        var inspectionTime = parseInt(res.info.inspectionTime / 60);
-                        var inspectionTime_a = res.info.inspectionTime - (inspectionTime * 60);
-                        $("#r_teml_thgl").val(inspectionTime)//巡检
-                        $("#r_teml_thel").val(inspectionTime_a)
-                        $("#slideTest4").children().children(".layui-slider-bar").css("width", res.info.powerPeople1 + "%")//灯亮时段1有人
-                        $("#slideTest4").children().children(".layui-slider-wrap").css("left", res.info.powerPeople1 + "%")
-                        $("#slideTest4").children().children().children(".layui-input").val(res.info.powerPeople1)
-                        $("#slideTest5").children().children(".layui-slider-bar").css("width", res.info.powerSensor1 + "%")//灯亮时段1无人
-                        $("#slideTest5").children().children(".layui-slider-wrap").css("left", res.info.powerSensor1 + "%")
-                        $("#slideTest5").children().children().children(".layui-input").val(res.info.powerSensor1)
-                        $("#slideTest6").children().children(".layui-slider-bar").css("width", res.info.powerPeople2 + "%")//灯亮时段2有人
-                        $("#slideTest6").children().children(".layui-slider-wrap").css("left", res.info.powerPeople2 + "%")
-                        $("#slideTest6").children().children().children(".layui-input").val(res.info.powerPeople2)
-                        $("#slideTest7").children().children(".layui-slider-bar").css("width", res.info.powerSensor2 + "%")//灯亮时段2无人
-                        $("#slideTest7").children().children(".layui-slider-wrap").css("left", res.info.powerSensor2 + "%")
-                        $("#slideTest7").children().children().children(".layui-input").val(res.info.powerSensor2)
-                        $("#slideTest8").children().children(".layui-slider-bar").css("width", res.info.powerPeople3 + "%")//灯亮时段3有人
-                        $("#slideTest8").children().children(".layui-slider-wrap").css("left", res.info.powerPeople3 + "%")
-                        $("#slideTest8").children().children().children(".layui-input").val(res.info.powerPeople3)
-                        $("#slideTest9").children().children(".layui-slider-bar").css("width", res.info.powerSensor3 + "%")//灯亮时段3无人
-                        $("#slideTest9").children().children(".layui-slider-wrap").css("left", res.info.powerSensor3 + "%")
-                        $("#slideTest9").children().children().children(".layui-input").val(res.info.powerSensor3)
-                        $("#slideTest10").children().children(".layui-slider-bar").css("width", res.info.powerPeople4 + "%")//灯亮时段4有人
-                        $("#slideTest10").children().children(".layui-slider-wrap").css("left", res.info.powerPeople4 + "%")
-                        $("#slideTest10").children().children().children(".layui-input").val(res.info.powerPeople4)
-                        $("#slideTest11").children().children(".layui-slider-bar").css("width", res.info.powerSensor4 + "%")//灯亮时段4无人
-                        $("#slideTest11").children().children(".layui-slider-wrap").css("left", res.info.powerSensor4 + "%")
-                        $("#slideTest11").children().children().children(".layui-input").val(res.info.powerSensor4)
-                        $("#slideTest12").children().children(".layui-slider-bar").css("width", res.info.powerPeople5 + "%")//灯亮时段5有人
-                        $("#slideTest12").children().children(".layui-slider-wrap").css("left", res.info.powerPeople5 + "%")
-                        $("#slideTest12").children().children().children(".layui-input").val(res.info.powerPeople5)
-                        $("#slideTest16").children().children(".layui-slider-bar").css("width", res.info.powerSensor5 + "%")//灯亮时段5无人
-                        $("#slideTest16").children().children(".layui-slider-wrap").css("left", res.info.powerSensor5 + "%")
-                        $("#slideTest16").children().children().children(".layui-input").val(res.info.powerSensor5)
-                        $("#slideTest13").children().children(".layui-slider-bar").css("width", res.info.powerDawnPeople + "%")//晨亮有人
-                        $("#slideTest13").children().children(".layui-slider-wrap").css("left", res.info.powerDawnPeople + "%")
-                        $("#slideTest13").children().children().children(".layui-input").val(res.info.powerDawnPeople)
-                        $("#slideTest14").children().children(".layui-slider-bar").css("width", res.info.powerSensorDown + "%")//晨亮无人
-                        $("#slideTest14").children().children(".layui-slider-wrap").css("left", res.info.powerSensorDown + "%")
-                        $("#slideTest14").children().children().children(".layui-input").val(res.info.powerSensorDown)
-                        $("#slideTest15").children().children(".layui-slider-bar").css("width", res.info.autoSleepTime + "%")//晨亮无人
-                        $("#slideTest15").children().children(".layui-slider-wrap").css("left", res.info.autoSleepTime + "%")
-                        $("#slideTest15").children().children().children(".layui-input").val(res.info.autoSleepTime)
-                        $("#slideTest_a").children().children(".layui-slider-bar").css("width", res.info.firDownPower + "%")//一阶前
-                        $("#slideTest_a").children().children(".layui-slider-wrap").css("left", res.info.firDownPower + "%")
-                        $("#slideTest_a").children().children().children(".layui-input").val(res.info.firDownPower)
-                        $("#slideTest_b").children().children(".layui-slider-bar").css("width", res.info.firReducAmplitude + "%")//一阶后
-                        $("#slideTest_b").children().children(".layui-slider-wrap").css("left", res.info.firReducAmplitude + "%")
-                        $("#slideTest_b").children().children().children(".layui-input").val(res.info.firReducAmplitude)
-                        $("#slideTest_c").children().children(".layui-slider-bar").css("width", res.info.twoDownPower + "%")//2阶前
-                        $("#slideTest_c").children().children(".layui-slider-wrap").css("left", res.info.twoDownPower + "%")
-                        $("#slideTest_c").children().children().children(".layui-input").val(res.info.twoDownPower)
-                        $("#slideTest_d").children().children(".layui-slider-bar").css("width", res.info.twoReducAmplitude + "%")//2阶后
-                        $("#slideTest_d").children().children(".layui-slider-wrap").css("left", res.info.twoReducAmplitude + "%")
-                        $("#slideTest_d").children().children().children(".layui-input").val(res.info.twoReducAmplitude)
-                        $("#slideTest_e").children().children(".layui-slider-bar").css("width", res.info.threeDownPower + "%")//3阶前
-                        $("#slideTest_e").children().children(".layui-slider-wrap").css("left", res.info.threeDownPower + "%")
-                        $("#slideTest_e").children().children().children(".layui-input").val(res.info.threeDownPower)
-                        $("#slideTest_f").children().children(".layui-slider-bar").css("width", res.info.threeReducAmplitude + "%")//3阶后
-                        $("#slideTest_f").children().children(".layui-slider-wrap").css("left", res.info.threeReducAmplitude + "%")
-                        $("#slideTest_f").children().children().children(".layui-input").val(res.info.threeReducAmplitude)
-                        $("#slideTest1").children().children(".layui-slider-bar").css("width", res.info.slideTest1 + "%")//开关灯延时
-                        $("#slideTest1").children().children(".layui-slider-wrap").css("left", res.info.slideTest1 + "%")
-                        $("#slideTest1").children().children().children(".layui-input").val(res.info.slideTest1)
-                        $("#slideTest_m").children().children(".layui-slider-bar").css("width", res.info.ligntOnDuration + "%")//光控延时时间
-                        $("#slideTest_m").children().children(".layui-slider-wrap").css("left", res.info.ligntOnDuration + "%")
-                        $("#slideTest_m").children().children().children(".layui-input").val(res.info.ligntOnDuration)
-                    }
-                }
-            });
-            //分组保存值
+            var ur=baseURL + 'advancedsetting/settingInfo?groupId='+grod
+            url(ur)
             $("#r_bttn").click(function () {
                 //负载
                 var loadWorkMode = parseInt($("#select1_b option:selected").attr("class"));   //负载工作模式
-                var powerLoad = parseInt($("#r_Load_power").val()); //负载功率
+                var powerLoad = parseInt($("#r_Load_power").val()*100); //负载功率
                 var timeTurnOn=$("#d414").val(); //开灯时刻
                 var timeTurnON_a=timeTurnOn.split(":")
                 var timeTurnON_b=Number(timeTurnON_a[0]*60)+Number(timeTurnON_a[1])
@@ -623,18 +392,18 @@ $(function(){
                 var time5=Number($("#r_teml_fif").val())*60+Number($("#r_teml_six").val());//5时段时长
                 var timeDown= Number($("#r_teml_el").val())*60+Number($("#r_teml_egl").val());//晨亮时段时长
                 //关灯时段
-                var powerPeople1=parseInt($("#slideTest4").children().children(".layui-slider-bar").width()/$("#slideTest4").children(".layui-slider").width()*100); //时段1 有人功率
-                var powerPeople2=parseInt($("#slideTest6").children().children(".layui-slider-bar").width()/$("#slideTest6").children(".layui-slider").width()*100);//时段2 有人功率
-                var powerPeople3=parseInt($("#slideTest8").children().children(".layui-slider-bar").width()/$("#slideTest8").children(".layui-slider").width()*100); //时段3 有人功率
-                var powerPeople4=parseInt($("#slideTest10").children().children(".layui-slider-bar").width()/$("#slideTest10").children(".layui-slider").width()*100);//时段4 有人功率
-                var powerPeople5=parseInt($("#slideTest12").children().children(".layui-slider-bar").width()/$("#slideTest12").children(".layui-slider").width()*100); //时段5 有人功率
-                var powerDawnPeople=parseInt($("#slideTest13").children().children(".layui-slider-bar").width()/$("#slideTest13").children(".layui-slider").width()*100);//晨亮 有人功率
-                var powerSensor1=parseInt($("#slideTest5").children().children(".layui-slider-bar").width()/$("#slideTest5").children(".layui-slider").width()*100); //时段1 无人功率
-                var powerSensor2=parseInt($("#slideTest7").children().children(".layui-slider-bar").width()/$("#slideTest7").children(".layui-slider").width()*100);//时段2 无人功率
-                var powerSensor3=parseInt($("#slideTest9").children().children(".layui-slider-bar").width()/$("#slideTest9").children(".layui-slider").width()*100);//时段3无人功率
-                var powerSensor4=parseInt($("#slideTest11").children().children(".layui-slider-bar").width()/$("#slideTest11").children(".layui-slider").width()*100); //时段4 无人功率
-                var powerSensor5=parseInt($("#slideTest16").children().children(".layui-slider-bar").width()/$("#slideTest16").children(".layui-slider").width()*100);//时段5 无人功率
-                var powerSensorDown=parseInt($("#slideTest14").children().children(".layui-slider-bar").width()/$("#slideTest14").children(".layui-slider").width()*100); //晨亮 无人功率
+                var powerPeople1=parseInt($("#slideTest4").children().children(".layui-slider-bar").height()/$("#slideTest4").children(".layui-slider").height()*100); //时段1 有人功率
+                var powerPeople2=parseInt($("#slideTest12").children().children(".layui-slider-bar").height()/$("#slideTest12").children(".layui-slider").height()*100);//时段2 有人功率
+                var powerPeople3=parseInt($("#slideTest8").children().children(".layui-slider-bar").height()/$("#slideTest8").children(".layui-slider").height()*100); //时段3 有人功率
+                var powerPeople4=parseInt($("#slideTest10").children().children(".layui-slider-bar").height()/$("#slideTest10").children(".layui-slider").height()*100);//时段4 有人功率
+                var powerPeople5=parseInt($("#slideTest13").children().children(".layui-slider-bar").height()/$("#slideTest13").children(".layui-slider").height()*100);//时段5 有人功率
+                var powerDawnPeople=parseInt($("#slideTest6").children().children(".layui-slider-bar").height()/$("#slideTest6").children(".layui-slider").height()*100);//晨亮 有人功率
+                var powerSensor1=parseInt($("#slideTest5").children().children(".layui-slider-bar").height()/$("#slideTest5").children(".layui-slider").height()*100);//时段1 无人功率
+                var powerSensor2=parseInt($("#slideTest16").children().children(".layui-slider-bar").height()/$("#slideTest16").children(".layui-slider").height()*100);//时段2 无人功率
+                var powerSensor3=parseInt($("#slideTest9").children().children(".layui-slider-bar").height()/$("#slideTest9").children(".layui-slider").height()*100);//时段3无人功率
+                var powerSensor4=parseInt($("#slideTest11").children().children(".layui-slider-bar").height()/$("#slideTest11").children(".layui-slider").height()*100); //时段4 无人功率
+                var powerSensor5=parseInt($("#slideTest14").children().children(".layui-slider-bar").height()/$("#slideTest14").children(".layui-slider").height()*100);//时段5 无人功率
+                var powerSensorDown=parseInt($("#slideTest7").children().children(".layui-slider-bar").height()/$("#slideTest7").children(".layui-slider").height()*100); //晨亮 无人功率
                 var autoSleepTime=parseInt($("#slideTest15").children().children(".layui-slider-bar").width()/$("#slideTest15").children(".layui-slider").width()*100); //自动休眠时间长度
                 var savingSwitch=parseInt($("#custom option:selected").attr("class"));
                 var inductionLightOnDelay=parseInt($("#r_teml_ma").val())
@@ -647,12 +416,11 @@ $(function(){
                 //蓄电池
                 var batStringNum= parseInt($("#r_teml_forl").val())//电池串数
                 var volOverDisCharge=parseInt($("#r_inpl_one").val()*100)//过放电压
-                var volCharge=parseInt($("#chong").val())*100//充电电压
-
-                var tempCharge=parseInt($("#slideTest3").val()) //充电温度范围(最大值  做高八位低八位处理)
-                var tempDisCharge=parseInt($("#slideTest17").val()) //放电温度范围（最大值做高八位低八位处理)）
-                var tempCharge0=parseInt($("#slideTest0").val()) //充电温度范围(最小值做高八位低八位处理)
-                var tempDisCharge25=parseInt($("#slideTest25").val()) //放电温度范围（最小值做高八位低八位处理)）
+                var volCharge=parseInt($("#chong").val()*100)//充电电压
+                var tempCharge=parseInt($("#r_teml_thglr").val()) //充电温度范围(最大值  做高八位低八位处理)
+                var tempDisCharge=parseInt($("#r_teml_thglt").val()) //放电温度范围（最大值做高八位低八位处理)）
+                var tempCharge0=parseInt($("#r_teml_thelr").val()) //充电温度范围(最小值做高八位低八位处理)
+                var tempDisCharge25=parseInt($("#r_teml_thet").val()) //放电温度范围（最小值做高八位低八位处理)）
                 var newTempCharge = ((tempCharge & 0xFF)<<8) + (tempCharge0 & 0xFF);
                 var newTempDisCharge = ((tempDisCharge & 0xFF)<<8) + (tempDisCharge25 & 0xFF);
 
@@ -668,10 +436,6 @@ $(function(){
                 //第三阶段
                 var threeDownPower = parseInt($("#slideTest_e").children().children(".layui-slider-bar").width()*100);//三阶降压功率
                 var threeReducAmplitude = parseInt($("#slideTest_f").children().children(".layui-slider-bar").width()*100);//三阶降功率幅度
-
-                console.log(firDownPower)
-                console.log(twoDownPower)
-                console.log(threeDownPower)
                 var qaKey=["loadWorkMode","powerLoad","timeTurnOn","timeTurnOff","time1",
                     "time2","time3","time4","time5","timeDown","powerPeople1","powerPeople2","powerPeople3","powerPeople4","powerPeople5",
                     "powerDawnPeople","powerSensor1","powerSensor2","powerSensor3","powerSensor4","powerSensor5","powerSensorDown","autoSleepTime","vpv",
@@ -682,7 +446,6 @@ $(function(){
                     powerDawnPeople,powerSensor1,powerSensor2,powerSensor3,powerSensor4,powerSensor5,powerSensorDown,autoSleepTime,vpv,
                     pvSwitch,batType,batStringNum,volOverDisCharge,volCharge,newTempCharge,newTempDisCharge,inspectionTime,icharge,switchDelayTime,firDownPower,
                     twoDownPower,threeDownPower,firReducAmplitude,twoReducAmplitude,threeReducAmplitude,ligntOnDuration,savingSwitch,inductionLightOnDelay];
-
 
                 $.ajax({
                     url:baseURL + 'advancedsetting/updateGroup',
@@ -761,12 +524,153 @@ $(function(){
                 })
             })
         }
+        function url(ur){
+            $.ajax({
+                url:ur,
+                contentType: "application/json;charset=UTF-8",
+                type:"get",
+                data: {},
+                success: function(res){
+                    if(res.info == ""){
+                        return
+                    }else{
+                        console.log("设备高级设置参数获取1")
+                        console.log(res)
+                        $("#r_Load_power").val(res.info.powerLoad/100)// 负载功率
+                        var turnon=parseInt(res.info.timeTurnOn/60)
+                        var turnona=res.info.timeTurnOn-(turnon*60);
+                        var turnonb=turnon+":"+turnona
+                        $("#d414").val(turnonb) ; //开灯时刻
+                        var timeTurnOff=parseInt(res.info.timeTurnOff/60);
+                        var timeTurnOff_a=res.info.timeTurnOff-(timeTurnOff*60);
+                        var timeTurnOff_b=timeTurnOff+":"+timeTurnOff_a
+                        $("#d4141").val(timeTurnOff_b)
+                        var time1=parseInt(res.info.time1/60);
+                        var time1_a=res.info.time1-(time1*60);
+                        $("#r_one_teml").val(time1)   //一阶段
+                        $("#r_teml_tw").val(time1_a)
+                        var time2=parseInt(res.info.time2/60);
+                        var time2_a=res.info.time2-(time2*60);
+                        $("#r_teml_sv").val(time2)//二阶段
+                        $("#r_teml_eg").val(time2_a)
+                        var time3=parseInt(res.info.time3/60);
+                        var time3_a=res.info.time3-(time3*60);
+                        $("#r_teml_th").val(time3)//三阶段
+                        $("#r_teml_for").val(time3_a)
+                        var time4=parseInt(res.info.time4/60);
+                        var time4_a=res.info.time4-(time4*60);
+                        $("#r_teml_ng").val(time4)//4阶段
+                        $("#r_teml_te").val(time4_a)
+                        var time5=parseInt(res.info.time5/60);
+                        var time5_a=res.info.time5-(time5*60);
+                        $("#r_teml_fif").val(time5)//5阶段
+                        $("#r_teml_six").val(time5_a)
+                        var timeDown=parseInt(res.info.timeDown/60);
+                        var timeDown_a=res.info.timeDown-(timeDown*60);
+                        $("#r_teml_el").val(timeDown)//晨亮时段时长
+                        $("#r_teml_egl").val(timeDown_a)
+                        $("#r_teml_tgl").val(res.info.vpv)//光控电压
+                        $("").val()// 光控关灯开关......
+                        $("#r_teml_forl").val(res.info.batStringNum) //电池串数
+                        $("#r_select_b option").val(res.info.batType);//电池类型
+                        $("#r_inpl_one").val(res.info.volOverDisCharge/100);//过放电压
+                        $("#r_inpl_tw").val(res.info.icharge/100);//充电电流
+                        $("#chong").val(res.info.volCharge/100);//充电电压
+                        $("#r_teml_ma").val(res.info.inductionLightOnDelay)  //人体感应功能开关
+                        var inspectionTime=parseInt(res.info.inspectionTime/60);
+                        var inspectionTime_a=res.info.inspectionTime-(inspectionTime*60);
+                        $("#r_teml_thgl").val(inspectionTime)//巡检
+                        $("#r_teml_thel").val(inspectionTime_a)
+                        var tempCharge=parseInt(res.info.tempCharge/60);
+                        var tempCharge_a=res.info.tempCharge-(tempCharge*60);
+                        $("#r_teml_thglr").val(tempCharge)//充电时间范围
+                        $("#r_teml_thelr").val(tempCharge_a)
+                        var tempDisCharge=parseInt(res.info.tempDisCharge/60);
+                        var tempDisCharge_a=res.info.tempDisCharge-(tempDisCharge*60);
+                        $("#r_teml_thglt").val(tempDisCharge)//放电时间范围
+                        $("#r_teml_thet").val(tempDisCharge_a)
+
+                        $("#slideTest4").children().children(".layui-slider-bar").css("height",res.info.powerPeople1+"%")//灯亮时段1有人
+                        $("#slideTest4").children().children(".layui-slider-wrap").css("bottom",res.info.powerPeople1+"%")
+                        $("#slideTest4").children().children().children(".layui-input").val(res.info.powerPeople1)
+                        $("#slideTest5").children().children(".layui-slider-bar").css("height",res.info.powerSensor1+"%")//灯亮时段1无人
+                        $("#slideTest5").children().children(".layui-slider-wrap").css("bottom",res.info.powerSensor1+"%")
+                        $("#slideTest5").children().children().children(".layui-input").val(res.info.powerSensor1)
+                        $("#slideTest12").children().children(".layui-slider-bar").css("height",res.info.powerPeople2+"%")//灯亮时段2有人
+                        $("#slideTest12").children().children(".layui-slider-wrap").css("bottom",res.info.powerPeople2+"%")
+                        $("#slideTest12").children().children().children(".layui-input").val(res.info.powerPeople2)
+                        $("#slideTest16").children().children(".layui-slider-bar").css("height",res.info.powerSensor2+"%")//灯亮时段2无人
+                        $("#slideTest16").children().children(".layui-slider-wrap").css("bottom",res.info.powerSensor2+"%")
+                        $("#slideTest16").children().children().children(".layui-input").val(res.info.powerSensor2)
+                        $("#slideTest8").children().children(".layui-slider-bar").css("height",res.info.powerPeople3+"%")//灯亮时段3有人
+                        $("#slideTest8").children().children(".layui-slider-wrap").css("bottom",res.info.powerPeople3+"%")
+                        $("#slideTest8").children().children().children(".layui-input").val(res.info.powerPeople3)
+                        $("#slideTest9").children().children(".layui-slider-bar").css("height",res.info.powerSensor3+"%")//灯亮时段3无人
+                        $("#slideTest9").children().children(".layui-slider-wrap").css("bottom",res.info.powerSensor3+"%")
+                        $("#slideTest9").children().children().children(".layui-input").val(res.info.powerSensor3)
+                        $("#slideTest10").children().children(".layui-slider-bar").css("height",res.info.powerPeople4+"%")//灯亮时段4有人
+                        $("#slideTest10").children().children(".layui-slider-wrap").css("bottom",res.info.powerPeople4+"%")
+                        $("#slideTest10").children().children().children(".layui-input").val(res.info.powerPeople4)
+                        $("#slideTest11").children().children(".layui-slider-bar").css("height",res.info.powerSensor4+"%")//灯亮时段4无人
+                        $("#slideTest11").children().children(".layui-slider-wrap").css("bottom",res.info.powerSensor4+"%")
+                        $("#slideTest11").children().children().children(".layui-input").val(res.info.powerSensor4)
+                        $("#slideTest13").children().children(".layui-slider-bar").css("height",res.info.powerPeople5+"%")//灯亮时段5有人
+                        $("#slideTest13").children().children(".layui-slider-wrap").css("bottom",res.info.powerPeople5+"%")
+                        $("#slideTest13").children().children().children(".layui-input").val(res.info.powerPeople5)
+                        $("#slideTest14").children().children(".layui-slider-bar").css("height",res.info.powerSensor5+"%")//灯亮时段5无人
+                        $("#slideTest14").children().children(".layui-slider-wrap").css("bottom",res.info.powerSensor5+"%")
+                        $("#slideTest14").children().children().children(".layui-input").val(res.info.powerSensor5)
+                        $("#slideTest6").children().children(".layui-slider-bar").css("height",res.info.powerDawnPeople+"%")//晨亮有人
+                        $("#slideTest6").children().children(".layui-slider-wrap").css("bottom",res.info.powerDawnPeople+"%")
+                        $("#slideTest6").children().children().children(".layui-input").val(res.info.powerDawnPeople)
+                        $("#slideTest7").children().children(".layui-slider-bar").css("height",res.info.powerSensorDown+"%")//晨亮无人
+                        $("#slideTest7").children().children(".layui-slider-wrap").css("bottom",res.info.powerSensorDown+"%")
+                        $("#slideTest7").children().children().children(".layui-input").val(res.info.powerSensorDown)
+                        $("#slideTest15").children().children(".layui-slider-bar").css("width", res.info.autoSleepTime + "%")//自动休眠
+                        $("#slideTest15").children().children(".layui-slider-wrap").css("left", res.info.autoSleepTime + "%")
+                        $("#slideTest15").children().children().children(".layui-input").val(res.info.autoSleepTime)
+
+                        $("#slideTest_a").children().children(".layui-slider-bar").css("width",res.info.firDownPower/100+"%")//一阶前
+                        $("#slideTest_a").children().children(".layui-slider-wrap").css("left",res.info.firDownPower/100+"%")
+                        $("#slideTest_a").children().children().children(".layui-input").val(res.info.firDownPower/100)
+                        $("#slideTest_b").children().children(".layui-slider-bar").css("width",res.info.firReducAmplitude/100+"%")//一阶后
+                        $("#slideTest_b").children().children(".layui-slider-wrap").css("left",res.info.firReducAmplitude/100+"%")
+                        $("#slideTest_b").children().children().children(".layui-input").val(res.info.firReducAmplitude/100)
+                        $("#slideTest_c").children().children(".layui-slider-bar").css("width",res.info.twoDownPower/100+"%")//2阶前
+                        $("#slideTest_c").children().children(".layui-slider-wrap").css("left",res.info.twoDownPower/100+"%")
+                        $("#slideTest_c").children().children().children(".layui-input").val(res.info.twoDownPower/100)
+                        $("#slideTest_d").children().children(".layui-slider-bar").css("width",res.info.twoReducAmplitude/100+"%")//2阶后
+                        $("#slideTest_d").children().children(".layui-slider-wrap").css("left",res.info.twoReducAmplitude/100+"%")
+                        $("#slideTest_d").children().children().children(".layui-input").val(res.info.twoReducAmplitude/100)
+                        $("#slideTest_e").children().children(".layui-slider-bar").css("width",res.info.threeDownPower/100+"%")//3阶前
+                        $("#slideTest_e").children().children(".layui-slider-wrap").css("left",res.info.threeDownPower/100+"%")
+                        $("#slideTest_e").children().children().children(".layui-input").val(res.info.threeDownPower/100)
+                        $("#slideTest_f").children().children(".layui-slider-bar").css("width",res.info.threeReducAmplitude/100+"%")//3阶后
+                        $("#slideTest_f").children().children(".layui-slider-wrap").css("left",res.info.threeReducAmplitude/100+"%")
+                        $("#slideTest_f").children().children().children(".layui-input").val(res.info.threeReducAmplitude/100)
+                        $("#slideTest1").children().children(".layui-slider-bar").css("width",res.info.switchDelayTime+"%")//开关灯延时
+                        $("#slideTest1").children().children(".layui-slider-wrap").css("left",res.info.switchDelayTime+"%")
+                        $("#slideTest1").children().children().children(".layui-input").val(res.info.switchDelayTime)
+                        $("#slideTest_m").children().children(".layui-slider-bar").css("width",res.info.ligntOnDuration+"%")//光控延时时间
+                        $("#slideTest_m").children().children(".layui-slider-wrap").css("left",res.info.ligntOnDuration+"%")
+                        $("#slideTest_m").children().children().children(".layui-input").val(res.info.ligntOnDuration)
+                    }
+                }
+            });
+        }
     }
 })
 
-function  f(hours,dischargeCapacityList,chargingCapacityList,chargingCurrentList,dischargeCurrentList,batteryVoltageList,ambientTemperatureList,internalTemperatureList,visitorsFlowrateList,inductionFrequencyList,meteorologicalList) {
+function  f(hours,newHours,newH,dischargeCapacityList,chargingCapacityList,chargingCurrentList,dischargeCurrentList,batteryVoltageList,ambientTemperatureList,internalTemperatureList,visitorsFlowrateList,inductionFrequencyList,meteorologicalList) {
 
     var time =hours
+    var time_sky
+    if(newH == "1"){
+        time_sky=newHours
+    }else {
+        time_sky=hours
+    }
+
     //充电量
     var dom = document.getElementById("container");
     var myChart = echarts.init(dom);
@@ -929,7 +833,7 @@ function  f(hours,dischargeCapacityList,chargingCapacityList,chargingCurrentList
         xAxis: {
             type: 'category',
             boundaryGap: false,
-            data: time
+            data: time_sky
         },
         yAxis: {
             type: 'value'
@@ -989,7 +893,7 @@ function  f(hours,dischargeCapacityList,chargingCapacityList,chargingCurrentList
             {
                 type : 'category',
                 boundaryGap : false,
-                data : time
+                data : time_sky
             }
         ],
         yAxis : [
@@ -1047,7 +951,7 @@ function  f(hours,dischargeCapacityList,chargingCapacityList,chargingCurrentList
             {
                 type : 'category',
                 boundaryGap : false,
-                data : time
+                data : time_sky
             }
         ],
         yAxis : [
@@ -1178,7 +1082,30 @@ function  f(hours,dischargeCapacityList,chargingCapacityList,chargingCurrentList
 
 
 
-
+    // 滑动按钮
+    $(".toogle").click(function () {
+        var projectId=$(this).attr("id") //项目id
+        var deviceId=$(this).parent().parent().parent().parent().attr("id");
+        var li_deviceCode=$(this).parent().attr("id");
+        var li_deviceType=$(this).parent().parent().attr("id");
+        var ele = $(this).children(".move");
+        if (ele.attr("data-state") == "1") {
+            ele.animate({left: "15%"}, 300, function () {
+                ele.attr("data-state", "0");
+                var value=[0]
+                off(li_deviceCode,value,li_deviceType,deviceId,projectId)
+            });
+            $(this).removeClass("on").addClass("off");
+            return
+        } else if (ele.attr("data-state") == "0") {
+            ele.animate({left: '50%'}, 300, function () {
+                ele.attr("data-state", "1");
+                var value=[1]
+                off(li_deviceCode,value,li_deviceType,deviceId,projectId)
+            });
+            $(this).removeClass("off").addClass("on");
+        }
+    })
 
 
 

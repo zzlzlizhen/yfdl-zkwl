@@ -44,12 +44,14 @@ public class HistoryServiceImpl implements HistoryService {
         HistoryDay historyDay = new HistoryDay();
         BeanUtils.copyProperties(historyMouth, historyDay);
         historyDay.setDayId(UUID.randomUUID().toString());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String time = sdf.format(historyMouth.getCreateTime());
         //添加日表数据
+        int i = historyDayMapper.countHistoryDayByDeviceCode(historyMouth.getDeviceCode(), time);
         int insert = historyDayMapper.insert(historyDay);
         log.info("日表添加历史数据"+insert);
         if(insert > 0){
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            String time = sdf.format(historyMouth.getCreateTime());
+            i = i + 1;
             historyMouth.setMouthId(UUID.randomUUID().toString());
             List<HistoryMouth> historyMouths = historyMouthMapper.queryHistoryMouth(historyMouth.getDeviceCode(), time);
             HistoryYear historyYear = new HistoryYear();
@@ -57,11 +59,14 @@ public class HistoryServiceImpl implements HistoryService {
             historyYear.setYearId(UUID.randomUUID().toString());
             //代表月表中有数据
             if(historyMouths != null && historyMouths.size() > 0){
-                historyMouth.setTime(time);
+                HistoryMouth month =new HistoryMouth();
+                month.setTime(time);
                 //代表今天已经上报过历史数据，去修改月表中数据
-                historyMouth.setMouthId(historyMouths.get(0).getMouthId());
+                month.setMouthId(historyMouths.get(0).getMouthId());
+                HistoryDay day = historyDayMapper.queryDay(historyMouth.getDeviceCode(), time);
+                BeanUtils.copyProperties(day, month);
                 log.info("修改月表历史数据");
-                int history = historyMouthMapper.updateHistoryByTime(historyMouth);
+                int history = historyMouthMapper.updateHistoryByTime(month);
                 //月表修改成功，查询年表中数据，如果有历史数据，修改年表数据
                 if(history > 0){
                     Date date = historyMouth.getCreateTime();
@@ -69,11 +74,12 @@ public class HistoryServiceImpl implements HistoryService {
                     String mon=String .format("%tm", date);
                     List<HistoryYear> historyYears = historyYearMapper.queryHistoryYear(historyYear.getDeviceCode(), year, mon);
                     if(historyYears != null && historyYears.size() > 0){
-                        historyYear.setYear(year);
-                        historyYear.setMonth(mon);
-                        historyYear.setYearId(historyYears.get(0).getYearId());
+                        HistoryYear newYear = new HistoryYear();
+                        newYear.setYearId(historyYears.get(0).getYearId());
+                        HistoryMouth newMonth = historyMouthMapper.queryMonth(historyYear.getDeviceCode(), year, mon);
+                        BeanUtils.copyProperties(newMonth, newYear);
                         log.info("修改年表历史数据");
-                        return historyYearMapper.updateHistroyByCode(historyYear);
+                        return historyYearMapper.updateHistroyByCode(newYear);
                     }else{
                         log.info("年表中没有数据，添加年表历史数据");
                         return historyYearMapper.insert(historyYear);
@@ -87,11 +93,12 @@ public class HistoryServiceImpl implements HistoryService {
                 String mon=String .format("%tm", date);
                 List<HistoryYear> historyYears = historyYearMapper.queryHistoryYear(historyYear.getDeviceCode(), year, mon);
                 if(historyYears != null && historyYears.size() > 0){
-                    historyYear.setYear(year);
-                    historyYear.setMonth(mon);
-                    historyYear.setYearId(historyYears.get(0).getYearId());
+                    HistoryYear newYear = new HistoryYear();
+                    newYear.setYearId(historyYears.get(0).getYearId());
+                    HistoryMouth newMonth = historyMouthMapper.queryMonth(historyYear.getDeviceCode(), year, mon);
+                    BeanUtils.copyProperties(newMonth, newYear);
                     log.info("月表中没有数据，年表中有数据修改年表历史数据");
-                    return historyYearMapper.updateHistroyByCode(historyYear);
+                    return historyYearMapper.updateHistroyByCode(newYear);
                 }else{
                     log.info("月表中没有数据，年表中有数据年表中没有数据，添加年表历史数据");
                     return historyYearMapper.insert(historyYear);

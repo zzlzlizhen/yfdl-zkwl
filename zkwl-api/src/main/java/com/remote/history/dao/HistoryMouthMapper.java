@@ -26,4 +26,12 @@ public interface HistoryMouthMapper extends BaseMapper<HistoryMouth> {
      * @return int
      **/
     List<HistoryMouth> queryHistoryMouth(@Param("deviceCode") String deviceCode, @Param("time") String time);
+    /*
+     * @Author zhangwenping
+     * @Description 统计月表数据添加给年
+     * @Date 14:40 2019/7/11
+     * @Param deviceCode year month
+     * @return HistoryMouth
+     **/
+    HistoryMouth queryMonth(@Param("deviceCode") String deviceCode, @Param("year") String year, @Param("month") String month);
 }

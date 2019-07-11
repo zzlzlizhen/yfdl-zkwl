@@ -18,11 +18,12 @@
 /*头部*/
 .setting{width:100%;height:70px;background: #fff; position: absolute;box-shadow: 1px 2px 2px 2px rgba(0, 0, 0, 0.35); display: none;}
 .setting span{width:100%;height: 34px;text-align: center;line-height: 34px;float:left;cursor: pointer}
-.setting span:hover{background: #999;color: #fff;}
+.setting span:hover{background: #27E2D4;color: #fff;}
 #nav_a:hover .setting{display: block}
-
+.rquebei,.rquebei{line-height: 36px !important;height: 36px!important;}
 /*基本弹窗*/
 .JI_b,.JI_b_a{width:100%;height:100%;position:absolute;z-index: 22222 ;top:0 ; display: none;}
+.r_beise{width:100%;height:100%;position:absolute;z-index: 999999 ;top:0 ; display: none;}
 .shade,.shade_a{width:100%;height:100%;background: #666; opacity: 0.3;}
 .nei_r,.nei_r_a{width:700px;height:600px; background:#fff;position: absolute;z-index: 222222;top:50%;left:50%;margin:-300px 0px 0px -350px;border-radius: 5px;}
 .nei_r_a{width:500px;margin-left:-250px;}

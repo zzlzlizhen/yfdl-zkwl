@@ -23,7 +23,7 @@
     </resultMap>
 
     <sql id="Base_Column_List" >
-    mouth_id, device_code, discharge_capacity, charging_capacity, charging_current, discharge_current,discharge_current,battery_voltage,ambient_temperature,
+    mouth_id, device_code, discharge_capacity, charging_capacity, charging_current, discharge_current,battery_voltage,ambient_temperature,
     internal_temperature,visitors_flowrate,induction_frequency,meteorological,create_time,fillings_number,discharge_number
     </sql>
 
@@ -38,17 +38,37 @@
     
     <update id="updateHistoryByTime" parameterType="com.remote.history.entity.HistoryMouth">
       update history_mouth set
-          discharge_capacity = discharge_capacity + #{historyMouth.dischargeCapacity},
-          charging_capacity = charging_capacity + #{historyMouth.chargingCapacity},
-          charging_current = charging_current + #{historyMouth.dischargeCurrent},
-          battery_voltage = battery_voltage + #{historyMouth.batteryVoltage},
-          ambient_temperature = ambient_temperature + #{historyMouth.ambientTemperature},
-          internal_temperature = internal_temperature + #{historyMouth.internalTemperature},
-          visitors_flowrate = visitors_flowrate + #{historyMouth.visitorsFlowrate},
-          induction_frequency = induction_frequency + #{historyMouth.inductionFrequency},
-          meteorological = meteorological + #{historyMouth.meteorological},
-          fillings_number = fillings_number + #{historyMouth.fillingsNumber},
-          discharge_number = discharge_number + #{historyMouth.dischargeNumber}
+          discharge_capacity =  #{historyMouth.dischargeCapacity},
+          charging_capacity = #{historyMouth.chargingCapacity},
+          charging_current =  #{historyMouth.dischargeCurrent},
+          battery_voltage = #{historyMouth.batteryVoltage},
+          discharge_current = #{historyMouth.batteryVoltage},
+          ambient_temperature =  #{historyMouth.ambientTemperature},
+          internal_temperature =  #{historyMouth.internalTemperature},
+          visitors_flowrate = #{historyMouth.visitorsFlowrate},
+          induction_frequency = #{historyMouth.inductionFrequency},
+          fillings_number = #{historyMouth.fillingsNumber},
+          discharge_number = #{historyMouth.dischargeNumber}
           where mouth_id = #{historyMouth.mouthId}
     </update>
+
+
+    <select id="queryMonth" resultMap="BaseResultMap">
+        SELECT
+            sum(discharge_capacity) AS discharge_capacity,
+            sum(charging_capacity) AS charging_capacity,
+            sum(induction_frequency) AS induction_frequency,
+            sum(visitors_flowrate) AS visitors_flowrate,
+            sum(fillings_number) AS fillings_number,
+            sum(discharge_number) AS discharge_number,
+			TRUNCATE(avg(charging_current),2) AS charging_current,
+		    TRUNCATE(avg(discharge_current),2)  AS discharge_current,
+            TRUNCATE(avg(battery_voltage),2) AS battery_voltage,
+            TRUNCATE(avg(ambient_temperature),2)   AS ambient_temperature,
+            TRUNCATE(avg(internal_temperature),2)  AS internal_temperature
+        FROM
+         history_mouth
+        where device_code = #{deviceCode}
+        and year(create_time) = #{year} and month(create_time) = #{month}
+    </select>
 </mapper>

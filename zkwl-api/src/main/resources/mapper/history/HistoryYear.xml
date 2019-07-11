@@ -37,16 +37,17 @@
 
     <update id="updateHistroyByCode" parameterType="com.remote.history.entity.HistoryYear">
       update history_year set
-          discharge_capacity = discharge_capacity + #{historyYear.dischargeCapacity},
-          charging_capacity = charging_capacity + #{historyYear.chargingCapacity},
-          charging_current = charging_current + #{historyYear.dischargeCurrent},
-          battery_voltage = battery_voltage + #{historyYear.batteryVoltage},
-          ambient_temperature = ambient_temperature + #{historyYear.ambientTemperature},
-          internal_temperature = internal_temperature + #{historyYear.internalTemperature},
-          visitors_flowrate = visitors_flowrate + #{historyYear.visitorsFlowrate},
-          induction_frequency = induction_frequency + #{historyYear.inductionFrequency},
-          fillings_number = fillings_number + #{historyYear.fillingsNumber},
-          discharge_number = discharge_number + #{historyYear.dischargeNumber}
+          discharge_capacity =  #{historyYear.dischargeCapacity},
+          charging_capacity = #{historyYear.chargingCapacity},
+          charging_current =  #{historyYear.dischargeCurrent},
+          battery_voltage =  #{historyYear.batteryVoltage},
+          discharge_current = #{historyYear.batteryVoltage},
+          ambient_temperature = #{historyYear.ambientTemperature},
+          internal_temperature =  #{historyYear.internalTemperature},
+          visitors_flowrate =  #{historyYear.visitorsFlowrate},
+          induction_frequency = #{historyYear.inductionFrequency},
+          fillings_number =  #{historyYear.fillingsNumber},
+          discharge_number = #{historyYear.dischargeNumber}
           where year_id = #{historyYear.yearId}
     </update>
     

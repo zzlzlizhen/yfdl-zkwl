@@ -203,8 +203,9 @@ $(function(){
                 $("#div").append(html);
                 // 地图定位
                 $(".ma_p").click(function(){
-                    var longitude=$(this).attr("id")
-                    var searchUrl=encodeURI('../equipment/equipment.html?longitude='+longitude)
+                    var longitude=$(this).attr("id");
+                    var name=$(this).parent().siblings("#r_namem").html()
+                    var searchUrl=encodeURI('../equipment/equipment.html?longitude='+longitude+"&name="+name)
                     location.href =searchUrl;
                 })
                 //控制面板

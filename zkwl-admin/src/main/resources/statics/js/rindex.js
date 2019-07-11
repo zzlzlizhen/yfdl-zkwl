@@ -11,7 +11,10 @@ $(function(){
     $(".shade_a,.wrong").click(function(){
         $(".JI_b_a,.nei_r_a").hide()
     })
-
+    //验证码
+    $(".r_beise").click(function(){
+        $(".r_lay,.r_beise").hide()
+    })
 
 //我要反馈
 

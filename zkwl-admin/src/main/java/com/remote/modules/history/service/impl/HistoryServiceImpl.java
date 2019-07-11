@@ -47,14 +47,21 @@ public class HistoryServiceImpl implements HistoryService {
                 queryHistory.getHours().add(substring);
                 queryHistory.getDischargeCapacityList().add(historyDay.getDischargeCapacity());
                 queryHistory.getChargingCapacityList().add(historyDay.getChargingCapacity());
+                queryHistory.getInductionFrequencyList().add(historyDay.getInductionFrequency());
+                queryHistory.getVisitorsFlowrateList().add(historyDay.getVisitorsFlowrate());
+            }
+        }
+        List<HistoryDay> historyDays1 = historyDayMapper.queryDeviceByCode(deviceCode, time);
+        if(CollectionUtils.isNotEmpty(historyDays1)){
+            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+            for(HistoryDay historyDay : historyDays1){
+                String format = dateFormat.format(historyDay.getCreateTime());
+                queryHistory.getNewHours().add(format);
                 queryHistory.getChargingCurrentList().add(historyDay.getChargingCurrent());
                 queryHistory.getDischargeCurrentList().add(historyDay.getDischargeCurrent());
                 queryHistory.getBatteryVoltageList().add(historyDay.getBatteryVoltage());
                 queryHistory.getAmbientTemperatureList().add(historyDay.getAmbientTemperature());
                 queryHistory.getInternalTemperatureList().add(historyDay.getInternalTemperature());
-                queryHistory.getVisitorsFlowrateList().add(historyDay.getVisitorsFlowrate());
-                queryHistory.getInductionFrequencyList().add(historyDay.getInductionFrequency());
-                queryHistory.getMeteorologicalList().add(historyDay.getMeteorological());
             }
         }
         return queryHistory;

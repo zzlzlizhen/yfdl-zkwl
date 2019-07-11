@@ -24,7 +24,7 @@
     </resultMap>
 
     <sql id="Base_Column_List" >
-    day_id, device_code, discharge_capacity, charging_capacity, charging_current, discharge_current,discharge_current,battery_voltage,ambient_temperature,
+    day_id, device_code, discharge_capacity, charging_capacity, charging_current, discharge_current,battery_voltage,ambient_temperature,
     internal_temperature,visitors_flowrate,induction_frequency,meteorological,create_time,fillings_number,discharge_number
     </sql>
 
@@ -32,20 +32,23 @@
         SELECT DATE_FORMAT(create_time, '%Y-%m-%d %H:00:00') AS time,
             sum(discharge_capacity) AS discharge_capacity,
             sum(charging_capacity) AS charging_capacity,
-            sum(charging_current) AS charging_current,
-            sum(discharge_current) AS discharge_current,
-            sum(battery_voltage) AS battery_voltage,
-            sum(ambient_temperature) AS ambient_temperature,
-            sum(internal_temperature) AS internal_temperature,
-            TRUNCATE(avg(visitors_flowrate),2) AS visitors_flowrate,
             sum(induction_frequency) AS induction_frequency,
-            sum(meteorological) as meteorological
+            sum(visitors_flowrate) AS visitors_flowrate
         FROM history_day
         where DATE_FORMAT(create_time,'%Y-%m-%d') = #{time}
         and device_code = #{deviceCode}
         GROUP BY time
         ORDER BY time;
     </select>
+
+    <select id="queryDeviceByCode" resultMap="BaseResultMap" >
+        SELECT create_time,charging_current,discharge_current,battery_voltage,ambient_temperature,
+        internal_temperature
+        FROM history_day
+        where DATE_FORMAT(create_time,'%Y-%m-%d') = #{time}
+        and device_code = #{deviceCode}
+    </select>
+
 
     <select id="queryHistoryDayOther" resultMap="BaseResultMap" >
         SELECT sum(fillings_number) as fillings_number,sum(discharge_number) as discharge_number,device_code

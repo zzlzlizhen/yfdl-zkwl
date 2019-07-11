@@ -73,10 +73,10 @@ public class AdvancedSettingController extends AbstractController{
             advancedSetting.setUid(getUserId());
             if(advancedSettingEntity != null){
                 advancedSetting.setUpdateTime(new Date());
-                R r = initAdvSetEnt(advancedSetting);
+   /*             R r = initAdvSetEnt(advancedSetting);
                 if(!r.isOK()){
                     return R.error(r);
-                }
+                }*/
               /*  advancedSettingService.updateById(advancedSetting);*/
                 falg = advancedSettingService.updateAdvance(advancedSettingEntity.getId(),advancedSetting);
                 if(!falg){
@@ -140,10 +140,10 @@ public class AdvancedSettingController extends AbstractController{
             advancedSetting.setUpdateUser(getUser().getRealName());
             if(advSE != null){
                 advancedSetting.setUpdateTime(new Date());
-                R r = initAdvSetEnt(advancedSetting);
+      /*          R r = initAdvSetEnt(advancedSetting);
                 if(!r.isOK()){
                     return R.error(r);
-                }
+                }*/
                 falg = advancedSettingService.updateAdvance(advSE.getId(),advancedSetting);
                 if(!falg){
                     return R.error("更新数据失败");

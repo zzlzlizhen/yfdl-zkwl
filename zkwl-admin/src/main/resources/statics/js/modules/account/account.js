@@ -56,6 +56,13 @@ $(function () {
                     }else{
                         state="<img src='/remote-admin/statics/image/yichang.png' alt=''>"
                     }
+                    //有效期
+                    var termOfValidity=res.page.list[i].termOfValidity
+                    if(termOfValidity == "0"){
+                        termOfValidity="半"
+                    }else{
+                        termOfValidity=res.page.list[i].termOfValidity
+                    }
 
                     html += " <tr class='r_pw'>\n" +
                         " <td>" + res.page.list[i].userId + "</td>\n" +
@@ -64,7 +71,7 @@ $(function () {
                         "<td>" + res.page.list[i].projectCount + "</td>\n" +
                         "<td>" + res.page.list[i].deviceCount + "</td>\n" +
                         "<td>" + res.page.list[i].createTime + "</td>\n" +
-                        "<td class='r_termof'>" + res.page.list[i].termOfValidity + "年</td>\n" +
+                        "<td class='r_termof'>" + termOfValidity + "年</td>\n" +
                         "<td>"+state+"</td>\n" +
                         "<td>" +
                         "<div class=\"switch\" > \n" +
@@ -121,12 +128,9 @@ $(function () {
                             console.log(res)
                         }
                     })
-
                 }
-
                 //編輯
                 $(".compile").click(function () {
-                    console.log("iiiiiiii")
                     console.log($(".mistake").html())
                     $(".shade,.shade_b").css("display", "block")
                     //id
@@ -147,7 +151,6 @@ $(function () {
                 })
                 //修改管理员
                 $("#sha_que_can").click(function () {
-                    console.log("8888888888888888888888")
                     //账号
                     var na_ma_mod = $("#acc_number_b").val();
                     //用户
@@ -166,11 +169,9 @@ $(function () {
                     //管理者
                     var r_Ad_mod = $("#r_Ad_mod").val();
 
-
                     if (na_ma_mod == "" || r_user_mod == "" || r_pw_mod == "" || r_termof_mod == "" || r_emal_mod == "" || r_typ_mod == "" || r_Ad_mod == "") {
                        $(".rrbol").html("輸入不能為空");
                          lay()
-
                     } else {
                         //    账号
                         if (!patrn3.exec(na_ma_mod)) {
@@ -186,7 +187,6 @@ $(function () {
                             $(".mistake").css("display","block");
                             return false;
                         }
-
                         //    密码
                         if (!patrn5.exec(r_pw_mod)) {
                             $(".rrbol").html("密码错误");
@@ -208,7 +208,6 @@ $(function () {
                             $(".rrbol").html("手机号错误");
                             $(".mistake").css("display","block");
                             return false;
-
                         }
 
                         $.ajax({

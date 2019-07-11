@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class testAdvanced {
     private static final String baseURL="127.0.0.1:8080/remote-admin";
-    private static final String CURRENT_COOKIE = "JSESSIONID=f66f11f7-96a0-4954-955d-cf87f8ce0c48";
+    private static final String CURRENT_COOKIE = "JSESSIONID=bb96fe6e-2895-4cae-8a47-56fb9ad7f3ee";
     @Test
     public void testChange(){
         String url = baseURL + "/fun/device/change";
