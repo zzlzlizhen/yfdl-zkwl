@@ -77,7 +77,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
     @Override
     public List<SysUserEntity> queryUserList(Map<String, Object> params) {
         String allParentId =(String)params.get("allParentId");
-        long userId = Long.parseLong(params.get("curCserId")+"") ;//当前登录用户id
+        long userId = Long.parseLong(params.get("curUserId")+"") ;//当前登录用户id
         String realName = (String)params.get("realName");
         return this.baseMapper.selectList(new QueryWrapper<SysUserEntity>().eq("flag",1)
                 .and(new Function<QueryWrapper<SysUserEntity>, QueryWrapper<SysUserEntity>>() {
@@ -97,7 +97,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
         //List<SysUserEntity> list = this.baseMapper.selectList(new QueryWrapper<SysUserEntity>().eq("parent_id",sysUserEntity.getUserId()));
         return sysUserDao.queryChild(sysUserEntity);
     }
-
+    /**
+     * 通过用户id 删除用户
+     * */
+    @Override
+    public int removeUser(Long userId) {
+        SysUserEntity userEntity = new SysUserEntity();
+        userEntity.setFlag(0);
+        return this.baseMapper.update(userEntity,
+                new QueryWrapper<SysUserEntity>().eq("user_id", userId));
+    }
     /*
     * 通过用户id查询所有自身和子孙用户
     * */
@@ -109,8 +118,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
     @Override
     public void saveUser(SysUserEntity user) {
         user.setCreateTime(new Date());
-        user.setDeviceCount(0);
-        user.setProjectCount(0);
+       /* user.setDeviceCount(0);
+        user.setProjectCount(0);*/
         user.setDeptId(1L);
         if(!StringUtils.isBlank(user.getRealName())){
             user.setRealName(user.getRealName());

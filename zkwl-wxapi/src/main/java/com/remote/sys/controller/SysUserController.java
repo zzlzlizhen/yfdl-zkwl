@@ -1,6 +1,7 @@
 
 package com.remote.sys.controller;
 
+import cn.hutool.core.util.StrUtil;
 import com.remote.common.utils.DateUtils;
 import com.remote.common.utils.PageUtils;
 import com.remote.common.utils.R;
@@ -10,8 +11,11 @@ import com.remote.common.validator.ValidatorUtils;
 import com.remote.common.validator.group.AddGroup;
 import com.remote.sys.entity.SysUserEntity;
 import com.remote.sys.service.SysUserService;
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -31,7 +35,7 @@ public class SysUserController extends AbstractController {
 	/**
      * 获取所有的用户名
      * */
-	@RequestMapping("/nameList")
+/*	@RequestMapping("/nameList")
 	public R list(@RequestParam Map<String, Object> params){
 		List<SysUserEntity> sysUserEntities = sysUserService.queryUserList(params);
 		List<String> realName = new ArrayList<String>();
@@ -43,6 +47,25 @@ public class SysUserController extends AbstractController {
 			}
         }
         return R.ok().put("realName",realName);
+	}*/
+	/**
+	 * 获取所有的用户名
+	 * */
+	@RequestMapping("/nameList")
+	public R list(@RequestParam Map<String, Object> params){
+		List<SysUserEntity> sysUserEntities = sysUserService.queryUserList(params);
+	/*	List<String> realName = new ArrayList<String>();
+        for(SysUserEntity sysUserEntity:sysUserEntities){
+        	if(sysUserEntity.getRealName().equals("")){
+        		realName.add("");
+			}else{
+				realName.add(sysUserEntity.getRealName());
+			}
+        }*/
+		if(CollectionUtils.isEmpty(sysUserEntities)){
+			return R.ok("用户信息不存在");
+		}
+		return R.ok().put("user",sysUserEntities);
 	}
 	/**
 	 * 当前用户跟下级用户
@@ -69,4 +92,22 @@ public class SysUserController extends AbstractController {
 		sysUserService.saveUser(user);
 		return R.ok();
 	}
+	/**
+	 * 删除用户
+	 */
+	@RequestMapping(value = "/delete" ,method = RequestMethod.POST)
+	public R delete(Long userId,Long curUserId){
+		if(userId==1L){
+			return R.error("系统管理员不能删除");
+		}
+		if(userId == curUserId){
+			return R.error("当前用户不能删除");
+		}
+		int falg = sysUserService.removeUser(userId);
+		if(falg < 0){
+			return R.error("删除失败");
+		}
+		return R.ok();
+	}
+
 }

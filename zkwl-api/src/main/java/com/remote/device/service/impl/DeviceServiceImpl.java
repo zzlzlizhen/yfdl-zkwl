@@ -81,7 +81,7 @@ public class DeviceServiceImpl implements DeviceService {
         Integer loadState = deviceEntity.getLoadState();
         Integer batteryState = deviceEntity.getBatteryState();
         Integer photocellState = deviceEntity.getPhotocellState();
-
+        deviceEntity.setRunState(RunStatusEnum.NORAML.getCode());
         //运行状态为正常
         if((loadState == LoadStatusEnum.SHUT.getCode() || loadState == LoadStatusEnum.OPEN.getCode()) &&
                 (batteryState == BatteryStatusEnum.UNDERVOLTAGE.getCode() || batteryState == BatteryStatusEnum.NORMAL.getCode() || batteryState == BatteryStatusEnum.LIMITING.getCode()) &&

@@ -145,6 +145,8 @@ $(function(){
                         runState = "报警";
                     }else if(runState == 3) {
                         runState = "故障";
+                    }else if(runState == 4) {
+                        runState = "离线";
                     }
 
                     //通讯类型
@@ -183,10 +185,14 @@ $(function(){
 
                     html += "<tr>\n" +
                         "<td id="+res.data.list[i].deviceId+" style=\"width:4%;\"> <input type= \"checkbox\" name='clk' class=\"checkbox_in  checkbox_i\"> </td>\n" +
-                        "<td id='r_nm'>"+res.data.list[i].deviceCode+"</td>\n" +
+                        "<td id='r_nm' class='r_nm'>"+res.data.list[i].deviceCode+"" +
+                        " <span class='Xufu' id="+res.data.list[i].deviceName+">"+res.data.list[i].deviceCode+"</span>" +
+                        "</td>\n" +
                         "<td style=\"width:10%;\" class='r_name' id='r_namem'>"+res.data.list[i].deviceName+"</td>\n" +
                         "<td class='grod' id="+res.data.list[i].groupId+">"+res.data.list[i].groupName+"</td>\n" +
-                        "<td class='type'>"+res.data.list[i].deviceType+"</td>\n" +
+                        "<td class='type'>"+res.data.list[i].deviceTypeName+"" +
+                        " <span class='Xufu_type' id="+res.data.list[i].deviceCode+">"+res.data.list[i].deviceTypeName+"</span>" +
+                        "</td>\n" +
                         "<td>"+photocellState+" </td>\n" +
                         "<td>"+batteryState+"</td>\n" +
                         "<td>"+loadState+"</td>\n" +
@@ -198,7 +204,7 @@ $(function(){
                         "<a href=\"#\" class='particulars_a' ><img src='/remote-admin/statics/image/r_kongzhi.svg' alt='' class='r_erkongzhi'></a>\n" +
                         "<a href=\"#\" class='particulars' id="+res.data.list[i].deviceId+"><img src='/remote-admin/statics/image/bianji.png' alt=''></a>\n" +
                         "<a href=\"#\" class='ma_p' id="+res.data.list[i].longitude+","+res.data.list[i].latitude+"><img src='/remote-admin/statics/image/ditu.svg' alt=''style='width: 25px;height:25px;'></a>\n" +
-                        "<a href='' class='deleteq'><img src='/remote-admin/statics/image/shanchu.png' alt=''></a>\n" +
+                        "<a class='deleteq'><img src='/remote-admin/statics/image/shanchu.png' alt=''></a>\n" +
                         "</td>\n" +
                         "</tr>"
                 //修改样式<span class="glyphicon glyphicon-search"></span>
@@ -207,6 +213,15 @@ $(function(){
 
                 }
                 $("#div").append(html);
+                //hover
+                $(".type,.r_nm").hover(function(){
+                    var c_la=$(this).children().attr("id");
+                    $("#"+c_la).show()
+                },function(){
+                    var c_la=$(this).children().attr("id");
+                    $("#"+c_la).hide()
+                });
+
                 // 地图定位
                 $(".ma_p").click(function(){
                     var longitude=$(this).attr("id");
@@ -234,10 +249,7 @@ $(function(){
                             $(this).prop("checked",true);
                             var devId=$(this).parent().attr('id');
                             console.log("全选1")
-                            console.log(devId)
                             arr.push(devId)
-                            console.log(arr)
-
                             var len=arr.length;
                             $("#mo_sp").html(len+"项")
                             $(".move_a").show()
@@ -246,8 +258,9 @@ $(function(){
                         $('input[name="clk"]').each(function(){
                             $(this).prop("checked",false);
                             var devId=$(this).parent().attr('id');
-                            console.log("全选2")
-                            console.log(devId)
+                            arr=[]
+                            $("#mo_sp").html(""+"项")
+                            $(".move_a").hide()
                         });
                     }
                 });
@@ -293,9 +306,17 @@ $(function(){
                     ids = ids.substr(0,ids.length - 1);
                     dele(ids);
                 })
+                //删除彈窗/////////////////////
+                $(".shade_a_delete,.sha_cancel_delete,.guan_sha").click(function () {
+                    $(".shade_delete,.shade_b_delete").css("display", "none")
+                })
                 //   删除
+                var Dele_id
                 $(".deleteq").click(function(){
-                    var Dele_id=$(this).parent().attr('id');
+                    $(".shade_delete,.shade_b_delete").css("display", "block");
+                    Dele_id=$(this).parent().attr('id');
+                })
+                $(".sha_que_delete").click(function(){
                     dele(Dele_id);
                 })
                 function dele(Dele_id){
@@ -383,6 +404,9 @@ $(function(){
                      proid=$(this).parent().attr('id');
                     var  r_namem = $(this).parent().siblings("#r_namem").html();
                     $(".pro_s_b").val(r_namem)
+                    var r_rrena = $(this).parent().siblings(".grod").html();
+                    $("#select1_b option:selected").text(r_rrena);
+
                     fen()
                 })
 
@@ -494,6 +518,10 @@ $(function(){
             })
         }
 
+    })
+    //确定删除
+    $(".rqubtn,.shade_a_delete").click(function () {
+        $(".shade_delete,.shade_b_delete").css("display", "none")
     })
 //编辑去弹窗/////////////////////////////////
     $(".shade_modifier_project").click(function(){

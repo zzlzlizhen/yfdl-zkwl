@@ -14,6 +14,8 @@ $(function() {
     });
 
 
+
+
     r_fenye(10,1)
     //系统消息
     function r_fenye(pageSizea, pagesa){
@@ -40,10 +42,7 @@ $(function() {
                         "</li>"
                 }
                 $(".r_op>ul").append(inhtml);
-                //    详情
-                $(".r_details").click(function(){
-                    $(".shade_project,.shade_b_project_r").css("display","block");
-                })
+
                 //  分頁
                 $("#pagination5").pagination({
                     currentPage: pagesb,
@@ -88,24 +87,64 @@ $(function() {
                       "</p>"+
                       " <div>"+
                       "<span >"+ res.page.list[i].backCreateTime+"</span>"+
-                      "<span class='r_details' id="+ res.page.list[i].backId+">详情</span>"+
+                      "<span class='r_details' id="+ res.page.list[i].backId+"><img src='/remote-admin/statics/image/rxiangqing.png' alt=''> 详情</span>"+
                       "</div>"+
                       "</li>"
               }
 
               $(".r_llis>ul").append(html);
+              //未读条数
+              $.ajax({
+                  url: baseURL + 'sys/feedback/queryCount ',
+                  type: "GET",
+                  success: function (res) {
+                      var r_num_in = res.queryCount;
+                      $("#r_num_in").html(r_num_in)
+                      if(res.code == "200"){
+                          console.log(res)
+                      }else{
+                          alert("失败")
+                      }
+
+                  }
+              })
               // 详情
+              var backId
               $(".r_details").click(function(){
                   $(".shade_project,.shade_b_project_r").css("display","block");
-                  // var r_tents=$("#r_tents").html()
-                  // var r_const= $("#r_const").html()
-                  // var r_imes=$("#r_imes").html()
-                  // var r_emls=$("#r_emls").html()
-                  // var r_moes=$("#r_moes").html()
-                  // var r_imgs=$("#r_imgs").attr("src");
-                  var backId=$(this).attr("id")
+                  backId=$(this).attr("id")
                   rdele(backId);
               })
+
+              $("#huifue").click(function(){
+                  $(".roi").css("display","none")
+                  $(".ryu").css("display","block")
+              })
+              $('#project_confirme').click(function(){
+                  console.log(backId)
+                  var rcon = $(".r_tex_bo").val()
+                  console.log(rcon)
+                  $.ajax({
+                      url: baseURL + 'sys/feedback/update',
+                      type: "POST",
+                      data:
+                          "&backId=" + backId +
+                          "&answerContent=" + rcon ,
+                      success: function (res) {
+                          console.log(res)
+                          if(res.code == "200"){
+                              $(".shade_project").css("display","none")
+                              $(".roi").css("display","none")
+                              $(".ryu").css("display","block")
+                          }else{
+                              alert("失败")
+                          }
+                      }
+                  })
+              })
+
+
+
               function rdele(backId){
                   console.log(backId)
                   $.ajax({
@@ -159,5 +198,17 @@ $(function() {
     //详情去弹窗
     $(".shade_add_project,.glyphicon,.r_yes").click(function(){
         $(".shade_project").css("display","none")
+        $(".roi").css("display","none")
+        $(".ryu").css("display","block")
     })
+
+    //回复
+    $('.sha_buttom').find('div').click(function(){
+        var index = $(this).index();
+        console.log(index)
+        // $(this).addClass('active').siblings().removeClass('active');
+        $('.r_xc').find('.rionbo').eq(index).show().siblings().hide();
+    })
+
+
 })

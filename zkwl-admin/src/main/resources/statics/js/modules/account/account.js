@@ -221,7 +221,7 @@ $(function () {
                             "&headUrl=" + "" +
                             "&realName=" + r_user_mod +
                             "&termOfValidity=" + termOfValidity +
-                            "&type=" + r_Ad_mod,
+                            "&roleId=" + r_Ad_mod,
                             success: function (res) {
                                 console.log(JSON.stringify(res));
                                 if (res.code == "200") {
@@ -298,8 +298,10 @@ $(function () {
     $("#shade_a,.sha_cancel,.guan_shc").click(function () {
         $(".shade,.shade_b").css("display", "none")
     })
-
-
+//删除确定弹窗
+// $(".layui-layer-btn0").click(function(){
+//     $("#layui-layer1").css("display", "none")
+// })
     //删除彈窗/////////////////////
     $(".shade_a_delete,.sha_cancel_delete,.guan_sha").click(function () {
         $(".shade_delete,.shade_b_delete").css("display", "none")

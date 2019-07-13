@@ -346,4 +346,9 @@
             </foreach>
         </if>
     </select>
+
+
+    <select id="getDeviceByDeviceCode" resultType="java.lang.Integer">
+        select count(1) from fun_device where is_del = 0 and device_code = #{deviceCode}
+    </select>
 </mapper>

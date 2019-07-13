@@ -458,11 +458,13 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
         //缓存中取出数据
         CacheUtils cacheUtils = (CacheUtils)SpringUtils.getBean("cacheUtils");
-        String deviceCode = cacheUtils.get(ctx.channel().id().asShortText()).toString();
         String socketString = ctx.channel().remoteAddress().toString();
         if (evt instanceof IdleStateEvent) {
             IdleStateEvent event = (IdleStateEvent) evt;
             if (event.state() == IdleState.READER_IDLE) {
+                String deviceCode = cacheUtils.get(ctx.channel().id().asShortText()).toString();
+                DeviceService deviceService = (DeviceService)SpringUtils.getBean("deviceServiceImpl");
+                deviceService.updateDeviceTimeOutByCode(deviceCode);
                 log.info("Client: " + socketString + " READER_IDLE 读超时");
                 ctx.close();
             } else if (event.state() == IdleState.WRITER_IDLE) {
@@ -482,7 +484,11 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-
+        //缓存中取出数据
+        CacheUtils cacheUtils = (CacheUtils)SpringUtils.getBean("cacheUtils");
+        String deviceCode = cacheUtils.get(ctx.channel().id().asShortText()).toString();
+        DeviceService deviceService = (DeviceService)SpringUtils.getBean("deviceServiceImpl");
+        deviceService.updateDeviceTimeOutByCode(deviceCode);
         ctx.close();
         CHANNEL_MAP.remove(ctx.channel().id().asShortText());
         log.info(ctx.channel().id() + " 发生了错误,此连接被关闭" + "此时连通数量: " + CHANNEL_MAP.size());

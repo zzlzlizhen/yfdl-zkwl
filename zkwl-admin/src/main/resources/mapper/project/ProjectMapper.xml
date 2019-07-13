@@ -105,6 +105,9 @@
             <if test="projectStatus != null">
                 project_status = #{projectStatus},
             </if>
+            <if test="create_user != null">
+                create_user = #{exclusiveUser},
+            </if>
             update_user = #{updateUser},
             update_time = now()
         </set>

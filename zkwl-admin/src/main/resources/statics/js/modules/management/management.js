@@ -118,11 +118,7 @@ $(function () {
                         $('input[name="clk"]').each(function(){
                             $(this).prop("checked",true);
                             var devId=$(this).parent().attr('id');
-                            console.log("组全选1")
-                            console.log(devId)
                             arr.push(devId)
-                            console.log(arr)
-
                             var len=arr.length;
                             $("#mo_sp").html(len+"项")
                             $(".move_a").show()
@@ -131,8 +127,9 @@ $(function () {
                         $('input[name="clk"]').each(function(){
                             $(this).prop("checked",false);
                             var devId=$(this).parent().attr('id');
-                            console.log("组全选2")
-                            console.log(devId)
+                            arr=[]
+                            $("#mo_sp").html(""+"项")
+                            $(".move_a").hide()
                         });
                     }
                 });
@@ -177,10 +174,16 @@ $(function () {
                     dele(ids)
                 })
                 //    删除
+                var aproid
                 $(".deleteq").click(function () {
-                    var aproid = $(this).parent().attr('id');
+                    $(".shade_delete,.shade_b_delete").css("display", "block");
+                    aproid = $(this).parent().attr('id');
+                })
+
+                $(".sha_que_delete").click(function(){
                     dele(aproid)
                 })
+
                 function dele(aproid){
                     $.ajax({
                         url: baseURL + 'fun/group/delete?groupIds=' + aproid + "&projectId=" + Id,
@@ -209,6 +212,9 @@ $(function () {
                 $(".modifier").click(function () {
                     $(".shade_modifier,.shade_b_modifier").css("display", "block");
                     proid = $(this).parent().attr('id');
+                    var r_inhtml = $(this).parent().siblings(".groupName").html();
+                    $(".pro_s_b").val(r_inhtml)
+
                 })
                 $("#confirm_man").click(function () {
                     var pro_s_b = $(".pro_s_b").val();
@@ -259,6 +265,14 @@ $(function () {
 
     //    表格结束
     }
+    //确定删除
+    $(".rqubtn,.shade_a_delete").click(function () {
+        $(".shade_delete,.shade_b_delete").css("display", "none")
+    })
+    //删除彈窗/////////////////////
+    $(".glyphicon ,.glyphicon-remove ,.guan_sha").click(function () {
+        $(".shade_delete,.shade_b_delete").css("display", "none")
+    })
     //添加
     $("#add_grouping").click(function(){
         $(".shade_project,.shade_b_project").css("display","block");

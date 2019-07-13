@@ -11,8 +11,8 @@ import java.util.concurrent.ConcurrentHashMap;
  **/
 @Component
 public class DeviceTypeMap {
-    public static final ConcurrentHashMap<String, Integer> DEVICE_TYPE = new ConcurrentHashMap<>();
+    public static final ConcurrentHashMap<String, String> DEVICE_TYPE = new ConcurrentHashMap<>();
     static {
-        DEVICE_TYPE.put("LADG",1); //代表路灯设备
+        DEVICE_TYPE.put("1","GPRS-40W-路灯");
     }
 }

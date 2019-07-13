@@ -1,5 +1,6 @@
 package com.remote;
 
+import com.remote.common.netty.NettyServer;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,9 +17,7 @@ public class App implements CommandLineRunner {
     }
     @Override
     public void run(String... args) throws Exception {
-       /* Thread server = new Thread(new NettyServer(2001));
-        server.start();*/
-        Thread server = new Thread(new MqttTask());
+        Thread server = new Thread(new NettyServer(2001));
         server.start();
     }
 

@@ -19,8 +19,8 @@ html,body{width:100% !important;height:100% !important;margin:0;padding:0;font-s
     color: #666 !important;
 }
 .on {display:block;}
-.tab li.cur {border-bottom: 2px solid rgba(24, 144, 255, 1);}
-.Shu_r{width:100%;height:18%;float:left;border-bottom: 10px solid rgba(242, 242, 242, 1);background: #fff;}
+/*.tab li.cur {border-bottom: 2px solid rgba(24, 144, 255, 1);}*/
+.Shu_r{width:100%;height:107px;float:left;border-bottom: 10px solid rgba(242, 242, 242, 1);background: #fff;}
 
 .form_input{margin:0;padding: 0;}
 .sele_con{width:10%;margin-top: 2.2%; float:left;}
@@ -37,7 +37,7 @@ html,body{width:100% !important;height:100% !important;margin:0;padding:0;font-s
 .r-load{width: 54.5%;height: auto;float: left;}
 .r-heade,.r-Lamp-head{width: 100%;height:37px ;background: #D9F8F7;border: 1px solid #CCCCCC;line-height:37px;text-indent:25px;border-radius: 8px 8px 0 0;border-bottom: 0px;}
 .r-Battery-tw-con{border: 1px solid #CCCCCC;border-radius:0 0 8px 8px ;float: left;border-top: 0px;background: #fff;height: 327px}
-.r-content{width:100%;float:left;height:624px;background: #fff;border: 1px solid #CCCCCC;border-radius: 0 0 8px 8px;padding-bottom: 17px;border-top: 0px;margin-bottom: 200px}
+.r-content{width:100%;float:left;height:624px;background: #fff;border: 1px solid #CCCCCC;border-radius: 0 0 8px 8px;padding-bottom: 17px;border-top: 0px;margin-bottom: 120px}
 .le-con{width:50%;font-size: 12px;float: left;margin: 3% 0px 0px 0%;}
 .le-con > p{width: 100%;display:block;height: 50px;line-height: 50px;}
 .le-con > div{display: flex;align-items: center;height: 50px;}
@@ -70,8 +70,8 @@ spinner {width: 100px;}
 .input-group-btn-vertical > .btn:last-child {margin-top: -2px;border-bottom-right-radius: 4px;}
 .input-group-btn-vertical i{position: absolute;top: 0;left: 4px;}
 /*蓄电池*/
-.m_in{margin: 2% 1% 0px 1%;width:44%;line-height: 28px;}
-.r-Battery-tw{width: 44.5%;height: 420px;float: right;margin-top: 57px;}
+.m_in{margin: 2% 1% 0px 1%;width:49%;line-height: 28px;}
+.r-Battery-tw{width: 44.5%;height: 420px;float: right;margin-top: 98px;}
 
 /*光电池*/
 .r-Battery{width: 44.5%;height: 197px;float: right;}
@@ -97,7 +97,7 @@ spinner {width: 100px;}
 .r-Battery-rge > div{height: 50px;}
 .layui-slider-input-txt input{text-align: right;}
 .r-bt > input{display: inline-block;}
-.r-Battery-rge span{float: left;line-height:40px;width:31%;height: 50px ;line-height: 50px;}
+.r-Battery-rge span{float: left;line-height:40px;width:31%;height: 50px ;line-height: 50px;font-size: 12px;}
 .r-Battery-rge span>i{color: red;}
 
 /*进度条内容*/
@@ -125,7 +125,7 @@ spinner {width: 100px;}
 .r-Lamp-Progress div p{width:auto;float: left;margin-left: 1%;}
 .r-Lamp-Progress div>span{float: left;width:78px;height:100%;margin-left: 3%;}
 .r-Lamp-Progress div>.progress{float: left;margin-top: 19px;}
-.r-Battery-lef div span{width:29%;height: 100%;float: left;line-height: 50px;margin:0px 3% 0px 6%;}
+.r-Battery-lef div span{width:29%;height: 100%;float: left;line-height: 50px;margin:0px 3% 0px 6%;font-size: 12px;}
 .r-Battery-lef span>i,.r-Battery-reg i{color:red;}
 .de_i{margin-left:14% !important;}
 /*丸子*/
@@ -163,7 +163,7 @@ spinner {width: 100px;}
     background-size: 100%;
 }
 .rqubtn{
-    background: url('/remote-admin/statics/image/r_quxiao.png')no-repeat center;
+    background: url('/remote-admin/statics/image/sousuo-1.png')no-repeat center;
     width: 99px;
     height: 45px;
     float: left;

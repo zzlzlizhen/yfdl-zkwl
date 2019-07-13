@@ -2,6 +2,7 @@ package com.remote.device.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.remote.common.utils.ValidateUtils;
 import com.remote.device.dao.DeviceMapper;
 import com.remote.device.entity.DeviceEntity;
 import com.remote.device.entity.DeviceQuery;
@@ -42,16 +43,10 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public boolean addDevice(DeviceEntity deviceEntity) {
-        String deviceCode = deviceEntity.getDeviceCode();
         //目前只有一种产品，2G 日后在添加其他产品
         deviceEntity.setCommunicationType(CommunicationEnum.NORMAL.getCode());
-        String deviceType = deviceCode.substring(0, 4);
-        if(DEVICE_TYPE.get(deviceType) != null){
-            deviceEntity.setDeviceType(DEVICE_TYPE.get(deviceType).toString());
-            return deviceMapper.insert(deviceEntity) > 0 ? true : false;
-        }else{
-            return false;
-        }
+        deviceEntity.setDeviceType("1");
+        return deviceMapper.insert(deviceEntity) > 0 ? true : false;
     }
 
     @Override

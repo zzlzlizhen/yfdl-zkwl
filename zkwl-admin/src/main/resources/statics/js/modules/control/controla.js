@@ -787,6 +787,7 @@ function  f(hours,newHours,newH,dischargeCapacityList,chargingCapacityList,charg
             {
                 name: '充电量',
                 type: 'bar',
+                smooth: true,
                 barGap: 0,
                 label: labelOption,
                 data: chargingCapacityList
@@ -794,6 +795,7 @@ function  f(hours,newHours,newH,dischargeCapacityList,chargingCapacityList,charg
             {
                 name: '放电量',
                 type: 'bar',
+                smooth: true,
                 label: labelOption,
                 data: dischargeCapacityList
             }
@@ -835,6 +837,16 @@ function  f(hours,newHours,newH,dischargeCapacityList,chargingCapacityList,charg
             boundaryGap: false,
             data: time_sky
         },
+        dataZoom: [{
+            type: 'slider',
+            show: true,
+            xAxisIndex: [0],
+            left: '9%',
+            bottom: -8,
+            height: '8%',//组件高度
+            start: 5,
+            end:80 //初始化滚动条
+        }],
         yAxis: {
             type: 'value'
         },
@@ -842,15 +854,18 @@ function  f(hours,newHours,newH,dischargeCapacityList,chargingCapacityList,charg
             {
                 name:'充电电流',
                 type:'line',
+                smooth: true,
                 stack: '总量',
                 data:chargingCurrentList
             },
             {
                 name:'放电电流',
                 type:'line',
+                smooth: true,
                 stack: '总量',
                 data:dischargeCurrentList
             },
+
         ]
     };
     if (option_z && typeof option_z === "object") {
@@ -896,6 +911,16 @@ function  f(hours,newHours,newH,dischargeCapacityList,chargingCapacityList,charg
                 data : time_sky
             }
         ],
+        dataZoom: [{
+            type: 'slider',
+            show: true,
+            xAxisIndex: [0],
+            left: '9%',
+            bottom: -8,
+            height: '8%',//组件高度
+            start: 5,
+            end:80 //初始化滚动条
+        }],
         yAxis : [
             {
                 type : 'value'
@@ -906,6 +931,7 @@ function  f(hours,newHours,newH,dischargeCapacityList,chargingCapacityList,charg
                 name:'电池电压',
                 type:'line',
                 stack: '总量',
+                smooth: true,
                 areaStyle: {},
                 data:batteryVoltageList
             },
@@ -954,6 +980,16 @@ function  f(hours,newHours,newH,dischargeCapacityList,chargingCapacityList,charg
                 data : time_sky
             }
         ],
+        dataZoom: [{
+            type: 'slider',
+            show: true,
+            xAxisIndex: [0],
+            left: '9%',
+            bottom: -8,
+            height: '8%',//组件高度
+            start: 5,
+            end:80 //初始化滚动条
+        }],
         yAxis : [
             {
                 type : 'value'
@@ -964,6 +1000,7 @@ function  f(hours,newHours,newH,dischargeCapacityList,chargingCapacityList,charg
                 name:'环境温度',
                 type:'line',
                 stack: '总量',
+                smooth: true,
                 areaStyle: {},
                 data:ambientTemperatureList,
             },
@@ -971,6 +1008,7 @@ function  f(hours,newHours,newH,dischargeCapacityList,chargingCapacityList,charg
                 name:'内部温度',
                 type:'line',
                 stack: '总量',
+                smooth: true,
                 areaStyle: {},
                 data:internalTemperatureList
             },
@@ -1018,12 +1056,14 @@ function  f(hours,newHours,newH,dischargeCapacityList,chargingCapacityList,charg
             {
                 name:'人流量',
                 type:'line',
+                smooth: true,
                 stack: '总量',
                 data:visitorsFlowrateList
             },
             {
                 name:'感应次数',
                 type:'line',
+                smooth: true,
                 stack: '总量',
                 data:inductionFrequencyList
             },
@@ -1071,6 +1111,7 @@ function  f(hours,newHours,newH,dischargeCapacityList,chargingCapacityList,charg
             {
                 name:'气象信息',
                 type:'line',
+                smooth: true,
                 stack: '总量',
                 data:meteorologicalList
             }
@@ -1079,38 +1120,5 @@ function  f(hours,newHours,newH,dischargeCapacityList,chargingCapacityList,charg
     if (option_t && typeof option_t === "object") {
         myChart_t.setOption(option_t, true);
     }
-
-
-
-    // 滑动按钮
-    $(".toogle").click(function () {
-        var projectId=$(this).attr("id") //项目id
-        var deviceId=$(this).parent().parent().parent().parent().attr("id");
-        var li_deviceCode=$(this).parent().attr("id");
-        var li_deviceType=$(this).parent().parent().attr("id");
-        var ele = $(this).children(".move");
-        if (ele.attr("data-state") == "1") {
-            ele.animate({left: "15%"}, 300, function () {
-                ele.attr("data-state", "0");
-                var value=[0]
-                off(li_deviceCode,value,li_deviceType,deviceId,projectId)
-            });
-            $(this).removeClass("on").addClass("off");
-            return
-        } else if (ele.attr("data-state") == "0") {
-            ele.animate({left: '50%'}, 300, function () {
-                ele.attr("data-state", "1");
-                var value=[1]
-                off(li_deviceCode,value,li_deviceType,deviceId,projectId)
-            });
-            $(this).removeClass("off").addClass("on");
-        }
-    })
-
-
-
-
-
-
 
 }

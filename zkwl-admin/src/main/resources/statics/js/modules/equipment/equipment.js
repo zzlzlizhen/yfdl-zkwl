@@ -149,15 +149,15 @@ $(function () {
                                                         "<div class=\"nav_pro_v_b nav_bb\" id="+res.data[i].longitude+">\n" +
                                                         "<div class=\"nav_project nav_pro_she\"  id="+res.data[i].groupId+">设备名称："+res.data[i].deviceName+"</div>\n" +
                                                         "<p class=\"nav_pro_p\" id="+res.data[i].latitude+">运行状态："+ res.data[i].runState+"</p>\n" +
-                                                        "<div class=\"swa\" id=" + res.data[i].deviceType + "> \n" +
-                                                        "<div class=\"switcha\" id=" + res.data[i].deviceCode + "> \n" +
-                                                        "<div class='" + offClass + "' id=" + res.data[i].projectId + " > \n" +
-                                                        "<div class=\"move\"  data-state=" + res.data[i].onOff + "></div> \n" +
-                                                        "<div class=\"btnSwitch btn1\"></div> \n" +
-                                                        "<div class=\"btnSwitch btn2 \"></div> \n" +
-                                                        "</div> " +
-                                                        "</div>\n" +
-                                                        "</div>\n" +
+                                                        // "<div class=\"swa\" id=" + res.data[i].deviceType + "> \n" +
+                                                        // "<div class=\"switcha\" id=" + res.data[i].deviceCode + "> \n" +
+                                                        // "<div class='" + offClass + "' id=" + res.data[i].projectId + " > \n" +
+                                                        // "<div class=\"move\"  data-state=" + res.data[i].onOff + "></div> \n" +
+                                                        // "<div class=\"btnSwitch btn1\"></div> \n" +
+                                                        // "<div class=\"btnSwitch btn2 \"></div> \n" +
+                                                        // "</div> " +
+                                                        // "</div>\n" +
+                                                        // "</div>\n" +
                                                         "</li>\n"
                                                     var locon={y:res.data[i].longitude,x:res.data[i].latitude,title:"L",con:res.data[i].createTime,branch:res.data[i].deviceName}
                                                     arr.push(locon) //push经纬度
@@ -169,63 +169,63 @@ $(function () {
                                                 history("",groupId,"")//历史数据、高级设置
 
                                                 // 滑动按钮
-                                                $(".toogle").click(function () {
-                                                    var projectId=$(this).attr("id") //项目id
-                                                    var deviceId=$(this).parent().parent().parent().parent().attr("id");
-                                                    var li_deviceCode=$(this).parent().attr("id");
-                                                    var li_deviceType=$(this).parent().parent().attr("id");
-                                                    var ele = $(this).children(".move");
-                                                    if (ele.attr("data-state") == "1") {
-                                                        ele.animate({left: "15%"}, 300, function () {
-                                                            ele.attr("data-state", "0");
-                                                            var value=[0]
-                                                            off(li_deviceCode,value,li_deviceType,deviceId,projectId)
-                                                        });
-                                                        $(this).removeClass("on").addClass("off");
-                                                        return
-                                                    } else if (ele.attr("data-state") == "0") {
-                                                        ele.animate({left: '50%'}, 300, function () {
-                                                            ele.attr("data-state", "1");
-                                                            var value=[1]
-                                                            off(li_deviceCode,value,li_deviceType,deviceId,projectId)
-                                                        });
-                                                        $(this).removeClass("off").addClass("on");
-                                                    }
-                                                })
-                                                function  off(li_deviceCode,value,li_deviceType,deviceId,projectId){
-                                                    var ass=[]
-                                                    ass.push(li_deviceCode)
-                                                    $.ajax({
-                                                        url:baseURL + 'fun/device/change',
-                                                        contentType: "application/json;charset=UTF-8",
-                                                        type:"POST",
-                                                        data: JSON.stringify({
-                                                            "deviceCodes": ass, //需要修改的设备code
-                                                            "qaKey": ["onOff"], //需要修改的参数键
-                                                            "value": value, //需要修改的参数值
-                                                            "deviceType": li_deviceType, //设备类型
-                                                            "status": 2
-                                                        }),
-                                                        success: function(res) {
-                                                            console.log("1111")
-                                                            console.log(res)
-                                                        }
-                                                    })
-                                                    $.ajax({
-                                                        url:baseURL + 'fun/device/updateOnOffByIds',
-                                                        contentType: "application/json;charset=UTF-8",
-                                                        type:"POST",
-                                                        data: JSON.stringify({
-                                                            "deviceId":deviceId,//设备id
-                                                            "projectId":projectId,//项目id
-                                                            "onOff":value[0], //0：关；1：开：
-                                                        }),
-                                                        success: function(res) {
-                                                            console.log("2222")
-                                                            console.log(res)
-                                                        }
-                                                    })
-                                                }
+                                                // $(".toogle").click(function () {
+                                                //     var projectId=$(this).attr("id") //项目id
+                                                //     var deviceId=$(this).parent().parent().parent().parent().attr("id");
+                                                //     var li_deviceCode=$(this).parent().attr("id");
+                                                //     var li_deviceType=$(this).parent().parent().attr("id");
+                                                //     var ele = $(this).children(".move");
+                                                //     if (ele.attr("data-state") == "1") {
+                                                //         ele.animate({left: "15%"}, 300, function () {
+                                                //             ele.attr("data-state", "0");
+                                                //             var value=[0]
+                                                //             off(li_deviceCode,value,li_deviceType,deviceId,projectId)
+                                                //         });
+                                                //         $(this).removeClass("on").addClass("off");
+                                                //         return
+                                                //     } else if (ele.attr("data-state") == "0") {
+                                                //         ele.animate({left: '50%'}, 300, function () {
+                                                //             ele.attr("data-state", "1");
+                                                //             var value=[1]
+                                                //             off(li_deviceCode,value,li_deviceType,deviceId,projectId)
+                                                //         });
+                                                //         $(this).removeClass("off").addClass("on");
+                                                //     }
+                                                // })
+                                                // function  off(li_deviceCode,value,li_deviceType,deviceId,projectId){
+                                                //     var ass=[]
+                                                //     ass.push(li_deviceCode)
+                                                //     $.ajax({
+                                                //         url:baseURL + 'fun/device/change',
+                                                //         contentType: "application/json;charset=UTF-8",
+                                                //         type:"POST",
+                                                //         data: JSON.stringify({
+                                                //             "deviceCodes": ass, //需要修改的设备code
+                                                //             "qaKey": ["onOff"], //需要修改的参数键
+                                                //             "value": value, //需要修改的参数值
+                                                //             "deviceType": li_deviceType, //设备类型
+                                                //             "status": 2
+                                                //         }),
+                                                //         success: function(res) {
+                                                //             console.log("1111")
+                                                //             console.log(res)
+                                                //         }
+                                                //     })
+                                                //     $.ajax({
+                                                //         url:baseURL + 'fun/device/updateOnOffByIds',
+                                                //         contentType: "application/json;charset=UTF-8",
+                                                //         type:"POST",
+                                                //         data: JSON.stringify({
+                                                //             "deviceId":deviceId,//设备id
+                                                //             "projectId":projectId,//项目id
+                                                //             "onOff":value[0], //0：关；1：开：
+                                                //         }),
+                                                //         success: function(res) {
+                                                //             console.log("2222")
+                                                //             console.log(res)
+                                                //         }
+                                                //     })
+                                                // }
 
                                                 //单台设备
                                                 var par_id

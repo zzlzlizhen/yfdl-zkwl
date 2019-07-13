@@ -48,11 +48,6 @@ public class MqttController extends AbstractController{
 	@ResponseBody
 	@RequestMapping("/pub")
 	public R list(@RequestParam Map<String, Object> params){
-		String groupId = "1cbc10c8-1e06-4507-b1c5-8db72c344f3b";
-		AdvancedSettingEntity advancedSettingEntity = advancedSettingService.queryByDevOrGroupId(groupId,"0");
-		String json = JSON.toJSONString(advancedSettingEntity,true);
-		System.out.print(json);
-		params.put("message",json);
 		if(params.get("message")!=null){
 			return sendMqttService.publish(mqttSubTopic,(String)params.get("message"));
 		}else{
@@ -83,6 +78,10 @@ public class MqttController extends AbstractController{
 		}else{
 			message = (String)params.get("message");
 		}
+/*		for(int i = 0; i < 50000;i++){
+			MqttTopic mqttTopic = mqttPubClient.getTopic(i+"");
+			sendMqttService.publish(mqttTopic,i+"");
+		}*/
 		MqttTopic mqttTopic = MAP_MQTT_TOPIC.get(topic);
 		if(mqttTopic == null){
 			mqttTopic = mqttPubClient.getTopic(topic);

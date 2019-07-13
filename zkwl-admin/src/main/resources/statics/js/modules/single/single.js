@@ -191,7 +191,7 @@ $(function(){
                         "<div class=\"btnSwitch btn2 \">开</div> \n" +
                         "</div>" +
                         "</td>\n"+
-                        "<td>" + updateTime + "</td>\n" +
+                        "<td id="+ res.data.list[i].groupName + " class='sha'>" + updateTime + "</td>\n" +
                         "<td id=" + res.data.list[i].deviceId + ">" +
                         "<a class='particulars_a' ><img src='/remote-admin/statics/image/r_kongzhi.svg' alt='' class='r_erkongzhi'></a>\n" +
                         "<a class='particulars'><img src='/remote-admin/statics/image/bianji.png' alt=''></a>\n" +
@@ -227,7 +227,6 @@ $(function(){
                             $(this).prop("checked",true);
                             var devId=$(this).parent().attr('id');
                             arr.push(devId)
-
                             var len=arr.length;
                             $("#mo_sp").html(len+"项")
                             $(".move_a").show()
@@ -236,6 +235,9 @@ $(function(){
                         $('input[name="clk"]').each(function(){
                             $(this).prop("checked",false);
                             var devId=$(this).parent().attr('id');
+                            arr=[]
+                            $("#mo_sp").html(""+"项")
+                            $(".move_a").hide()
                         });
                     }
                 });
@@ -279,8 +281,13 @@ $(function(){
                     deletes(ids)
                 })
                 //删除
+                var Dele_id
                 $(".deleteq").click(function(){
-                    var Dele_id=$(this).parent().attr('id');
+                    $(".shade_delete,.shade_b_delete").css("display", "block");
+                     Dele_id=$(this).parent().attr('id');
+                })
+
+                $(".sha_que_delete").click(function(){
                     deletes(Dele_id)
                 })
                 function deletes(Dele_id){
@@ -423,6 +430,10 @@ $(function(){
                     var r_namem = $(this).parent().siblings("#r_namem").html();
                     projectId = $(this).parent().siblings(".li_deviceType").attr("id");
                     $(".pro_s_b").val(r_namem)
+                    var r_rrenae = $(this).parent().siblings(".sha").attr("id");
+                    $("#select1_b option:selected").text(r_rrenae);
+
+
                     fen(projectId)
                 })
                 $("#confirm_x").click(function(){
@@ -495,6 +506,14 @@ $(function(){
     //    表格渲染数据结束
     }
 
+//确定删除
+    $(".rqubtn,.shade_a_delete").click(function () {
+        $(".shade_delete,.shade_b_delete").css("display", "none")
+    })
+    //删除彈窗/////////////////////
+    $(".glyphicon,.glyphicon-remove,.guan_sha").click(function () {
+        $(".shade_delete,.shade_b_delete").css("display", "none")
+    })
 //    新增设备
     $("#add_single").click(function(){
         $(".shade_project,.shade_b_project").css("display","block");

@@ -116,5 +116,14 @@ public interface DeviceMapper extends BaseMapper<DeviceEntity> {
      * 通过当前用户的所拥有的userIds查询设备信息
      * */
     List<Map<Object,Object>> getDeviceInfoList(@Param("userIds")List<Long> userIds);
+
+    /*
+     * @Author zhangwenping
+     * @Description 根据编号查询
+     * @Date 9:40 2019/7/12
+     * @Param deviceCode
+     * @return int
+     **/
+    int getDeviceByDeviceCode(String deviceCode);
 }
 

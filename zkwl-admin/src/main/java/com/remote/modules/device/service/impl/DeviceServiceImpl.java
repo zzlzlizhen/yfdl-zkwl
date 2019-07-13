@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.remote.common.enums.CommunicationEnum;
 import com.remote.common.enums.FaultlogEnum;
+import com.remote.common.utils.DeviceTypeMap;
 import com.remote.common.utils.ValidateUtils;
 import com.remote.modules.device.dao.DeviceMapper;
 import com.remote.modules.device.entity.DeviceEntity;
@@ -73,6 +74,9 @@ public class DeviceServiceImpl implements DeviceService {
         if(CollectionUtils.isNotEmpty(list)){
             for(DeviceEntity deviceEntity : list){
                 deviceEntity.setGroupName(map.get(deviceEntity.getGroupId()));
+                if(DeviceTypeMap.DEVICE_TYPE.get(deviceEntity.getDeviceType()) != null){
+                    deviceEntity.setDeviceTypeName(DeviceTypeMap.DEVICE_TYPE.get(deviceEntity.getDeviceType()));
+                }
             }
         }
         PageInfo<DeviceEntity> pageInfo = new PageInfo<>(list);
@@ -82,11 +86,9 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public boolean addDevice(DeviceEntity deviceEntity) throws Exception {
         ValidateUtils.validate(deviceEntity,Arrays.asList("deviceCode","deviceName"));
-        String deviceCode = deviceEntity.getDeviceCode();
         //目前只有一种产品，2G 日后在添加其他产品
         deviceEntity.setCommunicationType(CommunicationEnum.NORMAL.getCode());
         deviceEntity.setDeviceType("1");
-        String deviceType = deviceCode.substring(0, 4);
         return deviceMapper.insert(deviceEntity) > 0 ? true : false;
     }
 
@@ -235,5 +237,10 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public List<Map<Object,Object>> getDeviceInfoList(List<Long> userIds){
         return this.deviceMapper.getDeviceInfoList(userIds);
+    }
+
+    @Override
+    public int getDeviceByDeviceCode(String deviceCode) {
+        return deviceMapper.getDeviceByDeviceCode(deviceCode);
     }
 }

@@ -97,6 +97,10 @@ public class DeviceController extends AbstractController {
         deviceEntity.setOnOff(AllEnum.NO.getCode());
         deviceEntity.setRunState(RunStatusEnum.OFFLINE.getCode());
         deviceEntity.setSignalState(0);
+        int i = deviceService.getDeviceByDeviceCode(deviceEntity.getDeviceCode());
+        if(i > 0){
+            return R.error(400,"设备编号重复");
+        }
         boolean flag = deviceService.addDevice(deviceEntity);
         if(!flag){
             return R.error(400,"添加设备失败");

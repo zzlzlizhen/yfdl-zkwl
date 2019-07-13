@@ -31,5 +31,6 @@ public interface SysUserService extends IService<SysUserEntity> {
      * 保存用户
      */
     void saveUser(SysUserEntity user);
+    int removeUser(Long uid);
 
 }

@@ -88,8 +88,12 @@ $(function () {
                 $("#div").append(html)
 
             //   删除
-                $(".deleteq").click(function(){
-                    var id=$(this).parent().attr('id');
+                var id
+                $(".deleteq").click(function () {
+                    $(".shade_delete,.shade_b_delete").css("display", "block");
+                    id=$(this).parent().attr('id');
+                })
+                $(".sha_que_delete").click(function(){
                     $.ajax({
                         url:baseURL + 'fun/project/delete?projectIds='+id,
                         contentType: "application/json;charset=UTF-8",
@@ -101,6 +105,10 @@ $(function () {
                           window.location.reload()
                         }
                     })
+                })
+                //删除彈窗/////////////////////
+                $(".shade_a_delete,.sha_cancel_delete,.guan_sha").click(function () {
+                    $(".shade_delete,.shade_b_delete").css("display", "none")
                 })
             // 地图定位
                 $(".ma_p").click(function(){
@@ -116,10 +124,10 @@ $(function () {
                      proid=$(this).parent().attr('id');
                     var r_por_num = $(this).parent().siblings(".Na_me").html();
                     $(".pro_name_b").val(r_por_num);
-                    var r_por_numa = $(this).parent().siblings(".exclusiveUser").html();
-                    $(".r_con_r option:selected").text(r_por_numa);
                     var r_por_num = $(this).parent().siblings(".Na_me").html();
                     $(".pro_s_b").val(r_por_num);
+                    var r_rrna = $(this).parent().siblings(".exclusiveUser").html();
+                    $("#select1_b option:selected").text(r_rrna);
                 })
                 $("#confirm_x").click(function(){
                     var pro_name_b= $(".pro_name_b").val()
@@ -227,7 +235,9 @@ $(function () {
      $(".shade_modifier_project").click(function(){
          $(".shade_modifier,.shade_b_modifier").css("display","none")
      })
-
+    $(".rqubtn,.shade_a_delete").click(function () {
+        $(".shade_delete,.shade_b_delete").css("display", "none")
+    })
 })
 
 

@@ -1,11 +1,13 @@
 package com.remote.mqtt.callback;
 
+import com.remote.SpringBeanFactory;
 import com.remote.mqtt.MqttCallbackAbstract;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,11 +16,11 @@ import org.springframework.stereotype.Service;
  * @description:
  */
 @Service
+@Lazy(value = true)
 public class SubTopicCallBack extends MqttCallbackAbstract {
 
-    @Autowired(required = false)
-    @Qualifier("mqttSubClient")
-    private MqttClient mqttSubClient;
+    @Autowired
+    private SpringBeanFactory springBeanFactory;
 
     @Override
     public void exeuteSubMessage(String topic, MqttMessage mqttMessage) throws Exception {
@@ -32,6 +34,12 @@ public class SubTopicCallBack extends MqttCallbackAbstract {
 
     @Override
     public void reConnection() throws Exception {
-        mqttSubClient.reconnect();
+    /*    MqttClient mqttClient = springBeanFactory.getBeanById("mqttSubClient");
+        if(null != mqttClient && !mqttClient.isConnected()){
+            mqttClient.reconnect();
+            System.out.println("重连成功");
+        }*/
+
     }
+
 }

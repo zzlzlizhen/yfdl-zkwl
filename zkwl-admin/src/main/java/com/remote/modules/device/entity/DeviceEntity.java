@@ -42,6 +42,10 @@ public class DeviceEntity {
      */
     private String deviceType;
     /**
+     * 设备类型名称
+     */
+    private String deviceTypeName;
+    /**
      * 光电池状态
      */
     private Integer photocellState;

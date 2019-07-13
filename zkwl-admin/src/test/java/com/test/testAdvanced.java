@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class testAdvanced {
     private static final String baseURL="127.0.0.1:8080/remote-admin";
-    private static final String CURRENT_COOKIE = "JSESSIONID=bb96fe6e-2895-4cae-8a47-56fb9ad7f3ee";
+    private static final String CURRENT_COOKIE = "JSESSIONID=9c39621c-9206-48be-983e-66fb07f1bc75";
     @Test
     public void testChange(){
         String url = baseURL + "/fun/device/change";
@@ -62,8 +62,8 @@ public class testAdvanced {
     public void updateMqtt(){
         String url = baseURL + "/sys/mqtt/dynamic_pub";
         Map<String,Object> map = new HashMap<String,Object>();
-        map.put("topic","test3");
-        map.put("message","哈哈哈");
+        map.put("topic","admin.send.instructions.message");
+        map.put("message","132445");
         String result4 = HttpRequest.post(url).header(Header.COOKIE,CURRENT_COOKIE).form(map).execute().body();
         System.out.println(result4);
     }

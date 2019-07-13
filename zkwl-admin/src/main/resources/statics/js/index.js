@@ -140,6 +140,7 @@ function routerList(router, menuList){
 $("#r_val_eml").click(function(){
     $(".r_lay").css("display","block")
     $(".r_beise").css("display","block")
+    $(".r_lay_a").css("display","none")
 })
 //点击获取验证码
 $("#btn").click(function(){

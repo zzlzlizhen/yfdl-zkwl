@@ -20,6 +20,7 @@
 .setting span{width:100%;height: 34px;text-align: center;line-height: 34px;float:left;cursor: pointer}
 .setting span:hover{background: #27E2D4;color: #fff;}
 #nav_a:hover .setting{display: block}
+#set_p:hover .r_tou_o{}
 .rquebei,.rquebei{line-height: 36px !important;height: 36px!important;}
 /*基本弹窗*/
 .JI_b,.JI_b_a{width:100%;height:100%;position:absolute;z-index: 22222 ;top:0 ; display: none;}
@@ -141,7 +142,7 @@
     margin-left: 30%;
 }
 .rqubtn{
-    background: url('/remote-admin/statics/image/r_quxiao.png')no-repeat center;
+    background: url('/remote-admin/statics/image/sousuo-1.png')no-repeat center;
     width: 99px;
     height: 45px;
     float: left;

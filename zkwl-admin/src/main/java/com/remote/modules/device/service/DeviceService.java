@@ -139,4 +139,13 @@ public interface DeviceService {
      * 通过所有用户获取设备信息
      * */
     List<Map<Object,Object>> getDeviceInfoList(List<Long> userIds);
+
+    /*
+     * @Author zhangwenping
+     * @Description 根据编号查询
+     * @Date 9:40 2019/7/12
+     * @Param deviceCode
+     * @return int
+     **/
+    int getDeviceByDeviceCode(String deviceCode);
 }
