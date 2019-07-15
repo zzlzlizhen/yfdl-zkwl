@@ -1,6 +1,6 @@
 
 function  zhuang(pro_je,groupId,par_id) {
-    $(".She").show()
+    $(".She,.She_a").show()
     $(".grouping").hide()
     $.ajax({
         url: baseURL + 'fun/device/getDeviceById?deviceId='+par_id,
@@ -40,6 +40,7 @@ function  zhuang(pro_je,groupId,par_id) {
             $("#slideTest3 .layui-slider-wrap").css('left', chen_g/$(".progres").width()*$(".progres").width() + '%');
 
             var youVal = res.data.onOff; // 1,2 把拿到的开关灯值赋给单选按钮
+
             $("input[name='category']").each(function(index) {
                 if ($("input[name='category']").get(index).value == youVal) {
                     $("input[name='category']").get(index).checked = true;
@@ -47,6 +48,7 @@ function  zhuang(pro_je,groupId,par_id) {
             });
 
             //点击开关
+            $(".control-label").unbind('click');
             $(".control-label").click(function(){
                 var category = parseInt($('input:radio[name="category"]:checked').val());
                 var r_wen1 = $("#slideTest1").children().children(".layui-slider-bar").width();
@@ -59,10 +61,14 @@ function  zhuang(pro_je,groupId,par_id) {
                 var r_wen_b = Math.ceil(r_wenb);
                 var r_wenc =  r_wen3/$(".progres").width()*100
                 var r_wen_c = Math.ceil(r_wenc);
-                equipment_b(pro_je,groupId,par_id,category,r_wen_a,r_wen_b,r_wen_c,deviceCode)
+                console.log("++++"+deviceCode)
+
+                equipment_b(pro_je,"",par_id,category,r_wen_a,r_wen_b,r_wen_c,deviceCode)
 
             })
+
             //    滑动单台亮度
+            $("#slideTest1").unbind('blur');
             $('#slideTest1').blur(function(){
                 var category = parseInt($('input:radio[name="category"]:checked').val());
                 var r_wen1 = $("#slideTest1").children().children(".layui-slider-bar").width();
@@ -75,9 +81,10 @@ function  zhuang(pro_je,groupId,par_id) {
                 var r_wen_b = Math.ceil(r_wenb);
                 var r_wenc =  r_wen3/$(".progres").width()*100
                 var r_wen_c = Math.ceil(r_wenc);
-                equipment_b(pro_je,groupId,par_id,category,r_wen_a,r_wen_b,r_wen_c,deviceCode)
+                equipment_b(pro_je,"",par_id,category,r_wen_a,r_wen_b,r_wen_c,deviceCode)
             })
             //    滑动亮灯时长
+            $("#slideTest2").unbind('blur');
             $('#slideTest2').blur(function(){
                 var category = parseInt($('input:radio[name="category"]:checked').val());
                 var r_wen1 = $("#slideTest1").children().children(".layui-slider-bar").width();
@@ -90,9 +97,10 @@ function  zhuang(pro_je,groupId,par_id) {
                 var r_wen_b = Math.ceil(r_wenb);
                 var r_wenc =  r_wen3/$(".progres").width()*100
                 var r_wen_c = Math.ceil(r_wenc);
-                equipment_b(pro_je,groupId,par_id,category,r_wen_a,r_wen_b,r_wen_c,deviceCode)
+                equipment_b(pro_je,"",par_id,category,r_wen_a,r_wen_b,r_wen_c,deviceCode)
             })
             //    滑动晨亮时长
+            $("#slideTest3").unbind('blur');
             $('#slideTest3').blur(function(){
                 var category = parseInt($('input:radio[name="category"]:checked').val());
                 var r_wen1 = $("#slideTest1").children().children(".layui-slider-bar").width();
@@ -105,7 +113,7 @@ function  zhuang(pro_je,groupId,par_id) {
                 var r_wen_b = Math.ceil(r_wenb);
                 var r_wenc =  r_wen3/$(".progres").width()*100
                 var r_wen_c = Math.ceil(r_wenc);
-                equipment_b(pro_je,groupId,par_id,category,r_wen_a,r_wen_b,r_wen_c,deviceCode)
+                equipment_b(pro_je,"",par_id,category,r_wen_a,r_wen_b,r_wen_c,deviceCode)
             })
         }
 
@@ -116,10 +124,11 @@ function  zhuang(pro_je,groupId,par_id) {
 //控制分组
 function  f_en(pro_je,groupId) {
     $(".She").hide()
-    $(".grouping").show()
+    $(".grouping,.She_a").show()
     //分组饼图
     Bing(pro_je,groupId)
 //点击开关
+    $(".control-label").unbind('click');
     $(".control-label").click(function(){
         var category = parseInt($('input:radio[name="category"]:checked').val());
         var r_wen1 = $("#slideTest1").children().children(".layui-slider-bar").width();
@@ -136,6 +145,7 @@ function  f_en(pro_je,groupId) {
 
     })
     //    滑动单台亮度
+    $("#slideTest1").unbind('blur');
     $('#slideTest1').blur(function(){
         var category = parseInt($('input:radio[name="category"]:checked').val());
         var r_wen1 = $("#slideTest1").children().children(".layui-slider-bar").width();
@@ -151,6 +161,7 @@ function  f_en(pro_je,groupId) {
         equipment_b(pro_je,groupId,"",category,r_wen_a,r_wen_b,r_wen_c,0)
     })
     //    滑动亮灯时长
+    $("#slideTest2").unbind('blur');
     $('#slideTest2').blur(function(){
         var category = parseInt($('input:radio[name="category"]:checked').val());
         var r_wen1 = $("#slideTest1").children().children(".layui-slider-bar").width();
@@ -166,6 +177,7 @@ function  f_en(pro_je,groupId) {
         equipment_b(pro_je,groupId,"",category,r_wen_a,r_wen_b,r_wen_c,0)
     })
     //    滑动晨亮时长
+    $("#slideTest3").unbind('blur');
     $('#slideTest3').blur(function(){
         var category = parseInt($('input:radio[name="category"]:checked').val());
         var r_wen1 = $("#slideTest1").children().children(".layui-slider-bar").width();
@@ -183,8 +195,8 @@ function  f_en(pro_je,groupId) {
 }
 function equipment_b(pro_je,groupId,par_id,category,r_wen_a,r_wen_b,r_wen_c,deviceCode) {
     var Code
-    if(deviceCode == 0){
-        Code=""
+    if(deviceCode == ""){
+        Code=[]
     }else{
         Code= [deviceCode]
     }
@@ -216,8 +228,8 @@ function equipment_b(pro_je,groupId,par_id,category,r_wen_a,r_wen_b,r_wen_c,devi
         contentType: "application/json;charset=UTF-8",
         type:"POST",
         data: JSON.stringify({
-            "deviceCodes": deviceCode, //需要修改的设备code
-            "qaKey": ["category","r_wen_a","r_wen_b","r_wen_c"], //需要修改的参数键
+            "deviceCodes": Code, //需要修改的设备code
+            "qaKey": ["onOff","light","lightingDuration","morningHours"], //需要修改的参数键
             "value": [category,r_wen_a,r_wen_b,r_wen_c], //需要修改的参数值
             "deviceType": 1, //设备类型
             "status": 2,

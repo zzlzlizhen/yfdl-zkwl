@@ -2,7 +2,10 @@ package com.remote.device.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.remote.device.entity.DeviceEntity;
+import com.remote.device.entity.DeviceQuery;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 @Mapper
 public interface DeviceMapper extends BaseMapper<DeviceEntity> {
@@ -31,4 +34,12 @@ public interface DeviceMapper extends BaseMapper<DeviceEntity> {
      * @return int
      **/
     int updateDeviceTimeOutByCode(String deviceCode);
+    /*
+     * @Author zhangwenping
+     * @Description 查询设备信息
+     * @Date 9:36 2019/7/15
+     * @Param devicequery
+     * @return List<DeviceEntity>
+     **/
+    List<DeviceEntity> queryDevice(DeviceQuery deviceQuery);
 }

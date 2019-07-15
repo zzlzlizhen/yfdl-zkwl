@@ -12,14 +12,13 @@ netty:
 spring:
   profiles:
     active: prod
-#  mqtt:
-#    username: admin
-#    mqpassword: public
-#    host-url: tcp://192.168.47.128:1883
-#    client-id: zhjsbackground${random.value}
-#    default-topic: topic
-#    completionTimeout: 3000
-#    keepAlive: 60
+  mqtt:
+    username: admin
+    mqpassword: 123456
+    host-url: tcp://39.97.169.198:9999
+    client-id: zhjsbackground${random.value}
+    completionTimeout: 3000
+    keepAlive: 60
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8

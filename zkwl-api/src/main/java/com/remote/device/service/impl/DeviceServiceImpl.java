@@ -7,6 +7,7 @@ import com.remote.common.enums.PhotovoltaicCellStatusEnum;
 import com.remote.common.enums.RunStatusEnum;
 import com.remote.device.dao.DeviceMapper;
 import com.remote.device.entity.DeviceEntity;
+import com.remote.device.entity.DeviceQuery;
 import com.remote.device.service.DeviceService;
 import com.remote.device.util.XYmatch;
 import com.remote.faultlog.entity.FaultlogEntity;
@@ -138,6 +139,11 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public int updateDeviceTimeOutByCode(String deviceCode) {
         return deviceMapper.updateDeviceTimeOutByCode(deviceCode);
+    }
+
+    @Override
+    public List<DeviceEntity> queryDeviceNoPage(DeviceQuery deviceQuery) {
+        return deviceMapper.queryDevice(deviceQuery);
     }
 
 

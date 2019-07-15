@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class testAdvanced {
     private static final String baseURL="127.0.0.1:8080/remote-admin";
-    private static final String CURRENT_COOKIE = "JSESSIONID=9c39621c-9206-48be-983e-66fb07f1bc75";
+    private static final String CURRENT_COOKIE = "JSESSIONID=62f12099-d1c0-410e-a1c7-11f4a5d3f632";
     @Test
     public void testChange(){
         String url = baseURL + "/fun/device/change";
@@ -41,7 +41,6 @@ public class testAdvanced {
         map.put("groupId","52027ee5-ba61-4c32-8342-f233fd3ab19a");
         map.put("loadWorkMode",3);
         map.put("powerLoad",5);
-        map.put("powerPeople1",5);
         String result4 = HttpRequest.post(url).header(Header.COOKIE,CURRENT_COOKIE).form(map).execute().body();
         System.out.println(result4);
     }

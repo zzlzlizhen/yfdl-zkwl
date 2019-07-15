@@ -85,7 +85,12 @@ $(function () {
                 }else{
                     arra=arr //总项目经纬度获取全局变量
                 }
+                //地图
                 m_p(deviceStatus,arra)
+                //右侧边栏
+                $(".She,.She_a").hide()
+                $(".grouping").show()
+
                 $(".nav_pro_v").attr("t","0")
                 $(".nav_pro_v").click(function(){
                     var pro_je=$(this).parents(".pro_li").attr("id")
@@ -122,7 +127,8 @@ $(function () {
                                 $("#" + pro_je + "1").show().append(htmla)
                                 arra=arr //分组经纬度获取全局变量
                                 m_p(deviceStatus,arra)
-
+                                //右侧边栏数据
+                                Bing(pro_je,"")//控制项目
                                 //    分组下设备
                                 $(".nav_pro_v_b").click(function(){
                                     var groupId=$(this).parent().attr('id');
@@ -230,6 +236,8 @@ $(function () {
                                                 //单台设备
                                                 var par_id
                                                 $(".nav_bb").click(function () {
+                                                    $(this).addClass("nav_bb_color");
+                                                    $(this).parents().siblings().children(".nav_bb").removeClass("nav_bb_color")
                                                     arr=[]
                                                     arra=[]
                                                     console.log(deviceStatus+"单台设备")
@@ -250,11 +258,11 @@ $(function () {
                                                     //历史数据、高级设置
                                                     history (deviceCode,groId,type)
                                                 })
-
                                             }
                                         });
                                     }else{
-                                        $("#" + groupId + "2").html("")
+                                        $("#" + groupId + "2").html("");
+                                        f_en(pro_je,groupId)
                                         return
                                     }
 
@@ -266,7 +274,9 @@ $(function () {
                     }else{
                         $(this).attr("t","0")
                         $("#" + pro_je + "1").empty().hide()
-
+                        //右侧边栏
+                        $(".She,.She_a").hide()
+                        $(".grouping").show()
                     }
                     var pro_je=$(this).parent().attr('id');
                     if($("#"+pro_je+"1").html() == ""){
@@ -291,7 +301,7 @@ $(function () {
         geolocation.getCurrentPosition(function(r) {
             var point = new BMap.Point(r.point.lng, r.point.lat);
             map.centerAndZoom(point,9);
-            map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
+            //map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
             map.addControl(new BMap.NavigationControl({enableGeolocation:true}));
             map.addControl(new BMap.OverviewMapControl());
 

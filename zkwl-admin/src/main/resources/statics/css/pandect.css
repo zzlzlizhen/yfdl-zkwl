@@ -3,25 +3,163 @@ html, body {width: 100%;height: 100%;margin: 0;padding: 0;overflow: hidden;}
 .app,#allmap {width: 100%;height: 100%;}
 .app{height: 90%;}
 
-.hear{width:70%;margin: auto;height:10%;background-image: url("../../../image/biaoti.png");background-size: 100%;}
+.hear{width: 70%;
+    margin: auto;
+    height: 49px;
+    background-image: url("/remote-admin/statics/image/biaoti.png");
+    background-size: 100% 51px;
+    line-height: 145px;
+    text-align: center;}
+.hear h2{height: 45px;line-height: 45px;color: #006AD3;padding: 0;margin: 12px 0;font-size: 28px;}
+.app{
+    margin-top: 12px;
+}
+.r_zonlam_l{
+    width:352px;
+    height:194px ;
+    background:#fff ;
+    border-radius:14px ;
+    position: absolute;
+    left:25px;
+    top:82px;
+}
+.r_zonlam_l P{
+    width: 50%;
+    height: 89px;
+    float: left;
+    padding: 0;
+    margin: 0;
+}
+.r_zonlam_l P img{
+    display: inline-block;
+    float: left;
+    margin: 3px 0 0 -1px;
+    width: 112px;
+    height: 111px;
+}
+.r_zonlam_l p i{
+    font-style: normal;
+    font-size: 12px;
+    margin: 23px 0 0 -7px;
+    display: inline-block;
+    color: #7F7F7F;
+}
+.r_zonlam_l P span{
+    display: inline-block;
+    width: 30%;
+    height: 24px;
+    font-size: 24px;
+    margin: 9px 0 0 -5px;
+}
+.r_dengshu{
+    color: #00BAB5;
+}
+.r_wangshu{
+    color: #3494EA;
+}
+.r_tongjitu{
+    width:101px ;
+    height:101px ;
+    float: left;
+    margin:3% 0 0 34%;
+}
+.r_jindu{
+    height: 130px;
+    width:352px;
+    background: #fff;
+    border-radius:14px ;
+    position: absolute;
+    left: 25px;
+    top: 298px;
+}
+#jindu{width:50px ;height:8.5px;border-radius: 3.3px;
+    background: -moz-linear-gradient(0deg, #16D0BA, #D3F2F2);
+    background: -webkit-gradient(linear,0 50%,100% 50%,from(#16D0BA),to(#D3F2F2));
+    background: -webkit-linear-gradient(0deg, #16D0BA, #D3F2F2);
+    background: -o-linear-gradient(0deg, #16D0BA, #D3F2F2);
+}
+#r_jinmian{width: 74px;height: 8.5px;border-radius: 3.3px;
+    background: -moz-linear-gradient(0deg, #0970D5, #A5CFF5);
+    background: -webkit-gradient(linear,0 50%,100% 50%,from(#0970D5),to(#A5CFF5));
+    background: -webkit-linear-gradient(0deg, #0970D5, #A5CFF5);
+    background: -o-linear-gradient(0deg, #0970D5, #A5CFF5);
+}
+.r_jindu>div{
+    width: 50%;
+    float: left;
+    margin-top: 6%;
 
+}
+.r_jindu>div>span{
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    font-size: 18px;
+    margin-top: 8%;
+    color: #000000;
+}
+.r_jindu>div>span i{
+    font-size: 10px;
+    font-style: normal;
+}
+.r_jindu>div>p{
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+    margin-top: 5px;
+    color: #3F4040;
+}
+.r_jindu>div>div{
+    margin: 0 auto;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
+.r_right{
+    width:214px ;
+    height:35px ;
+    position: absolute;
+    right: 25px;
+    top: 83px;
+    line-height: 35px;
+    color: #333333;
+}
+.r_right span{
+    display: inline-block;
+    -width: 33.33%;
+}
+.r_lu{
+    display: inline-block;
+    width:12px ;
+    height:12px ;
+    background:#00D3C8 ;
+    border-radius: 50%;
+    margin-right:3px;
+}
+.r_guan{
+    display: inline-block;
+    width:12px ;
+    height:12px ;
+    background:#006AD3 ;
+    border-radius: 50%;
+    margin-right:3px;
+}
+.r_rchers_l{
+    width: 690px;
+    height: 220px;
+    background: #fff;
+    border-radius: 14px;
+    position: absolute;
+    bottom: 25px;
+    left: 25px;
+}
+.r_rchers_e{
+    width: 690px;
+    height: 220px;
+    background: #fff;
+    border-radius: 14px;
+    position: absolute;
+    bottom: 25px;
+    right: 25px;
+}
 
 

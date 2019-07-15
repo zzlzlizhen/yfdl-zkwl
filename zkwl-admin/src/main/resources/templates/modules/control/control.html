@@ -33,7 +33,7 @@
         line-height: 36px;
         color: #008E8E;
     }
-    input[type=radio],input[type=checkbox]  {
+    .de_i input[type=radio],input[type=checkbox]  {
         display: inline-block;
         vertical-align: middle;
         width: 10px;
@@ -46,7 +46,7 @@
         line-height: 10px;
         color: #d8d8d8;
     }
-    input[type=checkbox]:after  {
+    .de_i input[type=checkbox]:after  {
         content: "";
         display:block;
         width: 10px;
@@ -60,7 +60,7 @@
         border-radius: 50%;
         background: #ccc;
     }
-    input[type=checkbox]:checked:after  {
+    .de_i input[type=checkbox]:checked:after  {
         background-color: #37AF6E;
     }
 
@@ -70,7 +70,7 @@
     <img src="${request.contextPath}/statics/image/dingwei.png" alt="">项目管理>北方动力海淀>查看
 </div>
 <ul class="tab r_shx">
-    <li class="cur">历史数据</li>
+    <li class="cur" style="margin-left:10%;">历史数据</li>
     <li id="opt">高级配置</li>
 </ul>
 <div class="option_a">
@@ -181,7 +181,7 @@
                             <div class="progres de_i">
                                 <div id="slideTest5" class="demo-slider" style="height:10px;"></div>
                                 <i style="font-size: 12px;position: relative;width: 67px;top: 199px;display: inline-block;font-style:normal;text-align: right;left: 5px;height: 18px;
-    line-height: 18px;"><input name="sex" type="checkbox"  style="float: left;margin-right: 5px;display: inline-block;margin-top: 2px;"/>无人功率</i>
+    line-height: 18px;"><input name="sex" type="checkbox"  checked="" value="0" class="se_a"/> 无人功率</i>
                             </div>
                         </div>
                     </div>
@@ -219,7 +219,7 @@
                             <div class="progres de_i">
                                 <div id="slideTest16" class="demo-slider" style="height:10px;"></div>
                                 <i style="position: relative;width:67px;top: 199px;display: inline-block;font-style:normal;font-size: 12px;text-align: right;left: 5px;height: 18px;
-    line-height: 18px;"><input name="sex" type="checkbox"  style="float: left;margin-right: 5px;display: inline-block;margin-top: 2px;"/>无人功率</i>
+    line-height: 18px;"><input name="sex" type="checkbox" value="1" checked=""  class="se_b"/>无人功率</i>
                             </div>
                         </div>
                     </div>
@@ -254,7 +254,7 @@
                                 <div id="slideTest9" class="demo-slider" style="height:10px;"></div>
                                 <i style="font-size: 12px;position: relative;width: 67px;top: 199px;display: inline-block;font-style:normal;text-align: right;left: 5px;height: 18px;
     line-height: 18px;">
-                                 <input name="sex" type="checkbox"  style="float: left;margin-right: 5px;display: inline-block;margin-top: 2px;"/>无人功率</i>
+                                 <input name="sex" type="checkbox"  checked="" value="2" class="se_c"/>无人功率</i>
                             </div>
                         </div>
                     </div>
@@ -292,7 +292,7 @@
                             <div class="progres de_i">
                                 <div id="slideTest11" class="demo-slider" style="height:10px;"></div>
                                 <i style="font-size: 12px;position: relative;width: 67px;top: 199px;display: inline-block;font-style:normal;text-align: right;left: 5px;height: 18px;
-    line-height: 18px;"><input name="sex" type="checkbox"  style="float: left;margin-right: 5px;display: inline-block;margin-top: 2px;"/>无人功率</i>
+    line-height: 18px;"><input name="sex" type="checkbox" value="3"  checked="checked" class="se_d"/>无人功率</i>
                             </div>
                         </div>
                     </div>
@@ -328,7 +328,7 @@
                             <div class="progres de_i">
                                 <div id="slideTest14" class="demo-slider" style="height:10px;"></div>
                                 <i style="position: relative;width:67px;top: 199px;display: inline-block;font-style:normal;font-size: 12px;text-align: right;left: 5px;height: 18px;
-    line-height: 18px;"><input name="sex" type="checkbox"  style="float: left;margin-right: 5px;display: inline-block;margin-top: 2px;"/>无人功率</i>
+    line-height: 18px;"><input name="sex" type="checkbox" value="4"  checked="" class="se_e"/>无人功率</i>
                             </div>
                         </div>
                     </div>
@@ -366,7 +366,7 @@
                             <div class="progres de_i">
                                 <div id="slideTest7" class="demo-slider" style="height:10px;"></div>
                                 <i style="position: relative;width:67px;top: 199px;display: inline-block;font-style:normal;font-size: 12px;text-align: right;left: 5px;height: 18px;
-    line-height: 18px;"><input name="sex" type="checkbox"  style="float: left;margin-right: 5px;display: inline-block;margin-top: 2px;"/>无人功率</i>
+    line-height: 18px;"><input name="sex" type="checkbox"  value="5"  checked="" class="se_f"/>无人功率</i>
                             </div>
                         </div>
                     </div>
@@ -393,7 +393,7 @@
                         <span style="width:32%;margin-top:0.5%;float: left;line-height: 50px;font-size: 12px;">人体感应后的亮灯延时</span>
                         <div class="container" style="width:28%;margin:2.1% 0px 0px 2%;">
                             <div class="input-group spinner">
-                                <input type="text" class="form-control" value="2" id="r_teml_ma">
+                                <input type="text" class="form-control" value="0" id="r_teml_ma">
                                 <div class="input-group-btn-vertical">
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
@@ -473,7 +473,7 @@
                         <span>充电温度范围</span>
                         <div class="container" style="float:left;width: 14%">
                             <div class="input-group spinner">
-                                <input type="text" class="form-control" value="2" id="r_teml_thglte">
+                                <input type="text" class="form-control" value="2"  onBlur=" " id="r_teml_thglte">
                                 <div class="input-group-btn-vertical">
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
@@ -483,7 +483,7 @@
                         <p style="float:left;margin: 0;margin-right: 19px;line-height: 34px;">°C</p>
                         <div class="container r-container" style="float:left;width: 14%">
                             <div class="input-group spinner" >
-                                <input type="text" class="form-control" value="2" id="r_teml_thete">
+                                <input type="text" class="form-control" value="2"  onBlur=" " id="r_teml_thete">
                                 <div class="input-group-btn-vertical">
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>

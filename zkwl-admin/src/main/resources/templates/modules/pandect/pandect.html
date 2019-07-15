@@ -13,13 +13,71 @@
 
     <script type="text/javascript" src="//apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
     <script type="text/javascript" src="//api.map.baidu.com/api?v=3.0&ak=H7Apgj0jSA8WFUOyKZyL20MgZmjfHz7V"></script>
+    <!--echarts-->
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+
 </head>
 <body>
-    <div class="hear"></div>
+    <div class="hear">
+
+            <h2>平台总览</h2>
+
+    </div>
     <!--地图-->
     <div class="app">
         <div id="allmap">地图</div>
+        <div class="r_zonlam_l">
+            <div>
+                <p>
+                    <img src="${request.contextPath}/statics/image/ludengshu.png" alt="">
+                    <i>路灯数</i>
+                    <span class="r_dengshu">32</span>
+                </p>
+                <p>
+                    <img src="${request.contextPath}/statics/image/wangguanshu.png" alt="">
+                    <i>网管数</i>
+                    <span class="r_wangshu">11</span>
+                </p>
+            </div>
+            <div class="r_tongjitu">
+                <div id="pieDiagram" class="floatLeft" style="height:101px;width:101px;"></div>
+            </div>
+        </div>
+        <div class="r_jindu">
+            <div>
+                <p>照明面积</p>
+                <div id="jindu"></div>
+                <span>93.1117<i>m²</i></span>
+            </div>
+            <div>
+                <p>降低碳排放量</p>
+                <div id="r_jinmian"></div>
+                <span>12,750<i>km</i></span>
+            </div>
+        </div>
+        <div class="r_right">
+            <span>设备分布：</span>
+            <span><i class="r_lu"></i>路灯</span>
+            <span><i class="r_guan"></i>网关</span>
+        </div>
+        <div class="r_rchers_l" id="r_rchers_l">
+        </div>
+        <div class="r_rchers_e" id="r_rchers_e">
+        </div>
     </div>
 </body>
 <script src="${request.contextPath}/statics/js/modules/pandect/pandect.js"></script>
+
+<script type="text/javascript">
+    var option1 = {
+        value:20,//百分比,必填
+        name:'及格率',//必填
+        title:'学习成绩',
+        backgroundColor:null,
+        color:['#38a8da','#d4effa'],
+        fontSize:16,
+        domEle:document.getElementById("pieDiagram")//必填
+    },percentPie1 = new PercentPie(option1);
+    percentPie1.init();
+</script>
 </html>

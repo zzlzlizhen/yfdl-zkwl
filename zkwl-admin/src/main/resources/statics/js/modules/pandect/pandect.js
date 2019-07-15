@@ -1,6 +1,255 @@
 $(function () {
     m_p()
+
+    function PercentPie(option){
+        this.backgroundColor = option.backgroundColor||'#fff';
+        this.color           = option.color||['#38a8da','#d4effa'];
+        this.fontSize        = option.fontSize||14;
+        this.domEle          = option.domEle;
+        this.value           = option.value;
+        this.name            = option.name;
+        this.title           = option.title;
+    }
+
+    PercentPie.prototype.init = function(){
+        var _that = this;
+        var option = {
+            textStyle: {
+                color: '#333333'          // 图例文字颜色
+            },
+            backgroundColor:_that.backgroundColor,
+            color:_that.color,
+            title: {
+                text: _that.title,
+                top:'3%',
+                left:'1%',
+                textStyle:{
+                    color: '#333',
+                    fontStyle: 'normal',
+                    fontWeight: 'normal',
+                    fontFamily: 'sans-serif',
+                    fontSize: 16,
+                }
+            },
+            series: [{
+                name: '来源',
+                type: 'pie',
+                radius: ['60%', '75%'],
+                avoidLabelOverlap: false,
+                hoverAnimation:false,
+                label: {
+                    normal: {
+                        show: false,
+                        position: 'center',
+                        textStyle: {
+                            fontSize: _that.fontSize,
+                            fontWeight: 'bold'
+                        },
+                        formatter:'{b}\n{c}%'
+                    }
+                },
+                data: [{
+                    value: _that.value,
+                    name: _that.name,
+                    label:{
+                        normal:{
+                            show:true
+                        }
+                    }
+                },
+                    {
+                        value: 100-_that.value,
+                        name: ''
+                    }
+                ]
+            }]
+        };
+
+        echarts.init(_that.domEle).setOption(option);
+    };
+    var option1 = {
+        value:20,//百分比,必填
+        name:'故障率',//必填
+        // title:'学习成绩',
+        backgroundColor:null,
+        color:['#FDC03D','#CCCCCC'],
+        fontSize:14,
+        domEle:document.getElementById("pieDiagram")//必填
+
+    },percentPie1 = new PercentPie(option1);
+    percentPie1.init();
+
 })
+
+
+
+//折现填充统计表
+var myChart = echarts.init(document.getElementById('r_rchers_l'));
+
+// 指定图表的配置项和数据
+var colors = ['#5793f3', '#d14a61', '#675bba'];
+
+
+option = {
+    color: colors,
+
+    tooltip: {
+        trigger: 'none',
+        axisPointer: {
+            type: 'cross',
+
+        }
+    },
+    // legend: {
+    //     data:['2015 降水量', '2016 降水量']
+    // },
+    grid: {
+        top: 70,
+        bottom: 50
+    },
+    xAxis: [
+        {
+            type: 'category',
+            axisTick: {
+                alignWithLabel: true
+            },
+            axisLabel: {
+                show: true,
+                textStyle: {
+                    color: '#DEDFDF'
+                }
+            },
+            axisLine: {
+                onZero: false,
+                lineStyle: {
+                    color:'#ccc'
+                }
+            },
+            axisPointer: {
+                label: {
+                    formatter: function (params) {
+                        return '降水量  ' + params.value
+                            + (params.seriesData.length ? '：' + params.seriesData[0].data : '');
+                    }
+                }
+            },
+            data: ["2016-1", "2016-2", "2016-3", "2016-4", "2016-5", "2016-6", "2016-7", "2016-8", "2016-9", "2016-10", "2016-11", "2016-12"]
+        },
+        {
+            type: 'category',
+            axisTick: {
+                alignWithLabel: true
+            },
+            axisLine: {
+                onZero: false,
+                lineStyle: {
+                    color: colors[0]
+                }
+            },
+            axisPointer: {
+                label: {
+                    formatter: function (params) {
+                        return '降水量  ' + params.value
+                            + (params.seriesData.length ? '：' + params.seriesData[0].data : '');
+                    }
+                }
+            },
+            // data: ["2015-1", "2015-2", "2015-3", "2015-4", "2015-5", "2015-6", "2015-7", "2015-8", "2015-9", "2015-10", "2015-11", "2015-12"]
+        }
+    ],
+    yAxis: [
+        {
+            type: 'value',
+            axisLabel: {
+                show: true,
+                textStyle: {
+                    color: '#DEDFDF'
+                }
+            },
+            axisLine: {
+                lineStyle: {
+                    color:'#ccc'
+                }
+            },
+        }
+    ],
+    series: [
+        {
+            name:'2015 降水量',
+            type:'line',
+            xAxisIndex: 1,
+            smooth: true,
+
+            data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3],
+        },
+
+    ]
+};
+
+// 使用刚指定的配置项和数据显示图表。
+myChart.setOption(option);
+/////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var myChart = echarts.init(document.getElementById('r_rchers_e'));
+
+option2 = {
+    legend: {},
+    tooltip: {},
+    dataset: {
+        dimensions: ['product', '充电量', '放电量'],
+        source: [
+            {product: 'Matcha Latte', '充电量': 43.3, '放电量': 85.8, '2017': 93.7},
+            {product: 'Milk Tea', '充电量': 83.1, '放电量': 73.4, '2017': 55.1},
+            {product: 'Cheese Cocoa', '充电量': 86.4, '放电量': 65.2, '2017': 82.5},
+            {product: 'Walnut Brownie', '充电量': 72.4, '放电量': 53.9, '2017': 39.1}
+        ]
+    },
+    xAxis: {type: 'category'},
+    yAxis: {},
+    // Declare several bar series, each will be mapped
+    // to a column of dataset.source by default.
+    series: [
+        {
+            type: 'bar',
+            itemStyle:{
+                normal:{
+                    color:'#3896EA'
+                }
+            },
+        },
+
+        {
+            type: 'bar',
+            itemStyle:{
+                normal:{
+                    color:'#2EE2D5'
+                }
+            },
+        },
+    ]
+};
+
+myChart.setOption(option2);
+
+
+
+
+
 //地图方法
 function m_p() {
     // 百度地图API功能

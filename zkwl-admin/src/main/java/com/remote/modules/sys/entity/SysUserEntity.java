@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.remote.common.validator.group.AddGroup;
 import com.remote.common.validator.group.UpdateGroup;
+import com.sun.mail.imap.YoungerTerm;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
@@ -33,14 +34,13 @@ public class SysUserEntity implements Serializable {
 	/**
 	 * 用户名
 	 */
-	/*@NotBlank(message="用户名不能为空", groups = {AddGroup.class, UpdateGroup.class})*/
+
+	@NotBlank(message="账号不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String username;
 
 	/**
 	 * 密码
 	 */
-	@NotBlank(message="密码不能为空", groups = AddGroup.class)
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String password;
 
 	/**
@@ -75,6 +75,7 @@ public class SysUserEntity implements Serializable {
 	 * 用户类型 0使用者  1  管理者  2 超级管理员
 	 * */
 	@TableField(exist=false)
+	@NotNull(message = "用户类型不能为空",groups = {AddGroup.class, UpdateGroup.class})
 	private Long roleId;
 
 	/**

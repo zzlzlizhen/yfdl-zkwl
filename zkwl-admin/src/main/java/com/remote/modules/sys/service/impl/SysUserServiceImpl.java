@@ -73,7 +73,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 						.and(new Function<QueryWrapper<SysUserEntity>, QueryWrapper<SysUserEntity>>() {
 							@Override
 							public QueryWrapper<SysUserEntity> apply(QueryWrapper<SysUserEntity> sysUserEntityQueryWrapper) {
-								return sysUserEntityQueryWrapper.likeRight("all_parent_id",allParentId+",").or().eq("user_id",userId);
+								return sysUserEntityQueryWrapper.likeRight(StringUtils.isNotBlank(allParentId),"all_parent_id",allParentId+",").or().eq("user_id",userId);
 							}
 						})
 		);

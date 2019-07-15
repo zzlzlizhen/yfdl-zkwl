@@ -60,6 +60,21 @@
         </where>
     </select>
 
+    <select id="queryDevice" parameterType="com.remote.device.entity.DeviceQuery" resultMap="BaseResultMap" >
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        fun_device
+        <where>
+            is_del = 0
+            <if test="deviceQuery.groupId !=null and deviceQuery.groupId!=''">
+                AND group_id = #{deviceQuery.groupId}
+            </if>
+            <if test="deviceQuery.projectId !=null and deviceQuery.projectId!=''">
+                AND project_id = #{deviceQuery.projectId}
+            </if>
+        </where>
+    </select>
 
     <update id="updateDeviceByCode" parameterType="com.remote.device.entity.DeviceEntity">
         update fun_device

@@ -462,9 +462,13 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         if (evt instanceof IdleStateEvent) {
             IdleStateEvent event = (IdleStateEvent) evt;
             if (event.state() == IdleState.READER_IDLE) {
-                String deviceCode = cacheUtils.get(ctx.channel().id().asShortText()).toString();
-                DeviceService deviceService = (DeviceService)SpringUtils.getBean("deviceServiceImpl");
-                deviceService.updateDeviceTimeOutByCode(deviceCode);
+                try{
+                    String deviceCode = cacheUtils.get(ctx.channel().id().asShortText()).toString();
+                    DeviceService deviceService = (DeviceService)SpringUtils.getBean("deviceServiceImpl");
+                    deviceService.updateDeviceTimeOutByCode(deviceCode);
+                }catch (Exception e){
+
+                }
                 log.info("Client: " + socketString + " READER_IDLE 读超时");
                 ctx.close();
             } else if (event.state() == IdleState.WRITER_IDLE) {

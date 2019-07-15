@@ -74,6 +74,7 @@ public class SysUserController extends AbstractController {
 	@SysLog("修改密码")
 	@RequestMapping("/password")
 	public R password(String password, String newPassword){
+		Assert.isBlank(password, "密码不为能空");
 		Assert.isBlank(newPassword, "新密码不为能空");
 
 		//原密码
@@ -129,6 +130,7 @@ public class SysUserController extends AbstractController {
 	@RequestMapping(value = "/save",method = RequestMethod.POST)
 	@RequiresPermissions("sys:user:save")
 	public R save(SysUserEntity user){
+		Assert.isBlank(user.getPassword(), "密码不为能空");
 		ValidatorUtils.validateEntity(user, AddGroup.class);
 		Date d = null;
 		if(user.getTermOfValidity() >= 1){
@@ -240,7 +242,7 @@ public class SysUserController extends AbstractController {
 	@RequestMapping(value = "/updatePwd",method = RequestMethod.POST)
 	public R updatePwd(String username, String password){
 		if(StringUtils.isBlank(username) || StringUtils.isBlank(password)){
-			return R.error("密码不能为空");
+			return R.error("用户名或密码不能为空");
 		}
         String slat =  sysUserService.selectSlat(username);
 		if(StringUtils.isNotBlank(slat)){

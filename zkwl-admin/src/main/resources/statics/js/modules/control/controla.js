@@ -35,7 +35,7 @@ $(function(){
     var deviceId=href['deviceId'];
     //设备类型
     var type=href['type'];
-    console.log("Code")
+    console.log("Code++=")
     console.log(deviceCode)
     console.log("分组id")
     console.log(grod)
@@ -208,14 +208,34 @@ $(function(){
                 $("#chong").val($("#r_teml_forl").val()*3.6)
             }
         })
-
+    //感应多选
+        $(".se_a,.se_b,.se_c,.se_d,.se_e,.se_f").click(function(){
+            if( $(this).attr("checked") == 'checked'){
+                $(this).attr("checked",false);
+            }else{
+                $(this).attr("checked",true);
+            }
+        });
+        var flag=true
         if(deviceCode != ""){
             //设备高级设置数据渲染
             console.log("设备高级设置上传")
             var ur=baseURL + 'advancedsetting/queryDevAdvInfo?deviceCode='+deviceCode+"&groupId="+grod
             url(ur)
+            $("input").blur(function(){
+                if($(this).val() == ""){
+                    alert("input输入不能为空")
+                    flag=false
+                }else{
+                    flag=true
+                }
+            })
+
             //设备保存值
             $("#r_bttn").click(function () {
+                if(!flag){
+                    return
+                }
                 //负载
                 var loadWorkMode = parseInt($("#select1_b option:selected").attr("class"));   //负载工作模式
                 var powerLoad = parseInt($("#r_Load_power").val()*100); //负载功率
@@ -248,10 +268,11 @@ $(function(){
 
                 var autoSleepTime=parseInt($("#slideTest15").children().children(".layui-slider-bar").width()/$("#slideTest15").children(".layui-slider").width()*100); //自动休眠时间长度
                 var savingSwitch=parseInt($("#custom option:selected").attr("class"));
-                var inductionLightOnDelay=parseInt($("#r_teml_ma").val())
+                var inductionLightOnDelay = parseInt($("#r_teml_ma").val());
                 //光电池
-                var vpv=parseInt($("#r_teml_tgl").val());//光控电压
+                var vpv=parseInt($("#r_teml_tgl").val()*100);//光控电压
                 var pvSwitch=parseInt($("#r_btl_th>.r_btl_th[type='radio']:checked").val()); //光控关灯开灯
+
                 var batType=parseInt($("#r_select_b option:selected").attr("class"));// 电池类型
                 var switchDelayTime=parseInt($("#slideTest1").children().children(".layui-slider-bar").width()/$("#slideTest1").children(".layui-slider").width()*100);//开关灯延时
                 var ligntOnDuration=parseInt($("#slideTest_m").children().children(".layui-slider-bar").width()/$("#slideTest_m").children(".layui-slider").width()*100);//光控延迟时间长度
@@ -259,13 +280,10 @@ $(function(){
                 var batStringNum= parseInt($("#r_teml_forl").val())//电池串数
                 var volOverDisCharge=parseInt($("#r_inpl_one").val()*100)//过放电压
                 var volCharge=parseInt($("#chong").val()*100)//充电电压
-                var tempCharge=parseInt($("#r_teml_thglr").val()) //充电温度范围(最大值  做高八位低八位处理)
+                var tempCharge=parseInt($("#r_teml_thglte").val()) //充电温度范围(最大值  做高八位低八位处理)
                 var tempDisCharge=parseInt($("#r_teml_thglt").val()) //放电温度范围（最大值做高八位低八位处理)）
-                var tempCharge0=parseInt($("#r_teml_thelr").val()) //充电温度范围(最小值做高八位低八位处理)
+                var tempCharge0=parseInt($("#r_teml_thete").val()) //充电温度范围(最小值做高八位低八位处理)
                 var tempDisCharge25=parseInt($("#r_teml_thet").val()) //放电温度范围（最小值做高八位低八位处理)）
-                console.log("高")
-                console.log(tempCharge)
-
                 var newTempCharge = ((tempCharge& 0xFF)<<8) + (tempCharge0 & 0xFF);
                 var newTempDisCharge = ((tempDisCharge & 0xFF)<<8) + (tempDisCharge25 & 0xFF);
                 var inspectionTime=Number($("#r_teml_thgl").val())*60+Number($("#r_teml_thel").val()) //巡检时间
@@ -279,17 +297,56 @@ $(function(){
                 // 第三阶段
                 var threeDownPower = parseInt($("#slideTest_e").children().children(".layui-slider-bar").width()*100);//三阶降压功率
                 var threeReducAmplitude = parseInt($("#slideTest_f").children().children(".layui-slider-bar").width()*100);//三阶降功率幅度
+                var se_a
+                var se_b
+                var se_c
+                var se_d
+                var se_e
+                var se_f
+                if($(".se_a[type='checkbox']").attr('checked') == "checked"){
+                     se_a=1
+                 }else{
+                     se_a=0
+                 }
+                if($(".se_b[type='checkbox']").attr('checked') == "checked"){
+                    se_b=2
+                }else{
+                    se_b=0
+                }
+                if($(".se_c[type='checkbox']").attr('checked') == "checked"){
+                    se_c=4
+                }else{
+                    se_c=0
+                }
+                if($(".se_d[type='checkbox']").attr('checked') == "checked"){
+                    se_d=8
+                }else{
+                    se_d=0
+                }
+                if($(".se_e[type='checkbox']").attr('checked') == "checked"){
+                    se_e=16
+                }else{
+                    se_e=0
+                }
+                if($(".se_f[type='checkbox']").attr('checked') == "checked"){
+                    se_f=32
+                }else{
+                    se_f=0
+                }
+                var inductionSwitch=se_a+se_b+se_c+se_d+se_e+se_f
+                console.log(inductionSwitch)
 
                 var qaKey=["loadWorkMode","powerLoad","timeTurnOn","timeTurnOff","time1",
                     "time2","time3","time4","time5","timeDown","powerPeople1","powerPeople2","powerPeople3","powerPeople4","powerPeople5",
                     "powerDawnPeople","powerSensor1","powerSensor2","powerSensor3","powerSensor4","powerSensor5","powerSensorDown","autoSleepTime","vpv",
                     "pvSwitch","batType","batStringNum","volOverDisCharge","volCharge","tempCharge","tempDisCharge","inspectionTime","iCharge","switchDelayTime","firDownPower",
-                    "twoDownPower","threeDownPower","firReducAmplitude","twoReducAmplitude","threeReducAmplitude","ligntOnDuration","savingSwitch","inductionLightOnDelay"];
+                    "twoDownPower","threeDownPower","firReducAmplitude","twoReducAmplitude","threeReducAmplitude","ligntOnDuration","savingSwitch","inductionLightOnDelay","inductionSwitch"];
                 var value=[loadWorkMode,powerLoad,timeTurnON_b,timeTurnOff_b,time1,
                     time2,time3,time4,time5,timeDown,powerPeople1,powerPeople2,powerPeople3,powerPeople4,powerPeople5,
                     powerDawnPeople,powerSensor1,powerSensor2,powerSensor3,powerSensor4,powerSensor5,powerSensorDown,autoSleepTime,vpv,
                     pvSwitch,batType,batStringNum,volOverDisCharge,volCharge,newTempCharge,newTempDisCharge,inspectionTime,icharge,switchDelayTime,firDownPower,
-                    twoDownPower,threeDownPower,firReducAmplitude,twoReducAmplitude,threeReducAmplitude,ligntOnDuration,savingSwitch,inductionLightOnDelay];
+                    twoDownPower,threeDownPower,firReducAmplitude,twoReducAmplitude,threeReducAmplitude,ligntOnDuration,savingSwitch,inductionLightOnDelay,inductionSwitch];
+
                 $.ajax({
                     url:baseURL + 'advancedsetting/updateDevice',
                     type:"POST",
@@ -334,7 +391,7 @@ $(function(){
                         "&inspectionTime="+ inspectionTime+//巡检时间
                         "&iCharge="+ icharge + //充电电流
 
-                        "&inductionSwitch="+ "" +//感应开关
+                        "&inductionSwitch="+ inductionSwitch +//感应开关
                         "&inductionLightOnDelay="+ inductionLightOnDelay +//感应后的亮灯延时
                         "&switchDelayTime="+ switchDelayTime + //开灯延时
                         "&firDownPower="+ firDownPower + //一阶降压功率
@@ -375,7 +432,18 @@ $(function(){
             console.log("分组高级设置上传");
             var ur=baseURL + 'advancedsetting/settingInfo?groupId='+grod
             url(ur)
+            $("input").blur(function(){
+                if($(this).val() == ""){
+                    alert("input输入不能为空")
+                    flag=false
+                }else{
+                    flag=true
+                }
+            })
             $("#r_bttn").click(function () {
+                if(!flag){
+                    return
+                }
                 //负载
                 var loadWorkMode = parseInt($("#select1_b option:selected").attr("class"));   //负载工作模式
                 var powerLoad = parseInt($("#r_Load_power").val()*100); //负载功率
@@ -406,9 +474,10 @@ $(function(){
                 var powerSensorDown=parseInt($("#slideTest7").children().children(".layui-slider-bar").height()/$("#slideTest7").children(".layui-slider").height()*100); //晨亮 无人功率
                 var autoSleepTime=parseInt($("#slideTest15").children().children(".layui-slider-bar").width()/$("#slideTest15").children(".layui-slider").width()*100); //自动休眠时间长度
                 var savingSwitch=parseInt($("#custom option:selected").attr("class"));
-                var inductionLightOnDelay=parseInt($("#r_teml_ma").val())
+                var inductionLightOnDelay = parseInt($("#r_teml_ma").val());
+
                 //光电池
-                var vpv=parseInt($("#r_teml_tgl").val());//光控电压
+                var vpv=parseInt($("#r_teml_tgl").val()*100);//光控电压
                 var pvSwitch=parseInt($("#r_btl_th>.r_btl_th[type='radio']:checked").val()); //光控关灯开灯
                 var batType=parseInt($("#r_select_b option:selected").attr("class"));// 电池类型
                 var switchDelayTime=parseInt($("#slideTest1").children().children(".layui-slider-bar").width()/$("#slideTest1").children(".layui-slider").width()*100);
@@ -417,9 +486,9 @@ $(function(){
                 var batStringNum= parseInt($("#r_teml_forl").val())//电池串数
                 var volOverDisCharge=parseInt($("#r_inpl_one").val()*100)//过放电压
                 var volCharge=parseInt($("#chong").val()*100)//充电电压
-                var tempCharge=parseInt($("#r_teml_thglr").val()) //充电温度范围(最大值  做高八位低八位处理)
+                var tempCharge=parseInt($("#r_teml_thglte").val()) //充电温度范围(最大值  做高八位低八位处理)
                 var tempDisCharge=parseInt($("#r_teml_thglt").val()) //放电温度范围（最大值做高八位低八位处理)）
-                var tempCharge0=parseInt($("#r_teml_thelr").val()) //充电温度范围(最小值做高八位低八位处理)
+                var tempCharge0=parseInt($("#r_teml_thete").val()) //充电温度范围(最小值做高八位低八位处理)
                 var tempDisCharge25=parseInt($("#r_teml_thet").val()) //放电温度范围（最小值做高八位低八位处理)）
                 var newTempCharge = ((tempCharge & 0xFF)<<8) + (tempCharge0 & 0xFF);
                 var newTempDisCharge = ((tempDisCharge & 0xFF)<<8) + (tempDisCharge25 & 0xFF);
@@ -436,92 +505,131 @@ $(function(){
                 //第三阶段
                 var threeDownPower = parseInt($("#slideTest_e").children().children(".layui-slider-bar").width()*100);//三阶降压功率
                 var threeReducAmplitude = parseInt($("#slideTest_f").children().children(".layui-slider-bar").width()*100);//三阶降功率幅度
+                var se_a
+                var se_b
+                var se_c
+                var se_d
+                var se_e
+                var se_f
+                if($(".se_a[type='checkbox']").attr('checked') == "checked"){
+                    se_a=1
+                }else{
+                    se_a=0
+                }
+                if($(".se_b[type='checkbox']").attr('checked') == "checked"){
+                    se_b=2
+                }else{
+                    se_b=0
+                }
+                if($(".se_c[type='checkbox']").attr('checked') == "checked"){
+                    se_c=4
+                }else{
+                    se_c=0
+                }
+                if($(".se_d[type='checkbox']").attr('checked') == "checked"){
+                    se_d=8
+                }else{
+                    se_d=0
+                }
+                if($(".se_e[type='checkbox']").attr('checked') == "checked"){
+                    se_e=16
+                }else{
+                    se_e=0
+                }
+                if($(".se_f[type='checkbox']").attr('checked') == "checked"){
+                    se_f=32
+                }else{
+                    se_f=0
+                }
+                var inductionSwitch=se_a+se_b+se_c+se_d+se_e+se_f
                 var qaKey=["loadWorkMode","powerLoad","timeTurnOn","timeTurnOff","time1",
                     "time2","time3","time4","time5","timeDown","powerPeople1","powerPeople2","powerPeople3","powerPeople4","powerPeople5",
                     "powerDawnPeople","powerSensor1","powerSensor2","powerSensor3","powerSensor4","powerSensor5","powerSensorDown","autoSleepTime","vpv",
                     "pvSwitch","batType","batStringNum","volOverDisCharge","volCharge","tempCharge","tempDisCharge","inspectionTime","iCharge","switchDelayTime","firDownPower",
-                    "twoDownPower","threeDownPower","firReducAmplitude","twoReducAmplitude","threeReducAmplitude","ligntOnDuration","savingSwitch","inductionLightOnDelay"];
+                    "twoDownPower","threeDownPower","firReducAmplitude","twoReducAmplitude","threeReducAmplitude","ligntOnDuration","savingSwitch","inductionLightOnDelay","inductionSwitch"];
                 var value=[loadWorkMode,powerLoad,timeTurnON_b,timeTurnOff_b,time1,
                     time2,time3,time4,time5,timeDown,powerPeople1,powerPeople2,powerPeople3,powerPeople4,powerPeople5,
                     powerDawnPeople,powerSensor1,powerSensor2,powerSensor3,powerSensor4,powerSensor5,powerSensorDown,autoSleepTime,vpv,
                     pvSwitch,batType,batStringNum,volOverDisCharge,volCharge,newTempCharge,newTempDisCharge,inspectionTime,icharge,switchDelayTime,firDownPower,
-                    twoDownPower,threeDownPower,firReducAmplitude,twoReducAmplitude,threeReducAmplitude,ligntOnDuration,savingSwitch,inductionLightOnDelay];
+                    twoDownPower,threeDownPower,firReducAmplitude,twoReducAmplitude,threeReducAmplitude,ligntOnDuration,savingSwitch,inductionLightOnDelay,inductionSwitch];
 
-                $.ajax({
-                    url:baseURL + 'advancedsetting/updateGroup',
-                    type:"POST",
-                    data:
-                        "&groupId="+ grod + //分组id
-                        "&loadWorkMode="+ loadWorkMode + //负载工作模式
-                        "&powerLoad="+ powerLoad +//负载功率
-                        "&timeTurnOn="+ timeTurnON_b + //开灯时刻
-                        "&timeTurnOff="+ timeTurnOff_b + //关灯时刻
-                        "&time1="+ time1 +//1时段时长
-                        "&time2="+ time2 +//2时段时长
-                        "&time3="+ time3 +//3时段时长
-                        "&time4="+ time4 +//4时段时长
-                        "&time5="+ time5 +//5时段时长
-                        "&timeDown="+ timeDown +//晨亮时段时长
-                        "&powerPeople1="+ powerPeople1 +//时段1 有人功率
-                        "&powerPeople2="+ powerPeople2 +//时段2 有人功率
-                        "&powerPeople3="+ powerPeople3 +//时段3 有人功率
-                        "&powerPeople4="+ powerPeople4 +//时段4 有人功率
-                        "&powerPeople5="+ powerPeople5 +//时段5 有人功率
-                        "&powerDawnPeople="+ powerDawnPeople+//晨亮 有人功率
-                        "&powerSensor1="+ powerSensor1 +//时段1 无人功率
-                        "&powerSensor2="+ powerSensor2 +//时段2 无人功率
-                        "&powerSensor3="+ powerSensor3 +//时段3无人功率
-                        "&powerSensor4="+ powerSensor4 +//时段4 无人功率
-                        "&powerSensor5="+ powerSensor5 +//时段5 无人功率
-                        "&powerSensorDown="+ powerSensorDown +//晨亮 无人功率
+                    $.ajax({
+                        url:baseURL + 'advancedsetting/updateGroup',
+                        type:"POST",
+                        data:
+                            "&groupId="+ grod + //分组id
+                            "&loadWorkMode="+ loadWorkMode + //负载工作模式
+                            "&powerLoad="+ powerLoad +//负载功率
+                            "&timeTurnOn="+ timeTurnON_b + //开灯时刻
+                            "&timeTurnOff="+ timeTurnOff_b + //关灯时刻
+                            "&time1="+ time1 +//1时段时长
+                            "&time2="+ time2 +//2时段时长
+                            "&time3="+ time3 +//3时段时长
+                            "&time4="+ time4 +//4时段时长
+                            "&time5="+ time5 +//5时段时长
+                            "&timeDown="+ timeDown +//晨亮时段时长
+                            "&powerPeople1="+ powerPeople1 +//时段1 有人功率
+                            "&powerPeople2="+ powerPeople2 +//时段2 有人功率
+                            "&powerPeople3="+ powerPeople3 +//时段3 有人功率
+                            "&powerPeople4="+ powerPeople4 +//时段4 有人功率
+                            "&powerPeople5="+ powerPeople5 +//时段5 有人功率
+                            "&powerDawnPeople="+ powerDawnPeople+//晨亮 有人功率
+                            "&powerSensor1="+ powerSensor1 +//时段1 无人功率
+                            "&powerSensor2="+ powerSensor2 +//时段2 无人功率
+                            "&powerSensor3="+ powerSensor3 +//时段3无人功率
+                            "&powerSensor4="+ powerSensor4 +//时段4 无人功率
+                            "&powerSensor5="+ powerSensor5 +//时段5 无人功率
+                            "&powerSensorDown="+ powerSensorDown +//晨亮 无人功率
 
-                        "&savingSwitch="+ savingSwitch + //节能开关
-                        "&autoSleepTime="+ autoSleepTime + //自动休眠时间长度
-                        "&vpv="+ vpv + //光控电压
-                        "&pvSwitch="+ pvSwitch +//光控关灯开灯
+                            "&savingSwitch="+ savingSwitch + //节能开关
+                            "&autoSleepTime="+ autoSleepTime + //自动休眠时间长度
+                            "&vpv="+ vpv + //光控电压
+                            "&pvSwitch="+ pvSwitch +//光控关灯开灯
 
-                        "&ligntOnDuration="+ ligntOnDuration +//光控延迟时间长度
-                        "&batType="+ batType + // 电池类型 0:未设置；1：胶体电池；2：铅酸电池； 3磷酸铁锂电池；4：三元锂电池
-                        "&batStringNum="+batStringNum +//电池串数
-                        "&volOverDisCharge="+ volOverDisCharge + //过放电压
-                        "&volCharge="+ volCharge +//充电电压
-                        "&tempCharge="+ newTempCharge +//充电温度范围(最大值和最小值做高八位低八位处理)
-                        "&tempDisCharge="+ newTempDisCharge +//放电温度范围（最大值和最小值做高八位低八位处理)）
-                        "&inspectionTime="+ inspectionTime+//巡检时间
-                        "&iCharge="+ icharge + //充电电流
+                            "&ligntOnDuration="+ ligntOnDuration +//光控延迟时间长度
+                            "&batType="+ batType + // 电池类型 0:未设置；1：胶体电池；2：铅酸电池； 3磷酸铁锂电池；4：三元锂电池
+                            "&batStringNum="+batStringNum +//电池串数
+                            "&volOverDisCharge="+ volOverDisCharge + //过放电压
+                            "&volCharge="+ volCharge +//充电电压
+                            "&tempCharge="+ newTempCharge +//充电温度范围(最大值和最小值做高八位低八位处理)
+                            "&tempDisCharge="+ newTempDisCharge +//放电温度范围（最大值和最小值做高八位低八位处理)）
+                            "&inspectionTime="+ inspectionTime+//巡检时间
+                            "&iCharge="+ icharge + //充电电流
 
-                        "&inductionSwitch="+ "" +//感应开关
-                        "&inductionLightOnDelay="+ inductionLightOnDelay +//感应后的亮灯延时switchDelayTime
-                        "&switchDelayTime="+ switchDelayTime + //开关灯延时
-                        "&firDownPower="+ firDownPower + //一阶降压功率
-                        "&twoDownPower="+ twoDownPower + //二阶降压功率
-                        "&threeDownPower="+ threeDownPower + //三阶降压功率
-                        "&firReducAmplitude="+ firReducAmplitude + //一阶降功率幅度
-                        "&twoReducAmplitude="+ twoReducAmplitude + //二阶降功率幅度
-                        "&threeReducAmplitude="+ threeReducAmplitude //三阶降功率幅度
-                    ,
-                    success: function(res){
-                        console.log("分组高级设置上传成功")
-                        alert("分组保存成功")
-                    }
-                });
-            // 硬件分组
-                $.ajax({
-                    url:baseURL + 'fun/device/change',
-                    contentType: "application/json;charset=UTF-8",
-                    type:"POST",
-                    data: JSON.stringify({
-                        "qaKey": qaKey, //需要修改的参数键
-                        "value": value, //需要修改的参数值
-                        "deviceType": "1", //设备类型   /1
-                        "groupId":grod,
-                        "status":2
-                    }),
-                    success: function(res) {
-                        console.log("硬件分组返回")
-                        console.log(res)
-                    }
-                })
+                            "&inductionSwitch="+ inductionSwitch +//感应开关
+                            "&inductionLightOnDelay="+ inductionLightOnDelay +//感应后的亮灯延时switchDelayTime
+                            "&switchDelayTime="+ switchDelayTime + //开关灯延时
+                            "&firDownPower="+ firDownPower + //一阶降压功率
+                            "&twoDownPower="+ twoDownPower + //二阶降压功率
+                            "&threeDownPower="+ threeDownPower + //三阶降压功率
+                            "&firReducAmplitude="+ firReducAmplitude + //一阶降功率幅度
+                            "&twoReducAmplitude="+ twoReducAmplitude + //二阶降功率幅度
+                            "&threeReducAmplitude="+ threeReducAmplitude //三阶降功率幅度
+                        ,
+                        success: function(res){
+                            console.log("分组高级设置上传成功")
+                            alert("分组保存成功")
+                        }
+                    });
+                // 硬件分组
+                    $.ajax({
+                        url:baseURL + 'fun/device/change',
+                        contentType: "application/json;charset=UTF-8",
+                        type:"POST",
+                        data: JSON.stringify({
+                            "qaKey": qaKey, //需要修改的参数键
+                            "value": value, //需要修改的参数值
+                            "deviceType": "1", //设备类型   /1
+                            "groupId":grod,
+                            "status":2
+                        }),
+                        success: function(res) {
+                            console.log("硬件分组返回")
+                            console.log(res)
+                        }
+                    })
+
+
             })
         }
         function url(ur){
@@ -569,7 +677,7 @@ $(function(){
                         var timeDown_a=res.info.timeDown-(timeDown*60);
                         $("#r_teml_el").val(timeDown)//晨亮时段时长
                         $("#r_teml_egl").val(timeDown_a)
-                        $("#r_teml_tgl").val(res.info.vpv)//光控电压
+                        $("#r_teml_tgl").val(res.info.vpv/100)//光控电压
                         $("").val()// 光控关灯开关......
                         $("#r_teml_forl").val(res.info.batStringNum) //电池串数
                         $("#r_select_b option").val(res.info.batType);//电池类型
@@ -589,6 +697,52 @@ $(function(){
                         var tempDisCharge_a=res.info.tempDisCharge-(tempDisCharge*60);
                         $("#r_teml_thglt").val(tempDisCharge)//放电时间范围
                         $("#r_teml_thet").val(tempDisCharge_a)
+                        console.log(res.info.tempCharge)
+                        var newTempCharge1 =  res.info.tempCharge & 0xFF;
+                        var newTempCharge2 = (res.info.tempCharge>>8)//最高
+                        console.info(newTempCharge1+":"+newTempCharge2)
+                        var newTempDisCharge1 =  res.info.tempDisCharge & 0xFF;
+                        var newTempDisCharge2 = (res.info.tempDisCharge>>8) //最高
+                        $("#r_teml_thglte").val(newTempCharge2);
+                        $("#r_teml_thete").val(newTempCharge1);
+                        $("#r_teml_thglt").val(newTempDisCharge2);
+                        $("#r_teml_thet").val(newTempDisCharge1);
+                        var a=res.info.inductionSwitch
+                        var c=a.toString(2)
+                        var b ="";
+                        for(var i = c.length; i > 0; i--) {
+                            b += c.charAt(i - 1);
+                        }
+                        if(b.slice(0,1) == "1"){
+                            $(".se_a").attr("checked",true);
+                        }else{
+                            $(".se_a").attr("checked",false);
+                        }
+                        if(b.slice(1,2) == "1"){
+                            $(".se_b").attr("checked",true);
+                        }else{
+                            $(".se_b").attr("checked",false);
+                        }
+                        if(b.slice(2,3) == "1"){
+                            $(".se_c").attr("checked",true);
+                        }else{
+                            $(".se_c").attr("checked",false);
+                        }
+                        if(b.slice(3,4) == "1"){
+                            $(".se_d").attr("checked",true);
+                        }else{
+                            $(".se_d").attr("checked",false);
+                        }
+                        if(b.slice(4,5) == "1"){
+                            $(".se_e").attr("checked",true);
+                        }else{
+                            $(".se_e").attr("checked",false);
+                        }
+                        if(b.slice(5,6) == "1"){
+                            $(".se_f").attr("checked",true);
+                        }else{
+                            $(".se_f").attr("checked",false);
+                        }
 
                         $("#slideTest4").children().children(".layui-slider-bar").css("height",res.info.powerPeople1+"%")//灯亮时段1有人
                         $("#slideTest4").children().children(".layui-slider-wrap").css("bottom",res.info.powerPeople1+"%")

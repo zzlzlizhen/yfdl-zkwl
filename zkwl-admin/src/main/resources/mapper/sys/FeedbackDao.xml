@@ -31,11 +31,15 @@
     <!-- 查询用户的所有下级用户的反馈列表 -->
     <select id="queryBackList" resultType="com.remote.modules.sys.entity.FeedbackEntity">
         SELECT <include refid="columns"/> FROM feedback as ABSOLUTE
-        WHERE a.uid in
-        <foreach collection="userIds" index="index"
-                 item="uid" open="(" separator="," close=")">
-            #{uid}
-        </foreach>
+        WHERE 1=1
+        <if test="userIds !='' and userIds.size()>0">
+            and  a.uid in
+            <foreach collection="userIds" index="index"
+                     item="uid" open="(" separator="," close=")">
+                #{uid}
+            </foreach>
+        </if>
+
     </select>
     <select id="queryPageCount" resultType="java.lang.Integer">
         select count(back_id) from feedback where uid in

@@ -185,13 +185,15 @@ $(function(){
 
                     html += "<tr>\n" +
                         "<td id="+res.data.list[i].deviceId+" style=\"width:4%;\"> <input type= \"checkbox\" name='clk' class=\"checkbox_in  checkbox_i\"> </td>\n" +
-                        "<td id='r_nm' class='r_nm'>"+res.data.list[i].deviceCode+"" +
+                        "<td id='r_nm' class='r_nm'>" +
+                        "<div class='r_d'>"+res.data.list[i].deviceCode+"</div>" +
                         " <span class='Xufu' id="+res.data.list[i].deviceName+">"+res.data.list[i].deviceCode+"</span>" +
                         "</td>\n" +
                         "<td style=\"width:10%;\" class='r_name' id='r_namem'>"+res.data.list[i].deviceName+"</td>\n" +
                         "<td class='grod' id="+res.data.list[i].groupId+">"+res.data.list[i].groupName+"</td>\n" +
-                        "<td class='type'>"+res.data.list[i].deviceTypeName+"" +
-                        " <span class='Xufu_type' id="+res.data.list[i].deviceCode+">"+res.data.list[i].deviceTypeName+"</span>" +
+                        "<td class='type'>"+
+                        "<div class='r_d' id="+res.data.list[i].deviceType+">"+res.data.list[i].deviceTypeName+"</div>" +
+                        " <span class='Xufu Xufu_type' id="+res.data.list[i].deviceCode+">"+res.data.list[i].deviceTypeName+"</span>" +
                         "</td>\n" +
                         "<td>"+photocellState+" </td>\n" +
                         "<td>"+batteryState+"</td>\n" +
@@ -215,10 +217,10 @@ $(function(){
                 $("#div").append(html);
                 //hover
                 $(".type,.r_nm").hover(function(){
-                    var c_la=$(this).children().attr("id");
+                    var c_la=$(this).children(".Xufu").attr("id");
                     $("#"+c_la).show()
                 },function(){
-                    var c_la=$(this).children().attr("id");
+                    var c_la=$(this).children(".Xufu").attr("id");
                     $("#"+c_la).hide()
                 });
 
@@ -232,9 +234,9 @@ $(function(){
 
                 //控制面板
                 $(".particulars_a").click(function(){
-                    var deviceCode=$(this).parent().siblings("#r_nm").html();
+                    var deviceCode=$(this).parent().siblings(".r_nm").children(".r_d").html();
                     var grod=$(this).parent().siblings(".grod").attr('id');
-                    var type=$(this).parent().siblings(".type").html();
+                    var type=$(this).parent().siblings(".type").children(".r_d").attr("id");
                     var searchUrl=encodeURI('../control/control.html?deviceCode='+deviceCode+"&grod="+grod+"&type="+type)
                     location.href =searchUrl;
                 })

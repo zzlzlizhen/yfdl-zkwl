@@ -41,44 +41,74 @@
 		where ur.user_id = #{userId}
 	</select>
 
+
 	<select id="queryAllLevel" resultType="com.remote.modules.sys.entity.SysUserEntity">
 		select <include refid="columns"/> from sys_user where ${where}
 	</select>
 	<!--通过用户id跟邮箱查询该用户是否已经绑定邮箱-->
 	<select id="queryByEmailAndUid" resultType="com.remote.modules.sys.entity.SysUserEntity">
-		select <include refid="columns"/> from sys_user as su  where su.flag = 1 and su.type =1 and su.user_id = #{userId} and su.email = #{email}
+		select <include refid="columns"/> from sys_user as su  where su.flag = 1 and su.type =1
+		<if test="userId!=null">
+			and su.user_id = #{userId}
+		</if>
+		<if test="email!=null and email !='' ">
+			and su.email = #{email}
+		</if>
 	</select>
 	<!--通过用户id跟手机查询该手机号是否已绑定-->
 	<select id="queryBySmsAndUid" resultType="com.remote.modules.sys.entity.SysUserEntity">
-		SELECT <include refid="columns"/> from sys_user as su where su.flag = 1 and su.is_bind_mtype = 1 and su.user_id = #{userId} and su.mobile = #{mobile}
+		SELECT <include refid="columns"/> from sys_user as su where su.flag = 1 and su.is_bind_mtype = 1
+		<if test="userId!=null">
+		and su.user_id = #{userId}
+	    </if>
+		<if test="mobile!=null and mobile!=''">
+			and su.mobile = #{mobile}
+		</if>
 	</select>
 <!--	<select id="queryByUser" resultType="com.remote.modules.sys.entity.SysUserEntity">
 		select <include refid="columns"/> from sys_user where 1=1 and username = #{username}
 	</select>-->
 	<!-- 查询用户自身和子用户信息 -->
 	<select id="queryChild" resultType="com.remote.modules.sys.entity.SysUserEntity">
-		select <include refid="columns"/> from sys_user where flag = 1 and parent_id = #{userId} or user_id = #{userId}
+		select <include refid="columns"/> from sys_user where flag = 1
+		<if test="userId != null">
+			and parent_id = #{userId}
+			or user_id = #{userId}
+		</if>
+
 	</select>
 	<!-- 查询用户的自身或者子用户信息 -->
 	<select id="queryAllChild" resultType="com.remote.modules.sys.entity.SysUserEntity">
-		select <include refid="columns"/> from sys_user where flag = 1 and all_parent_id like concat(#{allParentId},',%') or user_id = #{userId}
+		select <include refid="columns"/> from sys_user where flag = 1
+		<if test="allParentId != null">
+			and all_parent_id like concat(#{allParentId},',%')
+		</if>
+		<if test="userId != null">
+			or user_id = #{userId}
+		</if>
+
 	</select>
 	<select id="selectSlat" resultType="java.lang.String">
-		select salt from sys_user where flag=1 and username = #{username}
+		select salt from sys_user where flag=1
+		<if test="username != null and username != ''">
+			and username = #{username}
+		</if>
+
 	</select>
 	<select id="getUidByContact" resultType="java.lang.Long">
-		select user_id from sys_user where email=#{contact} or mobile =#{contact} limit 1
+		select user_id from sys_user where flag=1
+		<if test="contact != null and contact != ''">
+			and email=#{contact} or mobile =#{contact}
+		</if>
+		limit 1
 	</select>
-
 	<select id="queryUserByUserIds" resultType="com.remote.modules.sys.entity.SysUserEntity">
-		select <include refid="columns"/> from sys_user where
+		select <include refid="columns"/> from sys_user where flag=1
 		<if test="userIds !=null and userIds.size()!= 0">
-		     user_id in
+		     and user_id in
 			<foreach collection="userIds" index="index" item="item" open="(" separator="," close=")">
 				#{item}
 			</foreach>
 		</if>
 	</select>
-
-
 </mapper>

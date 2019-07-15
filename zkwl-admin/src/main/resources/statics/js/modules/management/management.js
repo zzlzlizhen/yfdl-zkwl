@@ -102,7 +102,7 @@ $(function () {
                     var searchUrl=encodeURI('../equipment/equipment.html?longitude='+longitude+"&name="+name)
                     location.href =searchUrl;
                 })
-
+                //高级设置
                 $(".modifier_a").click(function(){
                     var grod=$(this).parent().attr('id');
                     console.log(grod)

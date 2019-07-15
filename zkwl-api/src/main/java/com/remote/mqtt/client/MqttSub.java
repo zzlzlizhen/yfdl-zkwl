@@ -29,7 +29,7 @@ public class MqttSub {
     public void init() {
         try {
             //订阅消息
-            int[] Qos = {2};
+            int[] Qos = {1};
             String[] topic1 = {mqttInfoConfig.getClientTopic()};
             if(mqttSubClient!=null){
                 mqttSubClient.subscribe(topic1,Qos);

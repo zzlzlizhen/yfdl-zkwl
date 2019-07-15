@@ -349,6 +349,9 @@
 
 
     <select id="getDeviceByDeviceCode" resultType="java.lang.Integer">
-        select count(1) from fun_device where is_del = 0 and device_code = #{deviceCode}
+        select count(1) from fun_device where is_del = 0
+         <if test="deviceCode!=null and deviceCode!=''">
+             and device_code = #{deviceCode}
+         </if>
     </select>
 </mapper>

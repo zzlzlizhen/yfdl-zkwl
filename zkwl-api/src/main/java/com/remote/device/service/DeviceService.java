@@ -2,6 +2,9 @@ package com.remote.device.service;
 
 import com.remote.common.CommonEntity;
 import com.remote.device.entity.DeviceEntity;
+import com.remote.device.entity.DeviceQuery;
+
+import java.util.List;
 
 public interface DeviceService {
     /*
@@ -29,4 +32,12 @@ public interface DeviceService {
      * @return  int
      **/
     int updateDeviceTimeOutByCode(String deviceCode);
+    /*
+     * @Author zhangwenping
+     * @Description 查询设备
+     * @Date 9:35 2019/7/15
+     * @Param deviceQuery
+     * @return List<DeviceEntity>
+     **/
+    List<DeviceEntity> queryDeviceNoPage(DeviceQuery deviceQuery);
 }
