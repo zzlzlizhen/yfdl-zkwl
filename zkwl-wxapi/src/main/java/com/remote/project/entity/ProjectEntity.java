@@ -18,8 +18,8 @@ public class ProjectEntity {
     private String projectId;
     private String projectCode;
     private String projectName;
-    private String ProjectDesc;//项目描述',
-    private String CityId;// 所属城市,
+    private String projectDesc;//项目描述',
+    private Integer cityId;// 所属城市,
     private Long exclusiveUser;// 管理者id',
     private Integer runStatus;// 运行状态',
     private Integer sumCount;// 总装机数量',
@@ -43,9 +43,8 @@ public class ProjectEntity {
      * 纬度
      */
     private String latitude;
+    //使用者姓名
+    private String exclusiveUserName;
 
-    private Long userId;
-
-    private String userName;
 
 }

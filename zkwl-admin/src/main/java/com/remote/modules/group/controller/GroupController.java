@@ -2,6 +2,7 @@ package com.remote.modules.group.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.remote.common.utils.R;
+import com.remote.common.utils.StringUtils;
 import com.remote.modules.group.entity.GroupEntity;
 import com.remote.modules.group.entity.GroupQuery;
 import com.remote.modules.group.service.GroupService;
@@ -32,10 +33,13 @@ public class GroupController extends AbstractController {
 
     @RequestMapping(value = "/add", method= RequestMethod.POST)
     public R add(@RequestBody GroupEntity group){
+        if(StringUtils.isEmpty(group.getGroupName())){
+            return R.error(201,"设备分组名称不能为空");
+        }
         SysUserEntity user = getUser();
         group.setGroupId(UUID.randomUUID().toString());
         group.setCreateUser(user.getUserId());
-        group.setCreateName(user.getUsername());
+        group.setCreateName(user.getRealName());
         group.setCreateTime(new Date());
         boolean b = groupService.queryByName(group.getProjectId(),group.getGroupName());
         if(b){
@@ -91,12 +95,15 @@ public class GroupController extends AbstractController {
 
     @RequestMapping(value = "/updateGroup", method= RequestMethod.POST)
     public R updateGroup(@RequestBody GroupEntity groupEntity){
+        if(StringUtils.isEmpty(groupEntity.getGroupName())){
+            R.error(201,"设备分组名称不能为空");
+        }
         SysUserEntity user = getUser();
         groupEntity.setUpdateTime(new Date());
         groupEntity.setUpdateUser(user.getUserId());
         boolean flag = groupService.updateGroup(groupEntity);
         if(!flag){
-            R.error(400,"修改分组失败");
+            return R.error(400,"修改分组失败");
         }
         return R.ok();
     }

@@ -41,9 +41,14 @@ public class ProjectController extends AbstractController {
 
     @RequestMapping(value = "/add", method= RequestMethod.POST)
     public R add(@RequestBody ProjectEntity project){
+        if(project.getExclusiveUser() == null){
+            return R.error(201,"使用人不能为空");
+        }
+        if(StringUtils.isEmpty(project.getProjectName())){
+            return R.error(201,"项目名称不能为空");
+        }
+        //前端传入登陆人id和姓名
         project.setProjectId(UUID.randomUUID().toString());
-        project.setCreateUser(project.getUserId());
-        project.setCreateName(project.getUserName());
         project.setCreateTime(new Date());
         project.setProjectCode(ProjectCodeUitls.getProjectCode());
         boolean flag = projectService.addProject(project);
@@ -91,7 +96,7 @@ public class ProjectController extends AbstractController {
     @RequestMapping(value = "/update", method= RequestMethod.POST)
     public R update(@RequestBody ProjectEntity projectEntity){
         projectEntity.setUpdateTime(new Date());
-        projectEntity.setUpdateUser(projectEntity.getUserId());
+        //前端传入修改人id
         boolean flag = projectService.updateProject(projectEntity);
         if(!flag){
             return R.error(400,"修改项目失败");

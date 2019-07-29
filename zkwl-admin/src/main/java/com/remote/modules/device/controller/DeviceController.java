@@ -4,10 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.remote.common.enums.AllEnum;
 import com.remote.common.enums.RunStatusEnum;
-import com.remote.common.utils.DataUtils;
-import com.remote.common.utils.R;
-import com.remote.common.utils.StringUtils;
-import com.remote.common.utils.MapUtils;
+import com.remote.common.utils.*;
 import com.remote.modules.device.entity.DeviceEntity;
 import com.remote.modules.device.entity.DeviceQuery;
 import com.remote.modules.device.service.DeviceService;
@@ -76,22 +73,44 @@ public class DeviceController extends AbstractController {
         data.setKey(key);
         String s = JSONObject.toJSONString(data);
         logger.info("操作设备:"+s);
-        template.convertAndSend("CalonDirectExchange", "CalonDirectRouting", s);
+        template.convertAndSend("topicExchange", "topic.upload", s);
     }
 
     @RequestMapping(value = "/updateVersion", method= RequestMethod.POST)
     public void updateVersion(@RequestBody DataUtils data){
+        List<String> deviceCodes = new ArrayList<>();
+        DeviceQuery deviceQuery = new DeviceQuery();
+        if(StringUtils.isNotEmpty(data.getGroupId())){
+            deviceQuery.setGroupId(data.getGroupId());
+            List<DeviceEntity> deviceEntities = deviceService.queryDeviceNoPage(deviceQuery);
+            deviceCodes = deviceEntities.parallelStream().map(deviceEntity -> deviceEntity.getDeviceCode()).collect(Collectors.toCollection(ArrayList::new));
+            data.setDeviceCodes(deviceCodes);
+        }else{
+            deviceCodes = data.getDeviceCodes();
+        }
+        if(CollectionUtils.isNotEmpty(deviceCodes)){
+            deviceService.updateDeviceRunStatus(deviceCodes);
+        }
         String s = JSONObject.toJSONString(data);
         logger.info("设备升级:"+s);
-        template.convertAndSend("CalonDirectExchange", "CalonDirectRouting", s);
+        template.convertAndSend("topicExchange", "topic.upgrade", s);
     }
 
     @RequestMapping(value = "/add", method= RequestMethod.POST)
     public R queryDevice(@RequestBody DeviceEntity deviceEntity) throws Exception {
+        if(StringUtils.isEmpty(deviceEntity.getGroupId())){
+            return R.error(201,"设备分组不能为空");
+        }
+        if(StringUtils.isEmpty(deviceEntity.getDeviceName())){
+            return R.error(201,"设备名称不能为空");
+        }
+        if(StringUtils.isEmpty(deviceEntity.getDeviceCode())){
+            return R.error(201,"设备编号不能为空");
+        }
         SysUserEntity user = getUser();
         deviceEntity.setCreateUser(user.getUserId());
         deviceEntity.setIsDel(AllEnum.NO.getCode());
-        deviceEntity.setCreateName(user.getUsername());
+        deviceEntity.setCreateName(user.getRealName());
         deviceEntity.setCreateTime(new Date());
         deviceEntity.setDeviceId(UUID.randomUUID().toString());
         deviceEntity.setOnOff(AllEnum.NO.getCode());
@@ -122,7 +141,7 @@ public class DeviceController extends AbstractController {
         List<String> deviceList = Arrays.asList(deviceIds.split(","));
         DeviceQuery deviceQuery = new DeviceQuery();
         deviceQuery.setDeviceList(deviceList);
-        deviceQuery.setIsDel(1);//删除标记  0未删除  1已删除
+        deviceQuery.setIsDel(AllEnum.YES.getCode());//删除标记  0未删除  1已删除
         deviceQuery.setUpdateUser(user.getUserId());
         deviceQuery.setUpdateTime(new Date());
         boolean flag = deviceService.deleteDevice(deviceQuery);
@@ -152,23 +171,33 @@ public class DeviceController extends AbstractController {
 
     @RequestMapping(value = "/updateDevice", method= RequestMethod.POST)
     public R updateDevice(@RequestBody DeviceEntity deviceEntity) throws Exception {
+        if(StringUtils.isEmpty(deviceEntity.getGroupId())){
+            return R.error(201,"设备分组不能为空");
+        }
+        if(StringUtils.isEmpty(deviceEntity.getDeviceName())){
+            return R.error(201,"设备名称不能为空");
+        }
         SysUserEntity user = getUser();
         deviceEntity.setUpdateUser(user.getUserId());
         deviceEntity.setUpdateTime(new Date());
         deviceEntity.setUpdateUserName(user.getUsername());
-        boolean flag = deviceService.updateById(deviceEntity);
-        if(!flag){
+        R r = deviceService.updateById(deviceEntity);
+        if(!r.isOK()){
             return R.error(400,"修改设备失败");
         }else{
             sysUserService.updateDevCount(getUser());
         }
-        return R.ok();
+        return r;
     }
 
     @RequestMapping(value = "/getDeviceByGroupIdNoPage", method= RequestMethod.GET)
-    public R getDeviceByGroupIdNoPage(String groupId){
+    public R getDeviceByGroupIdNoPage(String groupId,String projectId,Integer status){
         DeviceQuery deviceQuery = new DeviceQuery();
         deviceQuery.setGroupId(groupId);
+        deviceQuery.setProjectId(projectId);
+        if(!status.equals(new Integer(0))){
+            deviceQuery.setRunState(status);
+        }
         return R.ok(deviceService.queryDeviceNoPage(deviceQuery));
     }
 
@@ -190,11 +219,22 @@ public class DeviceController extends AbstractController {
         SysUserEntity user = getUser();
         deviceQuery.setUpdateUser(user.getUserId());
         deviceQuery.setUpdateTime(new Date());
-        deviceQuery.setUpdateUserName(user.getUsername());
+        deviceQuery.setUpdateUserName(user.getRealName());
         return R.ok(deviceService.updateOnOffByIds(deviceQuery));
     }
 
 
-
+    @RequestMapping(value = "/getDeviceType", method= RequestMethod.GET)
+    public R getDeviceType(){
+        Set<Map.Entry<String, String>> entries = DeviceTypeMap.DEVICE_TYPE.entrySet();
+        List<DeviceEntity> list = new ArrayList<>();
+        for(Map.Entry<String, String> entry : entries){
+            DeviceEntity deviceEntity = new DeviceEntity();
+            deviceEntity.setDeviceType(entry.getKey());
+            deviceEntity.setDeviceTypeName(entry.getValue());
+            list.add(deviceEntity);
+        }
+        return R.ok(list);
+    }
 
 }

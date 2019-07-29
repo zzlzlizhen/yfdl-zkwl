@@ -132,8 +132,28 @@ public class SysUserController extends AbstractController {
 	public R save(SysUserEntity user){
 		Assert.isBlank(user.getPassword(), "密码不为能空");
 		ValidatorUtils.validateEntity(user, AddGroup.class);
+		if(StringUtils.isNotBlank(user.getUsername())){
+			SysUserEntity sysUserEntity =	sysUserService.getByUsername(user.getUsername());
+			if(sysUserEntity != null){
+				return R.error("该用户名已存在");
+			}
+		}
+		if(StringUtils.isNotBlank(user.getEmail())){
+			SysUserEntity sysUserEntity =	sysUserService.getByEmail(user.getEmail());
+			if(sysUserEntity != null){
+				return R.error("该邮箱已存在");
+			}
+		}
+		if(StringUtils.isNotBlank(user.getMobile())){
+			SysUserEntity sysUserEntity = sysUserService.getByMobile(user.getMobile());
+			if(sysUserEntity != null){
+				return R.error("该手机号已存在");
+			}
+		}
 		Date d = null;
-		if(user.getTermOfValidity() >= 1){
+		if(user.getTermOfValidity() == 6){
+			d = DateUtils.addDateYears(new Date(),99);
+		}else if(user.getTermOfValidity() >= 1){
 			d = DateUtils.addDateYears(new Date(),user.getTermOfValidity());
 		}else{
 			d = DateUtils.addDateMonths(new Date(),6);
@@ -153,8 +173,22 @@ public class SysUserController extends AbstractController {
 	@RequiresPermissions("sys:user:update")
 	public R update(SysUserEntity user){
 		ValidatorUtils.validateEntity(user, UpdateGroup.class);
+		if(StringUtils.isNotBlank(user.getEmail())){
+			List<SysUserEntity> sysUserEntities = sysUserService.getByEmailAndUid(user.getEmail(),user.getUserId());
+			if(CollectionUtils.isNotEmpty(sysUserEntities)||sysUserEntities.size()>0){
+				return R.error("该邮箱已存在");
+			}
+		}
+		if(StringUtils.isNotBlank(user.getMobile())){
+			List<SysUserEntity> sysUserEntities = sysUserService.getByMobileAndUid(user.getMobile(),user.getUserId());
+			if(CollectionUtils.isNotEmpty(sysUserEntities)||sysUserEntities.size()>0){
+				return R.error("该手机号已存在");
+			}
+		}
 		Date d = null;
-		if(user.getTermOfValidity() >= 1){
+		if(user.getTermOfValidity() == 6){
+			d = DateUtils.addDateYears(new Date(),99);
+		}else if(user.getTermOfValidity() >= 1){
 			d = DateUtils.addDateYears(user.getCreateTime(),user.getTermOfValidity());
 		}else{
 			d = DateUtils.addDateMonths(user.getCreateTime(),6);
@@ -164,7 +198,7 @@ public class SysUserController extends AbstractController {
 		sysUserService.update(user);
 		return R.ok();
 	}
-	
+
 	/**
 	 * 删除用户
 	 */
@@ -207,7 +241,20 @@ public class SysUserController extends AbstractController {
 	@RequestMapping(value = "/updateBaseInfo",method = RequestMethod.POST)
 	@RequiresPermissions("sys:user:update")
 	public R updateBaseInfo(SysUserEntity user){
-		SysUserEntity sysUserEntity = sysUserService.queryByIdEAndM(getUserId());
+		ValidatorUtils.validateEntity(user, UpdateGroup.class);
+		if(StringUtils.isNotBlank(user.getEmail())){
+			List<SysUserEntity> sysUserEntities = sysUserService.getByEmailAndUid(user.getEmail(),getUserId());
+			if(CollectionUtils.isNotEmpty(sysUserEntities)||sysUserEntities.size()>0){
+				return R.error("该邮箱已存在");
+			}
+		}
+		if(StringUtils.isNotBlank(user.getMobile())){
+			List<SysUserEntity> sysUserEntities = sysUserService.getByMobileAndUid(user.getMobile(),getUserId());
+			if(CollectionUtils.isNotEmpty(sysUserEntities)||sysUserEntities.size()>0){
+				return R.error("该手机号已存在");
+			}
+		}
+		SysUserEntity sysUserEntity = sysUserService.queryByIdEAndM(this.getUserId());
 		if(sysUserEntity != null){
 			if(!StringUtils.isBlank(user.getEmail())&&!StringUtils.isBlank(sysUserEntity.getEmail())){
 				if(!user.getEmail().equals(sysUserEntity.getEmail())){
@@ -231,9 +278,14 @@ public class SysUserController extends AbstractController {
 	@RequiresPermissions("sys:user:info")
 	public R baseInfo(){
 		SysUserEntity user = sysUserService.getById(getUserId());
+
 		//获取用户所属的角色列表
 		List<Long> roleIdList = sysUserRoleService.queryRoleIdList(getUserId());
-		user.setRoleIdList(roleIdList);
+		if(CollectionUtils.isNotEmpty(roleIdList)&&roleIdList.size()>0){
+            user.setRoleIdList(roleIdList);
+            user.setRoleId(roleIdList.get(0));
+        }
+
 		return R.ok().put("user", user);
 	}
 	/**

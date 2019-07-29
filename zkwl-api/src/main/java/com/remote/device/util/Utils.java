@@ -97,7 +97,7 @@ public class Utils {
         BigDecimal b1 = new BigDecimal(d1);
         BigDecimal b2 = new BigDecimal(d2);
         BigDecimal multiply = b1.multiply(b2);
-        return multiply.setScale(1).doubleValue();
+        return multiply.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 
     public static UpdateVersion version(){
@@ -139,7 +139,9 @@ public class Utils {
 
 
     public static void main(String[] args) {
-
+        BigDecimal bd1 = new BigDecimal(Double.toString(7));
+        double v = bd1.divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        System.out.println(v);
     }
 
 

@@ -26,6 +26,10 @@ public class HistoryYear {
     private Double inductionFrequency;//感应次数
     private Integer fillingsNumber; //充满次数
     private Integer dischargeNumber;//冲放次数
+    //负载功率
+    private Double loadPower;
+    //充电功率
+    private Double chargingPower;
     private Date createTime;
     private String time;
 }

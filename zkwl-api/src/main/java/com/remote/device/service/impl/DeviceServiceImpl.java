@@ -50,34 +50,35 @@ public class DeviceServiceImpl implements DeviceService {
         String latitudeH = commonEntity.getLatitudeH();
         int i = Integer.valueOf(latitudeH) << 16;
         String latitudeL = commonEntity.getLatitudeL();
-        double latitudeUp = Double.valueOf(latitudeInt+"."+i+latitudeL);
+        double latitudeUp = Double.valueOf(latitudeInt+"."+(i+Integer.valueOf(latitudeL)));
 
 
         String longitudeInt = commonEntity.getLongitudeInt();//经度整数
         String longitudeH = commonEntity.getLongitudeH();
         int h = Integer.valueOf(longitudeH) << 16;
         String longitudeL = commonEntity.getLongitudeL();
-        double longitudeUp = Double.valueOf(longitudeInt+"."+h+longitudeL);
+        double longitudeUp = Double.valueOf(longitudeInt+"."+(h+Integer.valueOf(longitudeL)));
 
         //经纬度不为空的话，代表是手机扫码添加  否则代表页面添加，页面添加经纬度为空
-        if(entity.getLongitude() != null && entity.getLatitude() != null){
-            //原来经度
-            String longitude = entity.getLongitude();
-            //原来纬度
-            String latitude = entity.getLatitude();
-            //判断两个经纬度距离是否大于3公里
-            double distance = XYmatch.getDistance(longitudeUp, latitudeUp, Double.valueOf(longitude), Double.valueOf(latitude));
-            if(distance >= 3){
-                //相距大于3公里已基站为准
-                deviceEntity.setLatitude(latitudeInt+"."+i+latitudeL);
-                deviceEntity.setLongitude(longitudeInt+"."+h+longitudeL);
-            }
-        }else{
-            //经纬度为空，代表浏览器添加。浏览器添加没有基本定位，所以取基站定位
-            deviceEntity.setLatitude(latitudeInt+"."+i+latitudeL);
-            deviceEntity.setLongitude(longitudeInt+"."+h+longitudeL);
-        }
-
+//        if(entity.getLongitude() != null && entity.getLatitude() != null){
+//            //原来经度
+//            String longitude = entity.getLongitude();
+//            //原来纬度
+//            String latitude = entity.getLatitude();
+//            //判断两个经纬度距离是否大于3公里
+//            double distance = XYmatch.getDistance(longitudeUp, latitudeUp, Double.valueOf(longitude), Double.valueOf(latitude));
+//            if(distance >= 3){
+//                //相距大于3公里已基站为准
+//                deviceEntity.setLatitude(latitudeInt+"."+i+latitudeL);
+//                deviceEntity.setLongitude(longitudeInt+"."+h+longitudeL);
+//            }
+//        }else{
+//            //经纬度为空，代表浏览器添加。浏览器添加没有基本定位，所以取基站定位
+//            deviceEntity.setLatitude(latitudeInt+"."+i+latitudeL);
+//            deviceEntity.setLongitude(longitudeInt+"."+h+longitudeL);
+//        }
+        deviceEntity.setLatitude(String.valueOf(latitudeUp));
+        deviceEntity.setLongitude(String.valueOf(longitudeUp));
         //负载状态 loadState  蓄电池状态 batteryState 光电池状态  photocellState
         Integer loadState = deviceEntity.getLoadState();
         Integer batteryState = deviceEntity.getBatteryState();

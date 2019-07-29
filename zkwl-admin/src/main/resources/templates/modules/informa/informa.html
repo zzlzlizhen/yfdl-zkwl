@@ -12,36 +12,11 @@
     ul li {list-style: none;}
     html{overflow: hidden}
     .tab{background:#27E2D4;}
-    .hear {
-        width: 100%;
-        height: 70px;
-        float: left;
-        line-height: 60px;
-        font-size: 14px;
-        padding: 0 1%;
-        border-bottom:10px solid rgba(242, 242, 242, 1);
-
-    }
-    .tab li{
-        float: left;
-        width:115px;
-        height: 40px;
-        font-size: 14px;
-        text-align: center;
-        line-height: 40px;
-        cursor: pointer;
-        margin: 0;
-        color: #fff;
-    }
-    .tab li:hover{
-        color: #666666;
-    }
-    .tab li.cur{
-        border:none ;
-    }
-    .tab{
-        height: 49px;
-    }
+    .hear{width: 100%;height: 70px;float: left;line-height: 60px;font-size: 14px;padding: 0 1%;border-bottom:10px solid rgba(242, 242, 242, 1);}
+    .tab li{float: left;width:115px;height: 40px;font-size: 14px;text-align: center;line-height: 40px;cursor: pointer;margin: 0;color: #fff;}
+    .tab li:hover{color: #666666;}
+    .tab li.cur{border:none ;}
+    .tab{height: 49px;}
     .tab>i{
         width: 14px;
         height: 14px;
@@ -56,13 +31,18 @@
         color: #fff;
         top: 22%;
     }
+    @media screen and (max-width: 1500px) and (min-width: 800px){
+        .option {
+            width: 100%!important;
+        }
+    }
 </style>
 <body>
-<div class="hear">
+<div class="hear hear_fan">
     <img src="${request.contextPath}/statics/image/dingwei.png" alt="">用户反馈
 </div>
 <ul class="tab">
-    <li class="cur">系统消息</li>
+    <li class="cur" style="margin-left:5%;">系统消息</li>
     <li>用户反馈  </li><i id="r_num_in"></i>
 </ul>
 <div class="option_a option_b" style="max-height: 89%;">
@@ -106,8 +86,6 @@
               <span>邮箱：<i id="r_emls"></i></span>
               <span>手机号：<i id="r_moes"></i></span>
           <div class="sha_buttom">
-              <!--        <input type="button" value="确定" id="project_confirm" class="r_yes">-->
-              <!--        <input type="button" value="取消" class="shade_add_project">-->
               <div id="project_confirm"  class="rquebei r_yes" >取消</div>
               <div  class=" rqubtn"  id="huifu">回复</div>
           </div>
@@ -118,9 +96,7 @@
                   <span class="glyphicon glyphicon-pencil cu_m"></span>错误提示
                   <span class="glyphicon glyphicon-remove wrong"></span>
               </div>
-              <textarea rows="3" cols="20"  class="r_tex_bo">
-            请输入
-            </textarea>
+              <textarea rows="3" cols="20"  class="r_tex_bo" placeholder="请输入"></textarea>
           <div class="sha_buttom">
               <span id="project_confirme"  class="rquebei -r_yes" >确定</span>
               <div  class=" rqubtn r_yes"  id="huifue">取消</div>
@@ -130,7 +106,8 @@
 
 </div>
 </div>
-<script src="${request.contextPath}/statics/js/modules/informa/informa.js"></script>
-
+<script>
+    document.write('<script src="${request.contextPath}/statics/js/modules/informa/informa.js?v='+Math.random()+'"><\/script>');
+</script>
 </body>
 </html>

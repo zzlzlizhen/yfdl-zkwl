@@ -29,15 +29,41 @@
         .app{width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑"}
         #allmap {width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";}
         .fa{font-size: xx-large}
-        .BMapLabel{background: 0 !important;}
+        .BMapLabel{background: 0 !important;left:30px !important;top:6px !important;border:0 !important;}
         .move{z-index: 100;width: 33%;border-radius: 20px;height: 63%;position: absolute;cursor: pointer;background-color: #27E2D4;top: 16%;left: 14%;}
         .on .move{left: 50%;top: 18%;}
         .btn_fath{width: 71%;height: 20px;}
         .swa {width: 16%;height: 50%;float: left;margin: 1% 0px 0px 6%;}
         .switcha {width: 100%;margin: 7px 0px 0 0%;}
         .BMap_Marker>div>img{width:100%;height:100%;}
-        .BMapLabel{border:0 !important;: }
         .r_di_top{margin-top: 1%!important;}
+        #qu_a,#confirm{width:70px;height:33px;border:0;margin:3% 0px 0px 20%;}
+        @media screen and (min-width:800px) and (max-width:1400px) {
+            .g_b{height:176px !important;}
+            .g_b canvas{width: 372px !important;height: 135px !important;}
+            .cake_B{height:147px;}
+            .g_a{height:95px !important;}
+            .g_c{height:80px !important;}
+            .cake{height:146px !important;}
+            .r_D_a{width:55% !important;}
+            .drawer_img{margin-top:928%;}
+            .con_an{height:30px;}
+            .con_an_span{line-height: 30px;}
+            .form_con_an{line-height:34px; }
+            .pro_res{margin-top:13px !important;}
+            .slid{margin-top:4%;height:21px;}
+            .con_an_a{height:50px;}
+            .con_an_a input{height:27px;margin-top:8px;}
+            .convention{height:130px;}
+            .ri_a{margin-left:0px !important; }
+            .con_an_a input,.r_ba_tu_t{background-size: 100% 27px !important;font-size: 12px;}
+            .dra_spa,.dra_p{height:27px;line-height: 27px;font-size:12px !important;}
+            .dra_spa{margin-left:6% !important;}
+            .con_Gu ul img{width: 17px;height:17px;}
+            .con_Gu ul span{width:72%;text-align: left}
+            .con_Xu ul span{width:45%;}
+            .lu_m_a,.lu_m_b,.lu_m_c{width:30% !important;height:25px !important;font-size:19px !important;color:rgba(0,165,160,0.7) !important;}
+        }
     </style>
 </head>
 <body>
@@ -47,28 +73,39 @@
 </div>
 
 <!--单选-->
-<div class="radio">
-    <div class="radio_a"></div>
-    <div class="radio_b">
-        <div class="ra_div" style="margin-left:4%;"><p class=" p" id="0"></p></div>
-        <span>全部</span>
-        <div class="zheng ra_div"><p class="clicka p" id="1"></p></div>
-        <span class="zheng_a ">正常</span>
-        <div class="bao ra_div"><p class="clicka p" id="2"></p></div>
-        <span class="bao_a">报警</span>
-        <div class="gu ra_div"><p class="clicka p" id="3"></p></div>
-        <span class="gu_a">故障</span>
-        <div class="li ra_div"><p class="clicka p" id="4"></p></div>
-        <span class="li_a">离线</span>
-        <a class="btn btn-primary btn_m pan_m" id="pandect" ><i class="glyphicon glyphicon-eye-open"></i>总览</a>
-    </div>
+<!--<div class="radio">-->
+<!--    <div class="radio_a"></div>-->
+<!--    <div class="radio_b">-->
+<!--        <div class="ra_div D_xuan" style="margin-left:4%;"><p class=" p" id="0"></p></div>-->
+<!--        <span class="D_xuan">全部</span>-->
+<!--        <div class="zheng ra_div D_xuan"><p class="clicka p" id="1"></p></div>-->
+<!--        <span class="zheng_a D_xuan">正常</span>-->
+<!--        <div class="bao ra_div D_xuan"><p class="clicka p" id="2"></p></div>-->
+<!--        <span class="bao_a D_xuan">报警</span>-->
+<!--        <div class="gu ra_div D_xuan"><p class="clicka p" id="3"></p></div>-->
+<!--        <span class="gu_a D_xuan">故障</span>-->
+<!--        <div class="li ra_div D_xuan"><p class="clicka p" id="4"></p></div>-->
+<!--        <span class="li_a D_xuan">离线</span>-->
+<!--    </div>-->
+<!--</div>-->
+
+<div class="ra_state">
+     <div class="ra_state_a D_xuan" ></div>
+     <div class="ra_state_b D_xuan" ></div>
+     <div class="ra_state_c D_xuan" ><img src="${request.contextPath}/statics/image/zonglana.png"/></div>
+     <div class="ra_state_d D_xuan" ><img src="${request.contextPath}/statics/image/xuanzea.png"/></div>
+     <div class="q_uan D_xuan_a D_xuan" id="0"></div>
+     <div class="zh_eng D_xuan_a D_xuan" id="1"></div>
+     <div class="b_ao D_xuan_a D_xuan" id="2"></div>
+     <div class="g_u D_xuan_a D_xuan" id="3"></div>
+     <div class="l_i D_xuan_a D_xuan" id="4"></div>
+     <div class="zong-lan" id="pandect">总览</div>
 </div>
 
 <!--    侧边栏-->
 <div class="navigation">
 <!--    <div class="nav_t"></div>-->
     <div class="nav_n"></div>
-
     <div class="nav_n_a">
         <ul class="nav_a"  id="nav_a">
 
@@ -78,23 +115,24 @@
 
 <!--侧边抽屉-->
 <div class="drawer" id="drawer">
+    <div class="dra_zhao"></div>
     <div class="drawer_right">
         <img src="${request.contextPath}/statics/image/r_shuangzuojiantou-01.svg" class="drawer_img" id="drawer_img"/>
     </div>
     <div class="drawer_left">
         <div class="r_con_div She">
             <span class="dra_spa r_rgb">运行天数：</span>
-            <p class="dra_p r_di_top r_col_shu">1212</p>
+            <p class="dra_p r_di_top r_col_shu" id="Yx_a">0</p>
             <span class="dra_spa r_rgb">通讯方式：</span>
-            <p class="dra_p r_di_top r_col_shu">21212</p>
+            <p class="dra_p r_di_top r_col_shu" id="Yx_b">0</p>
         </div>
         <div class="r_con_div She">
-            <span class="dra_spa">硬件版本</span>
-            <p class="dra_p r_di_top">21212</p>
-            <span class="dra_spa" style="margin-left: 15px;">软件版本</span>
-            <p class="dra_p r_di_top">21212</p>
+            <span class="dra_spa">硬件版本：</span>
+            <p class="dra_p r_di_top" id="Yx_c">0</p>
+            <span class="dra_spa" style="margin-left: 15px;">软件版本：</span>
+            <p class="dra_p r_di_top" id="Yx_d">0</p>
         </div>
-        <div class="convention con_Xu She">
+        <div class="convention con_Xu She g_c">
             <span class="con_span">蓄电池</span>
             <ul>
                 <li>
@@ -109,12 +147,12 @@
                 </li>
                 <li style="border:0;">
                     <img src="${request.contextPath}/statics/image/dianya.png"/>
-                    <span class="r_duan">电池电压(v)</span>
+                    <span class="r_duan r_D_a">电池电压(v)</span>
                     <p  class="battery_c">100.5</p>
                 </li>
             </ul>
         </div>
-        <div class="convention con_Gu She">
+        <div class="convention con_Gu She g_c">
             <span class="con_span">光电池</span>
             <ul>
                 <li>
@@ -139,7 +177,7 @@
                 </li>
             </ul>
         </div>
-        <div class="convention con_Gu She">
+        <div class="convention con_Gu She g_c">
             <span class="con_span">负载</span>
             <ul>
                 <li>
@@ -153,38 +191,39 @@
                     <p class="battery_i">正常</p>
                 </li>
                 <li>
+                    <img src="${request.contextPath}/statics/image/gonglv.png"/>
+                    <span>负载电流(a)</span>
+                    <p class="battery_o">正常</p>
+                </li>
+                <li  style="border:0;">
                     <img src="${request.contextPath}/statics/image/fuzaigonglv.png"/>
                     <span>负载功率(w)</span>
                     <p class="battery_l">正常</p>
                 </li>
-                <li style="border:0;">
-                    <img src="${request.contextPath}/statics/image/gonglv.png"/>
-                    <span>负载电流(w)</span>
-                    <p class="battery_o">正常</p>
-                </li>
+
             </ul>
         </div>
-        <div class="convention con_Xu grouping">
+        <div class="convention con_Xu grouping g_a">
             <span class="con_span">项目数据</span>
             <ul>
                 <li>
-                    <img src="${request.contextPath}/statics/image/alarm.svg"/>
-                    <span>总装机数</span>
-                    <p class="lu_m_a">0</p>
+                    <img src="${request.contextPath}/statics/image/zhu_J.svg" style="margin-top:4%;"/>
+                    <span class="lu_m_a">0</span>
+                    <p>总装机数</p>
                 </li>
                 <li>
-                    <img src="${request.contextPath}/statics/image/alarm.svg"/>
-                    <span>网关数</span>
-                    <p class="lu_m_b">0</p>
+                    <img src="${request.contextPath}/statics/image/wanga.svg" style="margin-top:4%;"/>
+                    <span class="lu_m_b">0</span>
+                    <p>网关数</p>
                 </li>
                 <li style="border:0;">
-                    <img src="${request.contextPath}/statics/image/alarm.svg"/>
-                    <span>路灯数</span>
-                    <p  class="lu_m_c">0</p>
+                    <img src="${request.contextPath}/statics/image/L_D.svg" style="margin-top:4%;"/>
+                    <span class="lu_m_c">0</span>
+                    <p >路灯数</p>
                 </li>
             </ul>
         </div>
-        <div class="convention con_Xu grouping" style="height:250px;">
+        <div class="convention con_Xu grouping g_b" style="height:250px;">
             <span class="con_span">设备状态</span>
             <div class="cake">
                 <div class="cake_B" id="Bing"></div>
@@ -196,39 +235,35 @@
             <div class="con_an">
                 <span class="con_an_span">开/关/自动：</span>
                 <div class="form-group form_con_an" id="in_p">
-                    <input type="radio" class="control-label in_put" id="richang" style="margin-left:5%" value="0" name="category" checked/>开
-                    <input type="radio" class="control-label in_put" id="dae" value="1" name="category" />关
+                    <input type="radio" class="control-label in_put" id="richang" style="margin-left:5%" value="1" name="category" checked/>开
+                    <input type="radio" class="control-label in_put" id="dae" value="0" name="category" />关
                     <input type="radio" class="control-label in_put" id="dae_a" value="2" name="category" />自动
                 </div>
             </div>
             <div class="con_an">
                 <span class="con_an_span">亮度：</span>
-                <!--<div class="scroll" id="scrolla">-->
-                <!--<div class="bar" id="bara"></div>-->
-                <!--<div class="mask" id="maska"></div>-->
-                <!--</div>-->
-                <div class="progres" style="margin-top: 21px;width: 42%;">
+                <div class="progres pro_res" style="margin-top: 21px;width: 42%;">
                     <div id="slideTest1" class="demo-slider" contenteditable="true"  lay-percent="70%"></div>
                 </div>
                 <p id="pa" class="pa"></p>
             </div>
             <div class="con_an">
                 <span class="con_an_span">亮灯时长：</span>
-                <div class="progres" style="margin-top: 21px;width: 42%;">
-                    <div id="slideTest2" class="demo-slider" contenteditable="true"  lay-percent="70%"></div>
+                <div class="progres" style="width: 42%;height:100%;margin:0;">
+                    <input type="text" placeholder="亮灯时间" id="slideTest2" class="slid">
                 </div>
-                <p id="pb" class="pa"></p>
             </div>
             <div class="con_an">
                 <span class="con_an_span">晨亮时长：</span>
-                <div class="progres" style="margin-top: 21px;width: 42%;">
-                    <div id="slideTest3" class="demo-slider" contenteditable="true"  lay-percent="70%"></div>
+                <div class="progres" style="width: 42%;height:100%;margin:0;">
+                    <input type="text" placeholder="晨亮时间" id="slideTest3" class="slid">
                 </div>
-                <p id="pc" class="pa"></p>
             </div>
+            <button id="qu_a" class="r_ba_tu_t" style="margin-left:24%;">取消</button>
+            <button id="confirm" class="r_ba_tu_t">确定</button>
         </div>
         <div class="con_an_a She_a">
-            <input type="button" value="操作日志" id="operation" class="r_ba_tu">
+            <input type="button" value="操作日志" id="operation" class="r_ba_tu ri_a">
             <input type="button" value="故障日志" id="malfunction" class="r_ba_tu">
             <input type="button" value="控制面板" id="hear_control" class="r_ba_tu_t">
         </div>
@@ -252,8 +287,10 @@
 </div>
 
 </body>
-<script src="${request.contextPath}/statics/js/modules/equipment/equipment.js"></script>
-<script src="${request.contextPath}/statics/js/modules/equipment/schedule.js"></script>
+<script>
+    document.write('<script src="${request.contextPath}/statics/js/modules/equipment/equipment.js?v='+Math.random()+'"><\/script>');
+    document.write('<script src="${request.contextPath}/statics/js/modules/equipment/schedule.js?v='+Math.random()+'"><\/script>');
+</script>
 <script src="${request.contextPath}/statics/js/mapa.js"></script>
 <script src="${request.contextPath}/statics/js/textb.js"></script>
 </html>

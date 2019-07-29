@@ -19,11 +19,13 @@
         <result property="createTime" column="create_time"/>
         <result property="fillingsNumber" column="fillings_number"/>
         <result property="dischargeNumber" column="discharge_number"/>
+        <result property="chargingPower" column="charging_power"/>
+        <result property="loadPower" column="load_power"/>
     </resultMap>
 
     <sql id="Base_Column_List" >
     year_id,device_code, discharge_capacity, charging_capacity, charging_current, discharge_current,discharge_current,battery_voltage,ambient_temperature,
-    internal_temperature,visitors_flowrate,induction_frequency,create_time,fillings_number,discharge_number
+    internal_temperature,visitors_flowrate,induction_frequency,create_time,fillings_number,discharge_number,charging_power,load_power
     </sql>
 
     <select id="queryHistoryYear" resultMap="BaseResultMap" >
@@ -36,7 +38,7 @@
         create_time
     </select>
 
-    <delete id="deleteBatchMonth">
+    <delete id="deleteBatchYear">
         delete from history_year where create_time &lt; date_add(curdate(),INTERVAL -5 year )
     </delete>
 </mapper>

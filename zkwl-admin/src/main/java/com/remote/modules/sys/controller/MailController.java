@@ -42,6 +42,9 @@ public class MailController extends AbstractController{
     @RequestMapping("/sendBindEmail")
     @ResponseBody
     public R sendBindEmail(String email){
+        if(StringUtils.isBlank(email)){
+            return R.error("邮箱号不能为空");
+        }
         boolean isBind = checkBindEmail(email,"isEmail") ;
         if(isBind){
             return R.error("该邮箱已绑定");
@@ -51,6 +54,9 @@ public class MailController extends AbstractController{
         R r = sendEmailService.sendEmailSecurityCode(sendEmailSecurityCode);
         if(!r.isOK()){
             return R.error("邮件发送失败");
+        }
+        if(StringUtils.isBlank(securityCode)){
+            return R.error("验证码不能为空");
         }
         saveSecurity(email,"bindEmail",securityCode);
         return R.ok();
@@ -62,6 +68,9 @@ public class MailController extends AbstractController{
     @RequestMapping("/sendBindMobile")
     @ResponseBody
     public R sendBindSms(String mobile){
+        if(StringUtils.isBlank(mobile)){
+            return R.error("手机号不能为空");
+        }
         boolean falg = checkBindEmail(mobile,"isMobile");
         String securityCode = StringUtils.getSecurityCode(6);
         if(falg){
@@ -70,7 +79,7 @@ public class MailController extends AbstractController{
         SendPhoneSecurityCode sendPhoneSecurityCode = SendSecurityCodeUtils.bulidSendPhoneSecurityCode(sendPhoneConfig,mobile,securityCode,"1");
         R r = sendSmsService.sendSmsSecurityCode(sendPhoneSecurityCode);
         if(!r.isOK()){
-            R.error("手机发送失败");
+            return R.error("手机发送失败");
         }
         saveSecurity(mobile,"bindMobile",securityCode);
         return R.ok();
@@ -81,6 +90,9 @@ public class MailController extends AbstractController{
     @RequestMapping("/checkBindMobile")
     @ResponseBody
     public R checkBindMobile(String mobile,String securityCode){
+        if(StringUtils.isBlank(mobile)||StringUtils.isBlank(securityCode)){
+            return R.error("手机号或验证码不能为空");
+        }
         checkEmailAndMob(mobile,securityCode,"isMobile","bindMobile");
         return R.ok();
     }
@@ -140,6 +152,15 @@ public class MailController extends AbstractController{
      * 检查手机号，邮箱，验证码输入是否正确 是绑定，保存数据库，如果是发送验证码，不做处理
      * */
     public R checkEmailAndMob(String contact,String securityCode,String isEmailAndMobile,String isType){
+        if(StringUtils.isBlank(contact)){
+            return R.error("联系方式不能为空");
+        }
+        if(StringUtils.isBlank(securityCode)){
+            return R.error("验证码不能为空");
+        }
+        if(StringUtils.isBlank(isType)){
+            return R.error("联系方式类型不能为空");
+        }
         SecurityEntity security =null;
         if("isEmail".equals(isEmailAndMobile)){//0代表邮箱
             //查询邮箱验证码是否正确

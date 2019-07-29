@@ -13,9 +13,6 @@ $(function() {
         //另一种方法: $("div").eq($(".tab li").index(this)).addClass("on").siblings().removeClass('on');
     });
 
-
-
-
     r_fenye(10,1)
     //系统消息
     function r_fenye(pageSizea, pagesa){
@@ -80,14 +77,14 @@ $(function() {
               var html="";
               for (var i = 0; i < res.page.list.length; i++) {
                   html +=
-                      "<li>"+ '<img  src=\'"+res.page.list[i].headUrl+"\'>'+
+                      "<li id="+ res.page.list[i].uid+">"+ '<img  src=\'"+res.page.list[i].headUrl+"\'>'+
                       "<p>"+
                       "<span>"+res.page.list[i].username+"</span>"+
                       "<span>"+res.page.list[i].backContent+"</span>"+
                       "</p>"+
                       " <div>"+
                       "<span >"+ res.page.list[i].backCreateTime+"</span>"+
-                      "<span class='r_details' id="+ res.page.list[i].backId+"><img src='/remote-admin/statics/image/rxiangqing.png' alt=''> 详情</span>"+
+                      "<span class='r_details' id="+ res.page.list[i].backId+"><img src='/statics/image/rxiangqing.png' alt=''> 详情</span>"+
                       "</div>"+
                       "</li>"
               }
@@ -110,9 +107,11 @@ $(function() {
               })
               // 详情
               var backId
+              var uid
               $(".r_details").click(function(){
                   $(".shade_project,.shade_b_project_r").css("display","block");
                   backId=$(this).attr("id")
+                  uid=$(this).parent().parent().attr("id")
                   rdele(backId);
               })
 
@@ -121,14 +120,13 @@ $(function() {
                   $(".ryu").css("display","block")
               })
               $('#project_confirme').click(function(){
-                  console.log(backId)
                   var rcon = $(".r_tex_bo").val()
-                  console.log(rcon)
                   $.ajax({
                       url: baseURL + 'sys/feedback/update',
                       type: "POST",
                       data:
                           "&backId=" + backId +
+                          "&uid=" + uid +
                           "&answerContent=" + rcon ,
                       success: function (res) {
                           console.log(res)
@@ -184,9 +182,7 @@ $(function() {
                   nextPageText: "下一页",
                   callback: function (current) {
                       //当前页数current
-                      console.log("第几页")
                       var pagesb = current
-                      console.log(pagesb)
                       $(".r_llis>ul").html("")
                       r_ffye(pageSize, pagesb)
                   }
@@ -205,7 +201,6 @@ $(function() {
     //回复
     $('.sha_buttom').find('div').click(function(){
         var index = $(this).index();
-        console.log(index)
         // $(this).addClass('active').siblings().removeClass('active');
         $('.r_xc').find('.rionbo').eq(index).show().siblings().hide();
     })

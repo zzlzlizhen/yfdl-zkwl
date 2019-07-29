@@ -1,48 +1,93 @@
 $(function(){
+    //基本信息
+    $("#set_p").unbind('click');
     $("#set_p").click(function(){
-        $(".JI_b,.nei_r").show()
+        $(".JI_b,.nei_r").show();
+        $("#select1").html("");
+        //进入页面获取数据
+        $.ajax({
+            url:  'sys/user/baseInfo',
+            type: "POST",
+            success: function (res) {
+                console.log("修改账户信息")
+                console.log(res);
+                if (res.code == "200") {
+                    // var r_header_img = res.user.headUrl;
+                    // 图片
+                    // $("#r_header_img").attr("src", "user.headUrl");
+                    var r_ide = res.user.userId;
+                    $("#r_ide").val(r_ide);
+                    var select1 = res.user.roleId;
+                    var  n_ame
+                    if(res.user.roleId == 1){
+                        n_ame="使用者"
+                    }else if(res.user.roleId == 2){
+                        n_ame="管理者"
+                    }
+
+                    var html="";
+                    html+="<option id="+res.user.roleId+">"+n_ame+"</option>"
+                    $("#select1").append(html);
+
+                    var r_num = res.user.username;
+                    $("#r_num").val(r_num);
+                    var r_name_l = res.user.realName;
+                    $("#r_name_l").val(r_name_l)
+                    var r_rlm = res.user.email;
+                    $("#r_rlm").val(r_rlm);
+                    var r_rlp = res.user.mobile;
+                    $("#r_rlp").val(r_rlp);
+                    //    头像
+                    var url = res.user.headUrl;
+                    $("#pic").attr("src","https://39.97.169.198"+url);
+                } else {
+                    console.log(res.msg);
+                }
+            }
+        })
     })
     $(".shade,.wrong_a").click(function(){
-        $(".JI_b,.nei_r").hide()
+        $(".JI_b,.nei_r").hide();
     })
+    //反馈
     $("#feedback").click(function(){
-        $(".JI_b_a,.nei_r_a").show()
+        $(".JI_b_a,.nei_r_a,.shade_a").show();
     })
     $(".shade_a,.wrong").click(function(){
-        $(".JI_b_a,.nei_r_a").hide()
+        $(".JI_b_a,.nei_r_a,.shade_a").hide();
     })
     //验证码
-    $(".r_beise").click(function(){
-        $(".r_lay,.r_beise").hide()
+    $(".r_be,.r_be_a").click(function(){
+        $(".r_lay_a,.r_beise_a,.r_lay,.r_beise,.r_be,.r_be_a").hide();
     })
 
 //我要反馈
 
     $("#r-btn-las").click(function(){
         //标题
-        var rTitle = $("#rTitle").val()
+        var rTitle = $("#rTitle").val();
         //邮箱
-        var r_eml_fan = $("#r_eml_fan").val()
+        var r_eml_fan = $("#r_eml_fan").val();
         //手机号
-        var r_ph_fan = $("#r_ph_fan").val()
+        var r_ph_fan = $("#r_ph_fan").val();
         //内容
-        var r_wen_fan = $("#r_wen_fan").val()
+        var r_wen_fan = $("#r_wen_fan").val();
 
         if(rTitle ==""||r_eml_fan ==""||r_ph_fan==""||r_wen_fan==""){
-            $(".rrbol").html("輸入不能為空");
+            $(".rrbol").html("输入不能為空");
             lay()
         } else {
             // 邮箱
             if (!patrn2.exec(r_eml_fan)) {
                 $(".rrbol").html("邮箱错误");
-                console.log("邮箱错误")
+                console.log("邮箱错误");
                 $(".mistake").css("display","block");
                 return false;
             }
             //手机号错误
             if (!patrn1.exec(r_ph_fan)){
                 $(".rrbol").html("手机号错误");
-                console.log("手机号错误")
+                console.log("手机号错误");
                 $(".rrbol").html("手机号错误");
                 $(".mistake").css("display","block");
                 return false;
@@ -60,11 +105,12 @@ $(function(){
                 success: function (res) {
                     console.log(JSON.stringify(res));
                     if (res.code == "200") {
-                        alert('提交成功')
-                        $("#rTitle").val("")
-                        $("#r_eml_fan").val("")
-                        $("#r_ph_fan").val("")
-                        $("#r_wen_fan").val("")
+                        alert('提交成功');
+                        $("#rTitle").val("");
+                        $("#r_eml_fan").val("");
+                        $("#r_ph_fan").val("");
+                        $("#r_wen_fan").val("");
+                        $(".JI_b_a,.nei_r_a,.shade_a").hide();
                     } else {
                         alert(res.msg);
                     }

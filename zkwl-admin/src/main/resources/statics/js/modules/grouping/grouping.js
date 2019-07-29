@@ -2,6 +2,8 @@ $(function(){
     //获取上一个页面参数
     function showWindowHref(){
         var sHref = decodeURI(window.parent.document.getElementById("test").contentWindow.location.href);
+        console.log("=======");
+        console.log(sHref)
         var args = sHref.split('?');
         if(args[0] == sHref){
             return "";
@@ -33,8 +35,25 @@ $(function(){
     //报警数
     var callPoliceCount=href['callPoliceCount'];
     $("#callPoliceCount").html(callPoliceCount)
+    //项目状态
+    var projectStatus=href['projectStatus'];
+    if (projectStatus == null ) {
+        projectStatus = "";
+    } else if(projectStatus == 1) {
+        projectStatus = "正常运行";
+    }else if(projectStatus == 2) {
+        projectStatus = "停用运行";
+    }
+    $("#r_xiugai_six_tu").html(projectStatus)
+
     //项目id
     var  Id=href['projectId'];
+    console.log("------------")
+    console.log(projectStatus)
+    console.log(faultCount)
+    console.log(gatewayCount)
+    console.log(sumCount)
+    console.log(Id)
     var pages
     var pageSize
     var pageNum
@@ -45,19 +64,41 @@ $(function(){
         type:"get",
         data:{},
         success: function(res) {
+            console.log("00000")
+            console.log(res)
             var html=""
             for (var i = 0; i < res.data.length; i++) {
                 html += "<option class='option opti_a' id="+res.data[i].groupId+">"+res.data[i].groupName+"</option>\n"
             }
-            $("#select1,#select1_b,#se_for").append(html)
+            $("#select1_b,#se_for").append(html)
         }
     })
+    $.ajax({
+        url:baseURL + 'fun/device/getDeviceType',
+        contentType: "application/json;charset=UTF-8",
+        type:"get",
+        data:{},
+        success: function(res) {
+            var html=""
+            for (var i = 0; i < res.data.length; i++) {
+                html += "<option class='option opti_a' id="+res.data[i].deviceType+">"+res.data[i].deviceTypeName+"</option>\n"
+            }
+            $("#se_fora").append(html)
+        }
+    })
+    //地图
+    $("#hear_map").click(function(){
+        var searchUrl=encodeURI('../equipment/equipment.html')
+        location.href =searchUrl;
+    })
     //搜索
+    $("#proje_search").unbind('click');
     $("#proje_search").click(function(){
        var Se_id=$("#Se_id").val();
        var Se_name=$("#Se_name").val();
-       var select=$("#se_for option:selected").text()
-       var selecta=$("#se_fora option:selected").text()
+       var select=$("#se_for option:selected").attr("id")
+       var selecta=$("#se_fora option:selected").attr("id")
+        console.log("+++_"+select)
         $("#div").html("");
         form(pageSize,pageNum,Se_id,Se_name,select,selecta)
     })
@@ -87,7 +128,7 @@ $(function(){
                 var html=""
                 for (var i = 0; i < res.data.list.length; i++) {
                     //光电池状态
-                    var photocellState=res.data.list[i].photocellStat
+                    var photocellState=res.data.list[i].photocellState
                     if (photocellState == null ) {
                         photocellState = "";
                     } else if(photocellState == 0) {
@@ -147,6 +188,8 @@ $(function(){
                         runState = "故障";
                     }else if(runState == 4) {
                         runState = "离线";
+                    }else if(runState == 5) {
+                        runState = "升级中";
                     }
 
                     //通讯类型
@@ -172,28 +215,26 @@ $(function(){
                     if(signalState == null){
                         signalState=""
                     }else if(signalState == 0){
-                        signalState="<img src='/remote-admin/statics/image/rxinhao-7.svg' alt='' style='display: inline-block;width: 29px;height: 27px' class='xinhao'>"
+                        signalState="<img src='/statics/image/rxinhao-7.svg' alt='' style='display: inline-block;width: 29px;height: 27px' class='xinhao'>"
                     }else if(signalState == 1){
-                        signalState="<img src='/remote-admin/statics/image/rxinhao_8.svg' alt='' style='display: inline-block;width: 29px;height: 27px' class='xinhao'>"
+                        signalState="<img src='/statics/image/rxinhao_8.svg' alt='' style='display: inline-block;width: 29px;height: 27px' class='xinhao'>"
                     }else if(2 <= signalState <= 30){
-                        signalState="<img src='/remote-admin/statics/image/rxinhao-10.svg' alt='' style='display: inline-block;width: 29px;height: 27px' class='xinhao'>"
+                        signalState="<img src='/statics/image/rxinhao-10.svg' alt='' style='display: inline-block;width: 29px;height: 27px' class='xinhao'>"
                     }else if(31 <= signalState <= 51){
-                        signalState="<img src='/remote-admin/statics/image/rxinhao_2.svg' alt='' style='  display: inline-block;width: 29px;height: 27px' class='xinhao'>"
+                        signalState="<img src='/statics/image/rxinhao_2.svg' alt='' style='  display: inline-block;width: 29px;height: 27px' class='xinhao'>"
                     }else if(52 <= signalState <= 99){
-                        signalState="<img src='/remote-admin/statics/image/zhuyi.png' alt='' >"
+                        signalState="<img src='/statics/image/zhuyi.png' alt='' >"
                     }
 
                     html += "<tr>\n" +
                         "<td id="+res.data.list[i].deviceId+" style=\"width:4%;\"> <input type= \"checkbox\" name='clk' class=\"checkbox_in  checkbox_i\"> </td>\n" +
-                        "<td id='r_nm' class='r_nm'>" +
+                        "<td id='r_nm' class='r_nm' title="+res.data.list[i].deviceCode+">" +
                         "<div class='r_d'>"+res.data.list[i].deviceCode+"</div>" +
-                        " <span class='Xufu' id="+res.data.list[i].deviceName+">"+res.data.list[i].deviceCode+"</span>" +
                         "</td>\n" +
                         "<td style=\"width:10%;\" class='r_name' id='r_namem'>"+res.data.list[i].deviceName+"</td>\n" +
                         "<td class='grod' id="+res.data.list[i].groupId+">"+res.data.list[i].groupName+"</td>\n" +
-                        "<td class='type'>"+
+                        "<td class='type' title="+res.data.list[i].deviceTypeName+">"+
                         "<div class='r_d' id="+res.data.list[i].deviceType+">"+res.data.list[i].deviceTypeName+"</div>" +
-                        " <span class='Xufu Xufu_type' id="+res.data.list[i].deviceCode+">"+res.data.list[i].deviceTypeName+"</span>" +
                         "</td>\n" +
                         "<td>"+photocellState+" </td>\n" +
                         "<td>"+batteryState+"</td>\n" +
@@ -203,28 +244,17 @@ $(function(){
                         "<td>"+light+"</td>\n" +
                         "<td>"+communicationType+"</td>\n" +
                         "<td id="+res.data.list[i].deviceId+" >" +
-                        "<a href=\"#\" class='particulars_a' ><img src='/remote-admin/statics/image/r_kongzhi.svg' alt='' class='r_erkongzhi'></a>\n" +
-                        "<a href=\"#\" class='particulars' id="+res.data.list[i].deviceId+"><img src='/remote-admin/statics/image/bianji.png' alt=''></a>\n" +
-                        "<a href=\"#\" class='ma_p' id="+res.data.list[i].longitude+","+res.data.list[i].latitude+"><img src='/remote-admin/statics/image/ditu.svg' alt=''style='width: 25px;height:25px;'></a>\n" +
-                        "<a class='deleteq'><img src='/remote-admin/statics/image/shanchu.png' alt=''></a>\n" +
+                        "<a href=\"#\" class='particulars_a' ><img src='/statics/image/r_kongzhi.svg' alt='' class='r_erkongzhi'></a>\n" +
+                        "<a href=\"#\" class='particulars' id="+res.data.list[i].deviceId+"><img src='/statics/image/bianji.png' alt=''></a>\n" +
+                        "<a href=\"#\" class='ma_p' id="+res.data.list[i].longitude+","+res.data.list[i].latitude+"><img src='/statics/image/ditu.svg' alt=''style='width: 25px;height:25px;'></a>\n" +
+                        "<a class='deleteq'><img src='/statics/image/shanchu.png' alt=''></a>\n" +
                         "</td>\n" +
                         "</tr>"
-                //修改样式<span class="glyphicon glyphicon-search"></span>
-                    //<span class="glyphicon glyphicon-picture"></span>
-                    //<span class="glyphicon glyphicon-trash"></span>
-
                 }
                 $("#div").append(html);
-                //hover
-                $(".type,.r_nm").hover(function(){
-                    var c_la=$(this).children(".Xufu").attr("id");
-                    $("#"+c_la).show()
-                },function(){
-                    var c_la=$(this).children(".Xufu").attr("id");
-                    $("#"+c_la).hide()
-                });
 
                 // 地图定位
+                $(".ma_p").unbind('click');
                 $(".ma_p").click(function(){
                     var longitude=$(this).attr("id");
                     var name=$(this).parent().siblings(".r_name").html()
@@ -233,36 +263,38 @@ $(function(){
                 })
 
                 //控制面板
+                $(".particulars_a").unbind('click');
                 $(".particulars_a").click(function(){
                     var deviceCode=$(this).parent().siblings(".r_nm").children(".r_d").html();
                     var grod=$(this).parent().siblings(".grod").attr('id');
                     var type=$(this).parent().siblings(".type").children(".r_d").attr("id");
-                    var searchUrl=encodeURI('../control/control.html?deviceCode='+deviceCode+"&grod="+grod+"&type="+type)
+                    var name=$(this).parent().siblings(".r_name").html()
+                    var searchUrl=encodeURI('../control/control.html?deviceCode='+deviceCode+"&grod="+grod+"&type="+type+"&name="+name)
                     location.href =searchUrl;
                 })
 
                 //移动分组删除
                 var arr=[]
                 //全选
+                $('#checkbox[name="all"]').unbind('click');
                 $('#checkbox[name="all"]').click(function(){
                     arr=[]
                     if($(this).is(':checked')){
                         $('input[name="clk"]').each(function(){
                             $(this).prop("checked",true);
                             var devId=$(this).parent().attr('id');
-                            console.log("全选1")
                             arr.push(devId)
                             var len=arr.length;
                             $("#mo_sp").html(len+"项")
-                            $(".move_a").show()
+                            $(".move_a").show();
                         });
                     }else{
                         $('input[name="clk"]').each(function(){
                             $(this).prop("checked",false);
                             var devId=$(this).parent().attr('id');
                             arr=[]
-                            $("#mo_sp").html(""+"项")
-                            $(".move_a").hide()
+                            $("#mo_sp").html(""+"项");
+                            $(".move_a").hide();
                         });
                     }
                 });
@@ -273,30 +305,30 @@ $(function(){
                         $("#checkbox[name=all]:checkbox").prop('checked', true);
                         var devId=$(this).parent().attr('id');
                             arr.push(devId)
-
                         var len=arr.length;
-                        $("#mo_sp").html(len+"项")
-                        $(".move_a").show()
+                        $("#mo_sp").html(len+"项");
+                        $(".move_a").show();
                     }
                     else if(che_c == false){
                         if($(".checkbox_i").prop('checked') == true){
                             $("#checkbox[name=all]:checkbox").prop('checked', true);
-                            $(".move_a").show()
+                            $(".move_a").show();
+
                         }else{
                             $("#checkbox[name=all]:checkbox").prop('checked', false);
-                            $(".move_a").hide()
+                            $(".move_a").hide();
                         }
                         var devId=$(this).parent().attr('id');
                         var index = arr.indexOf(devId);
                             arr.splice(index, 1);
-
                         var len=arr.length;
                         $("#mo_sp").html(len+"项")
                     }
                 })
 
                 // 批量删除
-                $(".deleteAll").click(function(){
+                $("#deleteAll").unbind('click');
+                $("#deleteAll").click(function(){
                     if(arr.length <=0 ){
                         alert("请选择删除的设备!");
                         return;
@@ -309,15 +341,18 @@ $(function(){
                     dele(ids);
                 })
                 //删除彈窗/////////////////////
+                $(".shade_a_delete,.sha_cancel_delete,.guan_sha").unbind('click');
                 $(".shade_a_delete,.sha_cancel_delete,.guan_sha").click(function () {
                     $(".shade_delete,.shade_b_delete").css("display", "none")
                 })
                 //   删除
                 var Dele_id
+                $(".deleteq").unbind('click');
                 $(".deleteq").click(function(){
                     $(".shade_delete,.shade_b_delete").css("display", "block");
                     Dele_id=$(this).parent().attr('id');
                 })
+                $(".sha_que_delete").unbind('click');
                 $(".sha_que_delete").click(function(){
                     dele(Dele_id);
                 })
@@ -329,19 +364,20 @@ $(function(){
                         data:{},
                         success: function(res) {
                             if(res.code == "200"){
-                                window.location.reload()
+                                window.location.reload();
                             }else{
-                                alert("删除失败")
+                                alert("删除失败");
                             }
                         }
                     })
                 }
 
                 //移动分组
-                $(".mobile_pac").click(function(){
+                $("#mobile_pac").click(function(){
                     $(".shade_Yi,.shade_b_yi").css("display","block");
                 })
                 //移动搜索
+                $(".sousuo_i").unbind('click');
                 $(".sousuo_i").click(function(){
                      var Input_v=$(".sousuo_input").val();
                       $("#Dan_x").html("");
@@ -365,7 +401,6 @@ $(function(){
                                     "</span>"
                             }
                             $("#Dan_x").append(html);
-
                             $(".che_i").click(function(){
                                 var che_c=$(this).prop('checked');
                                 if(che_c == true){
@@ -379,6 +414,7 @@ $(function(){
                 }
 
                 //确认移动
+                $("#que_yi").unbind('click');
                 $("#que_yi").click(function(){
                     var ids = "";
                     for(var i = 0 ;i< arr.length;i++){
@@ -401,17 +437,17 @@ $(function(){
 
                 //编辑
                 var proid
+                $(".particulars").unbind('click');
                 $(".particulars").click(function(){
                     $(".shade_modifier,.shade_b_modifier").css("display","block");
                      proid=$(this).parent().attr('id');
                     var  r_namem = $(this).parent().siblings("#r_namem").html();
                     $(".pro_s_b").val(r_namem)
                     var r_rrena = $(this).parent().siblings(".grod").html();
-                    $("#select1_b option:selected").text(r_rrena);
-
-                    fen()
+                    $("#select1_b").val(r_rrena);
+                    // fen()
                 })
-
+                $("#confirm_x").unbind('click');
                 $("#confirm_x").click(function(){
                     var pro_s_b= $(".pro_s_b").val();
                     var select_b=$("#select1_b option:selected").attr("id");
@@ -464,8 +500,27 @@ $(function(){
 
 
      //    添加
+    $("#add_equipments").unbind('click');
     $("#add_equipments").click(function(){
         $(".shade_project,.shade_b_project").css("display","block");
+        $(".pro_name").val("");
+        $(".pro_s").val("");
+        $("#select1").append("<option class='option opti_a' ></option>");
+        $.ajax({
+            url:baseURL + 'fun/group/queryGroupNoPage?projectId='+Id,
+            contentType: "application/json;charset=UTF-8",
+            type:"get",
+            data:{},
+            success: function(res) {
+                console.log("00000")
+                console.log(res)
+                var html=""
+                for (var i = 0; i < res.data.length; i++) {
+                    html += "<option class='option opti_a' id="+res.data[i].groupId+">"+res.data[i].groupName+"</option>\n"
+                }
+                $("#select1").append(html)
+            }
+        })
         //添加设备-分组id
         // fen()
     })
@@ -486,11 +541,12 @@ $(function(){
     // }
     $(".shade_add_project").click(function(){
         $(".shade_project,.shade_b_project").css("display","none");
-        // $("#select1,#select1_b").html("")
+        $("#select1").html("");
     })
 
 
     //确认添加
+    $("#project_confirm").unbind('click');
     $("#project_confirm").click(function(){
         var pro_name= $(".pro_name").val();
         var pro_s= $(".pro_s").val();
@@ -532,6 +588,7 @@ $(function(){
     })
 
 //分组管理
+    $("#grouping").unbind('click');
     $("#grouping").click(function(){
         var proid=Id
         var searchUrl=encodeURI('../management/management.html?projectId='+proid+"&character="+character)
@@ -578,26 +635,25 @@ $(function(){
                      var T_an=data.data.forecast[0].type+" "+str_bb+"-"+str_a;
 
                     if(data.data.forecast[0].type== "多云"){
-                        $("#img").attr("src","/remote-admin/statics/image/duoyun.svg")
+                        $("#img").attr("src","/statics/image/duoyun.svg")
                     }else if(data.data.forecast[0].type== "晴"){
-                        $("#img").attr("src","/remote-admin/statics/image/qing.svg")
+                        $("#img").attr("src","/statics/image/qing.svg")
                     }else if(data.data.forecast[0].type== "雨"){
-                        $("#img").attr("src","/remote-admin/statics/image/yu.svg")
+                        $("#img").attr("src","/statics/image/yu.svg")
                     }else if(data.data.forecast[0].type== "小雨"){
-                        $("#img").attr("src","/remote-admin/statics/image/xiaoyu.svg")
+                        $("#img").attr("src","/statics/image/xiaoyu.svg")
                     }else if(data.data.forecast[0].type== "阵雨"){
-                        $("#img").attr("src","/remote-admin/statics/image/zhenyu.svg")
+                        $("#img").attr("src","/statics/image/zhenyu.svg")
                     }else if(data.data.forecast[0].type== "雪"){
-                        $("#img").attr("src","/remote-admin/statics/image/xue.svg")
+                        $("#img").attr("src","/statics/image/xue.svg")
                     }else if(data.data.forecast[0].type== "阴"){
-                        $("#img").attr("src","/remote-admin/statics/image/yintian.svg")
+                        $("#img").attr("src","/statics/image/yintian.svg")
                     }else if(data.data.forecast[0].type== "雨夹雪"){
-                        $("#img").attr("src","/remote-admin/statics/image/yujiaxue.svg")
+                        $("#img").attr("src","/statics/image/yujiaxue.svg")
                     }else if(data.data.forecast[0].type== "雷阵雨"){
-                        $("#img").attr("src","/remote-admin/statics/image/zhenyu.svg")
+                        $("#img").attr("src","/statics/image/zhenyu.svg")
                     }
-
-                     $("#T_an").html(T_an)
+                    $("#T_an").html(T_an)
                 }
             })
         }

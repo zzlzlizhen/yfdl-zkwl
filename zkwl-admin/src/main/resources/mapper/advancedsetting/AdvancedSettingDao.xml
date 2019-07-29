@@ -55,4 +55,32 @@
               and group_id=#{groupId}
           </if>
     </select>
+    <select id="queryByDeviceCode" resultType="com.remote.modules.advancedsetting.entity.AdvancedSettingEntity">
+        select <include refid="colums"/> from advanced_setting where 1=1
+        <if test="deviceCodes!= null and deviceCodes.size!= 0">
+            and device_code in
+            <foreach collection="deviceCodes" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+
+    <update id="updateAdvancedByDeviceCodes">
+        update advanced_setting set group_id = #{groupId}
+        <where>
+            group_id = #{oldGroupId}
+            <if test="deviceCodes !=null and deviceCodes.size()!= 0">
+                and device_code in
+                <foreach collection="deviceCodes" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </update>
+
+    <delete id="deleteAdvancedByDeviceCode">
+        delete from advanced_setting where  group_id = #{groupId} and device_code = #{deviceCode}
+    </delete>
+
 </mapper>

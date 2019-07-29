@@ -1,9 +1,6 @@
 package com.remote.common.rabbitmq;
 
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.DirectExchange;
-import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,23 +12,33 @@ import org.springframework.context.annotation.Configuration;
  **/
 @Configuration
 public class DirectRabbitConfig {
-
-    //队列
+    //升级队列
     @Bean
-    public Queue CalonDirectQueue() {
-        return new Queue("CalonDirectQueue",true);
+    public Queue upgradeQueue() {
+        return new Queue("topic.upgrade");
+    }
+
+    //上传队列
+    @Bean
+    public Queue upLoadQueue() {
+        return new Queue("topic.upload");
     }
 
     //Direct交换机
     @Bean
-    DirectExchange CalonDirectExchange() {
-        return new DirectExchange("CalonDirectExchange");
+    TopicExchange exchange() {
+        return new TopicExchange("topicExchange");
     }
 
-    //绑定
+    //绑定 升级队列
     @Bean
-    Binding bindingDirect() {
-        return BindingBuilder.bind(CalonDirectQueue()).to(CalonDirectExchange()).with("CalonDirectRouting");
+    Binding bindingUpgradeDirect() {
+        return BindingBuilder.bind(upgradeQueue()).to(exchange()).with("topic.upgrade");
+    }
+    //绑定 上传队列
+    @Bean
+    Binding bindingUpLoadDirect() {
+        return BindingBuilder.bind(upLoadQueue()).to(exchange()).with("topic.upload");
     }
 
 }

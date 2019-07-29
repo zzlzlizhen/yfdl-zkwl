@@ -2,6 +2,7 @@ package com.remote.group.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.remote.common.utils.R;
+import com.remote.common.utils.StringUtils;
 import com.remote.group.entity.GroupEntity;
 import com.remote.group.entity.GroupQuery;
 import com.remote.group.service.GroupService;
@@ -32,9 +33,10 @@ public class GroupController{
     @RequestMapping(value = "/add", method= RequestMethod.POST)
     public R add(@RequestBody GroupEntity group){
         group.setGroupId(UUID.randomUUID().toString());
-        group.setCreateUser(group.getUserId());
-        group.setCreateName(group.getUserName());
         group.setCreateTime(new Date());
+        if(StringUtils.isEmpty(group.getGroupName())){
+            return R.error(201,"分组名称不能为空");
+        }
         boolean b = groupService.queryByName(group.getProjectId(),group.getGroupName());
         if(b){
             return R.error(400,"分组名称重复");
@@ -87,7 +89,6 @@ public class GroupController{
     @RequestMapping(value = "/updateGroup", method= RequestMethod.POST)
     public R updateGroup(@RequestBody GroupEntity groupEntity){
         groupEntity.setUpdateTime(new Date());
-        groupEntity.setUpdateUser(groupEntity.getUserId());
         boolean flag = groupService.updateGroup(groupEntity);
         if(!flag){
             R.error(400,"修改分组失败");

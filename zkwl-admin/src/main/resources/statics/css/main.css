@@ -42,24 +42,51 @@ tbody > tr > th {font-weight: normal; }
 .panel .table { margin:0 0; }
 .panel .pagination { margin:0; }
 .panel-default>.panel-heading {background-color: #f5f5f5;}
-.row{
-	border-top: 1px solid #ddd;
-	margin:0;
-	padding:20px 2px 0px 2px;
-}
+.row{border-top: 1px solid #ddd;margin:0;padding:20px 2px 0px 2px;}
 .col-xs-6{padding-left: 0px;padding-right: 0px;}
 .form-horizontal .form-group {margin-left:0px;margin-right:0px;}
-.form-horizontal{
-	width:550px;padding-top:20px;
-}
-
+.form-horizontal{width:550px;padding-top:20px;}
 .retr,.retr_a{width:400px;height:200px; position: absolute;left:50%;margin-left:-200px;margin-top:10%;border:1px solid #ccc;}
 .retr>div,.retr_a>div{width:100%;height: 40px;float:left;}
 .retr>div>span,.retr_a>div>span{width:100px;height:100%;float: left;line-height: 40px;text-align: right;}
 .retr>div>input,.retr_a>div>input{width:200px;height:35px;float:left;border-radius: 4px;border:1px solid #ccc;}
-#btne{width:90px;height:35px;float:left;border-radius: 4px;border:1px solid #ccc;margin-left:10px;text-align: center}
+#btne{width:90px;height:26px;float:left;border-radius: 4px;border:1px solid #ccc;margin-left:10px;text-align: center}
 .Que,.Que_a{width:200px;height:35px;border-radius: 4px;float:left;margin-left:100px;text-align: center;line-height: 35px;font-size:14px;border:0;}
 .retr_a{display: none;}
+
+
+
+
+/*登录页面*/
+
+.login-page{
+    background: url('/statics/image/r_background.png')no-repeat center;
+    background-size: 100% 100% !important;width: 100%;height: 100%;}
+.login-box{width:408px;height:556px ;position: absolute;right:10%;top:50%;margin-top:-278px;border-radius: 4px;overflow: hidden;}
+.r_content_dv{width:408px;height:499px ;position: absolute;top:0;}
+.login-logo>b{display: inline-block;width: 106px;height:auto;background-size:100% !important;margin-top:12%;}
+.login-logo{margin-bottom: 20px;}
+.r_yonghuming,.r_yonghuming_b{width:330px;height:46px;border:1px solid #ccc!important;border-radius:24px!important;margin: 15px auto;}
+.r_yonghuming>input,.r_yanzhengma>input{background: none;border: none;position: relative;top:-44px;left:7%;height:40px;color:#fff;width: 79%}
+.r_yonghuming>span,.r_yanzhengma>span{position: relative;width:330px;height:46px;border-radius:24px!important;overflow: hidden;display: block}
+.r_yonghuming>span>p,.r_yanzhengma>span>p{background: #fff;opacity: 0.2;width:100%;height:100%;display: block}
+.r_yonghuming>img,.r_yanzhengma>img{position: relative;top:-46px;left:18px;}
+.r_yonghuming_b{border:0 !important;}
+.r_yonghuming_b>img{width:50%;height:100%;float:left;display:block;margin-left:-28px;}
+.r_yonghuming_b>a{float:right;margin:4% 1% 0px 0px;}
+.has-feedback{width: 330px;margin: 15px auto;}
+.form-group>div:first-child{float: left;}
+.form-group>div:last-child{float: right;margin-right:1%;}
+#dropdownCheck{border:1px solid #39a6ff;}
+.login-box-body, .register-box-body {background: none!important;padding-top: 0;}
+.r_deng{width: 330px;height: 46px;border-radius: 24px !important;margin: 55px auto;line-height: 46px;text-align: center;color: #fff;font-size: 16px;
+    background: linear-gradient(to right,#3472ea,#00b0c8);cursor: pointer;}
+.r_yanzhengma{width: 330px;height: 46px;border: 1px solid #ccc !important;border-radius: 24px !important;margin: 15px auto;}
+/*.form-control{width:51%!important;}*/
+.login-page{height: 100%!important;}
+.zhe_zao{width:100%;float:left;height:100%;background:#0d3570;opacity: 0.3;}
+.zhe_S{width:94%;height:94%;position:relative;background:#0d3570;opacity: 0.8;margin:3% 0px 0px 3%;}
+
 
 
 
@@ -67,73 +94,54 @@ tbody > tr > th {font-weight: normal; }
 
 
 @media screen and (max-width:1100px) {
-    .option {
-        width: 1474px!important;
-    }
-    .r_shx{width: 1474px!important;}
-    .drawer{width:55%!important;}
+    .drawer{width:440px !important;}
     .r_con_div{width: 100%;}
     r_col_shu{margin: 0!important;}
-    body,html{
-        width: 1131px !important;
-        overflow-x:visible;
-    }
-
-    .hear_w{
-        width: 60px;
-    }
+    .hear_w{width: 60px;}
     /*.form-control{*/
     /*    width: 5%;*/
     /*}*/
-    .project_he > a{
-        width: 90px;
+    .project_he > a{width: 90px;}
+    .form_input{width: 100% !important;}
+    .gross {width: 13%;height: 59%;float: left;border-radius: 5px;overflow: hidden;margin: 3.7% 0.5% 0px 0px !important;position: relative;}
+    .gross>img{width: 68px !important;height: 68px  !important;}
+    .gross span{font-size: 12px !important;margin: -29% 37px 0px 51.5% !important;}
+    .gross div{top: -15% !important;left: 65% !important;font-size: 12px !important;}
+    .r_rdi{width: 13%;}
+    .gross_a>span{margin: -27% 37px 0px 53.5% !important;}
+    .dra_spa, .dra_p{margin: 1% 0px 0px 2% !important;}
+    .dra_p{margin-left:0 !important;color:#27E2D4;}
+    .login-box{right: 15%!important;width: 365px;height: 510px;top: 55%;}
+    .r_content_dv{width: 365px;}
+    /*.r_deng{margin-left: 0%;width: 100%;}*/
+    .r_yonghuming, .r_yonghuming_b{width: 278px;
+        height: 42px;}
+    .r_yonghuming > span, .r_yanzhengma > span{width: 278px;height: 42px;}
+    .r_yanzhengma{width: 278px;height: 42px;}
+    .has-feedback{width: 278px;}
+    .r_deng{height: 42px;line-height: 42px;width: 88% !important;margin-left: 5% !important;}
+    .login-box-body, .register-box-body{padding:0;}
+    .login-box{}
+    .r_yonghuming > input, .r_yanzhengma > input{top: -43px;height: 42px;}
+    .bg-red, .callout.callout-danger, .alert-danger, .alert-error, .label-danger, .modal-danger .modal-body{
+        height: 45px;
     }
-    .form_input{
-        width: 100% !important;
+    .login-box-body, .register-box-body{
+        width: 87%;
+        margin: 0 auto;
     }
-
-    .gross {
-        width: 13%;
-        height: 59%;
-        float: left;
-        border-radius: 5px;
-        overflow: hidden;
-        margin: 3.7% 0.5% 0px 0px !important;
-        position: relative;
-    }
-    .gross>img{
-        width: 68px !important;
-        height: 68px  !important;
-    }
-    .gross span{
-        font-size: 12px !important;
-        margin: -29% 37px 0px 51.5% !important;
-
-    }
-    .gross div{
-        top: -15% !important;
-        left: 65% !important;
-        font-size: 12px !important;
-    }
-    .r_rdi{
-        width: 13%;
-    }
-
-    .gross_a>span{
-        margin: -27% 37px 0px 53.5% !important;
-    }
-
-    .dra_spa, .dra_p{
-        margin: 1% 0px 0px 10% !important;
-    }
-
-
-
-
 
 }
-
-
+@media screen and (min-width:800px) and (max-width:1400px) {
+    .login-box{
+        right:15%;
+    }
+}
+@media screen and (min-width:1400px) {
+    .login-box{
+        right:10%;
+    }
+}
 
 
 

@@ -27,7 +27,6 @@
         <result property="createTime" column="create_time"/>
         <result property="updateUser" column="update_user"/>
         <result property="updateTime" column="update_time"/>
-        <result property="deviceStatus" column="device_status"/>
         <result property="counts" column="counts"/>
         <result property="batteryMargin" column="battery_margin"/>
         <result property="batteryVoltage" column="battery_voltage"/>
@@ -57,9 +56,6 @@
         fun_device
         <where>
             is_del = 0
-            <if test="deviceQuery.deviceStatus !=null">
-                AND device_status = #{deviceQuery.deviceStatus}
-            </if>
             <if test="deviceQuery.groupId !=null and deviceQuery.groupId!=''">
                 AND group_id = #{deviceQuery.groupId}
             </if>
@@ -89,15 +85,37 @@
         </where>
     </select>
 
+    <select id="queryDeviceByProjectCount" resultMap="BaseResultMap" >
+        select
+        project_id,count(1) as counts from fun_device
+        where
+        is_del = 0
+        <if test="projectIds !=null and projectIds.size()!= 0">
+            and project_id in
+            <foreach collection="projectIds" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="deviceStatus != 0">
+            and run_state = #{deviceStatus}
+        </if>
+        group by project_id
+    </select>
+
+    <select id="queryDeviceByGroupIdTopOne" resultMap="BaseResultMap" >
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        fun_device
+        <where>
+            is_del = 0
+            and group_id = #{groupId} limit 0,1
+        </where>
+    </select>
+
     <select id="queryDeviceByGroupCount" resultMap="BaseResultMap" >
         select
-        <if test="groupIds !=null and groupIds.size()!= 0">
-            group_id,
-        </if>
-        <if test="projectIds !=null and projectIds.size()!= 0">
-            project_id,
-        </if>
-        count(1) as counts from fun_device
+        group_id,count(1) as counts from fun_device
         where
         is_del = 0
         <if test="groupIds !=null and groupIds.size()!= 0">
@@ -106,21 +124,13 @@
                 #{item}
             </foreach>
         </if>
-        <if test="projectIds !=null and projectIds.size()!= 0">
-            and project_id in
-            <foreach collection="projectIds" index="index" item="item" open="(" separator="," close=")">
-                #{item}
-            </foreach>
+        <if test="projectId !=null and projectId != ''">
+            and project_id = #{projectId}
         </if>
         <if test="deviceStatus != 0">
-            and device_status = #{deviceStatus}
+            and run_state = #{deviceStatus}
         </if>
-        <if test="projectIds !=null and projectIds.size()!= 0">
-            group by project_id
-        </if>
-        <if test="groupIds !=null and groupIds.size()!= 0">
-            group by group_id
-        </if>
+        group by group_id
     </select>
 
     <update id="deleteDevice" parameterType="com.remote.device.entity.DeviceQuery">
@@ -260,4 +270,8 @@
         </where>
     </update>
 
+
+    <select id="getDeviceByDeviceCode" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(1) from fun_device where is_del = 0 and device_code = #{deviceCode}
+    </select>
 </mapper>

@@ -40,4 +40,12 @@ public interface ProjectMapper extends BaseMapper<ProjectEntity> {
      * @return int
      **/
     int updateProjectById(ProjectEntity projectEntity);
+    /*
+     * @Author zhangwenping
+     * @Description 根据项目id查询项目详情
+     * @Date 13:47 2019/7/29
+     * @Param projectId
+     * @return ProjectEntity
+     **/
+    ProjectEntity queryProjectMap(@Param("projectId") String projectId);
 }

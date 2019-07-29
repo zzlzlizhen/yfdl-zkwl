@@ -25,8 +25,9 @@ $(function () {
     var pageSize
     var pageNum
     //搜索
+    $("#proje_search").unbind('click');
     $("#proje_search").click(function(){
-        var select=$("#form-control option:selected").text()
+        var select=$("#form-control").val()
         $("#div").html("")
         form(pageSize,pageNum,select)
     })
@@ -76,26 +77,23 @@ $(function () {
                     html += "<tr>\n" +
                         "<td id=" + res.data.list[i].groupId + " style=\"width:4%;\"> <input type= \"checkbox\"  name='clk' class=\"checkbox_in checkbox_i\"> </td>\n" +
                         "<td class='groupName'>" + res.data.list[i].groupName + "</td>\n" +
-                        "<td>" + res.data.list[i].groupName + "</td>\n" +
+                        "<td>" + res.data.list[i].deviceTypeName + "</td>\n" +
                         "<td>" + deviceCount + "</td>\n" +
-                        "<td>" + res.data.list[i].createTime + "</td>\n" +
+                        "<td title=" + res.data.list[i].createTime + ">" + res.data.list[i].createTime + "</td>\n" +
                         "<td>" + callPoliceCount + "</td>\n" +
                         "<td>" + faultCount + "</td>\n" +
                         "<td id=" + res.data.list[i].groupId + ">" +
-                        "<a  class='modifier_a'><img src='/remote-admin/statics/image/r_kongzhi.svg' alt='' class='r_erkongzhi'></a>\n" +
-                        "<a  class='modifier'><img src='/remote-admin/statics/image/bianji.png' alt=''></a>\n" +
-                        "<a  href=\"#\" class='ma_p' id="+res.data.list[i].longitude+","+res.data.list[i].latitude+"><img src='/remote-admin/statics/image/ditu.svg' alt=''style='width: 25px;height:25px;'></a>\n" +
-                        "<a  class='deleteq'><img src='/remote-admin/statics/image/shanchu.png' alt=''></a>\n" +
-                        "<a  class='particulars'><img src='/remote-admin/statics/image/r-se-youjiantou.svg' alt='' style='width: 22px;height:20px;' ></a>\n" +
+                        "<a  class='modifier_a'><img src='/statics/image/r_kongzhi.svg' alt='' class='r_erkongzhi'></a>\n" +
+                        "<a  class='modifier'><img src='/statics/image/bianji.png' alt=''></a>\n" +
+                        "<a  href=\"#\" class='ma_p' id="+res.data.list[i].longitude+","+res.data.list[i].latitude+"><img src='/statics/image/ditu.svg' alt=''style='width: 25px;height:25px;'></a>\n" +
+                        "<a  class='deleteq'><img src='/statics/image/shanchu.png' alt=''></a>\n" +
+                        "<a  class='particulars'><img src='/statics/image/r-se-youjiantou.svg' alt='' style='width: 22px;height:20px;' ></a>\n" +
                         "</td>\n" +
                         "</tr>"
-                    //修改样式<span class="glyphicon glyphicon-pencil"></span>
-                    //<span class="glyphicon glyphicon-search"></span>
-                    //<span class="glyphicon glyphicon-picture"></span>
-                    //<span class="glyphicon glyphicon-trash"></span>
                 }
                 $("#div").append(html);
                 // 地图定位
+                $(".ma_p").unbind('click');
                 $(".ma_p").click(function(){
                     var longitude=$(this).attr("id");
                     var name=$(this).parent().siblings(".groupName").html()
@@ -103,10 +101,11 @@ $(function () {
                     location.href =searchUrl;
                 })
                 //高级设置
+                $(".modifier_a").unbind('click');
                 $(".modifier_a").click(function(){
                     var grod=$(this).parent().attr('id');
-                    console.log(grod)
-                    var searchUrl=encodeURI('../control/control.html?deviceCode='+""+"&grod="+grod)
+                    var name=$(this).parent().siblings(".groupName").html();
+                    var searchUrl=encodeURI('../control/control.html?deviceCode='+""+"&grod="+grod+"&name="+name)
                     location.href =searchUrl;
                 })
                 //移动分组删除
@@ -134,6 +133,7 @@ $(function () {
                     }
                 });
                 //单选
+                $(".checkbox_i").unbind('click');
                 $(".checkbox_i").click(function () {
                     var che_c=$(this).prop('checked');
                     if(che_c == true){
@@ -161,6 +161,7 @@ $(function () {
                 })
 
                 // 批量删除
+                $(".deleteAll").unbind('click');
                 $(".deleteAll").click(function(){
                     if(arr.length <=0 ){
                         alert("请选择删除的设备!");
@@ -175,11 +176,12 @@ $(function () {
                 })
                 //    删除
                 var aproid
+                $(".deleteq").unbind('click');
                 $(".deleteq").click(function () {
                     $(".shade_delete,.shade_b_delete").css("display", "block");
                     aproid = $(this).parent().attr('id');
                 })
-
+                $(".sha_que_delete").unbind('click');
                 $(".sha_que_delete").click(function(){
                     dele(aproid)
                 })
@@ -201,6 +203,7 @@ $(function () {
                 }
 
                 //分组下设备
+                $(".particulars").unbind('click');
                 $(".particulars").click(function(){
                     var bproid = $(this).parent().attr('id');
                     var groupName= $(this).parent().siblings(".groupName").html();
@@ -209,6 +212,7 @@ $(function () {
                 })
                 //编辑
                 var proid
+                $(".modifier").unbind('click');
                 $(".modifier").click(function () {
                     $(".shade_modifier,.shade_b_modifier").css("display", "block");
                     proid = $(this).parent().attr('id');
@@ -216,7 +220,9 @@ $(function () {
                     $(".pro_s_b").val(r_inhtml)
 
                 })
+                $("#confirm_man").unbind('click');
                 $("#confirm_man").click(function () {
+                    console.log("Id+___"+proid)
                     var pro_s_b = $(".pro_s_b").val();
                     if (pro_s_b != "") {
                         $.ajax({
@@ -276,10 +282,12 @@ $(function () {
     //添加
     $("#add_grouping").click(function(){
         $(".shade_project,.shade_b_project").css("display","block");
+        $(".pro_name").val("")
     })
     $(".shade_add_project").click(function(){
         $(".shade_project,.shade_b_project").css("display","none")
     })
+    $("#add_queD").unbind('click');
     $("#add_queD").click(function(){
         var pro_name=$(".pro_name").val()
         $.ajax({

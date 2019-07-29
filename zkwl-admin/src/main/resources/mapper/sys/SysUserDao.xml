@@ -23,6 +23,7 @@
     	flag as flag,
     	is_bind_mtype as isBindMtype,
     	salt as salt,
+    	real_name as realName,
     	deadline as deadline
     </sql>
 
@@ -59,7 +60,7 @@
 	<select id="queryBySmsAndUid" resultType="com.remote.modules.sys.entity.SysUserEntity">
 		SELECT <include refid="columns"/> from sys_user as su where su.flag = 1 and su.is_bind_mtype = 1
 		<if test="userId!=null">
-		and su.user_id = #{userId}
+			and su.user_id = #{userId}
 	    </if>
 		<if test="mobile!=null and mobile!=''">
 			and su.mobile = #{mobile}
@@ -110,5 +111,30 @@
 				#{item}
 			</foreach>
 		</if>
+	</select>
+	<select id="getByEmailAndUid" resultType="com.remote.modules.sys.entity.SysUserEntity">
+		select <include refid="columns"/>  from sys_user where flag=1
+		<if test="email != null and email != ''">
+			and email = #{email}
+		</if>
+		<if test="userId != null and userId != ''">
+			and user_id != #{userId}
+		</if>
+	</select>
+	<select id="getByMobileAndUid" resultType="com.remote.modules.sys.entity.SysUserEntity">
+		select <include refid="columns"/>  from sys_user where flag=1
+		<if test="mobile != null and mobile != ''">
+			and mobile = #{mobile}
+		</if>
+		<if test="userId != null and userId != ''">
+			and user_id != #{userId}
+		</if>
+	</select>
+	<select id="queryByIdEAndM" resultType="com.remote.modules.sys.entity.SysUserEntity">
+		select <include refid="columns"/>  from sys_user where flag=1
+		<if test="userId != null and userId != ''">
+			and user_id = #{userId}
+		</if>
+		and (type = 1 or is_bind_mtype = 1)
 	</select>
 </mapper>

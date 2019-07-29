@@ -1,5 +1,6 @@
 package com.remote.modules.project.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.remote.common.enums.DeviceEnum;
@@ -10,6 +11,7 @@ import com.remote.modules.device.entity.DeviceQuery;
 import com.remote.modules.device.service.DeviceService;
 import com.remote.modules.group.entity.GroupEntity;
 import com.remote.modules.group.service.GroupService;
+import com.remote.modules.group.service.impl.GroupServiceImpl;
 import com.remote.modules.project.dao.ProjectMapper;
 import com.remote.modules.project.entity.ProjectEntity;
 import com.remote.modules.project.entity.ProjectQuery;
@@ -19,6 +21,8 @@ import com.remote.modules.sys.entity.SysUserEntity;
 import com.remote.modules.sys.service.SysUserService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +39,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
-
+    private Logger logger = LoggerFactory.getLogger(ProjectServiceImpl.class);
     @Autowired
     private ProjectMapper projectMapper;
 
@@ -51,11 +55,13 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public boolean addProject(ProjectEntity projectEntity) {
+        logger.info("添加项目信息："+JSONObject.toJSONString(projectEntity));
         return projectMapper.insert(projectEntity) > 0 ? true : false;
     }
 
     @Override
     public PageInfo<ProjectEntity> queryProjectByUserIds(ProjectQuery projectQuery) {
+        logger.info("查询项目信息："+JSONObject.toJSONString(projectQuery));
         List<SysUserEntity> userList = sysUserService.queryAllLevel(projectQuery.getUserId());
         if(CollectionUtils.isNotEmpty(userList)){
             List<Long> transform = userList.parallelStream().map(sysUserEntity -> sysUserEntity.getUserId()).collect(Collectors.toCollection(ArrayList::new));
@@ -67,7 +73,7 @@ public class ProjectServiceImpl implements ProjectService {
             List<SysUserEntity> userLists = sysUserService.queryUserByUserIds(transform);
             if(CollectionUtils.isNotEmpty(userLists)){
                 for (SysUserEntity sysUserEntity : userLists){
-                    userMap.put(sysUserEntity.getUserId(),sysUserEntity.getUsername());
+                    userMap.put(sysUserEntity.getUserId(),sysUserEntity.getRealName());
                 }
             }
             for (ProjectEntity projectEntity : list){
@@ -135,18 +141,22 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public boolean updateProject(ProjectEntity projectEntity) throws Exception {
+        logger.info("修改项目信息："+JSONObject.toJSONString(projectEntity));
         ValidateUtils.validate(projectEntity,Arrays.asList("projectId"));
         int i = projectMapper.updateProjectById(projectEntity);
         if(i > 0){
             DeviceQuery deviceQuery = new DeviceQuery();
             deviceQuery.setProjectId(projectEntity.getProjectId());
             List<DeviceEntity> deviceEntities = deviceService.queryDeviceNoPage(deviceQuery);
-            List<String> deviceIds = deviceEntities.parallelStream().map(deviceEntity -> deviceEntity.getDeviceId()).collect(Collectors.toCollection(ArrayList::new));
-            Long exclusiveUser = projectEntity.getExclusiveUser();
-            deviceQuery.setUpdateTime(new Date());
-            deviceQuery.setCreateUser(exclusiveUser);
-            deviceQuery.setUpdateUser(projectEntity.getCreateUser());
-            return deviceService.updateUserDevice(deviceQuery) > 0 ? true : false;
+            if(CollectionUtils.isNotEmpty(deviceEntities)){
+                List<String> deviceIds = deviceEntities.parallelStream().map(deviceEntity -> deviceEntity.getDeviceId()).collect(Collectors.toCollection(ArrayList::new));
+                Long exclusiveUser = projectEntity.getExclusiveUser();
+                deviceQuery.setUpdateTime(new Date());
+                deviceQuery.setCreateUser(exclusiveUser);
+                deviceQuery.setUpdateUser(projectEntity.getCreateUser());
+                return deviceService.updateUserDevice(deviceQuery) > 0 ? true : false;
+            }
+            return i > 0 ? true : false;
         }
         return false;
     }
@@ -173,7 +183,7 @@ public class ProjectServiceImpl implements ProjectService {
         Map<String,Integer> all = new HashMap<>();
         List<String> projectIds = list.parallelStream().map(projectEntity -> projectEntity.getProjectId()).collect(Collectors.toCollection(ArrayList::new));
 
-        List<DeviceEntity> deviceEntities1 = deviceService.queryDeviceByGroupCount(new ArrayList<String>(),projectIds,deviceStaus);
+        List<DeviceEntity> deviceEntities1 = deviceService.queryDeviceByProjectCount(projectIds,deviceStaus);
         if(CollectionUtils.isNotEmpty(deviceEntities1)){
             for(DeviceEntity deviceEntity : deviceEntities1){
                 all.put(deviceEntity.getProjectId(),deviceEntity.getCounts());
@@ -202,25 +212,25 @@ public class ProjectServiceImpl implements ProjectService {
         Map<String,Integer> offline = new HashMap<>();
         List<String> projectIds = list.parallelStream().map(projectEntity -> projectEntity.getProjectId()).collect(Collectors.toCollection(ArrayList::new));
 
-        List<DeviceEntity> deviceEntities1 = deviceService.queryDeviceByGroupCount(new ArrayList<String>(),projectIds,DeviceEnum.ALARM.getCode());//报警
+        List<DeviceEntity> deviceEntities1 = deviceService.queryDeviceByProjectCount(projectIds,DeviceEnum.ALARM.getCode());//报警
         if(CollectionUtils.isNotEmpty(deviceEntities1)){
             for(DeviceEntity deviceEntity : deviceEntities1){
                 alarm.put(deviceEntity.getProjectId(),deviceEntity.getCounts());
             }
         }
-        List<DeviceEntity> deviceEntities2 = deviceService.queryDeviceByGroupCount(new ArrayList<String>(),projectIds,DeviceEnum.FAULT.getCode());//故障
+        List<DeviceEntity> deviceEntities2 = deviceService.queryDeviceByProjectCount(projectIds,DeviceEnum.FAULT.getCode());//故障
         if(CollectionUtils.isNotEmpty(deviceEntities2)){
             for(DeviceEntity deviceEntity : deviceEntities2){
                 fault.put(deviceEntity.getProjectId(),deviceEntity.getCounts());
             }
         }
-        List<DeviceEntity> deviceEntities3 = deviceService.queryDeviceByGroupCount(new ArrayList<String>(),projectIds,DeviceEnum.NORMAL.getCode());//正常
+        List<DeviceEntity> deviceEntities3 = deviceService.queryDeviceByProjectCount(projectIds,DeviceEnum.NORMAL.getCode());//正常
         if(CollectionUtils.isNotEmpty(deviceEntities3)){
             for(DeviceEntity deviceEntity : deviceEntities3){
                 normal.put(deviceEntity.getProjectId(),deviceEntity.getCounts());
             }
         }
-        List<DeviceEntity> deviceEntities4 = deviceService.queryDeviceByGroupCount(new ArrayList<String>(),projectIds,DeviceEnum.OFFLINE.getCode());//离线
+        List<DeviceEntity> deviceEntities4 = deviceService.queryDeviceByProjectCount(projectIds,DeviceEnum.OFFLINE.getCode());//离线
         if(CollectionUtils.isNotEmpty(deviceEntities4)){
             for(DeviceEntity deviceEntity : deviceEntities4){
                 offline.put(deviceEntity.getProjectId(),deviceEntity.getCounts());

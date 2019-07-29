@@ -1,6 +1,7 @@
 package com.remote.modules.device.service;
 
 import com.github.pagehelper.PageInfo;
+import com.remote.common.utils.R;
 import com.remote.modules.device.entity.DeviceEntity;
 import com.remote.modules.device.entity.DeviceQuery;
 import com.remote.modules.device.entity.DeviceResult;
@@ -51,7 +52,7 @@ public interface DeviceService {
      * @Param deviceEntity
      * @return boolean
      **/
-    boolean updateById(DeviceEntity deviceEntity) throws Exception;
+    R updateById(DeviceEntity deviceEntity) throws Exception;
 
     /*
      * @Author zhangwenping
@@ -68,7 +69,15 @@ public interface DeviceService {
      * @Param groupIds deviceStatus projectIds
      * @return  List<DeviceEntity>
      **/
-    List<DeviceEntity> queryDeviceByGroupCount(List<String> groupIds,List<String> projectIds,Integer deviceStatus);
+    List<DeviceEntity> queryDeviceByGroupCount(List<String> groupIds,String projectId,Integer deviceStatus);
+    /*
+     * @Author zhagnwenping
+     * @Description 查询项目下设备各状态数量
+     * @Date 11:23 2019/6/18
+     * @Param groupIds deviceStatus projectIds
+     * @return List<DeviceEntity>
+     **/
+    List<DeviceEntity> queryDeviceByProjectCount(List<String> projectIds,Integer deviceStatus);
 
     /*
      * @Author zhangwenping
@@ -148,4 +157,21 @@ public interface DeviceService {
      * @return int
      **/
     int getDeviceByDeviceCode(String deviceCode);
+
+    /*
+     * @Author zhangwenping
+     * @Description 根据分组查询设备的第一条
+     * @Date 16:37 2019/7/17
+     * @Param groupId
+     * @return DeviceEntity
+     **/
+    DeviceEntity queryDeviceByGroupIdTopOne(String groupId);
+    /*
+     * @Author zhangwenping
+     * @Description 批量修改设备状态
+     * @Date 11:15 2019/7/25
+     * @Param deviceCodes
+     * @return int
+     **/
+    boolean updateDeviceRunStatus(List<String> deviceCodes);
 }

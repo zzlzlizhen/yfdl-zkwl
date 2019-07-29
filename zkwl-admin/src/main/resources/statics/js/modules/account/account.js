@@ -6,12 +6,14 @@ $(function () {
     var ids
 
     //搜索
+    $("#proje_search").unbind('click');
     $("#proje_search").click(function () {
-        var acc_id = $("#acc_id").val()
-        var acc_hao = $("#acc_hao").val()
-        var acc_name = $("#acc_name").val()
-        var select = $("#sele_ht option:selected").text()
-        $("#div").html("")
+        var acc_id = $("#acc_id").val();
+        var acc_hao = $("#acc_hao").val();
+        var acc_name = $("#acc_name").val();
+        var select = $("#sele_ht option:selected").attr("class");
+        console.log("===="+select)
+        $("#div").html("");
         pageNum = 1;
         form(pageSize, pageNum, acc_id, acc_hao, acc_name, select)
     })
@@ -52,26 +54,28 @@ $(function () {
                         offClass = "btn_fath clearfix  toogle on";
                     }
                     if(res.page.list[i].status == 1 &&  dead > Tima ){
-                        state="<img src='/remote-admin/statics/image/zhengchang.png' alt=''>"
+                        state="<img src='/statics/image/zhengchang.png' alt=''>"
                     }else{
-                        state="<img src='/remote-admin/statics/image/yichang.png' alt=''>"
+                        state="<img src='/statics/image/yichang.png' alt=''>"
                     }
                     //有效期
                     var termOfValidity=res.page.list[i].termOfValidity
                     if(termOfValidity == "0"){
-                        termOfValidity="半"
+                        termOfValidity="半年"
+                    }else if(termOfValidity == "6"){
+                        termOfValidity="永久"
                     }else{
-                        termOfValidity=res.page.list[i].termOfValidity
+                        termOfValidity=res.page.list[i].termOfValidity+"年"
                     }
 
                     html += " <tr class='r_pw'>\n" +
                         " <td>" + res.page.list[i].userId + "</td>\n" +
-                        "<td class='username'>" + res.page.list[i].username + "</td>\n" +
-                        " <td class='r_user'>" + res.page.list[i].realName + "</td>\n" +
+                        "<td class='username' title=" + res.page.list[i].username + ">" + res.page.list[i].username + "</td>\n" +
+                        " <td class='r_user' title=" + res.page.list[i].realName + ">" + res.page.list[i].realName + "</td>\n" +
                         "<td>" + res.page.list[i].projectCount + "</td>\n" +
                         "<td>" + res.page.list[i].deviceCount + "</td>\n" +
-                        "<td>" + res.page.list[i].createTime + "</td>\n" +
-                        "<td class='r_termof'>" + termOfValidity + "年</td>\n" +
+                        "<td title=" + res.page.list[i].createTime + ">" + res.page.list[i].createTime + "</td>\n" +
+                        "<td class='r_termof'>" + termOfValidity + "</td>\n" +
                         "<td>"+state+"</td>\n" +
                         "<td>" +
                         "<div class=\"switch\" > \n" +
@@ -81,11 +85,11 @@ $(function () {
                         "<div class=\"btnSwitch btn2 \">开</div> \n" +
                         "</div> " +
                         "</td>\n" +
-                        "<td class='r_typ'>" + res.page.list[i].mobile + "</td>\n" +
-                        "<td class='r_emal'>" + res.page.list[i].email + "</td>\n" +
+                        "<td class='r_typ' title=" + res.page.list[i].mobile + ">" + res.page.list[i].mobile + "</td>\n" +
+                        "<td class='r_emal' title=" + res.page.list[i].email + ">" + res.page.list[i].email + "</td>\n" +
                         "<td id=" + res.page.list[i].userId + ">\n" +
-                        " <a class='compile r_bu_sou1'><img src='/remote-admin/statics/image/bianji.png' alt=''></a>\n" +
-                        " <a href='javascript:void(0)'  class='Delete r_bu_sou2'><img src='/remote-admin/statics/image/shanchu.png' alt=''></a>\n" +
+                        " <a class='compile r_bu_sou1' id=" + res.page.list[i].headUrl + "><img src='/statics/image/bianji.png' alt=''></a>\n" +
+                        " <a href='javascript:void(0)'  class='Delete r_bu_sou2'><img src='/statics/image/shanchu.png' alt=''></a>\n" +
                         "</td>\n" +
                         "</tr>"
                         // 删除的样式<span class="glyphicon glyphicon-pencil " ></span>
@@ -95,6 +99,7 @@ $(function () {
                 $("#div").append(html)
                 //滑動按鈕
                 var Id_a
+                $(".toogle").unbind('click');
                 $(".toogle").click(function () {
                     var username = $(this).parent().parent().siblings(".username").html();
                     var ele = $(this).children(".move");
@@ -106,6 +111,9 @@ $(function () {
                             aaa(state, username, Id_a)
                         });
                         $(this).removeClass("on").addClass("off");
+                        setTimeout(function () {
+                            window.location.reload()
+                        }, 2000);
                         return
                     } else if (ele.attr("data-state") == "0") {
                         ele.animate({left: '50%'}, 300, function () {
@@ -114,6 +122,9 @@ $(function () {
                             aaa(state, username, Id_a)
                         });
                         $(this).removeClass("off").addClass("on");
+                        setTimeout(function () {
+                            window.location.reload()
+                        }, 2000);
                     }
                 })
 
@@ -129,12 +140,13 @@ $(function () {
                         }
                     })
                 }
-                //編輯
+                //编辑
+                var Id_aa
+                $(".compile").unbind('click');
                 $(".compile").click(function () {
-                    console.log($(".mistake").html())
                     $(".shade,.shade_b").css("display", "block")
                     //id
-                    Id_a = $(this).parent().attr('id');
+                    Id_aa = $(this).parent().attr('id');
                     var na_ma = $(this).parent().siblings(".username").html();
                     $("#acc_number_b").val(na_ma);
                     var r_user = $(this).parent().siblings(".r_user").html();
@@ -143,13 +155,17 @@ $(function () {
                     var r_pw = $(this).parent().siblings(".r_pw").html();
                     $("#acc_password_b").val(r_pw);
                     var r_termof = $(this).parent().siblings(".r_termof").html();
-                    $("#acc_select_b option:selected").text(r_termof);
+                    $("#acc_select_b ").val(r_termof);
                     var r_typ = $(this).parent().siblings(".r_typ").html();
                     $("#acc_call_b").val(r_typ);
                     var r_emal = $(this).parent().siblings(".r_emal").html();
                     $("#acc_mailbox_b").val(r_emal);
+                    //图片
+                    var url=$(this).attr("id")
+                    $("#pice").attr("src","https://39.97.169.198"+url);
                 })
                 //修改管理员
+                $("#sha_que_can").unbind('click');
                 $("#sha_que_can").click(function () {
                     //账号
                     var na_ma_mod = $("#acc_number_b").val();
@@ -158,10 +174,10 @@ $(function () {
                     // 密码
                     var r_pw_mod = $("#acc_password_b").val();
                     // 年限
-                    var r_termof_mod = $("#acc_select_b option:selected").text();
-                    var termOfValidity = r_termof_mod.substr(r_termof_mod.length - 2, 1)
+                    var r_termof_mod = $("#acc_select_b option:selected").attr("class");
                     //图片
                     var r_src_mod = $('#previewr').css('backgroundImage');
+                    var headUrle=$("#headUrle").val()
                     //邮箱
                     var r_emal_mod = $("#acc_mailbox_b").val();
                     //手机
@@ -169,7 +185,7 @@ $(function () {
                     //管理者
                     var r_Ad_mod = $("#r_Ad_mod").val();
 
-                    if (na_ma_mod == "" || r_user_mod == "" || r_pw_mod == "" || r_termof_mod == "" || r_emal_mod == "" || r_typ_mod == "" || r_Ad_mod == "") {
+                    if (na_ma_mod == "" || r_user_mod == "" || r_termof_mod == "" || r_emal_mod == "" || r_typ_mod == "" || r_Ad_mod == "") {
                        $(".rrbol").html("輸入不能為空");
                          lay()
                     } else {
@@ -188,12 +204,12 @@ $(function () {
                             return false;
                         }
                         //    密码
-                        if (!patrn5.exec(r_pw_mod)) {
-                            $(".rrbol").html("密码错误");
-                            console.log("密码错误")
-                            $(".shade_b").css("display","block");
-                            return false;
-                        }
+                        // if (!patrn5.exec(r_pw_mod)) {
+                        //     $(".rrbol").html("密码错误");
+                        //     console.log("密码错误")
+                        //     $(".shade_b").css("display","block");
+                        //     return false;
+                        // }
                         // 邮箱
                         if (!patrn2.exec(r_emal_mod)) {
                             $(".rrbol").html("邮箱错误");
@@ -209,25 +225,23 @@ $(function () {
                             $(".mistake").css("display","block");
                             return false;
                         }
-
                         $.ajax({
                             url: baseURL + 'sys/user/update',
                             type: "POST",
                             data:
-                            "&userId=" + Id_a +
+                            "&userId=" + Id_aa +
                             "&username=" + na_ma_mod +
                             "&email=" + r_emal_mod +
                             "&mobile=" + r_typ_mod +
-                            "&headUrl=" + "" +
+                            "&headUrl=" + headUrle +
                             "&realName=" + r_user_mod +
-                            "&termOfValidity=" + termOfValidity +
+                            "&termOfValidity=" + r_termof_mod +
                             "&roleId=" + r_Ad_mod,
                             success: function (res) {
                                 console.log(JSON.stringify(res));
                                 if (res.code == "200") {
                                     alert('修改成功')
                                     window.location.reload()
-
                                 } else {
                                     alert(res.msg);
                                 }
@@ -243,6 +257,7 @@ $(function () {
                     Id_a = $(this).parent().attr('id');
                 })
                 //確定刪除
+                $(".sha_que_delete").unbind('click');
                 $(".sha_que_delete").click(function () {
                     $.ajax({
                         url: baseURL + "sys/user/delete",
@@ -260,7 +275,6 @@ $(function () {
 
                 })
 
-
                 //  分頁
                 $("#pagination3").pagination({
                     currentPage: pages,
@@ -277,7 +291,7 @@ $(function () {
                         var acc_id = $("#acc_id").val();
                         var acc_hao = $("#acc_hao").val();
                         var acc_name = $("#acc_name").val();
-                        var select = $("#sele_ht option:selected").text();
+                        var select = $("#sele_ht option:selected").attr("class");
                         $("#div").html("");
                         form(pageSize, pagesb, acc_id, acc_hao, acc_name, select);
                     }
@@ -294,74 +308,76 @@ $(function () {
     // $("#setPage").on("click", function() {
     //     $("#pagination3").pagination("setPage", 1, 10);
     // });
-    //编辑弹窗刪除////////////////(编辑头像)
+    //编辑弹窗刪除
     $("#shade_a,.sha_cancel,.guan_shc").click(function () {
         $(".shade,.shade_b").css("display", "none")
     })
-//删除确定弹窗
-// $(".layui-layer-btn0").click(function(){
-//     $("#layui-layer1").css("display", "none")
-// })
-    //删除彈窗/////////////////////
-    $(".shade_a_delete,.sha_cancel_delete,.guan_sha").click(function () {
+    //删除弹窗
+    $(".shade_a_delete,.sha_cancel_delete,.guan_sha,.sha_cancel_newa").unbind('click');
+    $(".shade_a_delete,.sha_cancel_delete,.guan_sha,.sha_cancel_newa").click(function () {
         $(".shade_delete,.shade_b_delete").css("display", "none")
     })
-
-    //新建//////////////////////////（新建传参少头像）
+    //新建
+    $(".btn_m_new").unbind('click');
     $(".btn_m_new").click(function () {
-        $(".shade_new,.shade_b_new").css("display", "block")
+        $(".shade_new,.shade_b_new").css("display", "block");
+        $("#acc_number").val("")
+        $("#acc_user").val("")
+        $("#acc_password").val("")
+        $("#acc_select").val("")
+        $("#acc_mailbox").val("")
+        $("#acc_call").val("");
+        $("#role").val("");
+        $("#pic").attr("src","");
     })
     $(".shade_a_new,.sha_cancel_new,.guan_shb").click(function () {
         $(".shade_new,.shade_b_new").css("display", "none")
     })
+
+    $("#confirm_Z").unbind('click');
     $("#confirm_Z").click(function () {
         var acc_number = $("#acc_number").val()
         var acc_user = $("#acc_user").val()
         var acc_password = $("#acc_password").val()
         //图片
         var r_src_mod = $('#preview').css('backgroundImage');
-        var acc_select = $("#acc_select option:selected").text()
+        var acc_select = $("#acc_select option:selected").attr("class");
         var acc_mailbox = $("#acc_mailbox").val()
         var acc_call = $("#acc_call").val();
         var roleId = $("#role").val();
         var headUrl = $("#headUrl").val();
 
         if (acc_number == "" || acc_user == "" || acc_password == "" || acc_mailbox == "" || acc_call == "") {
-          $(".rrbol").html("輸入不能為空");
+          $(".rrbol").html("输入不能为空");
             lay()
         } else {
             //    账号
             if (!patrn3.exec(acc_number)) {
                 $(".rrbol").html("账号错误");
-                console.log("账号错误")
                 $(".mistake").css("display","block");
                 return false;
             }
             //    用户名
             if (!patrn4.exec(acc_user)) {
                 $(".rrbol").html("用户名错误");
-                console.log("用户名错误")
                 $(".mistake").css("display","block");
                 return false;
             }
             //    密码
             if (!patrn5.exec(acc_password)) {
                 $(".rrbol").html("密码错误");
-                console.log("密码错误")
                 $(".shade_b").css("display","block");
                 return false;
             }
             // 邮箱
             if (!patrn2.exec(acc_mailbox)) {
                 $(".rrbol").html("邮箱错误");
-                console.log("邮箱错误")
                 $(".mistake").css("display","block");
                 return false;
             }
             //手机号错误
             if (!patrn1.exec(acc_call)){
                 $(".rrbol").html("手机号错误");
-                console.log("手机号错误")
                 $(".rrbol").html("手机号错误");
                 $(".mistake").css("display","block");
                 return false;
@@ -381,12 +397,11 @@ $(function () {
                 "&mobile=" + acc_call +
                 "&roleId=" + roleId ,
                 success: function (res) {
-                    console.log(JSON.stringify(res));
                     if (res.code == 200) {
                         $("#acc_number").val("")
                         $("#acc_user").val("")
                         $("#acc_password").val("")
-                        $("#acc_select option:selected").text("")
+                        $("#acc_select").val("")
                         $("#acc_mailbox").val("")
                         $("#acc_call").val("");
                         $("#role").val("");
@@ -401,108 +416,7 @@ $(function () {
         }
     });
 
-
-//账户修改  选择图片
-//     var preview = document.querySelector('#previewr');
-//     var eleFile = document.querySelector('#file');
-//     eleFile.addEventListener('change', function () {
-//         var file = this.files[0];
-//         // 确认选择的文件是图片
-//         if (file.type.indexOf("image") == 0) {
-//             var reader = new FileReader();
-//             reader.readAsDataURL(file);
-//             reader.onload = function (e) {
-//                 // 图片base64化
-//                 var newUrl = this.result;
-//                 preview.style.backgroundImage = 'url(' + newUrl + ')';
-//             };
-//         }
-//     });
-
-
-    $(function() {
-        $("#pic").click(function() {
-            $("#upload").click(); //隐藏了input:file样式后，点击头像就可以本地上传
-            $("#upload").on("change", function() {
-                var objUrl = getObjectURL(this.files[0]); //获取图片的路径，该路径不是图片在本地的路径
-                if (objUrl) {
-                    $("#pic").attr("src", objUrl); //将图片路径存入src中，显示出图片
-                    upimg();
-                }
-            });
-        });
-    });
-
-    //建立一?可存取到?file的url
-    function getObjectURL(file) {
-        var url = null;
-        if (window.createObjectURL != undefined) { // basic
-            url = window.createObjectURL(file);
-        } else if (window.URL != undefined) { // mozilla(firefox)
-            url = window.URL.createObjectURL(file);
-        } else if (window.webkitURL != undefined) { // webkit or chrome
-            url = window.webkitURL.createObjectURL(file);
-        }
-        return url;
-    }
-    //上传头像到服务器
-    function upimg() {
-        console.log(344)
-        var pic = $('#upload')[0].files[0];
-        var file = new FormData();
-        file.append('image', pic);
-        $.ajax({
-            url: "/uploadImg",
-            type: "post",
-            data: file,
-            cache: false,
-            contentType: false,
-            processData: false,
-            success: function(data) {
-                console.log(data);
-                var res = data;
-                $("#resimg").append("<img src='/" + res + "'>")
-            }
-        });
-    }
-
-
-//分页
-    $(".ui-pagination-container").pagination({
-        currentPage: pageNum,
-        totalPage: pages,
-        isShow: true,
-        count: 7,
-        homePageText: "首页",
-        endPageText: "尾页",
-        prevPageText: "上一页",
-        nextPageText: "下一页",
-        callback: function (current) {
-            //当前页数current
-            var pagesb = current
-            var acc_id = $("#acc_id").val();
-            var acc_hao = $("#acc_hao").val();
-            var acc_name = $("#acc_name").val();
-            var select = $("#sele_ht option:selected").text();
-            $("#div").html("");
-            form(pageSize, pagesb, acc_id, acc_hao, acc_name, select);
-        }
-    });
-    //上传头像   添加
-    $("#pic").click(function() {
-        $("#upload").click(); //隐藏了input:file样式后，点击头像就可以本地上传
-        $("#upload").on("change", function() {
-            var objUrl = getObjectURL(this.files[0]); //获取图片的路径，该路径不是图片在本地的路径
-            if (objUrl) {
-                $("#pic").attr("src", objUrl); //将图片路径存入src中，显示出图片
-                upimg();
-            }
-        });
-
-        var lujing=$("#pic").attr("src");
-        console.log(lujing)
-    });
-
+//上传头像   添加
     new AjaxUpload('#upload', {
         action: baseURL + "sys/upload",
         name: 'file',
@@ -516,68 +430,18 @@ $(function () {
         },
         onComplete : function(file, r){
             if(r.code == 200){
-                // alert(r.url);
                 $("#headUrl").val(r.url);
-                $("#pic").attr("src",baseURL+r.url);
+                console.log("2+")
+                console.log(r.url);
+                console.log(file)
+                $("#pic").attr("src","https://39.97.169.198"+r.url);
             }else{
                 alert(r.msg);
             }
         }
     });
-
-
 });
-
-//建立一?可存取到?file的url
-function getObjectURL(file) {
-    var url = null;
-    if (window.createObjectURL != undefined) { // basic
-        url = window.createObjectURL(file);
-    } else if (window.URL != undefined) { // mozilla(firefox)
-        url = window.URL.createObjectURL(file);
-    } else if (window.webkitURL != undefined) { // webkit or chrome
-        url = window.webkitURL.createObjectURL(file);
-    }
-    return url;
-}
-//上传头像到服务器
-function upimg() {
-    console.log(344)
-    var pic = $('#upload')[0].files[0];
-    var file = new FormData();
-    file.append('image', pic);
-    $.ajax({
-        url: "sys/upload",
-        type: "post",
-        data: file,
-        cache: false,
-        contentType: false,
-        processData: false,
-        success: function(data) {
-            console.log(data);
-            var res = data;
-            $("#resimg").append("<img src='/" + res + "'>")
-        }
-    });
-}
-
-
-//修改   上传图片
-//上传头像   添加
-$("#pice").click(function() {
-    $("#uploade").click(); //隐藏了input:file样式后，点击头像就可以本地上传
-    $("#uploade").on("change", function() {
-        var objUrl = getObjectURL(this.files[0]); //获取图片的路径，该路径不是图片在本地的路径
-        if (objUrl) {
-            $("#pice").attr("src", objUrl); //将图片路径存入src中，显示出图片
-            upimg();
-        }
-    });
-
-    var lujing=$("#pice").attr("src");
-    console.log(lujing)
-});
-
+//修改 上传图片
 new AjaxUpload('#uploade', {
     action: baseURL + "sys/upload",
     name: 'file',
@@ -591,47 +455,12 @@ new AjaxUpload('#uploade', {
     },
     onComplete : function(file, r){
         if(r.code == 200){
-            // alert(r.url);
             $("#headUrle").val(r.url);
-            $("#pice").attr("src",baseURL+r.url);
+            console.log("4+")
+            console.log(r.url);
+            $("#pice").attr("src","https://39.97.169.198"+r.url);
         }else{
             alert(r.msg);
         }
     }
-
-
-
 });
-
-//建立一?可存取到?file的url
-function getObjectURL(file) {
-    var url = null;
-    if (window.createObjectURL != undefined) { // basic
-        url = window.createObjectURL(file);
-    } else if (window.URL != undefined) { // mozilla(firefox)
-        url = window.URL.createObjectURL(file);
-    } else if (window.webkitURL != undefined) { // webkit or chrome
-        url = window.webkitURL.createObjectURL(file);
-    }
-    return url;
-}
-//上传头像到服务器
-function upimg() {
-    console.log(344)
-    var pic = $('#upload')[0].files[0];
-    var file = new FormData();
-    file.append('image', pic);
-    $.ajax({
-        url: "sys/upload",
-        type: "post",
-        data: file,
-        cache: false,
-        contentType: false,
-        processData: false,
-        success: function(data) {
-            console.log(data);
-            var res = data;
-            $("#resimg").append("<img src='/" + res + "'>")
-        }
-    });
-}

@@ -107,6 +107,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
         return this.baseMapper.update(userEntity,
                 new QueryWrapper<SysUserEntity>().eq("user_id", userId));
     }
+
+    @Override
+    public List<SysUserEntity> queryUserByUserIds(List<Long> userIds) {
+        return sysUserDao.queryUserByUserIds(userIds);
+    }
+
     /*
     * 通过用户id查询所有自身和子孙用户
     * */
@@ -141,5 +147,26 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
         temp.setUserId(user.getUserId());
         temp.setAllParentId(user.getCurAllParentId()+","+user.getUserId());
         this.updateById(temp);
+    }
+    /**
+     * 通过邮箱查询该用户是否存在
+     * */
+    @Override
+    public SysUserEntity getByUsername(String username) {
+        return this.baseMapper.selectOne(new QueryWrapper<SysUserEntity>().eq("flag",1).eq("username",username));
+    }
+    /**
+     * 通过邮箱查询该用户是否存在
+     * */
+    @Override
+    public SysUserEntity getByEmail(String email) {
+        return this.baseMapper.selectOne(new QueryWrapper<SysUserEntity>().eq("flag",1).eq("email",email));
+    }
+    /**
+     * 通过邮箱查询该用户是否存在
+     * */
+    @Override
+    public SysUserEntity getByMobile(String mobile) {
+        return this.baseMapper.selectOne(new QueryWrapper<SysUserEntity>().eq("flag",1).eq("mobile",mobile));
     }
 }

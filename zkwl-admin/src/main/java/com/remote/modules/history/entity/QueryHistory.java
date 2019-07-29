@@ -26,6 +26,13 @@ public class QueryHistory {
     private List<Double> visitorsFlowrateList = new ArrayList<>();//人流量
     private List<Double> inductionFrequencyList = new ArrayList<>();//感应次数
     private List<Double> meteorologicalList = new ArrayList<>();//气象信息
+
+    private List<Double> loadPowerList = new ArrayList<>();//负载功率
+    private List<Double> chargingPowerList = new ArrayList<>();//充电功率
+
+    private Double loadPowerSum;
+    private Double chargingpowerSum;
     private List<String> hours = new ArrayList<>();//小时
     private List<String> newHours = new ArrayList<>();//时间
+    private String userName;
 }

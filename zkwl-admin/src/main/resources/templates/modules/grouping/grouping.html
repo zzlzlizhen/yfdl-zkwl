@@ -15,28 +15,23 @@
     </script>
 </head>
 <style>
-    .table_m table tr td a{
-        margin-left:8%;
+    .table_m table tr td a{margin-left:8%;}
+    .table_grouping table tr td, .table_grouping ul li{width: 7%;}
+    .shade_b_project{height: 360px;}
+    .form-control{height:35px;}
+    .form-group {margin-bottom: 0px;}
+    #se_fora option{width:100%;}
+    @media screen and (min-width:800px) and (max-width:1400px) {
+        .table_m{max-height:36%;}
     }
-    .table_grouping table tr td, .table_grouping ul li{
-        width: 7%;
-    }
-    .shade_b_project{
-        height: 360px;
-    }
-    .form-control{
-        height: 40px;
-    }
-    .form-group {
-        margin-bottom: 0px;
-    }
+    .box{margin-top:0.5%}
 </style>
 
 <body style="position: relative">
     <!--分组天气-->
     <div class="hear weather" style="padding: 0;">
         <!--天气-->
-        <div class="r_xiugai_six_tu">正常运行</div>
+        <div class="r_xiugai_six_tu" id="r_xiugai_six_tu"></div>
         <div class="hear_weather">
 
            <div class="hear_project" id="hear_project"></div>
@@ -86,7 +81,7 @@
         </div>
 
       <div style="float: right;width: 15%" class="r_rdi">
-          <div class="hear_map" ><img src="${request.contextPath}/statics/image/r_sxditu.png" alt="">地图</div>
+          <div class="hear_map" id="hear_map" ><img src="${request.contextPath}/statics/image/r_sxditu.png" alt="">地图</div>
       </div>
 
     </div>
@@ -110,7 +105,6 @@
         <div class="form-group col-sm-2 form_input">
             <select class="form-control"  id="se_fora">
                 <option></option>
-                <option>1</option>
             </select>
         </div>
         <a class="btn btn-primary btn_m gl_bt r_top_fon" id="proje_search"><img src="${request.contextPath}/statics/image/r_ssousuo.png" alt="">搜索</a>
@@ -120,7 +114,7 @@
     </div>
 
 
-    <div class="table_m table_grouping" id="rrapp" style="max-height:61%;height:auto;">
+    <div class="table_m table_grouping" id="rrapp">
         <ul>
             <li style="width:4%;"> <input type= "checkbox" class="checkbox_in" name="all" id="checkbox"> </li>
             <li>设备编号</li>
@@ -146,16 +140,14 @@
         <img src="${request.contextPath}/statics/image/zhuyi.png" alt="">
         <div>已选择</div>
         <span id="mo_sp"></span>
-      <p  class="r_span">
-          <img src="${request.contextPath}/statics/image/shanchu-1.png" alt="">
-          <!--<input type=""value="删除">-->
-          <i class="deleteAll" >删除</i>
-      </p>
-    <p  class="r_span">
-         <img src="${request.contextPath}/statics/image/yidong.png" alt="">
-        <!--<input type="" value="移动分组" >-->
-        <i class="mobile_pac" style=" font-style:normal">移动分组</i>
-    </p>
+        <p  class="r_span" id="deleteAll">
+            <img src="${request.contextPath}/statics/image/shanchu-1.png" alt="">
+            <i class="deleteAll" >删除</i>
+        </p>
+        <p  class="r_span" id="mobile_pac">
+            <img src="${request.contextPath}/statics/image/yidong.png" alt="">
+            <i class="mobile_pac" style=" font-style:normal">移动分组</i>
+        </p>
     </div>
     <!--分页-->
     <div class="box">
@@ -172,25 +164,23 @@
                 <span class="glyphicon glyphicon-remove wrong"></span>
             </div>
             <span class="sha_span">
-                <p> <span  style="color: red">*</span>设备编号：</p>
-                <input type="text" placeholder="请填写" class="pro_name">
+                <p class="Jan_r"> <span  style="color: red">*</span>设备编号：</p>
+                <input type="text" placeholder="请填写" class="pro_name" style="width:169px;">
             </span>
             <span class="sha_span">
-                <p> <span  style="color: red">*</span>设备名称：</p>
-                <input type="text" placeholder="请填写" class="pro_s">
+                <p  class="Jan_r"> <span  style="color: red">*</span>设备名称：</p>
+                <input type="text" placeholder="请填写" class="pro_s" style="width:169px;">
             </span>
             <span class="sha_span">
-                <p  style="width:29%"><span  style="color: red">*</span>设备分组：</p>
-                <div class="form-group col-sm-2 " style="width:70%;padding-left:0;padding-right:0;">
-                    <select class="form-control" id="select1" >
-                        <option class="opti_a"></option>
+                <p class="Jan_r"><span  style="color: red">*</span>设备分组：</p>
+                <div class="form-group col-sm-2 " style="width:160px;padding-left:0;padding-right:0;">
+                    <select class="form-control" id="select1"  style="width: 169px;height: 40px;">
+
                     </select>
                 </div>
             </span>
 
             <div class="sha_buttom">
-<!--                <input type="button" value="确定" id="project_confirm">-->
-<!--                <input type="button" value="取消" class="shade_add_project">-->
                 <div id="project_confirm"  class="rquebei" >确定</div>
                 <div  class="shade_add_project rqubtn"  >取消</div>
             </div>
@@ -207,28 +197,25 @@
                 <span class="glyphicon glyphicon-remove wrong"></span>
             </div>
             <span class="sha_span">
-                <p> <span  style="color: red">*</span>设备名称：</p>
-                <input type="text" placeholder="请填写" class="pro_s_b">
+                <p class="Jan_r"> <span  style="color: red">*</span>设备名称：</p>
+                <input type="text" placeholder="请填写" class="pro_s_b" style="width:169px;">
             </span>
             <span class="sha_span">
-                <p  style="width:29%"><span  style="color: red">*</span>设备分组：</p>
-                <div class="form-group col-sm-2 " style="width:70%;padding-left:0;padding-right:0;margin: 0;">
-                    <select class="form-control"  id="select1_b" >
-                       <option></option>
+                <p class="Jan_r"><span  style="color: red">*</span>设备分组：</p>
+                <div class="form-group col-sm-2 " style="width:169px;padding-left:0;padding-right:0;margin: 0;">
+                    <select class="form-control"  id="select1_b" style="height: 40px;">
                     </select>
                 </div>
             </span>
 
             <div class="sha_buttom">
-<!--                <input type="button" value="确定" id="confirm_x" >-->
-<!--                <input type="button" value="取消" class="shade_modifier_project">-->
                 <div id="confirm_x"  class="rquebei" >确定</div>
                 <div  class="shade_modifier_project rqubtn"  >取消</div>
             </div>
         </div>
     </div>
 <!--移动设备-->
-    <div class="shade_Yi">
+          <div class="shade_Yi">
         <div class="shade_a shade_modifier_yi"></div>
         <div class="shade_b_yi">
             <div class="Bian_j">移动分组<span class="glyphicon glyphicon-remove guan_shc shade_modifier_yi" ></span></div>
@@ -251,18 +238,15 @@
         <div class="shade_a_delete" ></div>
         <div class="shade_b_delete">
             <div class="Bian_j_delete">温馨提示<span class="glyphicon glyphicon-remove guan_sha" ></span></div>
-            <span class="delete_sp">是否删除设备</span>
-            <p class="delete_p">确定删除？</p>
+            <span class="delete_sp">是否删除设备?</span>
             <div class="sha_buttom_delete">
-                <!--            <input type="button" value="确定" class="sha_que_delete">-->
-                <!--            <input type="button" value="取消" class="sha_cancel_delete">-->
-                <div class="rquebei sha_que_delete" >确定</div>
-                <!--            <input type="button" value="取消" class="sha_cancel_new rqubtn">-->
+                <div class="rquebei sha_que_delete" style="margin-left:20%;">确定</div>
                 <div   class="sha_cancel_new rqubtn " >取消</div>
             </div>
         </div>
     </div>
-    <script src="${request.contextPath}/statics/js/modules/grouping/grouping.js"></script>
-
+    <script>
+        document.write('<script src="${request.contextPath}/statics/js/modules/grouping/grouping.js?v='+Math.random()+'"><\/script>');
+    </script>
 </body>
 </html>

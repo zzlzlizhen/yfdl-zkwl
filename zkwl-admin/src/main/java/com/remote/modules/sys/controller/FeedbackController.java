@@ -40,7 +40,7 @@ public class FeedbackController extends AbstractController{
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("sys:feedback:list")
+  /*  @RequiresPermissions("sys:feedback:list")*/
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = feedbackService.queryPage(params,getUser());
 
@@ -65,7 +65,6 @@ public class FeedbackController extends AbstractController{
      * */
     @RequestMapping("/backList")
     public R backList(@RequestParam Map<String, Object> params){
-
         PageUtils page = feedbackService.queryPage(params,getUser());
 
         return R.ok().put("page", page);
@@ -76,12 +75,20 @@ public class FeedbackController extends AbstractController{
      * 信息
      */
     @RequestMapping("/info/{backId}")
-    @RequiresPermissions("sys:feedback:info")
+    /*@RequiresPermissions("sys:feedback:info")*/
     public R info(@PathVariable("backId") String backId){
+        if(StringUtils.isBlank(backId)){
+            return R.error("反馈信息id不能为空");
+        }
         FeedbackEntity feedback = feedbackService.getById(backId);
         SysUserEntity sysUserEntity = sysUserService.queryById(feedback.getUid());
-        feedback.setUsername(sysUserEntity.getUsername());
-        feedback.setHeadUrl(sysUserEntity.getHeadUrl());
+        if(sysUserEntity != null){
+            feedback.setUsername(sysUserEntity.getUsername());
+            feedback.setHeadUrl(sysUserEntity.getHeadUrl());
+        }else{
+            feedback.setUsername("");
+            feedback.setHeadUrl("");
+        }
         MsgBackReadedEntity msgBackReadedEntity = msgBackReadedService.queryBackIdAndUid(backId,getUserId());
         if(msgBackReadedEntity == null){
             //如果反馈不为空
@@ -91,12 +98,30 @@ public class FeedbackController extends AbstractController{
         }
         return R.ok().put("feedback", feedback);
     }
+   /**
+    * 通过反馈id跟uid查询是不是给自身回复
+    * */
+   @RequestMapping("/isSelf")//true是自身，false不是自身
+   public R isSelf(@RequestParam("backId")String backId){
+       boolean falg = feedbackService.isSelf(backId,getUserId());
+       return R.ok().put("falg",falg);
+   }
+
     /**
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("sys:feedback:save")
+ /*   @RequiresPermissions("sys:feedback:save")*/
     public R save(FeedbackEntity feedback){
+        if(StringUtils.isBlank(feedback.getEmail())){
+            return R.error("反馈的邮箱不能为空");
+        }
+        if(StringUtils.isBlank(feedback.getMobile())){
+            return R.error("反馈的手机号不能为空");
+        }
+        if(StringUtils.isBlank(feedback.getBackContent())){
+            return R.error("反馈内容不能为空");
+        }
         feedback.setUid(this.getUserId());
         feedback.setBackId(IdGenerate.getUUIDString());
         feedback.setBackCreateTime(new Date());
@@ -113,8 +138,17 @@ public class FeedbackController extends AbstractController{
      * 新增反馈回复
      */
     @RequestMapping("/update")
-    @RequiresPermissions("sys:feedback:update")
+    /*@RequiresPermissions("sys:feedback:update")*/
     public R update( FeedbackEntity feedback){
+        if(feedback.getUid() == this.getUserId()){
+            return R.error("不能给自己回复");
+        }
+        if(StringUtils.isBlank(feedback.getBackId())|| "undefined".equals(feedback.getBackId())){
+            return R.error("反馈id不能为空");
+        }
+        if(StringUtils.isBlank(feedback.getAnswerContent())){
+            return R.error("回复内容不能为空");
+        }
         feedback.setAnswerUser(this.getUserId());
         feedback.setAnswerCreateTime(new Date());
         boolean flag = feedbackService.updateById(feedback);
@@ -131,7 +165,7 @@ public class FeedbackController extends AbstractController{
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("sys:feedback:delete")
+   /* @RequiresPermissions("sys:feedback:delete")*/
     public R delete(String ids){
         if(StringUtils.isBlank(ids)){
             return R.error("数据不能为空");
@@ -144,6 +178,7 @@ public class FeedbackController extends AbstractController{
 
         return R.ok();
     }
+
 
     /**
      * 增加信息到已读表

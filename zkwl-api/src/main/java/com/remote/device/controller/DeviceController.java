@@ -6,6 +6,7 @@ import com.remote.device.entity.DeviceEntity;
 import com.remote.device.service.DeviceService;
 import com.remote.device.util.DeviceInfo;
 import com.remote.device.util.MapKey;
+import com.remote.device.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,20 +31,11 @@ import static com.remote.device.util.MapKey.mapKey;
 @RequestMapping("/fun/device")
 public class DeviceController {
 
-    @Autowired
-    private CacheUtils cacheUtils;
-
-    @RequestMapping(value = "/set", method= RequestMethod.GET)
-    public void setTest(){
-        cacheUtils.set("11","22");
+    public static void main(String[] args) {
+        double div = Utils.div(4386, 1);
+        System.out.println(div);
 
 
     }
-    @RequestMapping(value = "/get", method= RequestMethod.GET)
-    public void getTest(){
-        Object o = cacheUtils.get("11");
-        System.out.println(o);
-    }
-
 
 }

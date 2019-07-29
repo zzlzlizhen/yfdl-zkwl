@@ -60,7 +60,7 @@ public class MessageController extends AbstractController {
      * 信息
      */
     @RequestMapping("/info/{msgId}")
-    @RequiresPermissions("sys:message:info")
+   /* @RequiresPermissions("sys:message:info")*/
     public R info(@PathVariable("msgId") String msgId){
         MessageEntity message = messageService.getById(msgId);
 
@@ -71,8 +71,8 @@ public class MessageController extends AbstractController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("sys:message:save")
-    public R save(@RequestBody MessageEntity message){
+/*    @RequiresPermissions("sys:message:save")*/
+    public R save(MessageEntity message){
         message.setMsgId(IdGenerate.getUUIDString());
         messageService.save(message);
 
@@ -83,8 +83,8 @@ public class MessageController extends AbstractController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("sys:message:update")
-    public R update(@RequestBody MessageEntity message){
+/*    @RequiresPermissions("sys:message:update")*/
+    public R update(MessageEntity message){
         ValidatorUtils.validateEntity(message);
         messageService.updateById(message);
         
@@ -95,8 +95,8 @@ public class MessageController extends AbstractController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("sys:message:delete")
-    public R delete(@RequestBody String[] msgIds){
+  /*  @RequiresPermissions("sys:message:delete")*/
+    public R delete(String[] msgIds){
         messageService.removeByIds(Arrays.asList(msgIds));
         return R.ok();
     }

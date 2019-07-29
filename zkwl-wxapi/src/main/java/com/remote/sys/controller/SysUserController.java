@@ -80,8 +80,31 @@ public class SysUserController extends AbstractController {
 	 */
 	@RequestMapping(value = "/save",method = RequestMethod.POST)
 	public R save(SysUserEntity user){
+		if(StringUtils.isNotBlank(user.getUsername())){
+			SysUserEntity sysUserEntity =	sysUserService.getByUsername(user.getUsername());
+			if(sysUserEntity != null){
+				return R.error("该用户名已存在");
+			}
+		}
+		if(StringUtils.isNotBlank(user.getEmail())){
+			SysUserEntity sysUserEntity =	sysUserService.getByEmail(user.getEmail());
+			if(sysUserEntity != null){
+				return R.error("该邮箱已存在");
+			}
+		}
+		if(StringUtils.isNotBlank(user.getMobile())){
+			SysUserEntity sysUserEntity = sysUserService.getByMobile(user.getMobile());
+			if(sysUserEntity != null){
+				return R.error("该手机号已存在");
+			}
+		}
+		if(user.getTermOfValidity()==null){
+			return R.error("账号有效期不能为空");
+		}
 		Date d = null;
-		if(user.getTermOfValidity() >= 1){
+		if(user.getTermOfValidity() == 6){
+			d = DateUtils.addDateYears(new Date(),99);
+		}else if(user.getTermOfValidity() >= 1){
 			d = DateUtils.addDateYears(new Date(),user.getTermOfValidity());
 		}else{
 			d = DateUtils.addDateMonths(new Date(),6);
@@ -97,6 +120,9 @@ public class SysUserController extends AbstractController {
 	 */
 	@RequestMapping(value = "/delete" ,method = RequestMethod.POST)
 	public R delete(Long userId,Long curUserId){
+		if(userId==null){
+			return R.error("数据不能为空");
+		}
 		if(userId==1L){
 			return R.error("系统管理员不能删除");
 		}

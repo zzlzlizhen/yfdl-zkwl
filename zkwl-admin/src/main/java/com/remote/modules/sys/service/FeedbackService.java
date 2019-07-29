@@ -23,6 +23,7 @@ public interface FeedbackService extends IService<FeedbackEntity> {
      * */
     List<FeedbackEntity> queryBackList(List<Long> userIds);
     FeedbackEntity queryDetailInfo(String backId);
+    boolean isSelf(String backId,Long uid);
 
     PageInfo<FeedbackEntity> queryBackList(List<Long> userIds, SysUserEntity curUser);
     int queryCount(Long curUid);

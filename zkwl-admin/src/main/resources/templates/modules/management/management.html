@@ -9,31 +9,15 @@
     <script src="${request.contextPath}/statics/js/modules/project/jquery_page.js"></script>
 </head>
 <style>
-    .table_m table tr td a{
-        margin-left: 8%;
-    }
-    .table_grouping_z table tr td, .table_grouping_z ul li{
-        width:13.1%;
-    }
-    .table_m table tr td:last-child {
-        width: 17.111%;
-    }
-    .table_m table tr td a {
-        margin-left: 4%;
-    }
-
+    .table_m table tr td a{margin-left: 8%;}
+    .table_grouping_z table tr td, .table_grouping_z ul li{width:13.1%;}
+    .table_m table tr td:last-child {width: 17.111%;}
+    .table_m table tr td a {margin-left: 4%;}
     @media screen and (min-width:800px) and (max-width:1300px){
-        .table_m table tr td:last-child {
-            width: 22.311%;
-        }
-        .table_grouping_z table tr td, .table_grouping_z ul li {
-            width: 12.1%;
-        }
+        .table_m table tr td:last-child {width: 22.311%;}
+        .table_grouping_z table tr td, .table_grouping_z ul li {width: 12.1%;}
     }
-    .shade_b_modifier,.shade_b_project{
-    height: 222px;
-}
-
+    .shade_b_modifier,.shade_b_project{height: 222px;margin-top:-110px;}
 </style>
 <body>
     <div class="hear">
@@ -42,20 +26,13 @@
     <div class="project_he" >
         <span class="hear_w">组名：</span>
         <div class="form-group col-sm-2 form_input">
-            <select class="form-control" id="form-control">
-                <option></option>
-                <option>马振超</option>
-                <option>ttttt</option>
-                <option>默认分组</option>
-                <option>aaaaa</option>
-                <option>5</option>
-            </select>
+            <input type="text" class="form-control" id="form-control"  placeholder=" ">
         </div>
         <a class="btn btn-primary btn_m gl_bt r_top_fon" id="proje_search"><img src="${request.contextPath}/statics/image/r_ssousuo.png" alt="">搜索</a>
         <a class="btn btn-primary btn_m r_top_fon" id="add_grouping"><img src="${request.contextPath}/statics/image/tianjia.png" alt="">新增分组</a>
     </div>
 <!--    表格-->
-    <div class="table_m table_grouping_z" id="rrapp" style="max-height:61%;height:auto;">
+    <div class="table_m table_grouping_z" id="rrapp">
         <ul>
             <li style="width:4%;"> <input type= "checkbox" class="checkbox_in" name="all" id="checkbox"> </li>
             <li>组名</li>
@@ -73,7 +50,6 @@
 
     <!-- 批量删除-->
     <div class="move_a">
-
         <img src="${request.contextPath}/statics/image/zhuyi.png" alt="">
         <div>已选择</div>
         <span id="mo_sp"></span>
@@ -94,19 +70,17 @@
     <!--新增设备-->
     <div class="shade_project">
         <div class="shade_a shade_add_project"></div>
-        <div class="shade_b_project"  style="height: 222px;">
+        <div class="shade_b_project"  style="height: 222px;margin-top: -110px;" >
             <div class="Bian_j">新增分组<span class="glyphicon glyphicon-remove guan_shc shade_add_project" ></span></div>
             <div class="mistake">
                 <span class="glyphicon glyphicon-pencil cu_m"></span>错误提示
                 <span class="glyphicon glyphicon-remove wrong"></span>
             </div>
             <span class="sha_span">
-                <p> <span  style="color: red">*</span>分组名称：</p>
-                <input type="text" placeholder="请填写" class="pro_name">
+                <p class="Jan_r"> <span  style="color: red">*</span>分组名称：</p>
+                <input type="text" placeholder="请填写" class="pro_name" style="width:169px;">
             </span>
             <div class="sha_buttom">
-<!--                <input type="button" value="确定" id="add_queD">-->
-<!--                <input type="button" value="取消" class="shade_add_project">-->
                 <div id="add_queD"  class="rquebei" >确定</div>
                 <div  class="shade_add_project rqubtn"  >取消</div>
             </div>
@@ -117,19 +91,17 @@
     <div class="shade_modifier">
         <div class="shade_a shade_modifier_project"></div>
         <div class="shade_b_modifier">
-            <div class="Bian_j">编辑项目<span class="glyphicon glyphicon-remove guan_shc shade_modifier_project" ></span></div>
+            <div class="Bian_j">编辑分组<span class="glyphicon glyphicon-remove guan_shc shade_modifier_project" ></span></div>
             <div class="mistake">
                 <span class="glyphicon glyphicon-pencil cu_m"></span>错误提示
                 <span class="glyphicon glyphicon-remove wrong"></span>
             </div>
             <span class="sha_span">
-                <p> <span  style="color: red">*</span>分组名称：</p>
-                <input type="text" placeholder="请填写" class="pro_s_b">
+                <p class="Jan_r"> <span  style="color: red">*</span>分组名称：</p>
+                <input type="text" placeholder="请填写" class="pro_s_b" style="width:169px;">
             </span>
 
             <div class="sha_buttom">
-<!--                <input type="button" value="确定" id="confirm_man" >-->
-<!--                <input type="button" value="取消" class="shade_modifier_project">-->
                 <div id="confirm_man"  class="rquebei" >确定</div>
                 <div  class="shade_modifier_project rqubtn"  >取消</div>
             </div>
@@ -140,17 +112,15 @@
         <div class="shade_a_delete" ></div>
         <div class="shade_b_delete">
             <div class="Bian_j_delete">温馨提示<span class="glyphicon glyphicon-remove guan_sha" ></span></div>
-            <span class="delete_sp">是否删除分组</span>
-            <p class="delete_p">确定删除？</p>
+            <span class="delete_sp">是否删除分组？</span>
             <div class="sha_buttom_delete">
-                <!--            <input type="button" value="确定" class="sha_que_delete">-->
-                <!--            <input type="button" value="取消" class="sha_cancel_delete">-->
-                <div class="rquebei sha_que_delete" >确定</div>
-                <!--            <input type="button" value="取消" class="sha_cancel_new rqubtn">-->
+                <div class="rquebei sha_que_delete" style="margin-left:20%;">确定</div>
                 <div   class="sha_cancel_new rqubtn " >取消</div>
             </div>
         </div>
     </div>
 </body>
-<script src="${request.contextPath}/statics/js/modules/management/management.js"></script>
+<script>
+    document.write('<script src="${request.contextPath}/statics/js/modules/management/management.js?v='+Math.random()+'"><\/script>');
+</script>
 </html>

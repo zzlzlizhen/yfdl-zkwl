@@ -7,6 +7,8 @@ import com.remote.modules.advancedsetting.entity.AdvancedSettingEntity;
 import com.remote.modules.advancedsetting.service.AdvancedSettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -52,8 +54,8 @@ public class AdvancedSettingServiceImpl extends ServiceImpl<AdvancedSettingDao, 
      * 通过设备code查询高级设置信息
      * */
     @Override
-    public AdvancedSettingEntity queryByDeviceCode(String deviceCode) {
-        return this.queryByProGroupId(deviceCode,"0");
+    public List<AdvancedSettingEntity> queryByDeviceCode(List<String> deviceCodes) {
+        return this.advancedSettingDao.queryByDeviceCode(deviceCodes);
     }
     /**
      * 通过高级设置id更新对应设备code得高级设置信息
@@ -83,5 +85,16 @@ public class AdvancedSettingServiceImpl extends ServiceImpl<AdvancedSettingDao, 
     public AdvancedSettingEntity queryByDevOrGroupId(String groupId,String deviceCode) {
         return this.baseMapper.selectOne(new QueryWrapper<AdvancedSettingEntity>().eq("group_id",groupId).eq("device_code",deviceCode));
     }
+
+    @Override
+    public int updateAdvancedByDeviceCodes(List<String> deviceCodes,String groupId,String oldGroupId) {
+        return advancedSettingDao.updateAdvancedByDeviceCodes(deviceCodes,groupId,oldGroupId);
+    }
+
+    @Override
+    public int deleteAdvancedByDeviceCode(String deviceCode, String groupId) {
+        return advancedSettingDao.deleteAdvancedByDeviceCode(deviceCode,groupId);
+    }
+
 
 }

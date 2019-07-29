@@ -4,6 +4,7 @@ import com.remote.common.utils.R;
 import com.remote.modules.history.entity.QueryHistory;
 import com.remote.modules.history.service.HistoryService;
 import com.remote.modules.sys.controller.AbstractController;
+import com.remote.modules.sys.entity.SysUserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,6 +30,7 @@ public class HistoryController extends AbstractController {
     @RequestMapping(value = "/queryHistoryByDay", method= RequestMethod.GET)
     public R queryDevice(String deviceCode,String time){
         StringBuffer sb = new StringBuffer();
+        SysUserEntity user = getUser();
         String[] split = time.split("-");
         sb.append(split[0]).append("-");
         if(split[1].length() != 2){
@@ -43,6 +45,7 @@ public class HistoryController extends AbstractController {
         }
         QueryHistory queryHistory = historyService.queryHistoryDay(deviceCode,sb.toString());
         if(queryHistory != null){
+            queryHistory.setUserName(user.getUsername());
             return R.ok(queryHistory);
         }
         return R.error(400,"查询历史数据失败");

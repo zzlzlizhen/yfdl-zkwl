@@ -15,7 +15,7 @@ function lay(){
 }
 
     // 手机号
-    var patrn1 = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/;
+    var patrn1 = /^1[3456789]\d{9}$/;
     // if (!patrn1.exec(r_typ_mod)){
     //     $(".rrbol").html("手机号错误");
     //     console.log("手机号错误")
@@ -31,7 +31,7 @@ function lay(){
     //
     // }
     //账号验证    验证规则：字母、数字、下划线组成，字母开头，4-16位。
-    var patrn3 = /^[a-zA-z]\w{3,15}$/;
+    var patrn3 = /^[a-zA-Z0-9]\w{3,15}$/;
     // if (!patrn3.exec(na_ma_mod)) {
     //     $(".rrbol").html("账号错误");
     //     console.log("账号错误")

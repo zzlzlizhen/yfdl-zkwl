@@ -50,14 +50,15 @@ public class FileUpAndDownServiceImpl implements FileUpAndDownService {
                 // 新名称
                 String newFileName = uuid + "." + imageName;
                 // 年月日文件夹
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-                String basedir = sdf.format(new Date());
+              /*  SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+                String basedir = sdf.format(new Date());*/
                 // 进行压缩(大于4M)
                 if (file.getSize() > config.getFileSize()) {
                     // 重新生成
                     String newUUID = UUID.randomUUID().toString().replaceAll("-", "");
                     newFileName = newUUID + "." + imageName;
-                    path = config.getUpPath() + "/" + basedir + "/" + newUUID + "." + imageName;
+                    /*path = config.getUpPath() + "/" + basedir + "/" + newUUID + "." + imageName;*/
+                    path = config.getUpPath() + "/" + newUUID + "." + imageName;
                     // 如果目录不存在则创建目录
                     File oldFile = new File(path);
                     if (!oldFile.exists()) {
@@ -67,9 +68,11 @@ public class FileUpAndDownServiceImpl implements FileUpAndDownService {
                     // 压缩图片
                     Thumbnails.of(oldFile).scale(config.getScaleRatio()).toFile(path);
                     // 显示路径
-                    r.put("url", config.getRelativePath()+"/" + basedir + "/" + newUUID + "." + imageName);
+                   /* r.put("url", config.getRelativePath()+"/" + basedir + "/" + newUUID + "." + imageName);*/
+                    r.put("url", config.getRelativePath()+"/" + newUUID + "." + imageName);
                 } else {
-                    path = config.getUpPath() + "/" + basedir + "/" + uuid + "." + imageName;
+                  /*  path = config.getUpPath() + "/" + basedir + "/" + uuid + "." + imageName;*/
+                    path = config.getUpPath() + "/" + uuid + "." + imageName;
                     // 如果目录不存在则创建目录
                     File uploadFile = new File(path);
                     if (!uploadFile.exists()) {
@@ -77,7 +80,8 @@ public class FileUpAndDownServiceImpl implements FileUpAndDownService {
                     }
                     file.transferTo(uploadFile);
                     // 显示路径
-                    r.put("url", config.getRelativePath()+"/" + basedir + "/" + uuid + "." + imageName);
+                    /*r.put("url", config.getRelativePath()+"/" + basedir + "/" + uuid + "." + imageName);*/
+                    r.put("url", config.getRelativePath()+"/"  + uuid + "." + imageName);
                 }
                 r.put("oldFileName", oldFileName);
                 r.put("newFileName", newFileName);

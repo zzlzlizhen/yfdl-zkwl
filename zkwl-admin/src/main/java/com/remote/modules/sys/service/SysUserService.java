@@ -115,4 +115,24 @@ public interface SysUserService extends IService<SysUserEntity> {
 	 * 通过当前用户id修改设备数量
 	 * */
 	boolean updateDevCount(SysUserEntity curUser);
+	/**
+	 * 通过邮箱查询用户信息是否存在
+	 * */
+	SysUserEntity getByEmail(String email);
+	/**
+	 * 通过手机号检查该手机号是否已存在
+	 * */
+	SysUserEntity getByMobile(String mobile);
+	/**
+	 * 通过邮箱跟当前用户id查询用户信息是否存在
+	 * */
+	List<SysUserEntity> getByEmailAndUid(String email,Long userId);
+	/**
+	 * 通过手机号当前用户id检查该手机号是否已存在
+	 * */
+	List<SysUserEntity> getByMobileAndUid(String mobile,Long userId);
+	/**
+	 * 通过用户名查询该用户是否存在
+	 * */
+	SysUserEntity getByUsername(String username);
 }

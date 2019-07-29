@@ -32,5 +32,25 @@ public interface SysUserService extends IService<SysUserEntity> {
      */
     void saveUser(SysUserEntity user);
     int removeUser(Long uid);
+    /**
+     * 通过邮箱跟当前用户id查询用户信息是否存在
+     * */
+    SysUserEntity getByEmail(String email);
+    /**
+     * 通过手机号当前用户id检查该手机号是否已存在
+     * */
+    SysUserEntity getByMobile(String mobile);
+    /**
+     * 通过用户名查询该用户是否存在
+     * */
+    SysUserEntity getByUsername(String username);
+    /*
+     * @Author zhangwenping
+     * @Description 根据ids查询详情
+     * @Date 9:47 2019/7/9
+     * @Param userIds
+     * @return List<SysUserEntity>
+     **/
+    List<SysUserEntity> queryUserByUserIds(List<Long> userIds);
 
 }

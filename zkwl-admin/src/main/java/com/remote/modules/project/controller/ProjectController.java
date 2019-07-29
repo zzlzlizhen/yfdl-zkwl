@@ -39,11 +39,17 @@ public class ProjectController  extends AbstractController {
 
 
     @RequestMapping(value = "/add", method= RequestMethod.POST)
-    public R add(@RequestBody ProjectEntity project){
+    public R add(@RequestBody ProjectEntity project) {
+        if(project.getExclusiveUser() == null){
+            return R.error(201,"使用人不能为空");
+        }
+        if(StringUtils.isEmpty(project.getProjectName())){
+            return R.error(201,"项目名称不能为空");
+        }
         SysUserEntity user = getUser();
         project.setProjectId(UUID.randomUUID().toString());
         project.setCreateUser(user.getUserId());
-        project.setCreateName(user.getUsername());
+        project.setCreateName(user.getRealName());
         project.setCreateTime(new Date());
         project.setProjectCode(ProjectCodeUitls.getProjectCode());
         boolean flag = projectService.addProject(project);
@@ -94,6 +100,12 @@ public class ProjectController  extends AbstractController {
 
     @RequestMapping(value = "/update", method= RequestMethod.POST)
     public R update(@RequestBody ProjectEntity projectEntity) throws Exception {
+        if(projectEntity.getExclusiveUser() == null){
+            return R.error(201,"使用人不能为空");
+        }
+        if(StringUtils.isEmpty(projectEntity.getProjectName())){
+            return R.error(201,"项目名称不能为空");
+        }
         SysUserEntity user = getUser();
         projectEntity.setUpdateTime(new Date());
         projectEntity.setUpdateUser(user.getUserId());

@@ -7,7 +7,7 @@
         <result column="project_code" property="projectCode" jdbcType="VARCHAR" />
         <result column="project_name" property="projectName" jdbcType="VARCHAR" />
         <result column="project_desc" property="projectDesc" jdbcType="TIMESTAMP" />
-        <result column="city_id" property="cityId" jdbcType="VARCHAR" />
+        <result column="city_id" property="cityId" jdbcType="INTEGER" />
         <result column="exclusive_user" property="exclusiveUser" jdbcType="VARCHAR" />
         <result column="run_status" property="runStatus" jdbcType="INTEGER" />
         <result column="sum_count" property="sumCount" jdbcType="INTEGER" />
@@ -59,6 +59,9 @@
             <if test="projectQuery.userName !=null and projectQuery.userName!=''">
                 AND exclusive_user LIKE CONCAT('%', #{projectQuery.userName}, '%')
             </if>
+            <if test="projectQuery.status !=null and projectQuery.status!=''">
+                AND exclusive_user LIKE CONCAT('%', #{projectQuery.userName}, '%')
+            </if>
         </where>
     </select>
 
@@ -86,6 +89,7 @@
             </if>
             <if test="exclusiveUser != null">
                 exclusive_user = #{exclusiveUser},
+                create_user = #{exclusiveUser},
             </if>
             <if test="runStatus != null">
                 run_status = #{runStatus},
@@ -104,9 +108,6 @@
             </if>
             <if test="projectStatus != null">
                 project_status = #{projectStatus},
-            </if>
-            <if test="create_user != null">
-                create_user = #{exclusiveUser},
             </if>
             update_user = #{updateUser},
             update_time = now()

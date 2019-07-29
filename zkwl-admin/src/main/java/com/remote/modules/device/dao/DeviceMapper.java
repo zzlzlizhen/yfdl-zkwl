@@ -43,7 +43,7 @@ public interface DeviceMapper extends BaseMapper<DeviceEntity> {
      * @Param groupIds deviceStatus projectIds
      * @return List<DeviceEntity>
      **/
-    List<DeviceEntity> queryDeviceByGroupCount(@Param("groupIds") List<String> groupIds,@Param("projectIds") List<String> projectIds,@Param("deviceStatus") Integer deviceStatus);
+    List<DeviceEntity> queryDeviceByGroupCount(@Param("groupIds") List<String> groupIds,@Param("projectId") String projectId,@Param("deviceStatus") Integer deviceStatus);
     /*
      * @Author zhangwenping
      * @Description 查询分组详情
@@ -124,6 +124,39 @@ public interface DeviceMapper extends BaseMapper<DeviceEntity> {
      * @Param deviceCode
      * @return int
      **/
-    int getDeviceByDeviceCode(String deviceCode);
+    int getDeviceByDeviceCode(@Param("deviceCode")String deviceCode);
+    /*
+     * @Author zhangwenping
+     * @Description 根据分组查询设备的第一条
+     * @Date 16:37 2019/7/17
+     * @Param groupId
+     * @return DeviceEntity
+     **/
+    DeviceEntity queryDeviceByGroupIdTopOne(@Param("groupId")String groupId);
+    /*
+     * @Author zhagnwenping
+     * @Description 查询项目下设备各状态数量
+     * @Date 11:23 2019/6/18
+     * @Param groupIds deviceStatus projectIds
+     * @return List<DeviceEntity>
+     **/
+    List<DeviceEntity> queryDeviceByProjectCount(@Param("projectIds") List<String> projectIds,@Param("deviceStatus") Integer deviceStatus);
+    /*
+     * @Author zhangwenping
+     * @Description 通过ids查询详情
+     * @Date 16:26 2019/7/24
+     * @Param deviceIds
+     * @return  List<DeviceEntity>
+     **/
+    List<DeviceEntity> queryDeviceByDeviceIds(@Param("deviceIds") List<String> deviceIds);
+
+    /*
+     * @Author zhangwenping
+     * @Description 批量修改设备状态
+     * @Date 11:15 2019/7/25
+     * @Param deviceCodes
+     * @return int
+     **/
+    int updateDeviceRunStatus(@Param("deviceCodes") List<String> deviceCodes);
 }
 

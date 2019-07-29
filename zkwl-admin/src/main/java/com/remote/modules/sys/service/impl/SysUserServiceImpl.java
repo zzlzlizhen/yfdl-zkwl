@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.function.Function;
 
@@ -125,7 +126,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 		this.baseMapper.update(user,
 				new QueryWrapper<SysUserEntity>().eq("user_id", user.getUserId()));
 		//保存用户与角色关系
-		sysUserRoleService.saveOrUpdate(user.getUserId(), user.getRoleIdList());
+		sysUserRoleService.saveOrUpdate(user.getUserId(), Arrays.asList(user.getRoleId()));
 	}
     /**
 	 * 更新用户基本信息
@@ -136,7 +137,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 		this.baseMapper.update(user,
 				new QueryWrapper<SysUserEntity>().eq("user_id", userId));
 		//保存用户与角色关系
-		sysUserRoleService.saveOrUpdate(user.getUserId(), user.getRoleIdList());
+		sysUserRoleService.saveOrUpdate(user.getUserId(), Arrays.asList(user.getRoleId()));
 	}
 	/**
      * 更新用户状态 通过用户id更用户状态
@@ -193,7 +194,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 
 	@Override
 	public List<SysUserEntity> queryAllLevel(Long userId) {
-	    SysUserEntity sysUserEntity = this.baseMapper.selectOne(new QueryWrapper<SysUserEntity>().eq("user_id",userId));
+	    SysUserEntity sysUserEntity = this.baseMapper.selectOne(new QueryWrapper<SysUserEntity>().eq("flag",1).eq("user_id",userId));
 
 		//String where = "parent_id='"+userId+"' or parent_id like '%,"+userId+"' or parent_id like '%,"+userId+",%' or parent_id like '"+userId+",%'";
 		//return sysUserDao.queryAllLevel(where);
@@ -206,6 +207,43 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	@Override
 	public SysUserEntity queryByEmailAndUid(String email,Long userId){
 		return sysUserDao.queryByEmailAndUid(email,userId);
+	}
+	/**
+	 * 通过邮箱查询该用户是否存在
+	 * */
+	@Override
+	public SysUserEntity getByUsername(String username) {
+		return this.baseMapper.selectOne(new QueryWrapper<SysUserEntity>().eq("flag",1).eq("username",username));
+	}
+	/**
+	 * 通过邮箱查询该用户是否存在
+	 * */
+	@Override
+	public SysUserEntity getByEmail(String email) {
+		return this.baseMapper.selectOne(new QueryWrapper<SysUserEntity>().eq("flag",1).eq("email",email));
+	}
+	/**
+	 * 通过邮箱查询该用户是否存在
+	 * */
+	@Override
+	public SysUserEntity getByMobile(String mobile) {
+		return this.baseMapper.selectOne(new QueryWrapper<SysUserEntity>().eq("flag",1).eq("mobile",mobile));
+	}
+	/**
+	 * 通过邮箱查询该用户是否存在
+	 * */
+	@Override
+	public List<SysUserEntity> getByEmailAndUid(String email,Long userId) {
+		return this.sysUserDao.getByEmailAndUid(email,userId);
+		//return this.baseMapper.selectOne(new QueryWrapper<SysUserEntity>().eq("email",email).notIn("user_id",curUid));
+	}
+	/**
+	 * 通过邮箱查询该用户是否存在
+	 * */
+	@Override
+	public List<SysUserEntity> getByMobileAndUid(String mobile,Long userId) {
+		return this.sysUserDao.getByMobileAndUid(mobile,userId);
+		//return this.baseMapper.selectOne(new QueryWrapper<SysUserEntity>().eq("mobile",mobile).notIn("user_id",curUid));
 	}
 	/**
 	 *根据手机号验证用户
@@ -252,11 +290,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 
 	@Override
 	public SysUserEntity queryById(Long userId) {
-		return this.baseMapper.selectOne(new QueryWrapper<SysUserEntity>().eq("user_id",userId));
+		return this.baseMapper.selectOne(new QueryWrapper<SysUserEntity>().eq("flag",1).eq("user_id",userId));
 	}
 	@Override
 	public SysUserEntity queryByIdEAndM(Long userId) {
-		return this.baseMapper.selectOne(new QueryWrapper<SysUserEntity>().eq("user_id",userId).eq("type",1).or().eq("is_bind_mtype",1));
+	//	return this.baseMapper.selectOne(new QueryWrapper<SysUserEntity>().eq("flag",1).eq("user_id",userId).eq("type",1).or().eq("is_bind_mtype",1));
+		return this.sysUserDao.queryByIdEAndM(userId);
 	}
 
 	@Override

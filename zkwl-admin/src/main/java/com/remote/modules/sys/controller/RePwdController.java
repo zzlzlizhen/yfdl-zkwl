@@ -44,6 +44,12 @@ public class RePwdController {
     @RequestMapping(value = "/checkRePwdMobile",method = RequestMethod.GET)
     @ResponseBody
     public R checkRePwdMobile(String mobile, String securityCode){
+        if(StringUtils.isBlank(mobile)){
+            return R.error("手机号不能为空");
+        }
+        if(StringUtils.isBlank(securityCode)){
+            return R.error("验证码不能为空");
+        }
         checkEmailAndMob(mobile,securityCode,"isMobile","rePwdMobile");
         return R.ok();
     }
@@ -53,6 +59,12 @@ public class RePwdController {
     @RequestMapping(value="/checkRePwdEmail",method = RequestMethod.GET)
     @ResponseBody
     public R checkRePwdEmail(String email,String securityCode){
+        if(StringUtils.isBlank(email)){
+            return R.error("邮箱不能为空");
+        }
+        if(StringUtils.isBlank(securityCode)){
+            return R.error("验证码不能为空");
+        }
         checkEmailAndMob(email,securityCode,"isEmail","rePwdEmail");
         return R.ok();
     }
@@ -61,6 +73,12 @@ public class RePwdController {
      * */
     @RequestMapping(value = "/sendForPwd",method = RequestMethod.GET)
     public R sendRePwd(String contact,String fPwdType){
+        if(StringUtils.isBlank(contact)){
+            return R.error("联系方式不能为空");
+        }
+        if(StringUtils.isBlank(fPwdType)){
+            return R.error("联系方式类型不能为空");
+        }
         /**
          * 邮箱发送验证码 找回密码
          * */

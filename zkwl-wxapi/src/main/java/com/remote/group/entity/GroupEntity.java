@@ -80,7 +80,6 @@ public class GroupEntity {
      */
     private String latitude;
 
-    private Long userId;
 
-    private String userName;
+    private String deviceTypeName;
 }

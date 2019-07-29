@@ -54,15 +54,30 @@ public class HistoryServiceImpl implements HistoryService {
         List<HistoryDay> historyDays1 = historyDayMapper.queryDeviceByCode(deviceCode, time);
         if(CollectionUtils.isNotEmpty(historyDays1)){
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+            Double loadPowerSum = 0.0;
+            Double chargingPowerSum = 0.0;
             for(HistoryDay historyDay : historyDays1){
                 String format = dateFormat.format(historyDay.getCreateTime());
                 queryHistory.getNewHours().add(format);
                 queryHistory.getChargingCurrentList().add(historyDay.getChargingCurrent());
                 queryHistory.getDischargeCurrentList().add(historyDay.getDischargeCurrent());
+                if(historyDay.getLoadPower() != null){
+                    loadPowerSum += historyDay.getLoadPower();
+                    queryHistory.getLoadPowerList().add(historyDay.getLoadPower());
+
+                }
+                if(historyDay.getChargingPower() != null){
+                    chargingPowerSum += historyDay.getChargingPower();
+                    queryHistory.getChargingPowerList().add(historyDay.getChargingPower());
+                }
+
+
                 queryHistory.getBatteryVoltageList().add(historyDay.getBatteryVoltage());
                 queryHistory.getAmbientTemperatureList().add(historyDay.getAmbientTemperature());
                 queryHistory.getInternalTemperatureList().add(historyDay.getInternalTemperature());
             }
+            queryHistory.setLoadPowerSum(loadPowerSum);
+            queryHistory.setChargingpowerSum(chargingPowerSum);
         }
         return queryHistory;
     }
@@ -73,6 +88,8 @@ public class HistoryServiceImpl implements HistoryService {
         QueryHistory queryHistory = new QueryHistory();
         List<HistoryMouth> historyMouths = historyMouthMapper.queryHistoryMouth(deviceCode, year, month);
         if(CollectionUtils.isNotEmpty(historyMouths)){
+            Double loadPowerSum = 0.0;
+            Double chargingPowerSum = 0.0;
             queryHistory.setHistoryMouths(historyMouths);
             for (HistoryMouth historyMouth : historyMouths){
                 String format = dateFormat.format(historyMouth.getCreateTime());
@@ -88,7 +105,18 @@ public class HistoryServiceImpl implements HistoryService {
                 queryHistory.getVisitorsFlowrateList().add(historyMouth.getVisitorsFlowrate());
                 queryHistory.getInductionFrequencyList().add(historyMouth.getInductionFrequency());
                 queryHistory.getMeteorologicalList().add(historyMouth.getMeteorological());
+                if(historyMouth.getLoadPower() != null){
+                    loadPowerSum += historyMouth.getLoadPower();
+                    queryHistory.getLoadPowerList().add(historyMouth.getLoadPower());
+
+                }
+                if(historyMouth.getChargingPower() != null){
+                    chargingPowerSum += historyMouth.getChargingPower();
+                    queryHistory.getChargingPowerList().add(historyMouth.getChargingPower());
+                }
             }
+            queryHistory.setLoadPowerSum(loadPowerSum);
+            queryHistory.setChargingpowerSum(chargingPowerSum);
         }
         return queryHistory;
     }
@@ -100,6 +128,8 @@ public class HistoryServiceImpl implements HistoryService {
         List<HistoryYear> historyYears = historyYearMapper.queryHistoryYear(deviceCode, year);
         if(CollectionUtils.isNotEmpty(historyYears)){
             queryHistory.setHistoryYears(historyYears);
+            Double loadPowerSum = 0.0;
+            Double chargingPowerSum = 0.0;
             for (HistoryYear historyYear : historyYears){
                 String format = dateFormat.format(historyYear.getCreateTime());
                 historyYear.setTime(format);
@@ -113,7 +143,18 @@ public class HistoryServiceImpl implements HistoryService {
                 queryHistory.getInternalTemperatureList().add(historyYear.getInternalTemperature());
                 queryHistory.getVisitorsFlowrateList().add(historyYear.getVisitorsFlowrate());
                 queryHistory.getInductionFrequencyList().add(historyYear.getInductionFrequency());
+                if(historyYear.getLoadPower() != null){
+                    loadPowerSum += historyYear.getLoadPower();
+                    queryHistory.getLoadPowerList().add(historyYear.getLoadPower());
+
+                }
+                if(historyYear.getChargingPower() != null){
+                    chargingPowerSum += historyYear.getChargingPower();
+                    queryHistory.getChargingPowerList().add(historyYear.getChargingPower());
+                }
             }
+            queryHistory.setLoadPowerSum(loadPowerSum);
+            queryHistory.setChargingpowerSum(chargingPowerSum);
         }
         return queryHistory;
     }

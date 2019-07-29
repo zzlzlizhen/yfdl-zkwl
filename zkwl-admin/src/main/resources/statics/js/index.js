@@ -1,4 +1,5 @@
-//生成菜单
+//生成菜单跳转页面
+var url
 var menuItem = Vue.extend({
     name: 'menu-item',
     props:{item:{}},
@@ -12,15 +13,14 @@ var menuItem = Vue.extend({
         '	<ul v-if="item.type === 0" class="treeview-menu">',
         '		<menu-item :item="item" v-for="item in item.list"></menu-item>',
         '	</ul>',
-
         '	<a v-if="item.type === 1 && item.parentId === 0" :href="\'#\'+item.url">',
         '		<i v-if="item.icon != null" :class="item.icon"></i>',
         '		<span>{{item.name}}</span>',
         '	</a>',
-
         '	<a v-if="item.type === 1 && item.parentId != 0" :href="\'#\'+item.url"><i v-if="item.icon != null" :class="item.icon"></i><i v-else class="fa fa-circle-o"></i> {{item.name}}</a>',
         '</li>'
-    ].join('')
+    ].join(''),
+
 });
 
 //iframe自适应
@@ -40,7 +40,7 @@ var vm = new Vue({
 	data:{
 		user:{},
 		menuList:{},
-		main:"main.html",
+		main:"modules/project/project_index.html",
 		password:'',
 		newPassword:'',
         navTitle:"控制台"
@@ -53,6 +53,8 @@ var vm = new Vue({
 		},
 		getUser: function(){
 			$.getJSON("sys/user/info?_"+$.now(), function(r){
+			    console.log("登录")
+			    console.log(r)
 				vm.user = r.user;
 			});
 		},
@@ -80,6 +82,7 @@ var vm = new Vue({
 								});
 							}else{
 								layer.alert(result.msg);
+
 							}
 						}
 					});
@@ -101,6 +104,7 @@ var vm = new Vue({
 		this.getMenuList();
 		this.getUser();
 	},
+
 	updated: function(){
 		//路由
 		var router = new Router();
@@ -119,170 +123,107 @@ function routerList(router, menuList){
 		}else if(menu.type == 1){
 			router.add('#'+menu.url, function() {
 				var url = window.location.hash;
-				
 				//替换iframe的url
 			    vm.main = url.replace('#', '');
-			    
+
 			    //导航菜单展开
 			    $(".treeview-menu li").removeClass("active");
 			    $("a[href='"+url+"']").parents("li").addClass("active");
-			    
+			    $("a[href='"+url+"']").parents().siblings("li").removeClass("active");
 			    vm.navTitle = $("a[href='"+url+"']").text();
 			});
 		}
 	}
 	router.add('#modules/informa/informa.html', function() {
+	    console.log("页面跳转3")
 		var url = window.location.hash;
 		vm.main = url.replace('#', '');
 	});
 }
+
 //点击弹窗
 $("#r_val_eml").click(function(){
-    $(".r_lay").css("display","block")
-    $(".r_beise").css("display","block")
-    $(".r_lay_a").css("display","none")
+    $(".r_lay,.r_beise,.r_be").css("display","block")
+    $(".r_lay_a,.r_beise_a,.r_be_a").css("display","none")
 })
-//点击获取验证码
-$("#btn").click(function(){
-    var r_val_eml = $("#r_rlm").val()
-		$.ajax({
-			url:  'contact/sendBindEmail',
-			type: "GET",
-			data: "&email=" + r_val_eml ,
-			success: function (res) {
-				console.log(JSON.stringify(res));
-				if (res.code == "200") {
-					console.log("///////////////////////")
-                    ryanzhengma()
-				} else {
-					console.log(res.msg);
-			}}
-	    })
-})
-	//提交  验证码  邮箱
-	function ryanzhengma(){
-		$("#r_bte").click(function(){
-			var r_rlm=$("#r_rlm").val()
-			var r_el_upd = $("#r_el_upd").val()
-		if(r_rlm == "" || r_el_upd == ""){
-					alert("输入不能为空")
-		}else{
-            // 邮箱
-            if (!patrn2.exec(r_rlm)) {
-                console.log("邮箱错误")
-                return false;
+//提交  验证码  邮箱
+$("#r_bte").click(function(){
+    var r_rlm=$("#r_rlm").val()
+    var r_el_upd = $("#r_el_upd").val()
+    if(r_rlm == "" || r_el_upd == ""){
+        alert("输入不能为空")
+    }else{
+        // 邮箱
+        if (!patrn2.exec(r_rlm)) {
+            console.log("邮箱错误")
+            return false;
+        }
+        $.ajax({
+            url:  'contact/checkBindEmail',
+            type: "GET",
+            data: "&email=" + r_rlm +
+            "&securityCode=" + r_el_upd ,
+            success: function (res) {
+                console.log(JSON.stringify(res));
+                if (res.code == "200") {
+                    console.log("/////////邮箱")
+                    $(".r_lay,.r_beise,.r_be").hide()
+                    $("#r_el_upd").val();
+                    countdown=60
+                    return
+                } else {
+                    console.log(res.msg);
+                    $("#r_el_upd").val();
+                    countdown=60
+                }
             }
-			$.ajax({
-				url:  'contact/checkBindEmail',
-				type: "GET",
-				data: "&email=" + r_rlm +
-				"&securityCode=" + r_el_upd ,
-				success: function (res) {
-					console.log(JSON.stringify(res));
-					if (res.code == "200") {
-						console.log("///////////////////////")
-						$(".r_lay").css("display","none")
-					} else {
-						console.log(res.msg);
-					}
-				}
-			})
-		}
-	})
-}
-//进入页面获取数据
-$.ajax({
-    url:  'sys/user/baseInfo',
-    type: "POST",
-    success: function (res) {
-        console.log("修改账户信息")
-        console.log(JSON.stringify(res));
-        if (res.code == "200") {
-        	console.log(res)
-            // var r_header_img = res.user.headUrl;
-            // 图片
-            // $("#r_header_img").attr("src", "user.headUrl");
-            var r_ide = res.user.userId;
-            $("#r_ide").val(r_ide)
-            var select1 = res.user.roleId;
-			$("#acc_select_b option:selected").text(select1);
-            var r_num = res.user.username;
-            $("#r_num").val(r_num)
-            var r_name_l = res.user.realName;
-            $("#r_name_l").val(r_name_l)
-            var r_rlm = res.user.email;
-            $("#r_rlm").val(r_rlm)
-            var r_rlp = res.user.mobile;
-            $("#r_rlp").val(r_rlp)
-            $(".r_lay").css("display","none")
-        } else {
-            console.log(res.msg);
-        }}
+        })
+    }
 })
 
-//点击获取手机验证码
-$("#btne").click(function(){
-    var r_el_upde = $("#r_rlp").val()
-    $.ajax({
-        url:  'contact/sendBindMobile',
-        type: "GET",
-        data: "&mobile=" + r_el_upde ,
-        success: function (res) {
-            console.log(JSON.stringify(res));
-            if (res.code == "200") {
-                console.log("///////////////////////")
-                ryph()
-            } else {
-                console.log(res.msg);
-            }
-        }
-    })
-})
 
 //提交  验证码 手机号
-function ryph(){
-    $("#r_btee").click(function(){
-        var r_rlmn=$("#r_rlp").val()
-        var r_el_updn = $("#r_el_upde").val()
-		console.log(r_rlmn)
-        console.log(r_el_updn)
-        if(r_rlmn == "" || r_el_updn == ""){
-            alert("输入不能为空")
-        }else{
-            //手机号错误
-            if (!patrn1.exec(r_rlmn)){
-                console.log("手机号错误")
-                return false;
-            }
-            $.ajax({
-                url:  'contact/checkBindMobile',
-                type: "GET",
-                data: "&email=" + r_rlmn +
-                "&securityCode=" + r_el_updn ,
-                success: function (res) {
-                    console.log(JSON.stringify(res));
-                    if (res.code == "200") {
-                        console.log("///////////////////////")
-                        $(".r_lay_a").css("display","none")
-                    } else {
-                        console.log(res.msg);
-                    }
-                }
-            })
+$("#r_btee").click(function(){
+    var r_rlmn=$("#r_rlp").val()
+    var r_el_updn = $("#r_el_upde").val()
+    console.log(r_rlmn)
+    console.log(r_el_updn)
+    if(r_rlmn == "" || r_el_updn == ""){
+        alert("输入不能为空")
+    }else{
+        //手机号错误
+        if (!patrn1.exec(r_rlmn)){
+            console.log("手机号错误")
+            return false;
         }
-    })
-}
-
-
+        $.ajax({
+            url:  'contact/checkBindMobile',
+            type: "GET",
+            data: "&email=" + r_rlmn +
+            "&securityCode=" + r_el_updn ,
+            success: function (res) {
+                console.log(JSON.stringify(res));
+                if (res.code == "200") {
+                    $("#r_el_upde").val()
+                    $(".r_lay_a,.r_beise_a,.r_be_a").hide()
+                } else {
+                    alert(res.msg);
+                }
+            }
+        })
+    }
+})
 
 
 $("#r_tijiao").click(function(){
-    var r_rlma=$("#r_num").val()
-    var r_rlmb = $("#r_name_l").val()
-    var r_rlmc=$("#r_rlm").val()
-    var r_rlmd = $("#r_rlp").val()
+    var r_rlma=$("#r_num").val();
+    var r_rlmb = $("#r_name_l").val();
+    var r_rlmc=$("#r_rlm").val();
+    var r_rlmd = $("#r_rlp").val();
+    var select=$("#select1 option:selected").attr("id");
+    var uRl=$("#headUrl").val()
 	if(r_rlma == "" || r_rlmb == ""|| r_rlmc == "" || r_rlmd == ""){
-alert("输入不能为空")
+        alert("输入不能为空")
 	}else{
         //    账号
         if (!patrn3.exec(r_rlma)) {
@@ -294,7 +235,6 @@ alert("输入不能为空")
             console.log("用户名错误")
             return false;
         }
-
         // 邮箱
         if (!patrn2.exec(r_rlmc)) {
             console.log("邮箱错误")
@@ -304,7 +244,6 @@ alert("输入不能为空")
         if (!patrn1.exec(r_rlmd)){
             console.log("手机号错误")
             return false;
-
         }
         $.ajax({
             url:  'sys/user/updateBaseInfo',
@@ -313,37 +252,69 @@ alert("输入不能为空")
             "&username=" + r_rlma +
             "&realName=" + r_rlmb +
             "&email=" + r_rlmc +
-            "&mobile=" + r_rlmd  ,
+            "&mobile=" + r_rlmd +
+            "&headUrl=" + uRl +
+            "&roleId=" + select ,
             success: function (res) {
                 console.log(JSON.stringify(res));
                 if (res.code == "200") {
-                    console.log(res)
-                    $(".r_lay").css("display","none")
+                    alert(res)
                 } else {
-                    console.log(res.msg);
-                }}
+                   alert(res.msg);
+                }
+            }
         })
 	}
 })
 
 $("#r_val_pho").click(function(){
-    $(".r_lay_a").css("display","block")
-    $(".r_beise").css("display","block")
+    $(".r_lay_a,.r_beise_a,.r_be_a").css("display","block")
+    $(".r_lay,.r_beise,.r_be").css("display","none")
 })
 //倒计时60秒
 var countdown=60;
 function sendemail(){
     console.log("22222")
     var obje = $("#btn");
-    countdown=60
-    settime(obje);
+    var r_val_eml = $("#r_rlm").val()
+    $.ajax({
+        url:  'contact/sendBindEmail',
+        type: "GET",
+        data: "&email=" + r_val_eml ,
+        success: function (res) {
+            console.log(JSON.stringify(res));
+            if (res.code == "200") {
+                console.log("///////////////////////")
+                countdown=60
+                settime(obje);
+            } else {
+                alert(res.msg);
+            }
+        }
+    })
+
 }
 
 function sendemail_a() {
 	console.log("111111111")
     var obj = $("#btne");
-    countdown=60
-    settime(obj);
+    var r_el_upde = $("#r_rlp").val()
+    $.ajax({
+        url:  'contact/sendBindMobile',
+        type: "GET",
+        data: "&mobile=" + r_el_upde ,
+        success: function (res) {
+            console.log(JSON.stringify(res));
+            if (res.code == "200") {
+                console.log("///////////////////////");
+                countdown=60
+                settime(obj);
+            } else {
+                alert(res.msg);
+            }
+        }
+    })
+
 }
 function settime(obja) { //发送验证码倒计时
     if (countdown == 0) {
@@ -358,8 +329,8 @@ function settime(obja) { //发送验证码倒计时
         countdown--;
     }
     setTimeout(function() {
-            settime(obja) }
-        ,1000)
+            settime(obja)
+     },1000)
 }
 
 

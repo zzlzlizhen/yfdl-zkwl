@@ -244,3 +244,9 @@
 	margin-top:2px;
 	margin-right:1px;
 }
+.WdateDiv #dpTime .tE:last-child{
+	display: none!important;
+}
+.WdateDiv #dpTime input:nth-of-type(4){
+	display: none!important;
+}

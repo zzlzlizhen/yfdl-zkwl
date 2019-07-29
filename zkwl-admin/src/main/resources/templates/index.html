@@ -24,7 +24,21 @@
   <script src="${request.contextPath}/statics/libs/ajaxupload.js"></script>
     [endif]-->
 </head>
+<style>
+    .layui-layer-btn0{
+        background: #27E2D4!important;
+        color: #0a0a0a!important;
+    }
+    .layui-layer-btn1{
+        background: #27E2D4!important;
+        border-color: #4898d5;
+    }
+    .layui-layer-btn a{
+        border: 0!important;
+    }
 
+
+</style>
 <!-- ADD THE CLASS layout-boxed TO GET A BOXED LAYOUT -->
 <body class="hold-transition skin-blue sidebar-mini body_m">
 <!-- Site wrapper -->
@@ -37,23 +51,23 @@
         <!-- 标题导航栏:样式可以在Header .less中找到 -->
         <nav class="navbar navbar-static-top navbar_m" role="navigation">
           <!-- 侧边栏切换按钮-->
-          <a href="#" class="sidebar-toggle navbar_m" data-toggle="offcanvas" role="button">
+          <a href="#" class="sidebar-toggle navbar_m" data-toggle="offcanvas" role="button" >
             <span class="sr-only">Toggle navigation</span>
           </a>
           <div class="navbar-custom-menu" style="margin-top:7px;">
             <ul class="nav navbar-nav">
-                <li><a  href="#modules/informa/informa.html" class="navbar_m r_lingdan_l" style="padding: 0;margin-top: 10px;margin-right: 10px;" ><img src="${request.contextPath}/statics/image/tongzhi.png" alt=""></a></li>
+                <li><a  href="#modules/informa/informa.html" class="navbar_m r_lingdan_l" style="padding: 0;margin-top: 13px;margin-right: 10px;" ><img src="${request.contextPath}/statics/image/rl.svg" alt="" style="display: inline-block;width: 22px;height: 22px;"></a></li>
                 <!--样式修改-->
                 <li id="nav_a">
                     <a href="javascript:;"  class="navbar_m"><span class=" r_ioc"  ></span></a>
                     <div class="setting" style="width: 109px;margin-left: -25px;">
-                        <span id="set_p" style="border-bottom: 1px solid #ccc;"><img src="${request.contextPath}/statics/image/r_shezhio.svg" alt=""  style="display: inline-block;width:25px ;height: 25px;" class="r_tou_o">基本设置</span>
-                        <span id="feedback"><img src="${request.contextPath}/statics/image/r_feijio.svg" alt=""  style="display: inline-block;width:25px ;height: 25px;">我要反馈</span>
+                        <span id="set_p" style="border-bottom: 1px solid #ccc;"><img src="${request.contextPath}/statics/image/rs.svg" alt=""  style="display: inline-block;width:16px ;height: 16px;margin-right: 3px;" class="r_tou_o">基本设置</span>
+                        <span id="feedback"><img src="${request.contextPath}/statics/image/rf.svg" alt=""  style="display: inline-block;width:25px ;height: 25px;">我要反馈</span>
                     </div>
                 </li>
 <!--                <li><a  @click="updatePassword"  class="navbar_m"><i class="glyphicon glyphicon-bell"></i></a></li>-->
-                <li><a href="logout"  class="navbar_m"><i class="glyphicon glyphicon-off"></i></a></li>
-                <li><a  class="navbar_m"><i class="r_touling"></i><img src=""> {{user.username}}</a></li>
+                <li><a href="logout"  class="navbar_m" style="    padding-top: 16.5px;"><i class="glyphicon glyphicon-off"></i></a></li>
+                <li><a  class="navbar_m" ><i></i><img  src="{{user.headUrl}}"> {{user.realName}}</a></li>
             </ul>
           </div>
         </nav>
@@ -96,9 +110,8 @@
       <!-- /.content-wrapper -->
 
         <footer class="main-footer">
-            <div class="pull-right hidden-xs">
-              项目备案号
-            </div>项目备案号
+<!--            <div class="pull-right hidden-xs"></div>-->
+            备案号：京ICP备11032443号-2
         </footer>
 
       <!-- 添加侧边栏的背景。必须放置这个div紧接控件侧栏之后 -->
@@ -107,20 +120,20 @@
       <!-- 修改密码 -->
         <div id="passwordLayer" style="display: none;">
             <form class="form-horizontal">
-            <div class="form-group">
-                <div class="form-group">
+            <div class="form-group" style="width: 339px;margin: 0 auto;">
+                <div class="form-group" style="display: none">
                     <div class="col-sm-2 control-label">账号</div>
                     <span class="label label-success" style="vertical-align: bottom;">{{user.username}}</span>
                 </div>
                 <div class="form-group">
-                    <div class="col-sm-2 control-label">原密码</div>
-                    <div class="col-sm-10">
+                    <div class="col-sm-2 control-label" style="width: 78px;">原密码</div>
+                    <div class="col-sm-10" style="float:left;width: 250px;">
                       <input type="password" class="form-control" v-model="password" placeholder="原密码"/>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" style="width: 100%;">
                     <div class="col-sm-2 control-label">新密码</div>
-                    <div class="col-sm-10">
+                    <div class="col-sm-10" style="float: left;width: 250px;">
                       <input type="text" class="form-control" v-model="newPassword" placeholder="新密码"/>
                     </div>
                 </div>
@@ -135,10 +148,10 @@
               <div class="J_fan">基本设置<span class="glyphicon glyphicon-remove wrong_a"></span></div>
               <!--<img src="${request.contextPath}/statics/image/blue.png" id="r_header_img" >-->
               <span class="sha_span preview">
-                    <img id="pic" style="width:50px;height:50px;border-radius:50%;background: red;" src="">
-                     <a class="btn btn-primary" id="upload" style="margin-left: 20px;background: #fff;color:#ccc;border:1px solid #ccc;margin-top: 123px;margin-left: -64px;" >上传文件</a>
-                    <input id="headUrl" type="hidden">
-                </span>
+                  <img id="pic" style="width:75px;height:75px;border-radius:50%;background:#ccc;" src="">
+                   <a class="btn btn-primary" id="upload" style="margin-left: 20px;background: #fff;color:#ccc;border:1px solid #ccc;margin-top: 123px;margin-left: -77px;" >上传文件</a>
+                  <input id="headUrl" type="hidden">
+              </span>
 
               <div class="import">
                   <div>
@@ -147,8 +160,7 @@
                   </div>
                   <div>
                       <span>账户类型</span>
-                      <select class="form-control" id="select1"    >
-                          <option>1</option>
+                      <select class="form-control" id="select1" style="text-indent:0px;padding-left: 2px;" >
 
                       </select>
                   </div>
@@ -172,83 +184,72 @@
                   </div>
               </div>
               <div class="confirm">
-<!--                  <input type="button" @click="updatePassword"  value="修改密码" >-->
-<!--                  <input type="button"  value="更新信息" id="r_tijiao">-->
-                  <div @click="updatePassword"   class="rquebei" >修改密码</div>
-                  <div  class=" rqubtn" id="r_tijiao" >更新信息</div>
+                  <div @click="updatePassword"   class="rquebei" style="margin-top:1.5%;">修改密码</div>
+                  <div  class=" rqubtn" id="r_tijiao"  style="margin-top:0.8%;">更新信息</div>
               </div>
           </div>
       </div>
         <!--邮箱弹窗-->
       <div class="r_beise">
+          <div class="r_be"></div>
           <div class="r_lay">
-              <!--<div>-->
-              <!--<input type="text" id="r_upd">-->
-              <!--<span id="btn_typ">绑定邮箱号</span>-->
-              <!--</div>-->
               <div>
-                  <input type="text" id="r_el_upd">
+                  <input type="text" id="r_el_upd" style="width:60%;float:left;">
                   <input type="button" id="btn" value="获取验证码" onclick="sendemail()" />
               </div>
-              <!--<button id="r_bte">提交</button>-->
-              <div id="r_bte" class="rquebei" >提交4444444444</div>
+              <div id="r_bte" class="rquebei" style="margin:10% 0px 0px 30%;">提交</div>
           </div>
       </div>
         <!--手机弹窗-->
-     <div class="r_beise">
+     <div class="r_beise_a">
+         <div class="r_be_a"></div>
          <div class="r_lay_a">
-             <!--<div>-->
-             <!--<input type="text" id="r_upd">-->
-             <!--<span id="btn_typ">绑定邮箱号</span>-->
-             <!--</div>-->
              <div>
-                 <input type="text" id="r_el_upde">
+                 <input type="text" id="r_el_upde" style="width:60%;float: left;">
                  <input type="button" id="btne" value="获取验证码" onclick="sendemail_a()" />
              </div>
-             <!--<button id="r_btee">提交</button>-->
-             <div id="r_btee" class="rquebei" >提交5555555555</div>
+             <div id="r_btee" class="rquebei" style="margin:10% 0px 0px 30%;">提交</div>
          </div>
      </div>
 
 
-<!--        反馈-->
-        <div class="JI_b_a">
-            <div class="shade_a"></div>
-            <div class="nei_r_a">
-                <div class="J_fan">反馈<span class="glyphicon glyphicon-remove wrong"></span></div>
+<!--反馈-->
+    <div class="JI_b_a">
+        <div class="shade_a"></div>
+        <div class="nei_r_a">
+            <div class="J_fan">反馈<span class="glyphicon glyphicon-remove wrong"></span></div>
 
-                <div class="import import_a">
-                    <div class="mistake">
-                        <span class="glyphicon glyphicon-pencil cu_m"></span>
-                        <P class="rrbol"></P>
-                        <span class="glyphicon glyphicon-remove wrong"></span>
-                    </div>
-                    <div>
-                        <span>标题</span>
-                        <input type="text" placeholder="请填写标题" id="rTitle">
-                    </div>
-                    <div>
-                        <span>邮箱</span>
-                        <input type="text" placeholder="请填写邮箱" id="r_eml_fan">
-                    </div>
-                    <div>
-                        <span>手机号</span>
-                        <input type="text" placeholder="请填写手机号" id="r_ph_fan">
-                    </div>
-                    <div>
-                        <span>内容</span>
-                        <textarea rows="7" cols="56" id="r_wen_fan" placeholder="请填写内容" >
-
-                        </textarea>
-                    </div>
+            <div class="import import_a">
+                <div class="mistake">
+                    <span class="glyphicon glyphicon-pencil cu_m"></span>
+                    <P class="rrbol"></P>
+                    <span class="glyphicon glyphicon-remove wrong"></span>
                 </div>
-                <div class="confirm">
-<!--                    <input type="button"  value="提交" id="r-btn-las">-->
-                    <div id="r-btn-las"  class="rquebeis" >提交</div>
-                    <div  class="sha_cancel rqubtn"  >取消</div>
+                <div>
+                    <span>标题</span>
+                    <input type="text" placeholder="请填写标题" id="rTitle">
+                </div>
+                <div>
+                    <span>邮箱</span>
+                    <input type="text" placeholder="请填写邮箱" id="r_eml_fan">
+                </div>
+                <div>
+                    <span>手机号</span>
+                    <input type="text" placeholder="请填写手机号" id="r_ph_fan">
+                </div>
+                <div>
+                    <span>内容</span>
+                    <textarea rows="7" cols="56" id="r_wen_fan" placeholder="请填写内容" >
+
+                    </textarea>
                 </div>
             </div>
+            <div class="confirm">
+                <div id="r-btn-las"  class="rquebeis" >提交</div>
+                <div  class="sha_cancel rqubtn"  >取消</div>
+            </div>
         </div>
+    </div>
 
     </div>
     <script src="${request.contextPath}/statics/libs/jquery.min.js"></script>
@@ -264,19 +265,44 @@
 </body>
 <script>
     $(function() {
-        $("#pic").click(function() {
-            $("#upload").click(); //隐藏了input:file样式后，点击头像就可以本地上传
-            $("#upload").on("change", function() {
-                var objUrl = getObjectURL(this.files[0]); //获取图片的路径，该路径不是图片在本地的路径
-                if (objUrl) {
-                    $("#pic").attr("src", objUrl); //将图片路径存入src中，显示出图片
-                    upimg();
-                }
-            });
+        // $("#pic").click(function() {
+        //     $("#upload").click(); //隐藏了input:file样式后，点击头像就可以本地上传
+        //     $("#upload").on("change", function() {
+        //         var objUrl = getObjectURL(this.files[0]); //获取图片的路径，该路径不是图片在本地的路径
+        //         if (objUrl) {
+        //             $("#pic").attr("src", objUrl); //将图片路径存入src中，显示出图片
+        //             upimg();
+        //         }
+        //     });
+        //
+        //     var lujing=$("#pic").attr("src");
+        //     console.log(lujing)
+        // });
 
-            var lujing=$("#pic").attr("src");
-            console.log(lujing)
+
+
+        //划过图片
+        $("#set_p").hover(function(){
+            $(this).children('img').attr("src","${request.contextPath}/statics/image/r_shezhi_i.svg");
+        },function(){
+            $(this).children('img').attr("src","${request.contextPath}/statics/image/rs.svg");
         });
+        $("#feedback").hover(function(){
+            $(this).children('img').attr("src","${request.contextPath}/statics/image/r_feijii.svg");
+        },function(){
+            $(this).children('img').attr("src","${request.contextPath}/statics/image/rf.svg");
+        });
+
+
+
+
+
+
+
+
+
+
+
 
         new AjaxUpload('#upload', {
             action:"/remote-admin/sys/upload",
@@ -293,45 +319,45 @@
                 if(r.code == 200){
                     // alert(r.url);
                     $("#headUrl").val(r.url);
-                    $("#pic").attr("src","/remote-admin/"+r.url);
+                    $("#pic").attr("src","https://39.97.169.198"+r.url);
                 }else{
                     alert(r.msg);
                 }
             }
         });
 
-        //建立一?可存取到?file的url
-        function getObjectURL(file) {
-            var url = null;
-            if (window.createObjectURL != undefined) { // basic
-                url = window.createObjectURL(file);
-            } else if (window.URL != undefined) { // mozilla(firefox)
-                url = window.URL.createObjectURL(file);
-            } else if (window.webkitURL != undefined) { // webkit or chrome
-                url = window.webkitURL.createObjectURL(file);
-            }
-            return url;
-        }
-        //上传头像到服务器
-        function upimg() {
-            console.log(344)
-            var pic = $('#upload')[0].files[0];
-            var file = new FormData();
-            file.append('image', pic);
-            $.ajax({
-                url: "sys/upload",
-                type: "post",
-                data: file,
-                cache: false,
-                contentType: false,
-                processData: false,
-                success: function(data) {
-                    console.log(data);
-                    var res = data;
-                    $("#resimg").append("<img src='/" + res + "'>")
-                }
-            });
-        }
+        // //建立一?可存取到?file的url
+        // function getObjectURL(file) {
+        //     var url = null;
+        //     if (window.createObjectURL != undefined) { // basic
+        //         url = window.createObjectURL(file);
+        //     } else if (window.URL != undefined) { // mozilla(firefox)
+        //         url = window.URL.createObjectURL(file);
+        //     } else if (window.webkitURL != undefined) { // webkit or chrome
+        //         url = window.webkitURL.createObjectURL(file);
+        //     }
+        //     return url;
+        // }
+        // //上传头像到服务器
+        // function upimg() {
+        //     console.log(344)
+        //     var pic = $('#upload')[0].files[0];
+        //     var file = new FormData();
+        //     file.append('image', pic);
+        //     $.ajax({
+        //         url: "sys/upload",
+        //         type: "post",
+        //         data: file,
+        //         cache: false,
+        //         contentType: false,
+        //         processData: false,
+        //         success: function(data) {
+        //             console.log(data);
+        //             var res = data;
+        //             $("#resimg").append("<img src='/" + res + "'>")
+        //         }
+        //     });
+        // }
     });
 </script>
 </html>

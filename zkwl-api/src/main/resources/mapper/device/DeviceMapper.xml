@@ -118,9 +118,6 @@
             <if test="light != null">
                 light = #{light},
             </if>
-            <if test="communicationType != null">
-                communication_type = #{communicationType},
-            </if>
             <if test="onOff != null">
                 on_off = #{onOff},
             </if>

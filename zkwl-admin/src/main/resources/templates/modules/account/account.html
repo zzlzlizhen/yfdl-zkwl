@@ -11,11 +11,8 @@
         <script src="${request.contextPath}/statics/libs/ajaxupload.js"></script>
     <style>
         html{ overflow: hidden}
-        .project_he>a{
-            line-height: 33px;
-        }
-
-
+        .project_he>a{line-height: 33px;}
+        .pun-a{margin-left:20% ;}
     </style>
 </head>
 <body>
@@ -39,13 +36,13 @@
     <div class="form-group col-sm-2 form_input">
         <select class="form-control" id="sele_ht">
             <option></option>
-            <option>0</option>
-            <option>1</option>
+            <option class="1">开</option>
+            <option class="0">关</option>
         </select>
     </div>
     <a class="btn btn-primary btn_m gl_bt" id="proje_search"><img src="${request.contextPath}/statics/image/r_ssousuo.png" alt="">搜索</a>
     <!--删除的样式<i class="glyphicon glyphicon-search gl_fu"></i>-->
-    <a class="btn btn-primary btn_m btn_m_new" ><img src="${request.contextPath}/statics/image/tianjia.png" alt="" class="rcxc">新建</a>
+    <a class="btn btn-primary btn_m btn_m_new" style="line-height: 38px;"><img src="${request.contextPath}/statics/image/tianjia.png" alt="" style="margin-top:-5%;" class="rcxc">新建</a>
     <!--删除的样式<i class="fa fa-plus"></i>-->
 </div>
 
@@ -80,7 +77,7 @@
         <div class="Bian_j">新建账户<span class="glyphicon glyphicon-remove guan_shb" ></span></div>
         <div class="mistake">
             <span class="glyphicon glyphicon-pencil cu_m"></span>
-            <P class="rrbol"></P>
+            <p class="rrbol"></p>
             <span class="glyphicon glyphicon-remove wrong"></span>
         </div>
         <span class="sha_span">
@@ -96,14 +93,15 @@
             <input type="text" placeholder="请填写" id="acc_password">
         </span>
         <span class="sha_span">
-            <p class="r_p" style="width: 29%;"><span  style="color: red">*</span>有效期：</p>
-            <div class="form-group col-sm-2 " style="width:70%;padding-left:0;padding-right:0;">
-                <select class="form-control" id="acc_select">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
+            <p class="r_p" style="width: 27%;"><span  style="color: red">*</span>有效期：</p>
+            <div class="form-group col-sm-2 " style="width:169px;padding-left:0;padding-right:0;margin-top:6%;">
+                <select class="form-control" id="acc_select" style="height: 40px;">
+                    <option class="1">1年</option>
+                    <option class="2">2年</option>
+                    <option class="3">3年</option>
+                    <option class="4">4年</option>
+                    <option class="5">5年</option>
+                    <option class="6">永久</option>
                 </select>
             </div>
         </span>
@@ -116,8 +114,8 @@
             <input type="text" placeholder="请填写" id="acc_call">
         </span>
         <span class="sha_span">
-            <p class="r_p" style="width: 29%;"><span  style="color: red">*</span>role：</p>
-            <div class="form-group col-sm-2 " style="width:70%;padding-left:0;padding-right:0;">
+            <p class="r_p" style="width: 27%;"><span  style="color: red">*</span>角色：</p>
+            <div class="form-group col-sm-2 " style="width:169px;padding-left:0;padding-right:0;margin-top:6%;">
                 <select class="form-control" id="role" style="height: 40px">
 <!--                    <option value="1">超级管理者</option>-->
                     <option value="2">管理者</option>
@@ -126,16 +124,14 @@
             </div>
         </span>
         <span class="sha_span preview">
-            <p><span  style="color: red">*</span>头像：</p>
-            <img id="pic" style="width:50px;height:50px;border-radius:50%;background: red;" src="">
-             <a class="btn btn-primary" id="upload" style="margin-left: 20px;background: #fff;color:#ccc;border:1px solid #ccc;" >上传文件</a>
+            <p style="width:28%;text-align: left;text-indent:1.85em;"><span  style="color: red">*</span>头像：</p>
+            <img id="pic" src="">
+             <a class="btn btn-primary" id="upload" >上传文件</a>
             <input id="headUrl" type="hidden">
         </span>
         <div class="sha_buttom">
-<!--            <input type="button" value="确定" id="confirm_Z" style="background: url("${request.contextPath}/statics/image/kuang-3.png")">-->
-            <div id="confirm_Z" class="rquebei" >确定</div>
-<!--            <input type="button" value="取消" class="sha_cancel_new rqubtn">-->
-            <div   class="sha_cancel_new rqubtn" >取消</div>
+            <div id="confirm_Z" class="rquebei" style="margin-left: 28%;">确定</div>
+            <div  class="sha_cancel_new rqubtn" >取消</div>
         </div>
     </div>
 </div>
@@ -158,29 +154,22 @@
             <input type="text" placeholder="请填写" id="acc_user_b">
         </span>
         <span class="sha_span">
-            <p ><span  style="color: red" >*</span>密码：</p>
+            <p ><span  style="color: red" ></span>密码：</p>
             <input type="text" placeholder="请填写" id="acc_password_b">
         </span>
         <span class="sha_span">
-            <p class="r_p" style="width: 29%;"><span  style="color: red">*</span>有效期：</p>
-            <div class="form-group col-sm-2 " style="width:70%;padding-left:0;padding-right:0;">
-                <select class="form-control" id="acc_select_b">
-                    <option>1年</option>
-                    <option>2年</option>
-                    <option>3年</option>
-                    <option>4年</option>
-                    <option>5年</option>
+            <p class="r_p" style="width: 27%;"><span  style="color: red">*</span>有效期：</p>
+            <div class="form-group col-sm-2 " style="width:169px;padding-left:0;padding-right:0;margin-top:5%;">
+                <select class="form-control" id="acc_select_b" style="height: 40px">
+                    <option class="1">1年</option>
+                    <option class="2">2年</option>
+                    <option class="3">3年</option>
+                    <option class="4">4年</option>
+                    <option class="5">5年</option>
+                    <option class="6">永久</option>
                 </select>
             </div>
         </span>
-        <!--<span class="sha_span preview">-->
-        <!--<p><span  style="color: red">*</span>头像：</p>-->
-        <!--<div id="previewr"></div>-->
-        <!--<input type="file" accept="image/*" id="filer" value=""/>-->
-        <!--<i>上传图片</i>-->
-        <!--</span>-->
-        <!--<img id="pic" style="width:100px;height:100px;border-radius:50%;" src="">-->
-        <!--<input id="upload" name="file" accept="image/*" type="file" style="display: none">-->
         <span class="sha_span">
             <p><span  style="color: red">*</span>邮箱：</p>
             <input type="text" placeholder="请填写" id="acc_mailbox_b">
@@ -190,24 +179,22 @@
             <input type="text" placeholder="请填写" id="acc_call_b">
         </span>
         <span class="sha_span">
-            <p class="r_p" style="width: 29%;"><span  style="color: red;">*</span>role：</p>
-            <div class="form-group col-sm-2 " style="width:70%;padding-left:0;padding-right:0;">
-                <select class="form-control" id="r_Ad_mod">
-                    <option value="2">超级管理者</option>
+            <p class="r_p" style="width: 27%;"><span  style="color: red;">*</span>角色：</p>
+            <div class="form-group col-sm-2 " style="width:169px;padding-left:0;padding-right:0;margin-top:5%;">
+                <select class="form-control" id="r_Ad_mod" style="height: 40px;">
+<!--                    <option value="2">超级管理者</option>-->
                     <option value="1">管理者</option>
                     <option value="0">使用者</option>
                 </select>
             </div>
         </span>
         <span class="sha_span preview">
-            <p><span  style="color: red">*</span>头像：</p>
-            <img id="pice" style="width:50px;height:50px;border-radius:50%;background: red;" src="">
-             <a class="btn btn-primary" id="uploade" style="margin-left: 20px;background: #fff;color:#ccc;border:1px solid #ccc;" >上传文件</a>
-            <input id="headUrle" type="hidden">
+            <p style="width:28%;text-align: left;text-indent: 1.85em;"><span  style="color: red">*</span>头像：</p>
+            <img id="pice" src="">
+             <a class="btn btn-primary" id="uploade">上传文件</a>
+            <input id="headUrle"  type="hidden">
         </span>
         <div class="sha_buttom">
-<!--            <input type="button" value="确定" id="sha_que_can" class="rquebei">-->
-<!--            <input type="button" value="取消" class="sha_cancel rqubtn" >-->
             <div id="sha_que_can" class="rquebei" >确定</div>
             <div  class="sha_cancel rqubtn"  >取消</div>
         </div>
@@ -219,23 +206,16 @@
     <div class="shade_a_delete" ></div>
     <div class="shade_b_delete">
         <div class="Bian_j_delete">温馨提示<span class="glyphicon glyphicon-remove guan_sha" ></span></div>
-        <span class="delete_sp">删除用户*******</span>
-        <p class="delete_p">确定删除？</p>
+        <span class="delete_sp">确定删除？</span>
         <div class="sha_buttom_delete">
-<!--            <input type="button" value="确定" class="sha_que_delete">-->
-<!--            <input type="button" value="取消" class="sha_cancel_delete">-->
-            <div class="rquebei sha_que_delete" >确定</div>
-            <!--            <input type="button" value="取消" class="sha_cancel_new rqubtn">-->
-            <div   class="sha_cancel_new rqubtn " >取消</div>
+            <div class="rquebei sha_que_delete pun-a" >确定</div>
+            <div class="sha_cancel_newa rqubtn " >取消</div>
         </div>
     </div>
 </div>
-<script src="${request.contextPath}/statics/js/modules/account/account.js"></script>
-<script src="${request.contextPath}/statics/js/regular.js"></script>
-</body>
 <script>
-    $(function() {
-
-    });
+    document.write('<script src="${request.contextPath}/statics/js/modules/account/account.js?v='+Math.random()+'"><\/script>');
+    document.write('<script src="${request.contextPath}/statics/js/regular.js?v='+Math.random()+'"><\/script>');
 </script>
+</body>
 </html>

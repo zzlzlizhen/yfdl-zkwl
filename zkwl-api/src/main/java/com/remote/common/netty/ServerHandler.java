@@ -25,6 +25,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.net.InetSocketAddress;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -47,11 +48,23 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
      */
     private static final ConcurrentHashMap<String, ChannelHandlerContext> CHANNEL_MAP = new ConcurrentHashMap<>();
 
-    @RabbitListener(queues = "CalonDirectQueue")//CalonDirectQueue为队列名称
+    @RabbitListener(queues = "topic.upload")//upgrade
     @RabbitHandler
-    public void process(String str) {
+    public void upgrade(String str) {
         if(!"".equals(str)){
-            log.info("MQ消费消息："+str);
+            log.info("MQ操作设备消费消息："+str);
+            JSONObject jsonObject = JSONObject.parseObject(str);
+            DeviceEntity deviceEntity = JSONObject.toJavaObject(jsonObject, DeviceEntity.class);
+            //操作设备和设备升级
+            onWhile(deviceEntity);
+        }
+    }
+
+    @RabbitListener(queues = "topic.upgrade")//upload
+    @RabbitHandler
+    public void upload(String str) {
+        if(!"".equals(str)){
+            log.info("MQ设备升级消费消息："+str);
             JSONObject jsonObject = JSONObject.parseObject(str);
             DeviceEntity deviceEntity = JSONObject.toJavaObject(jsonObject, DeviceEntity.class);
             //操作设备和设备升级
@@ -61,14 +74,13 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
 
 
-
     //操作设备和设备升级
     private void onWhile(DeviceEntity deviceEntity){
-        List<Integer> list = new ArrayList<>();
-        List<Integer> value = new ArrayList<>();
         List<String> deviceCodes = deviceEntity.getDeviceCodes();
         if(deviceCodes != null && deviceCodes.size() > 0){
             for(String deviceSN : deviceCodes){
+                List<Integer> list = new ArrayList<>();
+                List<Integer> value = new ArrayList<>();
                 //缓存中取出数据
                 CacheUtils cacheUtils = (CacheUtils)SpringUtils.getBean("cacheUtils");
                 String channelId = cacheUtils.get(deviceSN).toString();
@@ -175,8 +187,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         for (int i = 0 ; i < bytes.length;i++){
             sb.append(bytes[i]).append(",");
         }
-        log.info("收到客户端报文......16进制：");
-        log.info("【" + ctx.channel().id() + "】" + " :" + sb.toString());
+        log.info("未解析的数据:"+sb.toString());
         buf.resetReaderIndex();
         //判断数据长度
         int newBytes[] = new int[bytes.length];
@@ -192,9 +203,10 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         cmdId =newBytes[2];
         cmdId +=newBytes[3]<<8;
         //cmdId 5 或者 6 代表是正确数据
+
         if(cmdId == 5){
             length = 200;
-        }else if(cmdId == 6 || cmdId == 8){
+        }else if(cmdId == 6 || cmdId == 8 || cmdId == 1){
             length = 56;
         }
 
@@ -207,6 +219,10 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                 CHANNEL_MAP.remove(ctx.channel().id().asShortText());
                 return;
             }
+            if(cmdId == 1){
+                log.info(deviceInfo.getDevSN()+"操作设备成功!");
+                return;
+            }
             if(StringUtils.isEmpty(deviceInfo.getDevSN()) || StringUtils.isEmpty(deviceInfo.getDevKey()) || StringUtils.isEmpty(deviceInfo.getDevType())){
                 log.info("SN或DevKey或DevType为空");
                 ctx.close();
@@ -217,8 +233,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             CacheUtils cacheUtils = (CacheUtils)SpringUtils.getBean("cacheUtils");
             cacheUtils.set(deviceInfo.getDevSN(),ctx.channel().id().asShortText());
             cacheUtils.set(ctx.channel().id().asShortText(),deviceInfo.getDevSN());
-            log.info("收到客户端报文......");
-            log.info("【" + ctx.channel().id() + "】" + " :" + JSONObject.toJSONString(deviceInfo));
             //解密
             if(StringUtils.isEmpty(deviceInfo.getDevSN()) && StringUtils.isEmpty(deviceInfo.getDevKey())){
                 log.info("密钥和SN号为空");
@@ -274,6 +288,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         ByteBuf byteBuf = Unpooled.copiedBuffer(bytes);
         Channel channel = ctx.channel();
         channel.writeAndFlush(byteBuf);
+        log.info(deviceInfo.getDevSN()+"当前时刻信息获取完毕");
     }
 
     private void updateVersion(DeviceInfo deviceInfo,ChannelId channelId)throws Exception {
@@ -302,7 +317,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                 //转换成数组
                 Byte [] newBytes = bytes1.toArray(new Byte[1024]);
                 result.setBin(newBytes);
-                log.info("升级设备数据信息"+JSONObject.toJSONString(result));
+                log.info(deviceInfo.getDevSN()+"升级设备数据信息"+result.getNextCmdID());
                 //转换成字节
                 byte[] bytes = HexConvert.updateVersionToBytes(result);
                 ByteBuf byteBuf = Unpooled.copiedBuffer(bytes);
@@ -310,7 +325,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                 channel.writeAndFlush(byteBuf);
             }else{
                 //升级完毕
-                log.info("升级设备完毕");
+                log.info(deviceInfo.getDevSN()+"升级设备完毕");
                 count = 0;
             }
 
@@ -320,7 +335,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
     //数据格式解析
     public void dataAnalysis(DeviceInfo deviceInfo) throws Exception {
-        log.info("设备上传的信息："+JSONObject.toJSONString(deviceInfo));
         List<Integer> upKey = deviceInfo.getKey();
         List<Integer> upValue = deviceInfo.getValue();
         List<String> dataKey = new ArrayList<>();
@@ -331,6 +345,10 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         //根据devSN查询设备信息
         DeviceService deviceService = (DeviceService)SpringUtils.getBean("deviceServiceImpl");
         DeviceEntity deviceEntity = deviceService.queryDeviceByCode(deviceInfo.getDevSN());
+        if(deviceEntity == null){
+            log.info(deviceInfo.getDevSN()+"该设备未添加入系统");
+            return;
+        }
         //提供一个公共的类，类中存放设备全部信息  否则反射时会找不到属性。start
         CommonEntity common = new CommonEntity();
         BeanUtils.copyProperties(deviceEntity, common);
@@ -366,22 +384,26 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         HistoryMouth historyMouth = new HistoryMouth();
         BeanUtils.copyProperties(common, historyMouth);
         //放电电流
-        historyMouth.setDischargeCapacity(Double.valueOf(deviceEntity.getLoadPower()));
+        historyMouth.setDischargeCurrent(deviceEntity.getLoadCurrent());
 
         HistoryService historyService = (HistoryService)SpringUtils.getBean("historyServiceImpl");
         historyService.insertHistoryData(historyMouth);
-
+        log.info(deviceInfo.getDevSN()+"设备上传的信息完毕："+JSONObject.toJSONString(deviceEntity));
     }
 
     //参数转换
     private void convert(CommonEntity common) {
         //放电量
         if(common.getDischargeCapacity() != null){
-            common.setDischargeCapacity(Utils.div(common.getDischargeCapacity(),1));
+            BigDecimal bd1 = new BigDecimal(Double.toString(common.getDischargeCapacity()));
+            double v = bd1.divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP).doubleValue();
+            common.setDischargeCapacity(v);
         }
         //充电量
         if(common.getChargingCapacity() != null){
-            common.setChargingCapacity(Utils.div(common.getChargingCapacity(),1));
+            BigDecimal bd1 = new BigDecimal(Double.toString(common.getChargingCapacity()));
+            double v = bd1.divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP).doubleValue();
+            common.setChargingCapacity(v);
         }
         //放电电流
         if(common.getDischargeCurrent() != null){
@@ -407,12 +429,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         if(common.getPhotovoltaicCellVoltage() != null){
             common.setPhotovoltaicCellVoltage(Utils.div(common.getPhotovoltaicCellVoltage(),1));
         }
-        //充电电流
-        if(common.getChargingCurrent() != null){
-            common.setChargingCurrent(Utils.div(common.getChargingCurrent(),1));
-        }
         //充电功率chargingPower
-        common.setChargingPower(Utils.mul(common.getPhotovoltaicCellVoltage(),common.getChargingCurrent()));
+        common.setChargingPower(Utils.mul(common.getBatteryVoltage(),common.getChargingCurrent()));
         //负载电压
         if(common.getLoadVoltage() != null){
             common.setLoadVoltage(Utils.div(common.getLoadVoltage(),1));
@@ -461,21 +479,22 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         String socketString = ctx.channel().remoteAddress().toString();
         if (evt instanceof IdleStateEvent) {
             IdleStateEvent event = (IdleStateEvent) evt;
+            String deviceCode = "";
             if (event.state() == IdleState.READER_IDLE) {
                 try{
-                    String deviceCode = cacheUtils.get(ctx.channel().id().asShortText()).toString();
+                    deviceCode = cacheUtils.get(ctx.channel().id().asShortText()).toString();
                     DeviceService deviceService = (DeviceService)SpringUtils.getBean("deviceServiceImpl");
                     deviceService.updateDeviceTimeOutByCode(deviceCode);
                 }catch (Exception e){
 
                 }
-                log.info("Client: " + socketString + " READER_IDLE 读超时");
+                log.info("Client: " +deviceCode +"："+ socketString + " READER_IDLE 读超时");
                 ctx.close();
             } else if (event.state() == IdleState.WRITER_IDLE) {
-                log.info("Client: " + socketString + " WRITER_IDLE 写超时");
+                log.info("Client: " +deviceCode +"：" + socketString + " WRITER_IDLE 写超时");
                 ctx.close();
             } else if (event.state() == IdleState.ALL_IDLE) {
-                log.info("Client: " + socketString + " ALL_IDLE 总超时");
+                log.info("Client: " +deviceCode +"："+ socketString + " ALL_IDLE 总超时");
                 ctx.close();
             }
         }

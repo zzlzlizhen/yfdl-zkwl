@@ -62,7 +62,7 @@ public class DeviceEntity {
      */
     private Integer signalState;
     /**
-     * 运行状态
+     * 设备状态  1 正常 2 报警 3 故障 4离线 5升级中
      */
     private Integer runState;
     /**
@@ -109,10 +109,7 @@ public class DeviceEntity {
      * 修改时间
      */
     private Date updateTime;
-    /**
-     * 设备状态  1 正常 2 报警 3 故障 4离线
-     */
-    private Integer deviceStatus;
+
     private Integer counts;//统计数量
     //蓄电池余量
     private String batteryMargin;

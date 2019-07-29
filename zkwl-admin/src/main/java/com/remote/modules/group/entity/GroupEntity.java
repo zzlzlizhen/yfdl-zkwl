@@ -79,4 +79,8 @@ public class GroupEntity {
      * 纬度
      */
     private String latitude;
+    /**
+     * 设备类型名称
+     */
+    private String deviceTypeName;
 }

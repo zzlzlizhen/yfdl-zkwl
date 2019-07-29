@@ -9,33 +9,15 @@
     <script src="${request.contextPath}/statics/js/modules/project/jquery_page.js"></script>
 </head>
 <style>
-    body{
-        overflow: hidden;
-    }
-
-    .project_he>a{
-        vertical-align:middle
-    }
-    .project_he>a>img{
-         display: inline-block;
-         width: 18px;
-         height: 18px;
-    }
-
+    body{overflow: hidden;}
+    .project_he>a{vertical-align:middle}
+    .project_he>a>img{display: inline-block;width: 18px;height: 18px;}
     @media screen and (min-width:800px) and (max-width:1500px){
-        .table_m table tr td:last-child {
-            width: 23.111%;
-        }
+        .table_m table tr td:last-child {width: 23.111%;}
     }
-    .form-control{
-        height: 40px;
-    }
-    .form-group {
-        margin-bottom: 0px;
-    }
-    .shade_b_project{
-        height: 360px;
-    }
+    .form-control{height: 35px;}
+    .form-group {margin-bottom: 0px;}
+    .shade_b_project{height: 360px;}
 </style>
 <body>
 <div class="hear">
@@ -93,26 +75,35 @@
             <span class="glyphicon glyphicon-remove wrong"></span>
         </div>
         <span class="sha_span">
-            <p style="width: 29%"> <span  style="color: red">*</span>项目名称：</p>
-            <input type="text" placeholder="请填写" class="pro_name" style="width: 173px;">
+            <p class="Jan_r"> <span  style="color: red">*</span>项目名称：</p>
+            <input type="text" placeholder="请填写" value="" class="pro_name" style="width: 169px;">
         </span>
         <span class="sha_span">
-            <p  style="width: 29%"><span  style="color: red">*</span>使用者：</p>
+            <p class="Jan_r"><span  style="color: red">*</span>使用者：</p>
             <div class="form-group col-sm-2 " style="width:64%;padding-left:0;padding-right:0;height: 40px;margin-bottom: 0;">
-                <select class="form-control" id="select1" >
+                <select class="form-control" id="select1"  style="height: 40px;width: 169px;">
+                    <option></option>
+                </select>
+            </div>
+        </span>
+
+        <span class="sha_span">
+            <p class="Jan_r"><span  style="color: red">*</span>所在城市：</p>
+            <div class="form-group col-sm-2 " style="width:64%;padding-left:0;padding-right:0;height: 40px;margin-bottom: 0;">
+                <select class="form-control" id="selectb"  style="height: 40px;width: 169px;">
                     <option></option>
                 </select>
             </div>
         </span>
 
         <span class="sha_span" style="width: 100%;display: inline-block;">
-            <p style="width: 13%"> <span  style="color: red">*</span>项目描述：</p>
-              <textarea rows="10" cols="20"  placeholder="请填写" class="pro_s_b" style="width: 76%;height: 70px;border-radius: 4px;border:1px solid #ccc;text-indent: 10px;padding-top: 5px;"></textarea>
-          </span>
+            <p class="Jan_r" style="margin-right: 3px !important;"> <span  style="color: red">*</span>项目描述：</p>
+            <textarea rows="10" cols="20"  placeholder="请填写" class="pro_s_b_add" style="width: 77%;height: 70px;border-radius: 4px;border:1px solid #ccc;text-indent: 10px;padding-top: 5px;"></textarea>
+        </span>
 
         <div class="sha_buttom">
             <div id="project_confirm"  class="rquebei" >确定</div>
-            <div  class="shade_add_project rqubtn"  >取消</div>
+            <div  class="shade_add_project rqubtn" id="project_qu"  >取消</div>
         </div>
     </div>
 </div>
@@ -127,26 +118,21 @@
             <span class="glyphicon glyphicon-remove wrong"></span>
         </div>
         <span class="sha_span">
-            <p> <span  style="color: red">*</span>项目名称：</p>
-            <input type="text" placeholder="请填写" class="pro_name_b">
+            <p class="Jan_r"> <span  style="color: red">*</span>项目名称：</p>
+            <input type="text" placeholder="请填写" class="pro_name_b" style="width: 169px;">
         </span>
         <span class="sha_span">
-            <p style="width: 23%;"><span  style="color: red">*</span>使用者：</p>
-            <div class="form-group col-sm-2 " style="width:70%;padding-left:0;padding-right:0;">
-                <select class="form-control"  id="select1_b" >
-                    <option></option>
-                </select>
+            <p class="Jan_r"><span  style="color: red">*</span>使用者：</p>
+            <div class="form-group col-sm-2 " style="width:169px;padding-left:0;padding-right:0;">
+                <select class="form-control"  id="select1_b" name="select1_b"  style="height: 40px"></select>
             </div>
         </span>
         <span class="sha_span" style="width: 100%;display: inline-block;">
-            <p style="width: 13%"> <span  style="color: red">*</span>项目描述：</p>
-            <!--<input type="text" placeholder="请填写" class="pro_s_b">-->
-              <textarea rows="10" cols="20"  placeholder="请填写" class="pro_s_b" style="width: 76%;height: 70px;border-radius: 4px;border:1px solid #ccc;text-indent: 10px;padding-top: 5px;"></textarea>
+            <p class="Jan_r" style="width:88px !important;margin-right:0px !important;"> <span  style="color: red">*</span>项目描述：</p>
+              <textarea rows="10" cols="20"  placeholder="请填写" class="pro_s_b" style="width: 78.5%;height: 70px;border-radius: 4px;border:1px solid #ccc;text-indent: 10px;padding-top: 5px;"></textarea>
           </span>
 
         <div class="sha_buttom">
-<!--            <input type="button" value="确定" id="confirm_x" >-->
-<!--            <input type="button" value="取消" class="shade_modifier_project">-->
             <div id="confirm_x"  class="rquebei" >确定</div>
             <div  class="shade_modifier_project rqubtn"  >取消</div>
         </div>
@@ -158,19 +144,16 @@
     <div class="shade_a_delete" ></div>
     <div class="shade_b_delete">
         <div class="Bian_j_delete">温馨提示<span class="glyphicon glyphicon-remove guan_sha" ></span></div>
-        <span class="delete_sp">是否删除项目</span>
-        <p class="delete_p">确定删除？</p>
+        <span class="delete_sp">是否删除项目？</span>
         <div class="sha_buttom_delete">
-            <!--            <input type="button" value="确定" class="sha_que_delete">-->
-            <!--            <input type="button" value="取消" class="sha_cancel_delete">-->
             <div class="rquebei sha_que_delete" >确定</div>
-            <!--            <input type="button" value="取消" class="sha_cancel_new rqubtn">-->
             <div   class="sha_cancel_new rqubtn  rqubtn" >取消</div>
         </div>
     </div>
 </div>
-<script src="${request.contextPath}/statics/js/modules/project/project_index.js"></script>
-
+<script>
+    document.write('<script src="${request.contextPath}/statics/js/modules/project/project_index.js?v='+Math.random()+'"><\/script>');
+</script>
 </body>
 
 </html>

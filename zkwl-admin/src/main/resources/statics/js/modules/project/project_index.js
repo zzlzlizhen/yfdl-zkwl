@@ -12,7 +12,6 @@ $(function () {
         window.open("../pandect/pandect.html")
     })
 
-
     //用户信息
     $.ajax({
         url:baseURL + 'sys/user/nameList',
@@ -28,13 +27,31 @@ $(function () {
             $("#realName,#select1,#select1_b").append(html)
         }
     })
+
+    //城市信息
+    $.ajax({
+        url:baseURL + 'fun/distirct/queryDistirct',
+        type:"get",
+        data:{},
+        success: function(res) {
+            console.log("999999999999999999999999")
+            console.log("所属城市")
+            console.log(res)
+            var html=""
+            for( var i=0 ;i< res.data.length;i++){
+                html+="<option id="+res.data[i].id+">"+res.data[i].districtName+"</option>"
+            }
+            $("#selectb").append(html)
+        }
+    })
+
+
     //搜索
+    $("#proje_search").unbind('click');
     $("#proje_search").click(function(){
        var serial=$("#serial").val();
        var pro_name=$("#pro_name").val();
-       var select=$("#realName option:selected").text()
-       console.log("搜索")
-       console.log(pageSize+pageNum+serial+pro_name+select)
+       var select=$("#realName option:selected").attr("id");
         $("#div").html("")
        form(pageSize,pageNum,serial,pro_name,select)
     })
@@ -54,8 +71,6 @@ $(function () {
                 "pageNum":pagesa
             },
             success: function(res){
-                console.log("11111111")
-                console.log(res)
                 pages=res.data.pages;
                 pageSize=res.data.pageSize;
                 pageNum=res.data.pageNum
@@ -69,19 +84,19 @@ $(function () {
                         projectDesc = projectDesc;
                     }
                  html+=" <tr id="+res.data.list[i].projectId+">\n" +
-                     "<td>"+res.data.list[i].projectCode+"</td>\n" +
-                     "<td class='Na_me'>"+res.data.list[i].projectName+"</td>\n" +
-                     "<td class='exclusiveUser'>"+res.data.list[i].exclusiveUserName+"</td>\n" +
+                     "<td title="+res.data.list[i].projectCode+">"+res.data.list[i].projectCode+"</td>\n" +
+                     "<td class='Na_me' title="+res.data.list[i].projectName+">"+res.data.list[i].projectName+"</td>\n" +
+                     "<td class='exclusiveUser' title="+res.data.list[i].exclusiveUserName+">"+res.data.list[i].exclusiveUserName+"</td>\n" +
                      "<td class='sumCount'>"+res.data.list[i].sumCount+"</td>\n" +
                      "<td class='gatewayCount'>"+res.data.list[i].gatewayCount+"</td>\n" +
                      "<td class='faultCount'>"+res.data.list[i].faultCount+"</td>\n" +
                      "<td class='callPoliceCount'>"+res.data.list[i].callPoliceCount+"</td>\n" +
-                     "<td class='r_con_r'>"+projectDesc+"</td>\n" +
+                     "<td class='r_con_r' id="+res.data.list[i].projectStatus+" title="+projectDesc+">"+projectDesc+"</td>\n" +
                      "<td id="+res.data.list[i].projectId+">\n" +
-                     "<a href=\"#\" class='modifier'><img src='/remote-admin/statics/image/bianji.png' alt=''></span></a>\n" +
-                     "<a href=\"#\" class='ma_p' id="+res.data.list[i].longitude+","+res.data.list[i].latitude+"><img src='/remote-admin/statics/image/ditu2.svg' alt='' style='width: 25px;height:25px;'></a>\n" +
-                     "<a href=\"#\" class='deleteq'><img src='/remote-admin/statics/image/shanchu.png' alt=''></a>\n" +
-                     "<a href=\"#\" class='particulars'><div class='r_chakan' ><i style='font-style:normal'>查看<img  class='r_chakan_img' src='/remote-admin/statics/image/youjiantou.svg' alt=''></div></a>\n" +
+                     "<a href=\"#\" class='modifier'><img src='/statics/image/bianji.png' alt=''></span></a>\n" +
+                     "<a href=\"#\" class='ma_p' id="+res.data.list[i].longitude+","+res.data.list[i].latitude+"><img src='/statics/image/ditu2.svg' alt='' style='width: 25px;height:25px;'></a>\n" +
+                     "<a href=\"#\" class='deleteq'><img src='/statics/image/shanchu.png' alt=''></a>\n" +
+                     "<a href=\"#\" class='particulars'><div class='r_chakan' ><i style='font-style:normal'>查看<img  class='r_chakan_img' src='/statics/image/youjiantou.svg' alt=''></div></a>\n" +
                      "</td>\n" +
                      "</tr>"
                 }
@@ -89,10 +104,12 @@ $(function () {
 
             //   删除
                 var id
+                $(".deleteq").unbind('click');
                 $(".deleteq").click(function () {
                     $(".shade_delete,.shade_b_delete").css("display", "block");
                     id=$(this).parent().attr('id');
                 })
+                $(".sha_que_delete").unbind('click');
                 $(".sha_que_delete").click(function(){
                     $.ajax({
                         url:baseURL + 'fun/project/delete?projectIds='+id,
@@ -111,6 +128,7 @@ $(function () {
                     $(".shade_delete,.shade_b_delete").css("display", "none")
                 })
             // 地图定位
+                $(".ma_p").unbind('click');
                 $(".ma_p").click(function(){
                     var longitude=$(this).attr("id")
                     var name=$(this).parent().siblings(".Na_me").html()
@@ -119,22 +137,26 @@ $(function () {
                 })
             // 编辑
                 var proid
+                $(".modifier").unbind('click');
                 $(".modifier").click(function(){
                     $(".shade_modifier,.shade_b_modifier").css("display","block");
                      proid=$(this).parent().attr('id');
                     var r_por_num = $(this).parent().siblings(".Na_me").html();
                     $(".pro_name_b").val(r_por_num);
-                    var r_por_num = $(this).parent().siblings(".Na_me").html();
-                    $(".pro_s_b").val(r_por_num);
+                    var r_con_r = $(this).parent().siblings(".r_con_r").html();
+                    $(".pro_s_b").val(r_con_r);
                     var r_rrna = $(this).parent().siblings(".exclusiveUser").html();
-                    $("#select1_b option:selected").text(r_rrna);
+                    $("#select1_b").val(r_rrna);
+
+                    // var cheng = $(this).parent().siblings(".exclusiveUser").html();
+                    // $("#select1_n").val(cheng);
                 })
+                $("#confirm_x").unbind('click');
                 $("#confirm_x").click(function(){
                     var pro_name_b= $(".pro_name_b").val()
                     var pro_s_b= $(".pro_s_b").val()
                     var select_b=$("#select1_b option:selected").attr("id");
-
-                     console.log(select_b)
+                    var select_b=$("#select1_n option:selected").attr("id");
                     //正则  丸子
                     if(pro_name_b ==""||select_b=="") {
                         $(".mistake").css("display","block")
@@ -147,15 +169,22 @@ $(function () {
                                 "projectName":pro_name_b,
                                 "projectId":proid,
                                 "projectDesc":pro_s_b,
-                                "exclusiveUser":select_b
+                                "exclusiveUser":select_b,
                             }),
                             success: function(res){
-                                window.location.reload()
+                                console.log("77777777777777777777")
+                                console.log(res)
+                                if(res.code == 200){
+                                    window.location.reload()
+                                }else{
+                                    alert(res.msg)
+                                }
                             }
                         });
                     }
                 })
             // 分組
+                $(".particulars").unbind('click');
                 $(".particulars").click(function(){
                     proid=$(this).parent().attr('id');
                     var Na_me=$(this).parent().siblings(".Na_me").html();
@@ -164,9 +193,10 @@ $(function () {
                     var gatewayCount=$(this).parent().siblings(".gatewayCount").html();
                     var faultCount=$(this).parent().siblings(".faultCount").html();
                     var callPoliceCount=$(this).parent().siblings(".callPoliceCount").html();
-
-                    var searchUrl=encodeURI('../grouping/grouping.html?projectId='+proid+"&Na_me="+Na_me+"&exclusiveUser="+exclusiveUser+"&sumCount="+sumCount+"&gatewayCount="+gatewayCount+"&faultCount="+faultCount+"&callPoliceCount="+callPoliceCount)
+                    var projectStatus=$(this).parent().siblings(".r_con_r").attr('id');
+                    var searchUrl=encodeURI('../grouping/grouping.html?projectId='+proid+"&Na_me="+Na_me+"&exclusiveUser="+exclusiveUser+"&sumCount="+sumCount+"&gatewayCount="+gatewayCount+"&faultCount="+faultCount+"&callPoliceCount="+callPoliceCount+"&projectStatus="+projectStatus)
                     location.href =searchUrl;
+                    $('#test').attr('src', searchUrl);
                 })
 
             //  分頁
@@ -195,20 +225,24 @@ $(function () {
 
 // 新增//////////////////////////
    $("#proje_add").click(function(){
-       $(".shade_project,.shade_b_project").css("display","block")
+       $(".shade_project,.shade_b_project").css("display","block");
+       $(".pro_name").val("");
+       $(".pro_s_b_add").val("")
+       $("#select1 option:selected").text("");
+       $("#selectb option:selected").text("");
    })
     $(".shade_add_project").click(function(){
-        $(".shade_project,.shade_b_project").css("display","none")
+        $(".shade_project,.shade_b_project,.mistake").css("display","none")
     })
-
 
     $("#project_confirm").click(function(){
        var pro_name= $(".pro_name").val()
-       var pro_s_b= $(".pro_s").val()
+       var pro_s_b= $(".pro_s_b_add").val()
        var select=$("#select1 option:selected").attr("id");
-       console.log(select)
+        var selecte=$("#selectb option:selected").attr("id");
+       console.log(selecte)
         //正则  丸子
-        if(pro_name ==""||pro_s_b==""||select=="" ) {
+        if(pro_name ==""||pro_s_b==""||select==""||selecte=="" ) {
             $(".mistake").css("display","block")
         }else{
             $.ajax({
@@ -218,13 +252,22 @@ $(function () {
                 data:JSON.stringify({
                     "projectName":pro_name,
                     "projectDesc":pro_s_b,
-                    "exclusiveUser":select
+                    "exclusiveUser":select,
+                    "cityId ":selecte,
                 }),
                 success: function(res){
-                    $(".pro_name").val("")
-                    $("#select1").val("")
-                    $(".pro_s_b").val("")
-                    window.location.reload()
+                    console.log("///////////////////")
+                    console.log("res")
+                    if(res.code == 200){
+                        $(".pro_name").val("")
+                        $("#select1").val("")
+                        $("#selectb").val("")
+                        $(".pro_s_b").val("")
+                        window.location.reload()
+                    }else{
+                        alert(res.msg)
+                    }
+
                 }
             });
 
@@ -233,10 +276,10 @@ $(function () {
     })
     //编辑去弹窗/////////////////////////////////
      $(".shade_modifier_project").click(function(){
-         $(".shade_modifier,.shade_b_modifier").css("display","none")
+         $(".shade_modifier,.shade_b_modifier.mistake").css("display","none")
      })
     $(".rqubtn,.shade_a_delete").click(function () {
-        $(".shade_delete,.shade_b_delete").css("display", "none")
+        $(".shade_delete,.shade_b_delete.mistake").css("display", "none")
     })
 })
 

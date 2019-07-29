@@ -18,6 +18,7 @@ public class ProjectQuery {
     private String userName;
     private Integer pageSize;
     private Integer pageNum;
+    private Integer status;
     private List<Long> userIds = new ArrayList<>();
 
     public ProjectQuery(){};

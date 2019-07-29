@@ -24,8 +24,19 @@
     	su.salt as salt,
     	su.type as type,
     	su.is_bind_mtype as isBindMtype,
+    	su.real_name as realName,
     	su.deadline as deadline
     </sql>
+
+	<select id="queryUserByUserIds" resultType="com.remote.sys.entity.SysUserEntity">
+		select <include refid="columns"/> from sys_user as su where su.flag=1
+		<if test="userIds !=null and userIds.size()!= 0">
+			and su.user_id in
+			<foreach collection="userIds" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+	</select>
 
 	<!-- 查询用户的所有权限 -->
 	<select id="queryAllPerms" resultType="string">

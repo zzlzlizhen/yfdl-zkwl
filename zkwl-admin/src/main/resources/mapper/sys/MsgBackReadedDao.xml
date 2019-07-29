@@ -16,7 +16,13 @@
        WHERE mbr.msg_back_id = #{msgBackId} and mbr.uid == #{uid}
    </select>-->
     <select id="queryCount" resultType="java.lang.Integer">
-        select count(msg_back_id) from msg_back_readed where uid = #{uid} and type=#{type}
+        select count(msg_back_id) from msg_back_readed where 1=1
+        <if test="uid != null">
+           and uid = #{uid}
+        </if>
+        <if test="type != null">
+            and type=#{type}
+        </if>
     </select>
 
 </mapper>

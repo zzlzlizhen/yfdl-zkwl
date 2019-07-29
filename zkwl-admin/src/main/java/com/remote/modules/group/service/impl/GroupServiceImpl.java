@@ -1,8 +1,10 @@
 package com.remote.modules.group.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.remote.common.enums.DeviceEnum;
+import com.remote.common.utils.DeviceTypeMap;
 import com.remote.modules.device.entity.DeviceEntity;
 import com.remote.modules.device.entity.DeviceQuery;
 import com.remote.modules.device.service.DeviceService;
@@ -14,6 +16,8 @@ import com.remote.modules.project.entity.ProjectEntity;
 import com.remote.modules.sys.service.SysUserService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +32,7 @@ import java.util.stream.Collectors;
  **/
 @Service
 public class GroupServiceImpl implements GroupService {
+    private Logger logger = LoggerFactory.getLogger(GroupServiceImpl.class);
 
     @Autowired
     private GroupMapper groupMapper;
@@ -40,20 +45,32 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public boolean addGroup(GroupEntity group) {
+        logger.info("添加分组入参："+JSONObject.toJSONString(group));
         return groupMapper.insert(group) > 0 ? true : false;
     }
 
     @Override
     public PageInfo<GroupEntity> queryGroupByName(GroupQuery groupQuery) {
+        logger.info("查询分组入参："+JSONObject.toJSONString(groupQuery));
         Map<String,Integer> all = new HashMap<>();
         Map<String,Integer> alarm = new HashMap<>();
         Map<String,Integer> fault = new HashMap<>();
         PageHelper.startPage(groupQuery.getPageNum(),groupQuery.getPageSize());
         List<GroupEntity> list = groupMapper.queryGroupByName(groupQuery);
         if(CollectionUtils.isNotEmpty(list)){
-            List<String> groupIds = list.parallelStream().map(groupEntity -> groupEntity.getGroupId()).collect(Collectors.toCollection(ArrayList::new));
-            dataManager(groupIds,all,alarm,fault);
+            ArrayList<String> groupIds = list.parallelStream().map(groupEntity -> groupEntity.getGroupId()).collect(Collectors.toCollection(ArrayList::new));
+            dataManager(groupIds,groupQuery.getProjectId(),all,alarm,fault);
             for (GroupEntity groupEntity : list){
+                String groupId = groupEntity.getGroupId();
+                groupEntity.setDeviceCount(0);
+                groupEntity.setCallPoliceCount(0);
+                groupEntity.setFaultCount(0);
+                DeviceEntity deviceEntity = deviceService.queryDeviceByGroupIdTopOne(groupId);
+                if(deviceEntity != null){
+                    groupEntity.setDeviceTypeName(DeviceTypeMap.DEVICE_TYPE.get(deviceEntity.getDeviceType()));
+                }else{
+                    groupEntity.setDeviceTypeName("");
+                }
                 if(all.get(groupEntity.getGroupId()) != null){
                     groupEntity.setDeviceCount(all.get(groupEntity.getGroupId()));
                 }
@@ -69,20 +86,20 @@ public class GroupServiceImpl implements GroupService {
         return pageInfo;
     }
 
-    public void dataManager(List<String> groupIds,Map<String,Integer> all,Map<String,Integer> alarm,Map<String,Integer> fault){
-        List<DeviceEntity> deviceEntities = deviceService.queryDeviceByGroupCount(groupIds,new ArrayList<String>(),DeviceEnum.NORMAL.getCode());//正常
+    public void dataManager(List<String> groupIds,String projectId,Map<String,Integer> all,Map<String,Integer> alarm,Map<String,Integer> fault){
+        List<DeviceEntity> deviceEntities = deviceService.queryDeviceByGroupCount(groupIds,projectId,DeviceEnum.ALL.getCode());//正常
         if(CollectionUtils.isNotEmpty(deviceEntities)){
             for(DeviceEntity deviceEntity : deviceEntities){
                 all.put(deviceEntity.getGroupId(),deviceEntity.getCounts());
             }
         }
-        List<DeviceEntity> deviceEntities1 = deviceService.queryDeviceByGroupCount(groupIds,new ArrayList<String>(),DeviceEnum.ALARM.getCode());//报警
+        List<DeviceEntity> deviceEntities1 = deviceService.queryDeviceByGroupCount(groupIds,projectId,DeviceEnum.ALARM.getCode());//报警
         if(CollectionUtils.isNotEmpty(deviceEntities1)){
             for(DeviceEntity deviceEntity : deviceEntities1){
                 alarm.put(deviceEntity.getGroupId(),deviceEntity.getCounts());
             }
         }
-        List<DeviceEntity> deviceEntities2 = deviceService.queryDeviceByGroupCount(groupIds,new ArrayList<String>(),DeviceEnum.FAULT.getCode());//故障
+        List<DeviceEntity> deviceEntities2 = deviceService.queryDeviceByGroupCount(groupIds,projectId,DeviceEnum.FAULT.getCode());//故障
         if(CollectionUtils.isNotEmpty(deviceEntities2)){
             for(DeviceEntity deviceEntity : deviceEntities2){
                 fault.put(deviceEntity.getGroupId(),deviceEntity.getCounts());
@@ -161,7 +178,7 @@ public class GroupServiceImpl implements GroupService {
         List<GroupEntity> list = groupMapper.queryGroupByName(groupQuery);
         if(CollectionUtils.isNotEmpty(list)){
             List<String> groupIds = list.parallelStream().map(groupEntity -> groupEntity.getGroupId()).collect(Collectors.toCollection(ArrayList::new));
-            List<DeviceEntity> deviceEntities = deviceService.queryDeviceByGroupCount(groupIds,new ArrayList<String>(),DeviceEnum.ALL.getCode());//正常
+            List<DeviceEntity> deviceEntities = deviceService.queryDeviceByGroupCount(groupIds,projectId,DeviceEnum.ALL.getCode());//正常
             if(CollectionUtils.isNotEmpty(deviceEntities)){
                 for(DeviceEntity deviceEntity : deviceEntities){
                     all.put(deviceEntity.getGroupId(),deviceEntity.getCounts());
@@ -215,6 +232,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public boolean updateGroup(GroupEntity groupEntity) {
+        logger.info("修改分组入参："+JSONObject.toJSONString(groupEntity));
         return groupMapper.updateGroup(groupEntity) > 0 ? true : false;
     }
 

@@ -47,4 +47,12 @@ public interface ProjectService {
      * @return boolean
      **/
     boolean updateProject(ProjectEntity projectEntity);
+    /*
+     * @Author zhangwenping
+     * @Description 根据id查询项目详情
+     * @Date 13:46 2019/7/29
+     * @Param projectId
+     * @return ProjectEntity
+     **/
+    ProjectEntity queryProjectMap(String projectId);
 }

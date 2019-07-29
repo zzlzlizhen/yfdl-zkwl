@@ -85,7 +85,12 @@ public class OverViewController extends AbstractController{
      * 通过设备codes获取当前设备的放电量
      * */
     public double getTotalDischarge(List<String> deviceCodes){
-        return historyService.getTotalDischarge(deviceCodes);
+        Double chage = historyService.getTotalDischarge(deviceCodes);
+        if(chage != null){
+            return chage;
+        }else{
+            return 0;
+        }
     }
     /**
      *获取当前用户

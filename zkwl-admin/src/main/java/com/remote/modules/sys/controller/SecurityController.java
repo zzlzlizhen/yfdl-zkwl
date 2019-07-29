@@ -35,7 +35,7 @@ public class SecurityController {
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("sys:security:list")
+    /*@RequiresPermissions("sys:security:list")*/
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = securityService.queryPage(params);
 
@@ -47,7 +47,7 @@ public class SecurityController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-    @RequiresPermissions("sys:security:info")
+/*    @RequiresPermissions("sys:security:info")*/
     public R info(@PathVariable("id") Long id){
         SecurityEntity security = securityService.getById(id);
 
@@ -58,7 +58,7 @@ public class SecurityController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("sys:security:save")
+/*    @RequiresPermissions("sys:security:save")*/
     public R save(@RequestBody SecurityEntity security){
         securityService.save(security);
 
@@ -69,7 +69,7 @@ public class SecurityController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("sys:security:update")
+  /*  @RequiresPermissions("sys:security:update")*/
     public R update(@RequestBody SecurityEntity security){
         ValidatorUtils.validateEntity(security);
         securityService.updateById(security);
@@ -80,7 +80,7 @@ public class SecurityController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("sys:security:delete")
+/*    @RequiresPermissions("sys:security:delete")*/
     public R delete(@RequestBody Long[] ids){
         securityService.removeByIds(Arrays.asList(ids));
 

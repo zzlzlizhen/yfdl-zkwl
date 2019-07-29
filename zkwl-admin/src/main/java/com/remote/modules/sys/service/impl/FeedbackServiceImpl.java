@@ -120,5 +120,15 @@ public class FeedbackServiceImpl extends ServiceImpl<FeedbackDao, FeedbackEntity
         return this.baseMapper.selectOne(new QueryWrapper<FeedbackEntity>().eq("back_id",backId));
     }
 
+    @Override
+    public boolean isSelf(String backId, Long uid) {
+        boolean falg = false;
+        FeedbackEntity feedbackEntity = this.baseMapper.selectOne(new QueryWrapper<FeedbackEntity>().eq("back_id",backId).eq("uid",uid));
+        if(feedbackEntity != null){
+            falg = true;
+        }
+        return falg;
+    }
+
 
 }
