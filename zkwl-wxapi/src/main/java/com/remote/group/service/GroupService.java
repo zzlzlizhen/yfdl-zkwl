@@ -64,4 +64,12 @@ public interface GroupService {
      * @return boolean
      **/
     boolean updateGroup(GroupEntity groupEntity);
+    /*
+     * @Author zhangwenping
+     * @Description 根据id查看分组详情
+     * @Date 10:17 2019/8/5
+     * @Param groupId
+     * @return GroupEntity
+     **/
+    GroupEntity queryGroupById(String groupId);
 }

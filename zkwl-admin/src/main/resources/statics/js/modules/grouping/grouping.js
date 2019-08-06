@@ -2,8 +2,6 @@ $(function(){
     //获取上一个页面参数
     function showWindowHref(){
         var sHref = decodeURI(window.parent.document.getElementById("test").contentWindow.location.href);
-        console.log("=======");
-        console.log(sHref)
         var args = sHref.split('?');
         if(args[0] == sHref){
             return "";
@@ -44,11 +42,10 @@ $(function(){
     }else if(projectStatus == 2) {
         projectStatus = "停用运行";
     }
-    $("#r_xiugai_six_tu").html(projectStatus)
+    $("#r_xiugai_six_tu").html(projectStatus);
 
     //项目id
     var  Id=href['projectId'];
-    console.log("------------")
     console.log(projectStatus)
     console.log(faultCount)
     console.log(gatewayCount)
@@ -57,15 +54,13 @@ $(function(){
     var pages
     var pageSize
     var pageNum
-
+    var $color = localStorage.getItem("mycolor");
     $.ajax({
         url:baseURL + 'fun/group/queryGroupNoPage?projectId='+Id,
         contentType: "application/json;charset=UTF-8",
         type:"get",
         data:{},
         success: function(res) {
-            console.log("00000")
-            console.log(res)
             var html=""
             for (var i = 0; i < res.data.length; i++) {
                 html += "<option class='option opti_a' id="+res.data[i].groupId+">"+res.data[i].groupName+"</option>\n"
@@ -85,7 +80,8 @@ $(function(){
             }
             $("#se_fora").append(html)
         }
-    })
+    });
+
     //地图
     $("#hear_map").click(function(){
         var searchUrl=encodeURI('../equipment/equipment.html')
@@ -96,15 +92,28 @@ $(function(){
     $("#proje_search").click(function(){
        var Se_id=$("#Se_id").val();
        var Se_name=$("#Se_name").val();
-       var select=$("#se_for option:selected").attr("id")
+       // var select=$("#se_for option:selected").attr("id")
+        var select=$("#se_for").val();
        var selecta=$("#se_fora option:selected").attr("id")
-        console.log("+++_"+select)
         $("#div").html("");
-        form(pageSize,pageNum,Se_id,Se_name,select,selecta)
+        form(pageSize,pageNum,Se_id,Se_name,select,selecta);
+        refresh();
     })
+    //自动刷新
+    var t;
+    refresh();
+    function refresh(){
+        if($("#Se_id").val()=="" && $("#Se_name").val()=="" && $("#se_for").val()=="" && $("#se_fora").val()==""){
+            t=setInterval(function(){
+                form(10,1,"","","","");
+            }, 60000);
+        }else{
+            clearInterval(t);
+        }
+    }
 
     //渲染表格
-    form(10,1,"","","","")
+    form(10,1,"","","","");
     function form(pageSizea,pagesa,deviceCode,deviceName,groupId,deviceType){
         $.ajax({
             url: baseURL + 'fun/device/queryDevice',
@@ -251,8 +260,10 @@ $(function(){
                         "</td>\n" +
                         "</tr>"
                 }
-                $("#div").append(html);
-
+                $("#div").empty().append(html);
+                if($color == 2){
+                    $("#add_equipments,.particulars_a,.particulars,.deleteq").hide();
+                }
                 // 地图定位
                 $(".ma_p").unbind('click');
                 $(".ma_p").click(function(){
@@ -330,7 +341,11 @@ $(function(){
                 $("#deleteAll").unbind('click');
                 $("#deleteAll").click(function(){
                     if(arr.length <=0 ){
-                        alert("请选择删除的设备!");
+                        layer.open({
+                            title: '信息',
+                            content: '请选择删除的设备',
+                            skin: 'demo-class'
+                        });
                         return;
                     }
                     var ids = "";
@@ -364,9 +379,19 @@ $(function(){
                         data:{},
                         success: function(res) {
                             if(res.code == "200"){
-                                window.location.reload();
+                                layer.open({
+                                    title: '信息',
+                                    content: '删除成功',
+                                    skin: 'demo-class'
+                                });
+                                form(10,1,"","","","");
+                                $(".shade_delete,.shade_b_delete").css("display", "none");
                             }else{
-                                alert("删除失败");
+                                layer.open({
+                                    title: '信息',
+                                    content: '删除失败',
+                                    skin: 'demo-class'
+                                });
                             }
                         }
                     })
@@ -381,7 +406,7 @@ $(function(){
                 $(".sousuo_i").click(function(){
                      var Input_v=$(".sousuo_input").val();
                       $("#Dan_x").html("");
-                      pro_gro(Input_v)
+                      pro_gro(Input_v);
                 })
 
                 var gr_Id
@@ -405,7 +430,7 @@ $(function(){
                                 var che_c=$(this).prop('checked');
                                 if(che_c == true){
                                     $(this).parent().siblings().children(".che_i[name=alla]:checkbox").prop('checked', false);
-                                    gr_Id=$(this).parent().attr('id')
+                                    gr_Id=$(this).parent().attr('id');
                                 }
 
                             })
@@ -428,8 +453,12 @@ $(function(){
                         data:{},
                         success: function(res) {
                             if(res.code== "200"){
-                                alert("移动分组成功")
-                                window.location.reload()
+                                layer.open({
+                                    title: '信息',
+                                    content: '移动分组成功',
+                                    skin: 'demo-class'
+                                });
+                                window.location.reload();
                             }
                         }
                     })
@@ -442,7 +471,7 @@ $(function(){
                     $(".shade_modifier,.shade_b_modifier").css("display","block");
                      proid=$(this).parent().attr('id');
                     var  r_namem = $(this).parent().siblings("#r_namem").html();
-                    $(".pro_s_b").val(r_namem)
+                    $(".pro_s_b").val(r_namem);
                     var r_rrena = $(this).parent().siblings(".grod").html();
                     $("#select1_b").val(r_rrena);
                     // fen()
@@ -453,7 +482,7 @@ $(function(){
                     var select_b=$("#select1_b option:selected").attr("id");
                     //正则  丸子
                     if(pro_s_b == ""||select_b == ""){
-                        $(".mistake").css("display","block")
+                        $(".mistake").css("display","block");
                     }else{
                         $.ajax({
                             url:baseURL + 'fun/device/updateDevice',
@@ -467,7 +496,15 @@ $(function(){
                             }),
                             success: function(res){
                                 if(res.code == "200"){
-                                    window.location.reload()
+                                    $(".shade_modifier").hide();
+                                    $(".mistake").hide();
+                                    layer.open({
+                                        title: '信息',
+                                        content: '修改成功',
+                                        skin: 'demo-class'
+                                    });
+                                    form(10,1,"","","","");
+                                    $(".shade_modifier,.shade_b_modifier").css("display","none");
                                 }
 
                             }
@@ -475,7 +512,6 @@ $(function(){
                     }
 
                 })
-
 
                 $("#pagination3").pagination({
                     currentPage: pageNum,
@@ -489,8 +525,8 @@ $(function(){
                     callback: function(current) {
                         //当前页数current
                         var pagesb = current
-                        $("#div").html("")
-                        form(pageSize, pagesb)
+                        $("#div").html("");
+                        form(pageSize, pagesb);
                     }
                 });
 
@@ -512,13 +548,11 @@ $(function(){
             type:"get",
             data:{},
             success: function(res) {
-                console.log("00000")
-                console.log(res)
                 var html=""
                 for (var i = 0; i < res.data.length; i++) {
                     html += "<option class='option opti_a' id="+res.data[i].groupId+">"+res.data[i].groupName+"</option>\n"
                 }
-                $("#select1").append(html)
+                $("#select1").append(html);
             }
         })
         //添加设备-分组id
@@ -542,8 +576,11 @@ $(function(){
     $(".shade_add_project").click(function(){
         $(".shade_project,.shade_b_project").css("display","none");
         $("#select1").html("");
-    })
 
+    })
+    $(".glyphicon,.rqubtn").click(function(){
+        $(".mistake").css("display","none");
+    })
 
     //确认添加
     $("#project_confirm").unbind('click');
@@ -552,7 +589,7 @@ $(function(){
         var pro_s= $(".pro_s").val();
         var select_op=$("#select1 option:selected").attr("id");
         if(pro_s =="" || pro_name==""){
-            $(".mistake").css("display","block")
+            $(".mistake").css("display","block");
         }else{
             $.ajax({
                 url:baseURL + 'fun/device/add',
@@ -568,9 +605,20 @@ $(function(){
                     if(res.code == "200"){
                         $(".pro_name").val("");
                         $(".pro_s").val("");
-                        window.location.reload()
+                        $(".shade_project").hide();
+                        $(".mistake").hide();
+                        layer.open({
+                            title: '信息',
+                            content: '添加成功',
+                            skin: 'demo-class'
+                        });
+                        form(10, 1, "", "", "", "")
                     }else{
-                        alert("添加失败")
+                        layer.open({
+                            title: '信息',
+                            content: '添加失败',
+                            skin: 'demo-class'
+                        });
                     }
                 }
             })
@@ -579,81 +627,90 @@ $(function(){
     })
     //确定删除
     $(".rqubtn,.shade_a_delete").click(function () {
-        $(".shade_delete,.shade_b_delete").css("display", "none")
+        $(".shade_delete,.shade_b_delete").css("display", "none");
     })
 //编辑去弹窗/////////////////////////////////
     $(".shade_modifier_project").click(function(){
-        $(".shade_modifier,.shade_b_modifier").css("display","none")
-        // $("#select1,#select1_b").html("")
+        $(".shade_modifier,.shade_b_modifier").css("display","none");
     })
 
 //分组管理
     $("#grouping").unbind('click');
     $("#grouping").click(function(){
         var proid=Id
-        var searchUrl=encodeURI('../management/management.html?projectId='+proid+"&character="+character)
+        var searchUrl=encodeURI('../management/management.html?projectId='+proid+"&character="+character);
         location.href =searchUrl;
     })
 //移动分组弹窗
     $(".shade_modifier_yi").click(function(){
-        $(".shade_Yi,.shade_b_yi").css("display","none")
+        $(".shade_Yi,.shade_b_yi").css("display","none");
     })
 //天气
     //获取城市ajax
     $.ajax({
-        url: 'http://api.map.baidu.com/location/ip?ak=ia6HfFL660Bvh43exmH9LrI6',
+        url: 'http://api.map.baidu.com/location/ip?ak=H7Apgj0jSA8WFUOyKZyL20MgZmjfHz7V',
         type: 'POST',
         dataType: 'jsonp',
         success:function(data) {
             var Cheng_s=JSON.stringify(data.content.address_detail.province);
             var cut_a=Cheng_s.substring(1);
-            var cut_b=cut_a.substring(0,cut_a.length-2)
-            $('#weather').html(cut_b)
-            console.log("城市")
-            console.log(data)
+            var cut_b=cut_a.substring(0,cut_a.length-2);
+            $('#weather').html(cut_b);
+            console.log("城市");
+            console.log(data);
             //天气
             $.ajax({
                 url:'http://wthrcdn.etouch.cn/weather_mini?city='+cut_b,
                 data:"",
                 dataType:"jsonp",
                 success:function(data){
-                    console.log("天气")
-                    console.log(data);
                     var str=data.data.forecast[0].high
                     var str_a=str.slice(-3)
                     var str_b=data.data.forecast[0].low
                     var str_bb=str_b.slice(-3)
-                    // if(type == "多云"){
-                    //     var lujing=$("#img").attr("src");
-                    //     lujing='天气.png'
-                    // }else if(){
-                    //
-                    // }else if(){
-                    //
+                    var T_an=data.data.forecast[0].type+" "+str_bb+"-"+str_a;
+                    var myList = data.data.forecast[0].type;
+                       var newList=myList.split("");
+                        for( i=0;i<newList.length;i++){
+                            if(newList[i]=="雨"&&newList[i]=="雪"){
+                                $("#img").attr("src","/statics/image/yujiaxue.svg");
+                            }else if(newList[i]=="云"){
+                                $("#img").attr("src","/statics/image/duoyun.svg");
+                            }else if(newList[i]=="雨"){
+                                $("#img").attr("src","/statics/image/yu.svg");
+                            }else if(newList[i]== "雪"){
+                                $("#img").attr("src","/statics/image/xue.svg");
+                            }else if(newList[i]== "阴"){
+                                $("#img").attr("src","/statics/image/yintian.svg");
+                            }else if(newList[i]== "晴"){
+                                $("#img").attr("src","/statics/image/qing.svg");
+                            }else if(newList[i]== "冰"){
+                                $("#img").attr("src","/statics/image/rbingbao.svg");
+                            }
+                        }
+
+
+                    // if(data.data.forecast[0].type== "多云"){
+                    //     // console.log(data.data.forecast[0].type)
+                    //     $("#img").attr("src","/statics/image/duoyun.svg");
+                    // }else if(data.data.forecast[0].type== "晴"){
+                    //     $("#img").attr("src","/statics/image/qing.svg");
+                    // }else if(data.data.forecast[0].type== "雨"){
+                    //     $("#img").attr("src","/statics/image/yu.svg");
+                    // }else if(data.data.forecast[0].type== "小雨"){
+                    //     $("#img").attr("src","/statics/image/xiaoyu.svg");
+                    // }else if(data.data.forecast[0].type== "阵雨"){
+                    //     $("#img").attr("src","/statics/image/zhenyu.svg");
+                    // }else if(data.data.forecast[0].type== "雪"){
+                    //     $("#img").attr("src","/statics/image/xue.svg");
+                    // }else if(data.data.forecast[0].type== "阴"){
+                    //     $("#img").attr("src","/statics/image/yintian.svg");
+                    // }else if(data.data.forecast[0].type== "雨夹雪"){
+                    //     $("#img").attr("src","/statics/image/yujiaxue.svg");
+                    // }else if(data.data.forecast[0].type== "雷阵雨"){
+                    //     $("#img").attr("src","/statics/image/zhenyu.svg");
                     // }
-
-                     var T_an=data.data.forecast[0].type+" "+str_bb+"-"+str_a;
-
-                    if(data.data.forecast[0].type== "多云"){
-                        $("#img").attr("src","/statics/image/duoyun.svg")
-                    }else if(data.data.forecast[0].type== "晴"){
-                        $("#img").attr("src","/statics/image/qing.svg")
-                    }else if(data.data.forecast[0].type== "雨"){
-                        $("#img").attr("src","/statics/image/yu.svg")
-                    }else if(data.data.forecast[0].type== "小雨"){
-                        $("#img").attr("src","/statics/image/xiaoyu.svg")
-                    }else if(data.data.forecast[0].type== "阵雨"){
-                        $("#img").attr("src","/statics/image/zhenyu.svg")
-                    }else if(data.data.forecast[0].type== "雪"){
-                        $("#img").attr("src","/statics/image/xue.svg")
-                    }else if(data.data.forecast[0].type== "阴"){
-                        $("#img").attr("src","/statics/image/yintian.svg")
-                    }else if(data.data.forecast[0].type== "雨夹雪"){
-                        $("#img").attr("src","/statics/image/yujiaxue.svg")
-                    }else if(data.data.forecast[0].type== "雷阵雨"){
-                        $("#img").attr("src","/statics/image/zhenyu.svg")
-                    }
-                    $("#T_an").html(T_an)
+                    $("#T_an").html(T_an);
                 }
             })
         }

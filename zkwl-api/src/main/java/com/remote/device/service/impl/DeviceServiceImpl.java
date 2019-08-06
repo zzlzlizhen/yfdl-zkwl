@@ -5,6 +5,8 @@ import com.remote.common.enums.BatteryStatusEnum;
 import com.remote.common.enums.LoadStatusEnum;
 import com.remote.common.enums.PhotovoltaicCellStatusEnum;
 import com.remote.common.enums.RunStatusEnum;
+import com.remote.common.utils.CoodinateCovertor;
+import com.remote.common.utils.LngLat;
 import com.remote.device.dao.DeviceMapper;
 import com.remote.device.entity.DeviceEntity;
 import com.remote.device.entity.DeviceQuery;
@@ -59,26 +61,12 @@ public class DeviceServiceImpl implements DeviceService {
         String longitudeL = commonEntity.getLongitudeL();
         double longitudeUp = Double.valueOf(longitudeInt+"."+(h+Integer.valueOf(longitudeL)));
 
-        //经纬度不为空的话，代表是手机扫码添加  否则代表页面添加，页面添加经纬度为空
-//        if(entity.getLongitude() != null && entity.getLatitude() != null){
-//            //原来经度
-//            String longitude = entity.getLongitude();
-//            //原来纬度
-//            String latitude = entity.getLatitude();
-//            //判断两个经纬度距离是否大于3公里
-//            double distance = XYmatch.getDistance(longitudeUp, latitudeUp, Double.valueOf(longitude), Double.valueOf(latitude));
-//            if(distance >= 3){
-//                //相距大于3公里已基站为准
-//                deviceEntity.setLatitude(latitudeInt+"."+i+latitudeL);
-//                deviceEntity.setLongitude(longitudeInt+"."+h+longitudeL);
-//            }
-//        }else{
-//            //经纬度为空，代表浏览器添加。浏览器添加没有基本定位，所以取基站定位
-//            deviceEntity.setLatitude(latitudeInt+"."+i+latitudeL);
-//            deviceEntity.setLongitude(longitudeInt+"."+h+longitudeL);
-//        }
-        deviceEntity.setLatitude(String.valueOf(latitudeUp));
-        deviceEntity.setLongitude(String.valueOf(longitudeUp));
+        //经纬度转换成百度地图经纬度
+        LngLat lngLat_bd = new LngLat(longitudeUp,latitudeUp);
+        LngLat lngLat = CoodinateCovertor.bd_encrypt(lngLat_bd);
+        deviceEntity.setLatitude(String.valueOf(lngLat.getLantitude()));
+        deviceEntity.setLongitude(String.valueOf(lngLat.getLongitude()));
+
         //负载状态 loadState  蓄电池状态 batteryState 光电池状态  photocellState
         Integer loadState = deviceEntity.getLoadState();
         Integer batteryState = deviceEntity.getBatteryState();
@@ -138,13 +126,18 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public int updateDeviceTimeOutByCode(String deviceCode) {
-        return deviceMapper.updateDeviceTimeOutByCode(deviceCode);
+    public int updateDeviceTimeOutByCode(String deviceCode,Integer runState) {
+        return deviceMapper.updateDeviceTimeOutByCode(deviceCode,runState);
     }
 
     @Override
     public List<DeviceEntity> queryDeviceNoPage(DeviceQuery deviceQuery) {
         return deviceMapper.queryDevice(deviceQuery);
+    }
+
+    @Override
+    public int updateDeviceVersionByCode(String deviceCode) {
+        return deviceMapper.updateDeviceVersionByCode(deviceCode);
     }
 
 

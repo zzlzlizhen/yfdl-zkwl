@@ -4,7 +4,7 @@ var menuItem = Vue.extend({
     name: 'menu-item',
     props:{item:{}},
     template:[
-        '<li>',
+        '<li >',
         '	<a v-if="item.type === 0" href="javascript:;">',
         '		<i v-if="item.icon != null" :class="item.icon"></i>',
         '		<span>{{item.name}}</span>',
@@ -13,9 +13,9 @@ var menuItem = Vue.extend({
         '	<ul v-if="item.type === 0" class="treeview-menu">',
         '		<menu-item :item="item" v-for="item in item.list"></menu-item>',
         '	</ul>',
-        '	<a v-if="item.type === 1 && item.parentId === 0" :href="\'#\'+item.url">',
+        '	<a v-if="item.type === 1 && item.parentId === 0" :href="\'#\'+item.url" >',
         '		<i v-if="item.icon != null" :class="item.icon"></i>',
-        '		<span>{{item.name}}</span>',
+        '		<span style="margin-left:18%;font-size:16px;">{{item.name}}</span>',
         '	</a>',
         '	<a v-if="item.type === 1 && item.parentId != 0" :href="\'#\'+item.url"><i v-if="item.icon != null" :class="item.icon"></i><i v-else class="fa fa-circle-o"></i> {{item.name}}</a>',
         '</li>'
@@ -40,6 +40,7 @@ var vm = new Vue({
 	data:{
 		user:{},
 		menuList:{},
+        url:'',
 		main:"modules/project/project_index.html",
 		password:'',
 		newPassword:'',
@@ -53,8 +54,13 @@ var vm = new Vue({
 		},
 		getUser: function(){
 			$.getJSON("sys/user/info?_"+$.now(), function(r){
-			    console.log("登录")
-			    console.log(r)
+			    console.log("登录");
+			    console.log(r);
+			    if(r.user.headUrl !="") {
+                    vm.url = "https://guangxun-wulian.com" + r.user.headUrl;
+                }else{
+                    vm.url ="/statics/image/touXa.svg"
+                }
 				vm.user = r.user;
 			});
 		},
@@ -76,13 +82,22 @@ var vm = new Vue({
 					    dataType: "json",
 					    success: function(result){
 							if(result.code == 200){
-								layer.close(index);
-								layer.alert('修改成功', function(index){
-									location.reload();
-								});
+								// layer.close(index);
+								// layer.alert('修改成功', function(index){
+								// 	location.reload();
+								// });
+                                layer.open({
+                                    title: '信息',
+                                    content: '修改成功',
+                                    skin: 'demo-class'
+                                });
 							}else{
-								layer.alert(result.msg);
-
+								//layer.alert(result.msg);
+                                layer.open({
+                                    title: '信息',
+                                    content: result.msg,
+                                    skin: 'demo-class'
+                                });
 							}
 						}
 					});
@@ -141,6 +156,14 @@ function routerList(router, menuList){
 	});
 }
 
+$.ajax({
+    url:  'sys/user/baseInfo',
+    type: "POST",
+    success: function (res) {
+        console.log(res);
+        localStorage.mycolor= res.user.roleId;
+    }
+})
 //点击弹窗
 $("#r_val_eml").click(function(){
     $(".r_lay,.r_beise,.r_be").css("display","block")
@@ -151,7 +174,12 @@ $("#r_bte").click(function(){
     var r_rlm=$("#r_rlm").val()
     var r_el_upd = $("#r_el_upd").val()
     if(r_rlm == "" || r_el_upd == ""){
-        alert("输入不能为空")
+       // alert("输入不能为空")
+        layer.open({
+            title: '信息',
+            content: '输入不能为空',
+            skin: 'demo-class'
+        });
     }else{
         // 邮箱
         if (!patrn2.exec(r_rlm)) {
@@ -189,7 +217,12 @@ $("#r_btee").click(function(){
     console.log(r_rlmn)
     console.log(r_el_updn)
     if(r_rlmn == "" || r_el_updn == ""){
-        alert("输入不能为空")
+       // alert("输入不能为空")
+        layer.open({
+            title: '信息',
+            content: '输入不能为空',
+            skin: 'demo-class'
+        });
     }else{
         //手机号错误
         if (!patrn1.exec(r_rlmn)){
@@ -199,15 +232,21 @@ $("#r_btee").click(function(){
         $.ajax({
             url:  'contact/checkBindMobile',
             type: "GET",
-            data: "&email=" + r_rlmn +
+            data: "&mobile=" + r_rlmn +
             "&securityCode=" + r_el_updn ,
             success: function (res) {
                 console.log(JSON.stringify(res));
                 if (res.code == "200") {
+                    console.log("/////////手机号")
                     $("#r_el_upde").val()
                     $(".r_lay_a,.r_beise_a,.r_be_a").hide()
                 } else {
-                    alert(res.msg);
+                    //alert(res.msg);
+                    layer.open({
+                        title: '信息',
+                        content: res.msg,
+                        skin: 'demo-class'
+                    });
                 }
             }
         })
@@ -223,28 +262,54 @@ $("#r_tijiao").click(function(){
     var select=$("#select1 option:selected").attr("id");
     var uRl=$("#headUrl").val()
 	if(r_rlma == "" || r_rlmb == ""|| r_rlmc == "" || r_rlmd == ""){
-        alert("输入不能为空")
+        //alert("输入不能为空")
+        layer.open({
+            title: '信息',
+            content: '输入不能为空',
+            skin: 'demo-class'
+        });
 	}else{
         //    账号
         if (!patrn3.exec(r_rlma)) {
-            console.log("账号错误")
+            //console.log("账号错误")
+            layer.open({
+                title: '信息',
+                content: '账号错误',
+                skin: 'demo-class'
+            });
             return false;
         }
         //    用户名
         if (!patrn4.exec(r_rlmb)) {
-            console.log("用户名错误")
+            //console.log("用户名错误")
+            layer.open({
+                title: '信息',
+                content: '用户名错误',
+                skin: 'demo-class'
+            });
             return false;
         }
         // 邮箱
         if (!patrn2.exec(r_rlmc)) {
-            console.log("邮箱错误")
+           // console.log("邮箱错误")
+            layer.open({
+                title: '信息',
+                content: '邮箱错误',
+                skin: 'demo-class'
+            });
             return false;
         }
         //手机号错误
         if (!patrn1.exec(r_rlmd)){
-            console.log("手机号错误")
+           // console.log("手机号错误")
+            layer.open({
+                title: '信息',
+                content: '手机号错误',
+                skin: 'demo-class'
+            });
             return false;
         }
+
         $.ajax({
             url:  'sys/user/updateBaseInfo',
             type: "POST",
@@ -258,9 +323,20 @@ $("#r_tijiao").click(function(){
             success: function (res) {
                 console.log(JSON.stringify(res));
                 if (res.code == "200") {
-                    alert(res)
+                    // alert(res)
+                    $(".JI_b").hide()
+                    layer.open({
+                        title: '信息',
+                        content: "更新成功",
+                        skin: 'demo-class'
+                    });
                 } else {
-                   alert(res.msg);
+                   // alert(res.msg);
+                    layer.open({
+                        title: '信息',
+                        content: res.msg,
+                        skin: 'demo-class'
+                    });
                 }
             }
         })
@@ -274,7 +350,6 @@ $("#r_val_pho").click(function(){
 //倒计时60秒
 var countdown=60;
 function sendemail(){
-    console.log("22222")
     var obje = $("#btn");
     var r_val_eml = $("#r_rlm").val()
     $.ajax({
@@ -288,7 +363,12 @@ function sendemail(){
                 countdown=60
                 settime(obje);
             } else {
-                alert(res.msg);
+               // alert(res.msg);
+                layer.open({
+                    title: '信息',
+                    content: res.msg,
+                    skin: 'demo-class'
+                });
             }
         }
     })
@@ -296,7 +376,6 @@ function sendemail(){
 }
 
 function sendemail_a() {
-	console.log("111111111")
     var obj = $("#btne");
     var r_el_upde = $("#r_rlp").val()
     $.ajax({
@@ -310,7 +389,12 @@ function sendemail_a() {
                 countdown=60
                 settime(obj);
             } else {
-                alert(res.msg);
+                //alert(res.msg);
+                layer.open({
+                    title: '信息',
+                    content: res.msg,
+                    skin: 'demo-class'
+                });
             }
         }
     })

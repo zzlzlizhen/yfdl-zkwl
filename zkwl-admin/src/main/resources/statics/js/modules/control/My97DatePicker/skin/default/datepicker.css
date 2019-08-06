@@ -96,8 +96,8 @@
 }
 
 .WdateDiv .hhMenu{
-	margin-top:-90px; 
-	margin-left:26px;
+	margin-top:-90px !important;
+	margin-left:26px !important;
 }
 
 .WdateDiv .mmMenu{

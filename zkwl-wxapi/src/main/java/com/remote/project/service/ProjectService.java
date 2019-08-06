@@ -55,4 +55,12 @@ public interface ProjectService {
      * @return ProjectEntity
      **/
     ProjectEntity queryProjectMap(String projectId);
+    /*
+     * @Author zhangwenping
+     * @Description 查询用户下面的项目数量
+     * @Date 19:17 2019/7/8
+     * @Param userId
+     * @return int
+     **/
+    int queryProjectByUserCount(Long userId);
 }

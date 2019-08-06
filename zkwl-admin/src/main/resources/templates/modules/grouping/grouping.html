@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="${request.contextPath}/statics/css/jquery_page.css">
     <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
     <script src="${request.contextPath}/statics/js/modules/project/jquery_page.js"></script>
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/layui.css">
+    <script src="${request.contextPath}/statics/js/layui.js"></script>
     <script type="text/javascript">
         document.documentElement.style.fontSize = innerWidth / 16 + 'px';
         onresize = function () {
@@ -25,6 +27,22 @@
         .table_m{max-height:36%;}
     }
     .box{margin-top:0.5%}
+    @media screen and (max-width:1100px) {
+        /*.table_m_Z{width:800px;overflow-x:scroll}*/
+        body{
+            overflow-x:scroll;
+        }
+        .table_m{
+            width: 959px;
+        }
+        .project_he{
+            width: 959px;
+        }
+        .hear{
+            width: 959px;
+        }
+
+    }
 </style>
 
 <body style="position: relative">
@@ -35,16 +53,16 @@
         <div class="hear_weather">
 
            <div class="hear_project" id="hear_project"></div>
-           <div class="hear_city hear_city_a">
+           <div class="hear_city hear_city_a" style="margin-top:5px;">
               <div>
-                  <img src="${request.contextPath}/statics/image/rdiquz.png" alt=""  class="r_sox_ioc">
+                  <img src="${request.contextPath}/statics/image/rdiquz.png" alt="" style="margin-top:-3px;" class="r_sox_ioc">
                   <span>所属城市：</span>
                   <p id="weather" style="margin-right:5%"></p>
               </div>
              <div>
                  <img src="${request.contextPath}/statics/image/tianqi.png" alt="" class="r_sox_ioc">
                  <span>天气信息：</span>
-                 <img src=""  id="img" class="r_yun_sx" >
+                 <img src=""  id="img" class="r_yun_sx" style="margin-top:-4px;">
                  <p id="T_an"> </p>
              </div>
            </div>
@@ -97,9 +115,10 @@
         </div>
         <span class="hear_w">设备分组：</span>
         <div class="form-group col-sm-2 form_input">
-            <select class="form-control" id="se_for">
-                <option></option>
-            </select>
+            <input type="text" class="form-control" id="se_for"  placeholder=" ">
+            <!--<select class="form-control" id="se_for">-->
+                <!--<option></option>-->
+            <!--</select>-->
         </div>
         <span class="hear_w">设备类型：</span>
         <div class="form-group col-sm-2 form_input">
@@ -215,7 +234,7 @@
         </div>
     </div>
 <!--移动设备-->
-          <div class="shade_Yi">
+    <div class="shade_Yi">
         <div class="shade_a shade_modifier_yi"></div>
         <div class="shade_b_yi">
             <div class="Bian_j">移动分组<span class="glyphicon glyphicon-remove guan_shc shade_modifier_yi" ></span></div>
@@ -226,11 +245,11 @@
             <div class="Dan_x" id="Dan_x">
 
             </div>
-
             <div class="sha_buttom">
-                <input type="button" value="确定" id="que_yi" >
-                <input type="button" value="取消" class="shade_modifier_yi">
+                <div id="que_yi"  class="rquebei" >确定</div>
+                <div  class="shade_modifier_yi rqubtn"  >取消</div>
             </div>
+
         </div>
     </div>
     <!--删除-->

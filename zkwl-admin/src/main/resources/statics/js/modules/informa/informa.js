@@ -30,7 +30,10 @@ $(function() {
                 var inhtml=""
                 for (var i = 0; i < res.page.list.length; i++) {
                     inhtml +=
-                        "<li>"+ '<img  src=\'"+res.page.list[i].headUrl+"\'>'+
+                        "<li>"+
+                        "<div class='D_img'>"+
+                        "<img  src='/statics/image/lingDa.svg'>"+
+                        "</div>"+
                         "<p>"+
                         "<span>系统消息</span>"+
                         "<span>"+res.page.list[i].content+"</span>"+
@@ -76,8 +79,12 @@ $(function() {
               pageNum = res.page.totalPage;  //总页数
               var html="";
               for (var i = 0; i < res.page.list.length; i++) {
+                  var head="https://guangxun-wulian.com"+res.page.list[i].headUrl
                   html +=
-                      "<li id="+ res.page.list[i].uid+">"+ '<img  src=\'"+res.page.list[i].headUrl+"\'>'+
+                      "<li id="+ res.page.list[i].uid+">"+
+                      "<div class='D_img'>"+
+                      "<img  src="+head+">"+
+                      "</div>"+
                       "<p>"+
                       "<span>"+res.page.list[i].username+"</span>"+
                       "<span>"+res.page.list[i].backContent+"</span>"+
@@ -102,7 +109,6 @@ $(function() {
                       }else{
                           alert("失败")
                       }
-
                   }
               })
               // 详情
@@ -135,12 +141,16 @@ $(function() {
                               $(".roi").css("display","none")
                               $(".ryu").css("display","block")
                           }else{
-                              alert("失败")
+                              //alert("失败")
+                              layer.open({
+                                  title: '信息',
+                                  content: res.msg,
+                                  skin: 'demo-class'
+                              });
                           }
                       }
                   })
               })
-
 
 
               function rdele(backId){
@@ -149,7 +159,7 @@ $(function() {
                       url: baseURL + 'sys/feedback/info/'+backId,
                       type: "GET",
                       success: function (res) {
-                          var headUrl = res.feedback.headUrl;
+                          var headUrl = "https://guangxun-wulian.com"+res.feedback.headUrl;
                           $("#r_imgs").attr("src",headUrl)
                           var username = res.feedback.username;
                           $("#r_tents").html(username)
@@ -163,7 +173,12 @@ $(function() {
                           $("#r_moes").html(mobile)
                           if(res.code == "200"){
                           }else{
-                              alert("失败")
+                              //alert("失败")
+                              layer.open({
+                                  title: '信息',
+                                  content: '失败',
+                                  skin: 'demo-class'
+                              });
                           }
 
                       }

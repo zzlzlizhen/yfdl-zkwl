@@ -127,6 +127,9 @@ public class ProjectServiceImpl implements ProjectService {
                         projectEntity.setLatitude(latitudeSum.toString());
                     }
 
+                }else{
+                    projectEntity.setLongitude(latitudeSum.toString());
+                    projectEntity.setLatitude(latitudeSum.toString());
                 }
 
 
@@ -138,6 +141,10 @@ public class ProjectServiceImpl implements ProjectService {
     public boolean delProject(List<String> projectList,Long updateUser) {
         return projectMapper.delProject(projectList,updateUser,new Date()) > 0 ? true : false;
     }
+
+
+
+
 
     @Override
     public boolean updateProject(ProjectEntity projectEntity) throws Exception {
@@ -154,6 +161,7 @@ public class ProjectServiceImpl implements ProjectService {
                 deviceQuery.setUpdateTime(new Date());
                 deviceQuery.setCreateUser(exclusiveUser);
                 deviceQuery.setUpdateUser(projectEntity.getCreateUser());
+                deviceQuery.setDeviceList(deviceIds);
                 return deviceService.updateUserDevice(deviceQuery) > 0 ? true : false;
             }
             return i > 0 ? true : false;
@@ -236,30 +244,37 @@ public class ProjectServiceImpl implements ProjectService {
                 offline.put(deviceEntity.getProjectId(),deviceEntity.getCounts());
             }
         }
+
+        List<DeviceEntity> deviceEntities5 = deviceService.queryDeviceByProjectCount(projectIds,DeviceEnum.ALL.getCode());//全部
+        if(CollectionUtils.isNotEmpty(deviceEntities5)){
+            for(DeviceEntity deviceEntity : deviceEntities5){
+                all.put(deviceEntity.getProjectId(),deviceEntity.getCounts());
+            }
+        }
         for (ProjectEntity projectEntity : list){
-            Integer sumCount = 0;
             if(alarm.get(projectEntity.getProjectId()) != null) {
                 projectEntity.setCallPoliceCount(alarm.get(projectEntity.getProjectId()));
-                sumCount += alarm.get(projectEntity.getProjectId());
             }
             if(fault.get(projectEntity.getProjectId()) != null) {
                 projectEntity.setFaultCount(fault.get(projectEntity.getProjectId()));
-                sumCount += fault.get(projectEntity.getProjectId());
             }
             if(normal.get(projectEntity.getProjectId()) != null) {
                 projectEntity.setNormalCount(normal.get(projectEntity.getProjectId()));
-                sumCount += normal.get(projectEntity.getProjectId());
             }
             if(offline.get(projectEntity.getProjectId()) != null) {
                 projectEntity.setOfflineCount(offline.get(projectEntity.getProjectId()));
-                sumCount += offline.get(projectEntity.getProjectId());
+            }
+            if(all.get(projectEntity.getProjectId()) != null) {
+                projectEntity.setSumCount(all.get(projectEntity.getProjectId()));
+            }else{
+                projectEntity.setSumCount(0);
             }
             projectEntity.setGatewayCount(nullData(projectEntity.getGatewayCount()));
             projectEntity.setCallPoliceCount(nullData(projectEntity.getCallPoliceCount()));
             projectEntity.setFaultCount(nullData(projectEntity.getFaultCount()));
             projectEntity.setNormalCount(nullData(projectEntity.getNormalCount()));
             projectEntity.setOfflineCount(nullData(projectEntity.getOfflineCount()));
-            projectEntity.setSumCount(sumCount);
+
         }
     }
 
@@ -328,6 +343,7 @@ public class ProjectServiceImpl implements ProjectService {
         deviceMap.put(RunStatusEnum.WARNING.getName(),0);
         deviceMap.put(RunStatusEnum.FAULT.getName(),0);
         deviceMap.put(RunStatusEnum.OFFLINE.getName(),0);
+        deviceMap.put(RunStatusEnum.UPGRADE.getName(),0);
         List<DeviceEntity> deviceList = deviceService.queryRunStateCount(projectId, groupId);
         if(CollectionUtils.isNotEmpty(deviceList)){
             for(DeviceEntity deviceEntity : deviceList){
@@ -344,6 +360,9 @@ public class ProjectServiceImpl implements ProjectService {
                 if(deviceEntity.getRunState() == RunStatusEnum.OFFLINE.getCode()){
                     deviceMap.put(RunStatusEnum.OFFLINE.getName(),deviceEntity.getCounts());
                 }
+                if(deviceEntity.getRunState() == RunStatusEnum.UPGRADE.getCode()){
+                    deviceMap.put(RunStatusEnum.UPGRADE.getName(),deviceEntity.getCounts());
+                }
             }
         }
         projectResult.setSumCount(sumCount);
@@ -354,15 +373,18 @@ public class ProjectServiceImpl implements ProjectService {
             deviceScale.put(RunStatusEnum.WARNING.getName(),bigDecimal);
             deviceScale.put(RunStatusEnum.FAULT.getName(),bigDecimal);
             deviceScale.put(RunStatusEnum.OFFLINE.getName(),bigDecimal);
+            deviceScale.put(RunStatusEnum.UPGRADE.getName(),bigDecimal);
         }else{
             Integer integer = deviceMap.get(RunStatusEnum.NORAML.getName());
             Integer integer1 = deviceMap.get(RunStatusEnum.WARNING.getName());
             Integer integer2 = deviceMap.get(RunStatusEnum.FAULT.getName());
             Integer integer3 = deviceMap.get(RunStatusEnum.OFFLINE.getName());
+            Integer integer4 = deviceMap.get(RunStatusEnum.UPGRADE.getName());
             deviceScale.put(RunStatusEnum.NORAML.getName(),new BigDecimal(integer).divide(new BigDecimal(sumCount),2,BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)));
             deviceScale.put(RunStatusEnum.WARNING.getName(),new BigDecimal(integer1).divide(new BigDecimal(sumCount),2,BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)));
             deviceScale.put(RunStatusEnum.FAULT.getName(),new BigDecimal(integer2).divide(new BigDecimal(sumCount),2,BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)));
             deviceScale.put(RunStatusEnum.OFFLINE.getName(),new BigDecimal(integer3).divide(new BigDecimal(sumCount),2,BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)));
+            deviceScale.put(RunStatusEnum.UPGRADE.getName(),new BigDecimal(integer4).divide(new BigDecimal(sumCount),2,BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)));
         }
         Set<Map.Entry<String, Integer>> entries = deviceMap.entrySet();
         for (Map.Entry<String, Integer> entry : entries){

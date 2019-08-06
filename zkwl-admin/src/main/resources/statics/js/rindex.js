@@ -20,9 +20,9 @@ $(function(){
                     var select1 = res.user.roleId;
                     var  n_ame
                     if(res.user.roleId == 1){
-                        n_ame="使用者"
-                    }else if(res.user.roleId == 2){
                         n_ame="管理者"
+                    }else if(res.user.roleId == 2){
+                        n_ame="使用者"
                     }
 
                     var html="";
@@ -39,7 +39,12 @@ $(function(){
                     $("#r_rlp").val(r_rlp);
                     //    头像
                     var url = res.user.headUrl;
-                    $("#pic").attr("src","https://39.97.169.198"+url);
+                    if(url !=""){
+                        $("#pic").attr("src","https://guangxun-wulian.com"+url);
+                    }else{
+                        $("#pic").attr("src", "/statics/image/touXa.svg");
+                    }
+
                 } else {
                     console.log(res.msg);
                 }
@@ -53,8 +58,9 @@ $(function(){
     $("#feedback").click(function(){
         $(".JI_b_a,.nei_r_a,.shade_a").show();
     })
-    $(".shade_a,.wrong").click(function(){
+    $(".shade_a,.wrong,.sha_cancel").click(function(){
         $(".JI_b_a,.nei_r_a,.shade_a").hide();
+        $(".mistake").hide();
     })
     //验证码
     $(".r_be,.r_be_a").click(function(){
@@ -72,7 +78,6 @@ $(function(){
         var r_ph_fan = $("#r_ph_fan").val();
         //内容
         var r_wen_fan = $("#r_wen_fan").val();
-
         if(rTitle ==""||r_eml_fan ==""||r_ph_fan==""||r_wen_fan==""){
             $(".rrbol").html("输入不能為空");
             lay()
@@ -93,7 +98,6 @@ $(function(){
                 return false;
             }
 
-
             $.ajax({
                 url:'sys/feedback/save',
                 type: "POST",
@@ -105,14 +109,25 @@ $(function(){
                 success: function (res) {
                     console.log(JSON.stringify(res));
                     if (res.code == "200") {
-                        alert('提交成功');
+                       // alert('提交成功');
+                        $(".mistake").hide();
+                        layer.open({
+                            title: '信息',
+                            content: '提交成功',
+                            skin: 'demo-class'
+                        });
                         $("#rTitle").val("");
                         $("#r_eml_fan").val("");
                         $("#r_ph_fan").val("");
                         $("#r_wen_fan").val("");
                         $(".JI_b_a,.nei_r_a,.shade_a").hide();
                     } else {
-                        alert(res.msg);
+                        //alert(res.msg);
+                        layer.open({
+                            title: '信息',
+                            content: 'res.msg',
+                            skin: 'demo-class'
+                        });
                     }
                 }
             })

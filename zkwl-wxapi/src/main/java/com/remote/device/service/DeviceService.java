@@ -94,4 +94,8 @@ public interface DeviceService {
      * @return DeviceEntity
      **/
     DeviceEntity queryDeviceByGroupIdTopOne(String groupId);
+    /**
+     * 通过当前用户id查询所有子孙用户的设备数量
+     * */
+    Integer getDeviceCount(List<Long> userIds);
 }

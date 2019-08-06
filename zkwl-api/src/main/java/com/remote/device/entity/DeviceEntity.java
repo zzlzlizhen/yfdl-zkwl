@@ -1,7 +1,7 @@
 package com.remote.device.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.remote.advancedsetting.AdvancedSettingEntity;
+import com.remote.advancedsetting.entity.AdvancedSettingEntity;
 import lombok.Data;
 
 import java.util.Date;
@@ -144,4 +144,6 @@ public class DeviceEntity  extends AdvancedSettingEntity{
     private Integer runDay;
     //1代表设备升级    2 代表操作设备
     private Integer status;
+    //操作版本号
+    private Integer deviceVersion;
 }

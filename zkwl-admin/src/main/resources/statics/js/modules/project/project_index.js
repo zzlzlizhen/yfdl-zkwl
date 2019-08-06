@@ -1,9 +1,7 @@
 $(function () {
-
     var pages
     var pageSize //每页条数
     var pageNum //数据返回第几页
-
     var serial_a=""
     var pro_name_a=""
     var select_a=""
@@ -11,7 +9,7 @@ $(function () {
     $("#pandect").click(function () {
         window.open("../pandect/pandect.html")
     })
-
+    var $color = localStorage.getItem("mycolor");
     //用户信息
     $.ajax({
         url:baseURL + 'sys/user/nameList',
@@ -34,17 +32,13 @@ $(function () {
         type:"get",
         data:{},
         success: function(res) {
-            console.log("999999999999999999999999")
-            console.log("所属城市")
-            console.log(res)
             var html=""
             for( var i=0 ;i< res.data.length;i++){
                 html+="<option id="+res.data[i].id+">"+res.data[i].districtName+"</option>"
             }
-            $("#selectb").append(html)
+            $("#selectb").append(html);
         }
     })
-
 
     //搜索
     $("#proje_search").unbind('click');
@@ -55,10 +49,9 @@ $(function () {
         $("#div").html("")
        form(pageSize,pageNum,serial,pro_name,select)
     })
-
+    var proid
     //渲染表格
-    form(10,1,"","","")
-
+    form(10,1,"","","");
     function form(pageSizea,pagesa,serial,pro_name,select){
         $.ajax({
             url:baseURL + 'fun/project/queryProject',
@@ -100,8 +93,10 @@ $(function () {
                      "</td>\n" +
                      "</tr>"
                 }
-                $("#div").append(html)
-
+                $("#div").empty().append(html);
+                if($color == 2){
+                    $("#proje_add,.modifier,.deleteq").hide();
+                }
             //   删除
                 var id
                 $(".deleteq").unbind('click');
@@ -117,9 +112,20 @@ $(function () {
                         type:"get",
                         data:{},
                         success: function(res) {
-                          console.log("删除")
-                          console.log(res)
-                          window.location.reload()
+                            if(res.code == 200){
+                                layer.open({
+                                    title: '信息',
+                                    content: '删除成功',
+                                    skin: 'demo-class'
+                                });
+                                form(10,1,"","","");
+                            }else{
+                                layer.open({
+                                    title: '信息',
+                                    content: res.msg,
+                                    skin: 'demo-class'
+                                });
+                            }
                         }
                     })
                 })
@@ -136,7 +142,7 @@ $(function () {
                     location.href =searchUrl;
                 })
             // 编辑
-                var proid
+
                 $(".modifier").unbind('click');
                 $(".modifier").click(function(){
                     $(".shade_modifier,.shade_b_modifier").css("display","block");
@@ -148,15 +154,12 @@ $(function () {
                     var r_rrna = $(this).parent().siblings(".exclusiveUser").html();
                     $("#select1_b").val(r_rrna);
 
-                    // var cheng = $(this).parent().siblings(".exclusiveUser").html();
-                    // $("#select1_n").val(cheng);
                 })
                 $("#confirm_x").unbind('click');
                 $("#confirm_x").click(function(){
-                    var pro_name_b= $(".pro_name_b").val()
-                    var pro_s_b= $(".pro_s_b").val()
+                    var pro_name_b= $(".pro_name_b").val();
+                    var pro_s_b= $(".pro_s_b").val();
                     var select_b=$("#select1_b option:selected").attr("id");
-                    var select_b=$("#select1_n option:selected").attr("id");
                     //正则  丸子
                     if(pro_name_b ==""||select_b=="") {
                         $(".mistake").css("display","block")
@@ -172,12 +175,21 @@ $(function () {
                                 "exclusiveUser":select_b,
                             }),
                             success: function(res){
-                                console.log("77777777777777777777")
-                                console.log(res)
                                 if(res.code == 200){
-                                    window.location.reload()
+                                    $(".shade_modifier").hide()
+                                    $(".mistake").hide()
+                                    layer.open({
+                                        title: '信息',
+                                        content: '修改成功',
+                                        skin: 'demo-class'
+                                    });
+                                    form(10,1,"","","");
                                 }else{
-                                    alert(res.msg)
+                                    layer.open({
+                                        title: '信息',
+                                        content: res.msg,
+                                        skin: 'demo-class'
+                                    });
                                 }
                             }
                         });
@@ -239,8 +251,7 @@ $(function () {
        var pro_name= $(".pro_name").val()
        var pro_s_b= $(".pro_s_b_add").val()
        var select=$("#select1 option:selected").attr("id");
-        var selecte=$("#selectb option:selected").attr("id");
-       console.log(selecte)
+        var selecte=Number($("#selectb option:selected").attr("id"));
         //正则  丸子
         if(pro_name ==""||pro_s_b==""||select==""||selecte=="" ) {
             $(".mistake").css("display","block")
@@ -256,16 +267,24 @@ $(function () {
                     "cityId ":selecte,
                 }),
                 success: function(res){
-                    console.log("///////////////////")
-                    console.log("res")
                     if(res.code == 200){
                         $(".pro_name").val("")
                         $("#select1").val("")
                         $("#selectb").val("")
                         $(".pro_s_b").val("")
-                        window.location.reload()
+                        $(".shade_project").hide()
+                        layer.open({
+                            title: '信息',
+                            content: '添加成功',
+                            skin: 'demo-class'
+                        });
+                        form(10, 1, "", "", "", "")
                     }else{
-                        alert(res.msg)
+                        layer.open({
+                            title: '信息',
+                            content: res.msg,
+                            skin: 'demo-class'
+                        });
                     }
 
                 }
@@ -277,6 +296,7 @@ $(function () {
     //编辑去弹窗/////////////////////////////////
      $(".shade_modifier_project").click(function(){
          $(".shade_modifier,.shade_b_modifier.mistake").css("display","none")
+         $(".mistake").css("display","none")
      })
     $(".rqubtn,.shade_a_delete").click(function () {
         $(".shade_delete,.shade_b_delete.mistake").css("display", "none")

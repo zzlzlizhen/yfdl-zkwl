@@ -139,9 +139,8 @@ public class Utils {
 
 
     public static void main(String[] args) {
-        BigDecimal bd1 = new BigDecimal(Double.toString(7));
-        double v = bd1.divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP).doubleValue();
-        System.out.println(v);
+        double mul = mul(12.7, 1.7);
+        System.out.println(mul);
     }
 
 

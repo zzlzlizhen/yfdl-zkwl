@@ -77,7 +77,7 @@ public class UserRealm extends AuthorizingRealm {
 		UsernamePasswordToken token = (UsernamePasswordToken)authcToken;
 
 		//查询用户信息
-		SysUserEntity user = sysUserDao.selectOne(new QueryWrapper<SysUserEntity>().eq("username", token.getUsername()));
+		SysUserEntity user = sysUserDao.selectOne(new QueryWrapper<SysUserEntity>().eq("flag",1).eq("username", token.getUsername()));
 		//账号不存在
 		if(user == null) {
 			throw new UnknownAccountException("账号或密码不正确");

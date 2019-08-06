@@ -1,7 +1,11 @@
 package com.remote.common.netty;
 
 import com.alibaba.fastjson.JSONObject;
+import com.remote.advancedsetting.entity.AdvancedSettingEntity;
+import com.remote.advancedsetting.service.AdvancedSettingService;
 import com.remote.common.CommonEntity;
+import com.remote.common.SetUp;
+import com.remote.common.enums.RunStatusEnum;
 import com.remote.common.redis.CacheUtils;
 import com.remote.device.entity.DeviceEntity;
 import com.remote.device.service.DeviceService;
@@ -10,6 +14,8 @@ import com.remote.history.entity.HistoryMouth;
 import com.remote.history.service.HistoryService;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+
+
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelId;
@@ -19,11 +25,13 @@ import io.netty.handler.timeout.IdleStateEvent;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.net.InetSocketAddress;
@@ -50,25 +58,38 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
     @RabbitListener(queues = "topic.upload")//upgrade
     @RabbitHandler
-    public void upgrade(String str) {
-        if(!"".equals(str)){
-            log.info("MQ操作设备消费消息："+str);
-            JSONObject jsonObject = JSONObject.parseObject(str);
-            DeviceEntity deviceEntity = JSONObject.toJavaObject(jsonObject, DeviceEntity.class);
-            //操作设备和设备升级
-            onWhile(deviceEntity);
+    public void upgrade(String str, com.rabbitmq.client.Channel channel, Message message) throws IOException {
+        try{
+            if(!"".equals(str)){
+                log.info("MQ操作设备消费消息："+str);
+                JSONObject jsonObject = JSONObject.parseObject(str);
+                DeviceEntity deviceEntity = JSONObject.toJavaObject(jsonObject, DeviceEntity.class);
+                //操作设备和设备升级
+                onWhile(deviceEntity);
+            }
         }
+        catch(Exception e){
+            log.info("MQ操作设备报文有误");
+            channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
+        }
+
     }
 
     @RabbitListener(queues = "topic.upgrade")//upload
     @RabbitHandler
-    public void upload(String str) {
-        if(!"".equals(str)){
-            log.info("MQ设备升级消费消息："+str);
-            JSONObject jsonObject = JSONObject.parseObject(str);
-            DeviceEntity deviceEntity = JSONObject.toJavaObject(jsonObject, DeviceEntity.class);
-            //操作设备和设备升级
-            onWhile(deviceEntity);
+    public void upload(String str, com.rabbitmq.client.Channel channel, Message message) throws IOException {
+        try{
+            if(!"".equals(str)){
+                log.info("MQ设备升级消费消息："+str);
+                JSONObject jsonObject = JSONObject.parseObject(str);
+                DeviceEntity deviceEntity = JSONObject.toJavaObject(jsonObject, DeviceEntity.class);
+                //操作设备和设备升级
+                onWhile(deviceEntity);
+            }
+        }
+        catch(Exception e){
+            log.info("MQ设备升级报文有误");
+            channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
         }
     }
 
@@ -89,14 +110,23 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                     String encrypt = Utils.encrypt(deviceSN);
                     DeviceInfo result = null;
                     if(deviceEntity.getStatus().equals(new Integer(2))){
+
                         //需要客户端的设备信息
                         result = new DeviceInfo(4,0,encrypt,deviceEntity.getDeviceType(),deviceSN);
                         list.addAll(deviceEntity.getKey());
                         value.addAll(deviceEntity.getValue());
+
                         result.setKey(list);
                         result.setValue(value);
                         result.setDataLen(list.size());
-                        log.info("操作设备"+deviceSN+"："+JSONObject.toJSONString(result));
+                        DeviceService deviceTemp = (DeviceService)SpringUtils.getBean("deviceServiceImpl");
+                        int i = deviceTemp.updateDeviceVersionByCode(deviceSN);
+                        DeviceEntity temp = deviceTemp.queryDeviceByCode(deviceSN);
+                        list.add(6);
+                        value.add(temp.getDeviceVersion());
+                        if(i > 0){
+                            log.info("操作设备"+deviceSN+"："+JSONObject.toJSONString(result));
+                        }
                     }else if(deviceEntity.getStatus().equals(new Integer(1))){
                         result = new DeviceInfo(2,deviceEntity.getVersion(),encrypt,deviceEntity.getDeviceType(),deviceSN);
                         result.setKey(list);
@@ -108,6 +138,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                     ByteBuf byteBuf = Unpooled.copiedBuffer(bytes);
                     Channel channel = ctx.channel();
                     channel.writeAndFlush(byteBuf);
+
+
                 }else{
                     log.info("设备未连接");
                 }
@@ -205,7 +237,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         //cmdId 5 或者 6 代表是正确数据
 
         if(cmdId == 5){
-            length = 200;
+            length = 204;
         }else if(cmdId == 6 || cmdId == 8 || cmdId == 1){
             length = 56;
         }
@@ -254,7 +286,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
              */
             if(deviceInfo.getCmdID().equals(new Integer(5))){
                 //5终端发送需要上报的类型值 拿到客户端向服务端返回的设备信息做处理
-                dataAnalysis(deviceInfo);
+                dataAnalysis(deviceInfo,ctx.channel().id());
             }else if(deviceInfo.getCmdID().equals(new Integer(6))){
                 //更新版本
                 updateVersion(deviceInfo, ctx.channel().id());
@@ -288,6 +320,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         ByteBuf byteBuf = Unpooled.copiedBuffer(bytes);
         Channel channel = ctx.channel();
         channel.writeAndFlush(byteBuf);
+        DeviceService deviceService = (DeviceService)SpringUtils.getBean("deviceServiceImpl");
+        deviceService.updateDeviceTimeOutByCode(deviceInfo.getDevSN(),RunStatusEnum.NORAML.getCode());
         log.info(deviceInfo.getDevSN()+"当前时刻信息获取完毕");
     }
 
@@ -334,7 +368,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
 
     //数据格式解析
-    public void dataAnalysis(DeviceInfo deviceInfo) throws Exception {
+    public void dataAnalysis(DeviceInfo deviceInfo,ChannelId channelId) throws Exception {
+        ChannelHandlerContext ctx = CHANNEL_MAP.get(channelId.asShortText());
         List<Integer> upKey = deviceInfo.getKey();
         List<Integer> upValue = deviceInfo.getValue();
         List<String> dataKey = new ArrayList<>();
@@ -358,20 +393,70 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             for (String str : dataKey){
                 Field field = common.getClass().getDeclaredField(str);
                 Integer value = upValue.get(index);
+                field.setAccessible(true);
                 if (field.getGenericType().toString().equals("class java.lang.String")) {
-                    field.setAccessible(true);
                     field.set(common,value.toString());
                 }else if (field.getGenericType().toString().equals("class java.lang.Integer")) {
-                    field.setAccessible(true);
                     field.set(common,value);
                 }else if (field.getGenericType().toString().equals("class java.lang.Double")) {
-                    field.setAccessible(true);
                     field.set(common, Double.valueOf(value.toString()));
                 }
                 index ++;
             }
         }
+        //代表有些设备没有操作成功
+        if(common.getDeviceVersion() != deviceEntity.getDeviceVersion()){
+            Thread.sleep(10000);
+            SetUp setUp = new SetUp();
+            log.info(deviceEntity.getDeviceCode() + "设备没有操作成功，重新下发数据");
+            AdvancedSettingService advancedSettingService = (AdvancedSettingService)SpringUtils.getBean("advancedSettingServiceImpl");
 
+            List<Integer> key = new ArrayList<>(48);
+            List<Integer> value = new ArrayList<>(48);
+            //添加所有key
+            for(Map.Entry<Integer, String> entry : RealTimeMap.realTimeMap.entrySet()){
+                key.add(entry.getKey());
+            }
+            AdvancedSettingEntity advancedSettingEntity = advancedSettingService.queryByDeviceCode(deviceEntity.getDeviceCode());
+            BeanUtils.copyProperties(advancedSettingEntity, deviceEntity);
+            BeanUtils.copyProperties(deviceEntity, setUp);
+            if(key != null && key.size() > 0){
+                for (Integer inde : key){
+                    Field field = setUp.getClass().getDeclaredField(RealTimeMap.realTimeMap.get(inde));
+                    field.setAccessible(true);
+                    if (field.getGenericType().toString().equals("class java.lang.String")) {
+                        String str = (String)field.get(setUp);
+                        if(str == null){
+                            value.add(0);
+                        }else{
+                            value.add(Integer.valueOf(str));
+                        }
+
+                    }else if (field.getGenericType().toString().equals("class java.lang.Integer")) {
+                        Integer inte = (Integer)field.get(setUp);
+                        if(inte == null){
+                            value.add(0);
+                        }else{
+                            value.add(inte);
+                        }
+                    }
+                }
+            }
+
+            String encrypt = Utils.encrypt(deviceEntity.getDeviceCode());
+            DeviceInfo result = new DeviceInfo(4,0,encrypt,deviceEntity.getDeviceType(),deviceEntity.getDeviceCode());
+            key.add(6);
+            value.add(deviceEntity.getDeviceVersion());
+            result.setKey(key);
+            result.setValue(value);
+            result.setDataLen(key.size());
+            log.info(deviceEntity.getDeviceCode() + "设备重新操作："+JSONObject.toJSONString(result));
+            //转换成字节
+            byte[] bytes = HexConvert.hexStringToBytes(result);
+            ByteBuf byteBuf = Unpooled.copiedBuffer(bytes);
+            Channel channel = ctx.channel();
+            channel.writeAndFlush(byteBuf);
+        }
         //转换参数信息
         convert(common);
         //所有设备属性都映射到公共的类中，需要哪些信息，自行转换 start
@@ -407,11 +492,11 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         }
         //放电电流
         if(common.getDischargeCurrent() != null){
-            common.setDischargeCurrent(Utils.div(common.getDischargeCurrent(),1));
+            common.setDischargeCurrent(Utils.div(common.getDischargeCurrent(),2));
         }
         //充电电流
         if(common.getChargingCurrent() != null){
-            common.setChargingCurrent(Utils.div(common.getChargingCurrent(),1));
+            common.setChargingCurrent(Utils.div(common.getChargingCurrent(),2));
         }
         //电池电压
         if(common.getBatteryVoltage() != null){
@@ -484,7 +569,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                 try{
                     deviceCode = cacheUtils.get(ctx.channel().id().asShortText()).toString();
                     DeviceService deviceService = (DeviceService)SpringUtils.getBean("deviceServiceImpl");
-                    deviceService.updateDeviceTimeOutByCode(deviceCode);
+                    deviceService.updateDeviceTimeOutByCode(deviceCode,RunStatusEnum.OFFLINE.getCode());
                 }catch (Exception e){
 
                 }
@@ -511,7 +596,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         CacheUtils cacheUtils = (CacheUtils)SpringUtils.getBean("cacheUtils");
         String deviceCode = cacheUtils.get(ctx.channel().id().asShortText()).toString();
         DeviceService deviceService = (DeviceService)SpringUtils.getBean("deviceServiceImpl");
-        deviceService.updateDeviceTimeOutByCode(deviceCode);
+        deviceService.updateDeviceTimeOutByCode(deviceCode,RunStatusEnum.OFFLINE.getCode());
         ctx.close();
         CHANNEL_MAP.remove(ctx.channel().id().asShortText());
         log.info(ctx.channel().id() + " 发生了错误,此连接被关闭" + "此时连通数量: " + CHANNEL_MAP.size());

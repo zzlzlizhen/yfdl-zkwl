@@ -18,7 +18,7 @@ public interface DeviceService {
      * @Description 根据分组查询设备（分页）
      * @Date 13:50 2019/6/4
      * @Param deviceQuery
-     * @return PageInfo<DeviceEntity>
+     * @return PageInfo<DeviceEsEntity>
      **/
     PageInfo<DeviceEntity> queryDevice(DeviceQuery deviceQuery) throws Exception;
     /*
@@ -59,7 +59,7 @@ public interface DeviceService {
      * @Description 查询设备信息 不分页
      * @Date 13:29 2019/6/6
      * @Param deviceQuery
-     * @return  List<DeviceEntity>
+     * @return  List<DeviceEsEntity>
      **/
     List<DeviceEntity> queryDeviceNoPage(DeviceQuery deviceQuery);
     /*
@@ -67,7 +67,7 @@ public interface DeviceService {
      * @Description 查询分组下设备数量
      * @Date 10:56 2019/6/18
      * @Param groupIds deviceStatus projectIds
-     * @return  List<DeviceEntity>
+     * @return  List<DeviceEsEntity>
      **/
     List<DeviceEntity> queryDeviceByGroupCount(List<String> groupIds,String projectId,Integer deviceStatus);
     /*
@@ -75,7 +75,7 @@ public interface DeviceService {
      * @Description 查询项目下设备各状态数量
      * @Date 11:23 2019/6/18
      * @Param groupIds deviceStatus projectIds
-     * @return List<DeviceEntity>
+     * @return List<DeviceEsEntity>
      **/
     List<DeviceEntity> queryDeviceByProjectCount(List<String> projectIds,Integer deviceStatus);
 
@@ -84,7 +84,7 @@ public interface DeviceService {
      * @Description 查询分组详情
      * @Date 17:26 2019/6/19
      * @Param deviceId
-     * @return DeviceEntity
+     * @return DeviceEsEntity
      **/
     DeviceResult queryDeviceByDeviceId(String deviceId);
     /*
@@ -92,7 +92,7 @@ public interface DeviceService {
      * @Description 按照城市统计安装路灯数量
      * @Date 14:33 2019/6/20
      * @Param userId
-     * @return  List<DeviceEntity>
+     * @return  List<DeviceEsEntity>
      **/
     List<Map<Object,Object>> queryCountGroupByCity(Long userId);
     /*
@@ -127,7 +127,7 @@ public interface DeviceService {
      * @Description 根据项目或者分组统计其下所有设备
      * @Date 11:23 2019/6/18
      * @Param projectId groupId
-     * @return List<DeviceEntity>
+     * @return List<DeviceEsEntity>
      **/
     List<DeviceEntity> queryRunStateCount(String projectId,String groupId);
 
@@ -163,7 +163,7 @@ public interface DeviceService {
      * @Description 根据分组查询设备的第一条
      * @Date 16:37 2019/7/17
      * @Param groupId
-     * @return DeviceEntity
+     * @return DeviceEsEntity
      **/
     DeviceEntity queryDeviceByGroupIdTopOne(String groupId);
     /*

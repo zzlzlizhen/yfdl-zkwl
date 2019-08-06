@@ -1,6 +1,23 @@
 $(function(){
     //    数值增殖期
     (function ($) {
+        $("#r_teml_thglte,#r_teml_thglt").keyup(function(){
+            var $this = $(this);
+            $this.val($this.val().replace(/[^\-?\d.]/g,'')); //输入负数或正数
+            if($this.val()<-40){
+                alert("输入的值不允许小于-40")
+                $this.val("")
+            }
+        });
+
+        $("#r_teml_thet,#r_teml_thete").keyup(function(){
+            var $this = $(this);
+            if($this.val()>99){
+                alert("输入的值不允许大于99")
+                $this.val("")
+            }
+        });
+
         $('.spinner .btn:first-of-type').on('click', function () {
             // console.log( $(this).parent().siblings(".form-control").val() )
             $(this).parent().siblings(".form-control").val(parseInt($(this).parent().siblings(".form-control").val(), 0) + 1);
@@ -22,6 +39,8 @@ $(function(){
                 $(this).parent().siblings(".form-control").val("99")
             }
         })
+
+
 
     })(jQuery);
 
@@ -53,7 +72,7 @@ $(function(){
     var type=href['type'];
     //设备名称
     var name=href['name'];
-    console.log("Code++=")
+    console.log("设备deviceCode")
     console.log(deviceCode)
     console.log("分组id")
     console.log(grod)
@@ -63,10 +82,16 @@ $(function(){
     console.log(type)
     $("#bian").html("编号:"+deviceCode+">")
     $("#bian_b").html("名称:"+name)
-    // f([1,2,3,4,5,6,7,8,9,10,11,12],[],[],[],[],[],
-    //     [],[],[],[],[])
-
-
+    $.ajax({
+        url: baseURL + 'fun/history/getUsers',
+        contentType: "application/json;charset=UTF-8",
+        type: "get",
+        success: function (res) {
+            if (res.data.username == "admin" || res.data.username == "test01") {
+                $("#hardware").show();
+            }
+        }
+    })
 
     //判断高级设置页面针对是单台设备还是多台设备（做处理）
     if(deviceCode != "" ){
@@ -78,17 +103,22 @@ $(function(){
         var str_m="" + date1.getFullYear() + "-" + (date1.getMonth()- 5)
         var str_F="" + (date1.getFullYear()-3)
         var selse
-        console.log("11111111")
-        console.log(stra)
-        day(deviceCode,stra);
-        $("#sele_con").unbind('click');
-        $("#sele_con").click(function () {
+        function getNow(s) {
+            return s < 10 ?  + s: s;
+        }
+        var year=myDate.getFullYear();//获取当前年
+        var month=myDate.getMonth()+1;//获取当前月
+        var date=myDate.getDate();//获取当前日
+        var now=year+'-'+getNow(month)+"-"+getNow(date);
+
+        day(deviceCode,now);
+        $("#d421").val(now);
+        var data={dateFmt:'yyyy-M-d',minDate:str,maxDate:'%y-%M-%d'}
+        var data_a
+        $("#sele_con").change(function () {
             var selectId = $('#sele_con>option:selected').attr("id");
             selse=selectId
-        })
-        $("#d421").unbind('click');
-        $("#d421").click(function(){
-            var data
+            data_a=1
             if(selse == "1"){
                 data={dateFmt:'yyyy-M-d',minDate:str,maxDate:'%y-%M-%d'};
             }else if(selse == "2"){
@@ -96,8 +126,13 @@ $(function(){
             }else if(selse == "3"){
                 data={dateFmt:'yyyy',minDate:str_F,maxDate:'%y'};
             }
-            WdatePicker(data)
         })
+
+        $("#d421").click(function(){
+            console.log(data);
+            WdatePicker(data);
+        });
+
         $("#statistics").unbind('click');
         $("#statistics").click(function () {
             selse = $('#sele_con>option:selected').attr("id");
@@ -110,6 +145,11 @@ $(function(){
                 Year(deviceCode,va_l);
             }
         })
+    }else if(deviceCode == ""){
+         $("#opt").addClass("cur").siblings().removeClass('cur');
+         $("#op_a").addClass("on").siblings().removeClass('on');
+         $(".history").css({"pointer-events":"none","color":"#ccc"});
+         gao();
     }
 
     var dischargeCapacityList ;//放电量
@@ -133,7 +173,7 @@ $(function(){
             type: "get",
             data: {},
             success: function (res) {
-                console.log("日")
+                console.log("日");
                 console.log(res);
                 dischargeCapacityList=res.data.loadPowerList;//放电量/负载功率
                 chargingCapacityList=res.data.chargingPowerList;  //充电量/充电功率
@@ -148,9 +188,6 @@ $(function(){
                 hours=res.data.hours; //X坐标
                 newHours=res.data.newHours;
                 newH="1";
-                if(res.data.userName =="admin" || res.data.userName =="test01"){
-                   $("#hardware,#hardware_a").show();
-                }
                 f(hours,newHours,newH,dischargeCapacityList,chargingCapacityList,chargingCurrentList,dischargeCurrentList,batteryVoltageList,ambientTemperatureList,internalTemperatureList,visitorsFlowrateList,inductionFrequencyList,meteorologicalList)
             }
         })
@@ -205,7 +242,7 @@ $(function(){
         })
     }
 
-
+    $(".tab li").unbind('click');
     $(".tab li").click(function() {
         $(".tab li").eq($(this).index()).addClass("cur").siblings().removeClass('cur');
         $(".option_a>.option").hide().eq($(this).index()).show();
@@ -222,6 +259,7 @@ $(function(){
         $("#r_cl").click(function(){
             window.location.reload();
         })
+
 //高级设置自定义
         $("#custom").click(function(){
             var select=$("#custom option:selected").attr("class");
@@ -230,7 +268,9 @@ $(function(){
             }else{
                 $(".shade_project,.shade_b_project,.Bian_j").hide();
             }
+
         })
+
         $(".shade_add_project").click(function(){
             $(".shade_project,.shade_b_project,.Bian_j").hide();
         })
@@ -275,7 +315,7 @@ $(function(){
             url(ur)
             $("input").blur(function(){
                 if($(this).val() == ""){
-                    alert("input输入不能为空");
+                    alert("输入不能为空");
                     flag=false
                 }else{
                     flag=true
@@ -287,6 +327,9 @@ $(function(){
                 if(!flag){
                     return
                 }
+
+
+
                 //负载
                 var loadWorkMode = parseInt($("#select1_b option:selected").attr("class"));   //负载工作模式
                 var powerLoad = parseInt($("#r_Load_power").val()*100); //负载功率
@@ -342,13 +385,13 @@ $(function(){
                 var inspectionTime=parseInt($("#r_teml_thgl option:selected").attr("class")); //巡检时间
                 var icharge= parseInt($("#r_inpl_tw").val())*100;//充电电流
                 // 第一阶段
-                var firDownPower = parseInt($("#slideTest_a").children().children(".layui-slider-bar").width()*100 );//一阶降压功率
+                var firDownPower = parseInt($("#slideTest_a").val()*100 );//一阶降压功率
                 var firReducAmplitude = parseInt($("#slideTest_b").children().children(".layui-slider-bar").width());//一阶降功率幅度
                 // 第二阶段
-                var twoDownPower = parseInt($("#slideTest_c").children().children(".layui-slider-bar").width()*100);//二阶降压功率
+                var twoDownPower = parseInt($("#slideTest_c").val()*100);//二阶降压功率
                 var twoReducAmplitude = parseInt($("#slideTest_d").children().children(".layui-slider-bar").width());//二阶降功率幅度
                 // 第三阶段
-                var threeDownPower = parseInt($("#slideTest_e").children().children(".layui-slider-bar").width()*100);//三阶降压功率
+                var threeDownPower = parseInt($("#slideTest_e").val()*100);//三阶降压功率
                 var threeReducAmplitude = parseInt($("#slideTest_f").children().children(".layui-slider-bar").width());//三阶降功率幅度
                 var se_a
                 var se_b
@@ -490,7 +533,7 @@ $(function(){
             url(ur)
             $("input").blur(function(){
                 if($(this).val() == ""){
-                    alert("input输入不能为空");
+                    alert("输入不能为空");
                     flag=false
                 }else{
                     flag=true
@@ -554,13 +597,13 @@ $(function(){
                 var icharge=parseInt($("#r_inpl_tw").val())*100;//充电电流
                 //自定义
                 // 第一阶段
-                var firDownPower = parseInt($("#slideTest_a").children().children(".layui-slider-bar").width()*100 );//一阶降压功率
+                var firDownPower = parseInt($("#slideTest_a").val()*100 );//一阶降压功率
                 var firReducAmplitude = parseInt($("#slideTest_b").children().children(".layui-slider-bar").width());//一阶降功率幅度
                 // 第二阶段
-                var twoDownPower = parseInt($("#slideTest_c").children().children(".layui-slider-bar").width()*100);//二阶降压功率
+                var twoDownPower = parseInt($("#slideTest_c").val()*100);//二阶降压功率
                 var twoReducAmplitude = parseInt($("#slideTest_d").children().children(".layui-slider-bar").width());//二阶降功率幅度
                 //第三阶段
-                var threeDownPower = parseInt($("#slideTest_e").children().children(".layui-slider-bar").width()*100);//三阶降压功率
+                var threeDownPower = parseInt($("#slideTest_e").val()*100);//三阶降压功率
                 var threeReducAmplitude = parseInt($("#slideTest_f").children().children(".layui-slider-bar").width());//三阶降功率幅度
                 var se_a
                 var se_b
@@ -765,6 +808,20 @@ $(function(){
                         }
                         $("#r_select_b").val(batType);//电池类型
 
+                        var savingSwitch=res.info.savingSwitch;
+                        if(savingSwitch == 0){
+                            savingSwitch="关"
+                        }else if(savingSwitch == 1){
+                            savingSwitch="自定义"
+                        }else if(savingSwitch == 2){
+                            savingSwitch="智能1级"
+                        }else if(savingSwitch == 3){
+                            savingSwitch="智能2级"
+                        }else if(savingSwitch == 4){
+                            savingSwitch="智能3级"
+                        }
+                        $("#custom").val(savingSwitch);//智能节能开关
+
                         $("#r_inpl_one").val(res.info.volOverDisCharge/100);//过放电压
                         $("#r_inpl_tw").val(res.info.icharge/100);//充电电流
                         $("#chong").val(res.info.volCharge/100);//充电电压
@@ -887,22 +944,104 @@ $(function(){
                         $("#slideTest15").children().children(".layui-slider-bar").css("width", res.info.autoSleepTime + "%");//自动休眠
                         $("#slideTest15").children().children(".layui-slider-wrap").css("left", res.info.autoSleepTime + "%");
                         $("#slideTest15").children().children().children(".layui-input").val(res.info.autoSleepTime);
+                        layui.use('slider', function(){
+                            var $ = layui.$
+                                ,slider = layui.slider;
+                            slider.render({
+                                elem: '#slideTest4'
+                                ,theme: '#1E9FFF' //主题色
+                                ,input: true //输入框
+                                ,type: 'vertical' //垂直滑块
+                                ,value: res.info.powerPeople1//初始值
+                            });
+                            slider.render({
+                                elem: '#slideTest5'
+                                ,theme: '#1E9FFF' //主题色
+                                ,input: true //输入框
+                                ,type: 'vertical' //垂直滑块
+                                ,value: res.info.powerSensor1 //初始值
+                            });
+                            slider.render({
+                                elem: '#slideTest12'
+                                ,theme: '#1E9FFF' //主题色
+                                ,input: true //输入框
+                                ,type: 'vertical' //垂直滑块
+                                ,value: res.info.powerPeople2 //初始值
+                            });
+                            slider.render({
+                                elem: '#slideTest16'
+                                ,theme: '#1E9FFF' //主题色
+                                ,input: true //输入框
+                                ,type: 'vertical' //垂直滑块
+                                ,value: res.info.powerSensor2 //初始值
+                            });
+                            slider.render({
+                                elem: '#slideTest8'
+                                ,theme: '#1E9FFF' //主题色
+                                ,input: true //输入框
+                                ,type: 'vertical' //垂直滑块
+                                ,value: res.info.powerPeople3 //初始值
+                            });
+                            slider.render({
+                                elem: '#slideTest9'
+                                ,theme: '#1E9FFF' //主题色
+                                ,input: true //输入框
+                                ,type: 'vertical' //垂直滑块
+                                ,value: res.info.powerSensor3 //初始值
+                            });
+                            slider.render({
+                                elem: '#slideTest10'
+                                ,theme: '#1E9FFF' //主题色
+                                ,input: true //输入框
+                                ,type: 'vertical' //垂直滑块
+                                ,value: res.info.powerPeople4 //初始值
+                            });
+                            slider.render({
+                                elem: '#slideTest11'
+                                ,theme: '#1E9FFF' //主题色
+                                ,input: true //输入框
+                                ,type: 'vertical' //垂直滑块
+                                ,value: res.info.powerSensor4 //初始值
+                            });
+                            slider.render({
+                                elem: '#slideTest13'
+                                ,theme: '#1E9FFF' //主题色
+                                ,input: true //输入框
+                                ,type: 'vertical' //垂直滑块
+                                ,value: res.info.powerPeople5 //初始值
+                            });
+                            slider.render({
+                                elem: '#slideTest14'
+                                ,theme: '#1E9FFF' //主题色
+                                ,input: true //输入框
+                                ,type: 'vertical' //垂直滑块
+                                ,value: res.info.powerSensor5 //初始值
+                            });
+                            slider.render({
+                                elem: '#slideTest6'
+                                ,theme: '#1E9FFF' //主题色
+                                ,input: true //输入框
+                                ,type: 'vertical' //垂直滑块
+                                ,value:res.info.powerDawnPeople //初始值
+                            });
+                            slider.render({
+                                elem: '#slideTest7'
+                                ,theme: '#1E9FFF' //主题色
+                                ,input: true //输入框
+                                ,type: 'vertical' //垂直滑块
+                                ,value: res.info.powerSensorDown //初始值
+                            });
+                        });
 
-                        $("#slideTest_a").children().children(".layui-slider-bar").css("width",res.info.firDownPower/100+"%");//一阶前
-                        $("#slideTest_a").children().children(".layui-slider-wrap").css("left",res.info.firDownPower/100+"%");
-                        $("#slideTest_a").children().children().children(".layui-input").val(res.info.firDownPower/100);
+                        $("#slideTest_a").val(res.info.firDownPower/100);//一阶前
                         $("#slideTest_b").children().children(".layui-slider-bar").css("width",res.info.firReducAmplitude+"%");//一阶后
                         $("#slideTest_b").children().children(".layui-slider-wrap").css("left",res.info.firReducAmplitude+"%");
                         $("#slideTest_b").children().children().children(".layui-input").val(res.info.firReducAmplitude);
-                        $("#slideTest_c").children().children(".layui-slider-bar").css("width",res.info.twoDownPower/100+"%");//2阶前
-                        $("#slideTest_c").children().children(".layui-slider-wrap").css("left",res.info.twoDownPower/100+"%");
-                        $("#slideTest_c").children().children().children(".layui-input").val(res.info.twoDownPower/100);
+                        $("#slideTest_c").val(res.info.twoDownPower/100);//2阶前
                         $("#slideTest_d").children().children(".layui-slider-bar").css("width",res.info.twoReducAmplitude+"%");//2阶后
                         $("#slideTest_d").children().children(".layui-slider-wrap").css("left",res.info.twoReducAmplitude+"%");
                         $("#slideTest_d").children().children().children(".layui-input").val(res.info.twoReducAmplitude);
-                        $("#slideTest_e").children().children(".layui-slider-bar").css("width",res.info.threeDownPower/100+"%");//3阶前
-                        $("#slideTest_e").children().children(".layui-slider-wrap").css("left",res.info.threeDownPower/100+"%");
-                        $("#slideTest_e").children().children().children(".layui-input").val(res.info.threeDownPower/100);
+                        $("#slideTest_e").val(res.info.threeDownPower/100);//3阶前
                         $("#slideTest_f").children().children(".layui-slider-bar").css("width",res.info.threeReducAmplitude+"%");//3阶后
                         $("#slideTest_f").children().children(".layui-slider-wrap").css("left",res.info.threeReducAmplitude+"%");
                         $("#slideTest_f").children().children().children(".layui-input").val(res.info.threeReducAmplitude);
@@ -964,6 +1103,61 @@ $(function(){
         }
 
     }
+
+//input输入框只能输入数字和 小数点后两位
+    function num(obj,val){
+        obj.value = obj.value.replace(/[^\d.]/g,""); //清除"数字"和"."以外的字符
+        obj.value = obj.value.replace(/^\./g,""); //验证第一个字符是数字
+        obj.value = obj.value.replace(/\.{2,}/g,""); //只保留第一个, 清除多余的
+        obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+        obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3'); //只能输入两个小数
+    }
+
+    function numa(obj,val){
+        obj.value = obj.value.replace(/[^\d.]/g,""); //清除"数字"和"."以外的字符
+        obj.value = obj.value.replace(/^\./g,""); //验证第一个字符是数字
+        obj.value = obj.value.replace(/\.{2,}/g,""); //只保留第一个, 清除多余的
+        obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+        obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3'); //只能输入两个小数
+        var a=document.getElementById("chong").value;
+        var b=document.getElementById("r_inpl_one").value;//最小值
+        var c=document.getElementById("slideTest_c").value;
+        var e=document.getElementById("slideTest_e").value;
+        console.log(parseFloat(b)+'+++++'+parseFloat(a)+'+++++'+parseFloat(obj.value));
+        if( parseFloat(obj.value)>parseFloat(a)){
+            obj.value=a
+        }
+        //在这儿加判断吗对，最小值是多少
+        if(parseFloat(obj.value) < parseFloat(b)){
+            obj.value=b
+        }
+    }
+    function numc(obj,val){
+        obj.value = obj.value.replace(/[^\d.]/g,""); //清除"数字"和"."以外的字符
+        obj.value = obj.value.replace(/^\./g,""); //验证第一个字符是数字
+        obj.value = obj.value.replace(/\.{2,}/g,""); //只保留第一个, 清除多余的
+        obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+        obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3'); //只能输入两个小数
+        var a=document.getElementById("slideTest_a").value;
+        if( parseFloat(obj.value)>parseFloat(a)){
+            obj.value=a
+        }
+    }
+    function num_e(obj,val){
+        obj.value = obj.value.replace(/[^\d.]/g,""); //清除"数字"和"."以外的字符
+        obj.value = obj.value.replace(/^\./g,""); //验证第一个字符是数字
+        obj.value = obj.value.replace(/\.{2,}/g,""); //只保留第一个, 清除多余的
+        obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+        obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3'); //只能输入两个小数
+        var c=document.getElementById("slideTest_c").value;
+        if( parseFloat(obj.value)>parseFloat(c)){
+            obj.value=c
+        }
+    }
+
+
+
+
 })
 
 function  f(hours,newHours,newH,dischargeCapacityList,chargingCapacityList,chargingCurrentList,dischargeCurrentList,batteryVoltageList,ambientTemperatureList,internalTemperatureList,visitorsFlowrateList,inductionFrequencyList,meteorologicalList) {
@@ -981,76 +1175,6 @@ function  f(hours,newHours,newH,dischargeCapacityList,chargingCapacityList,charg
     var myChart = echarts.init(dom);
     var app = {};
     option = null;
-    var posList = [
-        'left', 'right', 'top', 'bottom',
-        'inside',
-        'insideTop', 'insideLeft', 'insideRight', 'insideBottom',
-        'insideTopLeft', 'insideTopRight', 'insideBottomLeft', 'insideBottomRight'
-    ];
-    app.configParameters = {
-        rotate: {
-            min: -90,
-            max: 90
-        },
-        verticalAlign: {
-            options: {
-                top: 'top',
-                middle: 'middle',
-                bottom: 'bottom'
-            }
-        },
-        position: {
-            options: echarts.util.reduce(posList, function (map, pos) {
-                map[pos] = pos;
-                return map;
-            }, {})
-        },
-        distance: {
-            min: 0,
-            max: 100
-        }
-    };
-    app.config = {
-        rotate: 90,
-        align: 'left',
-        verticalAlign: 'middle',
-        position: 'insideBottom',
-        distance: 15,
-        onChange: function () {
-            var labelOption = {
-                normal: {
-                    rotate: app.config.rotate,
-                    align: app.config.align,
-                    verticalAlign: app.config.verticalAlign,
-                    position: app.config.position,
-                    distance: app.config.distance
-                }
-            };
-            myChart.setOption({
-                series: [{
-                    label: labelOption
-                },{
-                    label: labelOption
-                }]
-            });
-        }
-    };
-    var labelOption = {
-        normal: {
-            show: false, //图标上显示数据
-            position: app.config.position,
-            distance: app.config.distance,
-            align: app.config.align,
-            verticalAlign: app.config.verticalAlign,
-            rotate: app.config.rotate,
-            formatter: '{c}  {name|{a}}',
-            rich: {
-                name: {
-                    textBorderColor: '#fff'
-                }
-            }
-        }
-    };
     option = {
         color: ['#27e2d4', '#508fea'],
         title: {
@@ -1065,17 +1189,15 @@ function  f(hours,newHours,newH,dischargeCapacityList,chargingCapacityList,charg
         legend: {
             data: ['负载功率', '充电功率']
         },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
         toolbox: {
-            show: true,
-            orient: 'vertical',
-            left: 'right',
-            top: 'center',
             feature: {
-                mark: {show: true},
-                dataView: {show: true, readOnly: false},
-                magicType: {show: true, type: ['line', 'bar']},
-                restore: {show: true},
-                saveAsImage: {show: true}
+                saveAsImage: {}
             }
         },
         calculable: true,
@@ -1092,7 +1214,7 @@ function  f(hours,newHours,newH,dischargeCapacityList,chargingCapacityList,charg
             xAxisIndex: [0],
             left: '9%',
             bottom: -8,
-            height: '8%',//组件高度
+            height: '6.5%',//组件高度
             start: 5,
             end:80 //初始化滚动条
         }],
@@ -1107,14 +1229,12 @@ function  f(hours,newHours,newH,dischargeCapacityList,chargingCapacityList,charg
                 type: 'bar',
                 smooth: true,
                 barGap: 0,
-                label: labelOption,
                 data: chargingCapacityList
             },
             {
                 name: '充电功率',
                 type: 'bar',
                 smooth: true,
-                label: labelOption,
                 data: dischargeCapacityList
             }
         ]
@@ -1162,7 +1282,7 @@ function  f(hours,newHours,newH,dischargeCapacityList,chargingCapacityList,charg
             xAxisIndex: [0],
             left: '9%',
             bottom: -8,
-            height: '8%',//组件高度
+            height: '6.5%',//组件高度
             start: 5,
             end:80 //初始化滚动条
         }],
@@ -1237,7 +1357,7 @@ function  f(hours,newHours,newH,dischargeCapacityList,chargingCapacityList,charg
             xAxisIndex: [0],
             left: '9%',
             bottom: -8,
-            height: '8%',//组件高度
+            height: '6.5%',//组件高度
             start: 5,
             end:80 //初始化滚动条
         }],
@@ -1307,7 +1427,7 @@ function  f(hours,newHours,newH,dischargeCapacityList,chargingCapacityList,charg
             xAxisIndex: [0],
             left: '9%',
             bottom: -8,
-            height: '8%',//组件高度
+            height: '6.5%',//组件高度
             start: 5,
             end:80 //初始化滚动条
         }],
@@ -1445,3 +1565,4 @@ function  f(hours,newHours,newH,dischargeCapacityList,chargingCapacityList,charg
     }
 
 }
+

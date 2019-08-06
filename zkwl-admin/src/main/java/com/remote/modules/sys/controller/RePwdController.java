@@ -100,13 +100,13 @@ public class RePwdController {
             //如果忘记密码类型为手机忘记密码
             boolean flag = checkBindEmail(contact,"isMobile");
             if(!flag){
-                R.error("手机号不存在");
+                return R.error("手机号不存在");
             }
             String securityCode = StringUtils.getSecurityCode(6);
             SendPhoneSecurityCode sendPhoneSecurityCode = SendSecurityCodeUtils.bulidSendPhoneSecurityCode(sendPhoneConfig,contact,securityCode,"2");
             R r = sendSmsService.sendSmsSecurityCode(sendPhoneSecurityCode);
             if(!r.isOK()){
-                R.error("手机发送失败");
+                return R.error("手机发送失败");
             }
             saveSecurity(contact,"rePwdMobile",securityCode);
             return R.ok();

@@ -69,9 +69,11 @@ $(function () {
     var jsonarr=[];
     var failRate
     $.ajax({
-        url:" http://localhost:8080/remote-admin/overview/overview",
+        url:" /overview/overview",
         type:"GET",
         success:function (res) {
+            console.log("=======11111")
+            console.log(res)
             var lampsNum = res.info.lampsNum;
             $(".r_dengshu").html(lampsNum);
             var gatewaysNum = res.info.gatewaysNum;

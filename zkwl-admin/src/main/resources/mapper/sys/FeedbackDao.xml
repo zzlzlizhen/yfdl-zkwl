@@ -17,7 +17,7 @@
         <result property="title" column="title"/>
     </resultMap>
     <sql id="columns" >
-        a.back_id as back_id,
+        a.back_id as backId,
         a.uid as uid,
         a.back_content as backContent,
         a.back_create_time as backCreateTime,
@@ -30,7 +30,7 @@
     </sql>
     <!-- 查询用户的所有下级用户的反馈列表 -->
     <select id="queryBackList" resultType="com.remote.modules.sys.entity.FeedbackEntity">
-        SELECT <include refid="columns"/> FROM feedback as ABSOLUTE
+        SELECT <include refid="columns"/> FROM feedback
         WHERE 1=1
         <if test="userIds !='' and userIds.size()>0">
             and  a.uid in
@@ -42,15 +42,22 @@
 
     </select>
     <select id="queryPageCount" resultType="java.lang.Integer">
-        select count(back_id) from feedback where uid in
-        <foreach collection="userIds" index="index"
-                 item="uid" open="(" separator="," close=")">
-            #{uid}
-        </foreach>
+        select count(back_id) from feedback where 1=1
+        <if test="userIds != null and userIds.size()>0">
+            and uid in
+            <foreach collection="userIds" index="index"
+                     item="uid" open="(" separator="," close=")">
+                #{uid}
+            </foreach>
+        </if>
     </select>
 
     <select id="queryCount" resultType="java.lang.Integer">
-        select count(back_id) from feedback where uid = #{uid}
+        select count(back_id) from feedback where 1=1
+        <if test="uid != null">
+           and uid = #{uid}
+        </if>
+
     </select>
     <select id="queryPageList" resultType="com.remote.modules.sys.entity.FeedbackEntity">
         SELECT
@@ -59,11 +66,14 @@
         FROM feedback a
             LEFT JOIN sys_user b ON a.uid=b.user_id
             LEFT JOIN msg_back_readed mbr on (mbr.uid=#{curUid} and a.back_id = mbr.msg_back_id and mbr.type=1)
-        WHERE b.user_id IN
-        <foreach collection="userIds" index="index"
-                 item="uid" open="(" separator="," close=")">
-            #{uid}
-        </foreach>
+        WHERE 1=1
+        <if test="userIds != null and userIds.size()>0">
+            and b.user_id IN
+            <foreach collection="userIds" index="index"
+                     item="uid" open="(" separator="," close=")">
+                #{uid}
+            </foreach>
+        </if>
         LIMIT #{offset},#{limit}
     </select>
 </mapper>

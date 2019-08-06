@@ -24,7 +24,8 @@
     	is_bind_mtype as isBindMtype,
     	salt as salt,
     	real_name as realName,
-    	deadline as deadline
+    	deadline as deadline,
+    	role_id as roleId
     </sql>
 
 	<!-- 查询用户的所有权限 -->

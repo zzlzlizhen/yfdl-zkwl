@@ -6,20 +6,20 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.remote.common.ShiroUtils;
 import com.remote.common.annotation.DataFilter;
 import com.remote.common.utils.PageUtils;
+import com.remote.device.service.DeviceService;
+import com.remote.project.service.ProjectService;
 import com.remote.sys.dao.SysUserDao;
 import com.remote.sys.entity.SysUserEntity;
 import com.remote.sys.service.SysUserRoleService;
 import com.remote.sys.service.SysUserService;
 import com.remote.utils.Query;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 /**
@@ -31,9 +31,13 @@ import java.util.function.Function;
 @Service("sysUserService")
 public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> implements SysUserService  {
     @Autowired
-    SysUserDao sysUserDao;
+    private SysUserDao sysUserDao;
     @Autowired
     private SysUserRoleService sysUserRoleService;
+    @Autowired
+    private DeviceService deviceService;
+    @Autowired
+    private ProjectService projectService;
     @Override
     @DataFilter(subDept = true, user = false)
     public PageUtils queryPage(Map<String, Object> params) {
@@ -59,7 +63,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
     }
     @Override
     public List<SysUserEntity> queryAllLevel(Long userId) {
-        return null;
+        SysUserEntity sysUserEntity = this.baseMapper.selectOne(new QueryWrapper<SysUserEntity>().eq("flag",1).eq("user_id",userId));
+        return sysUserDao.queryAllChild(sysUserEntity);
     }
 
     @Override
@@ -168,5 +173,45 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
     @Override
     public SysUserEntity getByMobile(String mobile) {
         return this.baseMapper.selectOne(new QueryWrapper<SysUserEntity>().eq("flag",1).eq("mobile",mobile));
+    }
+    @Override
+    public boolean updateDevCount(SysUserEntity curUser) {
+        SysUserEntity userEntity = new SysUserEntity();
+        List<SysUserEntity> userEntityList =  queryAllChild(curUser);
+        List<Long> userIds = new ArrayList<Long>();
+        if(CollectionUtils.isNotEmpty(userEntityList)&&userEntityList.size()>0){
+            for(SysUserEntity sysUserEntity: userEntityList){
+                userIds.add(sysUserEntity.getUserId());
+            }
+            Integer devCount = null;
+            if(CollectionUtils.isNotEmpty(userIds)&&userIds.size()>0){
+                devCount = deviceService.getDeviceCount(userIds);
+                if(devCount == null){
+                    devCount =0;
+                }else{
+                    devCount = devCount;
+                }
+            }
+            userEntity.setDeviceCount(devCount);
+        }
+        return this.update(userEntity,
+                new QueryWrapper<SysUserEntity>().eq("user_id", curUser.getUserId()));
+    }
+    @Override
+    public boolean updateProCount(Long curUid) {
+        SysUserEntity userEntity = new SysUserEntity();
+        Integer proCount = projectService.queryProjectByUserCount(curUid);
+        if(proCount == null){
+            proCount = 0;
+        }else{
+            proCount = proCount;
+        }
+        userEntity.setProjectCount(proCount);
+        return this.update(userEntity,
+                new QueryWrapper<SysUserEntity>().eq("user_id", curUid));
+    }
+    @Override
+    public String queryByUid(Long curUid){
+        return this.sysUserDao.queryByUid(curUid);
     }
 }

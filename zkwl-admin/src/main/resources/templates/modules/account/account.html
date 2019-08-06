@@ -1,3 +1,4 @@
+<#import "/spring.ftl" as spring/>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,10 +10,24 @@
         <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
         <script src="${request.contextPath}/statics/js/modules/project/jquery_page.js"></script>
         <script src="${request.contextPath}/statics/libs/ajaxupload.js"></script>
+        <link rel="stylesheet" href="${request.contextPath}/statics/css/layui.css">
+        <script src="${request.contextPath}/statics/js/layui.js"></script>
     <style>
         html{ overflow: hidden}
         .project_he>a{line-height: 33px;}
         .pun-a{margin-left:20% ;}
+        @media screen and (max-width:1100px) {
+            /*.table_m_Z{width:800px;overflow-x:scroll}*/
+            body{
+                overflow-x:scroll;
+            }
+            .table_m{
+                width: 959px;
+            }
+            .project_he{
+                width: 959px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -49,7 +64,7 @@
 <div class="table_m table_m_Z">
     <ul>
         <li>账号ID</li>
-        <li>账号</li>
+        <li><@spring.message code="message.login.username"/></li>
         <li>用户名</li>
         <li>项目数</li>
         <li>设备数</li>
@@ -81,7 +96,7 @@
             <span class="glyphicon glyphicon-remove wrong"></span>
         </div>
         <span class="sha_span">
-            <p> <span  style="color: red">*</span>账号：</p>
+            <p> <span  style="color: red">*</span><@spring.message code="message.login.username"/>：</p>
             <input type="text" placeholder="请填写" id="acc_number">
         </span>
         <span class="sha_span">
@@ -90,7 +105,7 @@
         </span>
         <span class="sha_span">
             <p><span  style="color: red" >*</span>密码：</p>
-            <input type="text" placeholder="请填写" id="acc_password">
+            <input type="password" placeholder="请填写" id="acc_password">
         </span>
         <span class="sha_span">
             <p class="r_p" style="width: 27%;"><span  style="color: red">*</span>有效期：</p>
@@ -118,14 +133,14 @@
             <div class="form-group col-sm-2 " style="width:169px;padding-left:0;padding-right:0;margin-top:6%;">
                 <select class="form-control" id="role" style="height: 40px">
 <!--                    <option value="1">超级管理者</option>-->
-                    <option value="2">管理者</option>
-                    <option value="3">使用者</option>
+                    <option value="1">管理者</option>
+                    <option value="2">使用者</option>
                 </select>
             </div>
         </span>
         <span class="sha_span preview">
             <p style="width:28%;text-align: left;text-indent:1.85em;"><span  style="color: red">*</span>头像：</p>
-            <img id="pic" src="">
+            <img id="pic" src="${request.contextPath}/statics/image/ttxa.svg">
              <a class="btn btn-primary" id="upload" >上传文件</a>
             <input id="headUrl" type="hidden">
         </span>
@@ -142,7 +157,7 @@
         <div class="Bian_j">编辑账户<span class="glyphicon glyphicon-remove guan_shc" ></span></div>
         <div class="mistake">
             <span class="glyphicon glyphicon-pencil cu_m"></span>
-            <P class="rrbol"></P>
+            <p class="rrbol"></p>
             <span class="glyphicon glyphicon-remove wrong"></span>
         </div>
         <span class="sha_span">
@@ -155,7 +170,7 @@
         </span>
         <span class="sha_span">
             <p ><span  style="color: red" ></span>密码：</p>
-            <input type="text" placeholder="请填写" id="acc_password_b">
+            <input type="password" placeholder="请填写" id="acc_password_b">
         </span>
         <span class="sha_span">
             <p class="r_p" style="width: 27%;"><span  style="color: red">*</span>有效期：</p>
@@ -182,9 +197,8 @@
             <p class="r_p" style="width: 27%;"><span  style="color: red;">*</span>角色：</p>
             <div class="form-group col-sm-2 " style="width:169px;padding-left:0;padding-right:0;margin-top:5%;">
                 <select class="form-control" id="r_Ad_mod" style="height: 40px;">
-<!--                    <option value="2">超级管理者</option>-->
-                    <option value="1">管理者</option>
-                    <option value="0">使用者</option>
+                    <option class="1">管理者</option>
+                    <option class="2">使用者</option>
                 </select>
             </div>
         </span>

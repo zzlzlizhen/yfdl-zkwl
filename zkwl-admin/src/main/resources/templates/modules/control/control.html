@@ -28,35 +28,10 @@
     <style>
         .rquebei{margin: 1.7% 0px 0px 1%;}
         .rquebei{line-height: 36px;color: #008E8E;}
-        .de_i input[type=radio],input[type=checkbox]  {
-            display: inline-block;
-            vertical-align: middle;
-            width: 10px;
-            height: 10px;
-            -margin-left: 5px;
-            -webkit-appearance: none;
-            background-color: transparent;
-            border-radius: 50%;
-            border:1px solid #ccc;
-            outline: 0 !important;
-            line-height: 10px;
-            color: #d8d8d8;
-        }
-        .de_i input[type=checkbox]:after  {
-            content: "";
-            display:block;
-            width: 10px;
-            height: 10px;
-            text-align: center;
-            line-height: 14px;
-            font-size: 16px;
-            color: #fff;
-            background-color: #fff;
-            box-sizing:border-box;
-            border-radius: 50%;
-            background: #ccc;
-        }
-
+        .de_i input[type=radio],input[type=checkbox]  {display: inline-block;vertical-align: middle;width: 10px;height: 10px;-margin-left: 5px;
+            -webkit-appearance: none;background-color: transparent;border-radius: 50%;border:1px solid #ccc;outline: 0 !important;line-height: 10px;color: #d8d8d8;}
+        .de_i input[type=checkbox]:after  {content: "";display:block;width: 10px;height: 10px;text-align: center;line-height: 14px;font-size: 16px;color: #fff;
+            background-color: #fff;box-sizing:border-box;border-radius: 50%;background: #ccc;}
         #r_cl{line-height: 47px;cursor: pointer;}
         #r_bttn{margin-top: 2%;line-height: 47px;color:#008E8E;cursor: pointer;}
         .r_shx p{width:auto;height:100%;float:left;display: block;line-height: 60px;}
@@ -65,15 +40,16 @@
         #chong{float: left;line-height:28px;margin-top:2%;width: 49%;border-radius: 4px;border: 1px solid #ccc;height: 70%;}
         .fan_h{padding:0px; float:right;width: 80px;height: 35px;text-align: center;font-size:12px;cursor: pointer;text-indent: 0;}
         #hardware,#hardware_a{display: none;}
+        .Jei{width:30%;height:30px;float:left;border:1px solid #ccc;border-radius:4px;margin:1.3% 0.8% 0px 0px;text-indent: 5px;}
     </style>
 </head>
 <body>
 <div class="hear r_shx">
     <p><img src="${request.contextPath}/statics/image/dingwei.png" alt="">项目管理></p><p class="p" id="bian"></p><p class="p" id="bian_b"></p>
-    <div class="btn btn-primary op_T rquebei fan_h" style="margin:0.8% 2% 0px 0px;" onclick="javascript:history.back()">返回上一页</div>
+    <div class="btn btn-primary op_T rquebei fan_h" style="margin:0.8% 2% 0px 0px;" onclick="goback()">返回上一页</div>
 </div>
 <ul class="tab r_shx">
-    <li class="cur" style="margin-left:10%;">历史数据</li>
+    <li class="cur history" style="margin-left:10%;">历史数据</li>
     <li id="opt">高级配置</li>
     <li id="hardware">硬件升级</li>
 </ul>
@@ -87,11 +63,11 @@
                 <option id="3">按年统计</option>
             </select>
             <span class="hear_w">选择日期：</span>
-            <input id="d421" class="Wdate da_te" type="text" />
+            <input id="d421" class="Wdate da_te" type="text"  autocomplete="off" />
             <div id="statistics" class="btn btn-primary btn_m op_T rquebei" >统计</div>
             <div class="btn btn-primary btn_m op_T rquebei" onclick="jQuery('#ele1').print()">打印报表</div>
         </div>
-        <div class="Biao_g" id="ele1">
+        <div class="Biao_g" id="ele1" style="height:88%">
             <div class="B_left" id="container"></div>
             <div class="B_left" id="zhe_x"></div>
             <div class="B_left" id="voltage"></div>
@@ -129,12 +105,11 @@
                         <span> 负载功率</span>
                         <div class="container_a">
                             <div class="input-group spinner">
-                                <input type="text"  oninput="num(this)" class="form-control in_dent"  value="12" id="r_Load_power">
+                                <!--oninput="num(this)"-->
+                                <input type="text"  class="form-control in_dent"  value="12" id="r_Load_power" oninput="value=value.replace(/[^\d]/g,'')" >
                                 <div class="input-group-btn-vertical">
-                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i>
-                                    </button>
-                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i>
-                                    </button>
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
+                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -149,11 +124,10 @@
                 <div class="r_sa_bx">
                     <div>
                       <span>时段:1
-<!--                            <input type="checkbox" name="check-3" value="6" class="lcs_check lcs_tt1" checked="checked" autocomplete="off" />-->
                       </span>
                         <div class="container">
                             <div class="input-group spinner">
-                                <input type="text" oninput="num(this)" class="form-control" value="12" id="r_one_teml">
+                                <input type="text" class="form-control r_feizifu" value="12" id="r_one_teml" oninput="value=value.replace(/[^\d]/g,'')" >
                                 <div class="input-group-btn-vertical">
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i>
                                     </button>
@@ -164,7 +138,7 @@
                         </div>
                         <div class="container r-container">
                             <div class="input-group spinner">
-                                <input type="text" oninput="num(this)" class="form-control" value="50" id="r_teml_tw">
+                                <input type="text"  class="form-control r_feizifu" value="50" id="r_teml_tw" oninput="value=value.replace(/[^\d]/g,'')" >
                                 <div class="input-group-btn-vertical">
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i>
                                     </button>
@@ -190,7 +164,7 @@
                         <span>时段:2</span>
                         <div class="container">
                             <div class="input-group spinner">
-                                <input type="text" oninput="num(this)" class="form-control" value="2" id="r_teml_sv">
+                                <input type="text"  class="form-control r_feizifu" value="2" id="r_teml_sv" oninput="value=value.replace(/[^\d]/g,'')">
                                 <div class="input-group-btn-vertical">
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i>
                                     </button>
@@ -201,7 +175,7 @@
                         </div>
                         <div class="container r-container">
                             <div class="input-group spinner">
-                                <input type="text" oninput="num(this)" class="form-control" value="2" id="r_teml_eg">
+                                <input type="text"  class="form-control r_feizifu" value="2" id="r_teml_eg" oninput="value=value.replace(/[^\d]/g,'')">
                                 <div class="input-group-btn-vertical">
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i>
                                     </button>
@@ -227,7 +201,7 @@
                         <span>时段:3</span>
                         <div class="container">
                             <div class="input-group spinner">
-                                <input type="text" oninput="num(this)" class="form-control" value="2" id="r_teml_th">
+                                <input type="text"  class="form-control r_feizifu" value="2" id="r_teml_th" oninput="value=value.replace(/[^\d]/g,'')">
                                 <div class="input-group-btn-vertical">
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
@@ -236,7 +210,7 @@
                         </div>
                         <div class="container r-container">
                             <div class="input-group spinner">
-                                <input type="text" oninput="num(this)" class="form-control" value="2" id="r_teml_for">
+                                <input type="text"  class="form-control r_feizifu" value="2" id="r_teml_for" oninput="value=value.replace(/[^\d]/g,'')">
                                 <div class="input-group-btn-vertical">
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
@@ -260,7 +234,7 @@
                         <span>时段:4</span>
                         <div class="container">
                             <div class="input-group spinner">
-                                <input type="text" oninput="num(this)" class="form-control" value="2" id="r_teml_ng">
+                                <input type="text"  class="form-control r_feizifu" value="2" id="r_teml_ng" oninput="value=value.replace(/[^\d]/g,'')">
                                 <div class="input-group-btn-vertical">
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i>
                                     </button>
@@ -271,7 +245,7 @@
                         </div>
                         <div class="container r-container">
                             <div class="input-group spinner">
-                                <input type="text" oninput="num(this)" class="form-control" value="2" id="r_teml_te">
+                                <input type="text"  class="form-control r_feizifu" value="2" id="r_teml_te" oninput="value=value.replace(/[^\d]/g,'')">
                                 <div class="input-group-btn-vertical">
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i>
                                     </button>
@@ -297,7 +271,7 @@
                         <span>时段:5</span>
                         <div class="container">
                             <div class="input-group spinner">
-                                <input type="text" oninput="num(this)" class="form-control" value="2" id="r_teml_fif">
+                                <input type="text"  class="form-control r_feizifu" value="2" id="r_teml_fif" oninput="value=value.replace(/[^\d]/g,'')">
                                 <div class="input-group-btn-vertical">
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
@@ -306,7 +280,7 @@
                         </div>
                         <div class="container r-container">
                             <div class="input-group spinner">
-                                <input type="text" oninput="num(this)" class="form-control" value="2" id="r_teml_six">
+                                <input type="text"  class="form-control r_feizifu" value="2" id="r_teml_six" oninput="value=value.replace(/[^\d]/g,'')">
                                 <div class="input-group-btn-vertical">
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i>
                                     </button>
@@ -332,7 +306,7 @@
                         <span>晨亮</span>
                         <div class="container">
                             <div class="input-group spinner">
-                                <input type="text" oninput="num(this)" class="form-control" value="2" id="r_teml_el">
+                                <input type="text"  class="form-control r_feizifu" value="2" id="r_teml_el" oninput="value=value.replace(/[^\d]/g,'')">
                                 <div class="input-group-btn-vertical">
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i>
                                     </button>
@@ -343,7 +317,7 @@
                         </div>
                         <div class="container r-container">
                             <div class="input-group spinner">
-                                <input type="text" oninput="num(this)" class="form-control" value="2" id="r_teml_egl">
+                                <input type="text"  class="form-control r_feizifu" value="2" id="r_teml_egl" oninput="value=value.replace(/[^\d]/g,'')">
                                 <div class="input-group-btn-vertical">
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i>
                                     </button>
@@ -374,7 +348,7 @@
                             <option class="1">自定义</option>
                             <option class="2">智能1级</option>
                             <option class="3">智能2级</option>
-                            <option class="4">智能2级</option>
+                            <option class="4">智能3级</option>
                         </select>
                     </div>
                     <div style="width:46%;float: left;">
@@ -388,7 +362,7 @@
                         <span style="width:32%;margin-top:0.5%;float: left;line-height: 50px;font-size: 12px;">人体感应后的亮灯延时</span>
                         <div class="container" style="width:28%;margin:2.1% 0px 0px 1.4%;">
                             <div class="input-group spinner">
-                                <input type="text" oninput="num(this)" class="form-control" value="1" id="r_teml_ma">
+                                <input type="text"  class="form-control" value="1" id="r_teml_ma" oninput="value=value.replace(/[^\d]/g,'')">
                                 <div class="input-group-btn-vertical">
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
@@ -408,7 +382,7 @@
                         <span>光控电压(v)</span>
                         <div class="container" style="width:48%;margin:1.7% 0px 0px 2%;">
                             <div class="input-group spinner">
-                                <input type="text" oninput="num(this)" class="form-control in_dent" value="2" id="r_teml_tgl">
+                                <input type="text"  class="form-control in_dent" value="2" id="r_teml_tgl" oninput="value=value.replace(/[^\d]/g,'')">
                                 <div class="input-group-btn-vertical">
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
@@ -449,7 +423,7 @@
                         <span>电池串数</span>
                         <div class="container" style="width:49%;margin-top:2%;">
                             <div class="input-group spinner">
-                                <input type="text" oninput="num(this)" class="form-control in_dent" value="3" id="r_teml_forl">
+                                <input type="text"  class="form-control in_dent" value="3" id="r_teml_forl" oninput="value=value.replace(/[^\d]/g,'')">
                                 <div class="input-group-btn-vertical">
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
@@ -458,27 +432,28 @@
                         </div>
                     </div>
                     <div>
-                        <span>过放电压(V)</span><input type="text" oninput="num(this)" value="2.5" placeholder="2.5~40"  class="m_in in_dent"  id="r_inpl_one">
+                        <span>过放电压(V)</span><input type="text"  value="2.5" placeholder="2.5~40"  class="m_in in_dent"  id="r_inpl_one" oninput="value=value.replace(/[^\d]/g,'')">
                     </div>
                     <div>
-                        <span>充电电流(A)</span><input type="text" oninput="num(this)" placeholder="0~40" value="0"  class="m_in in_dent" id="r_inpl_tw">
+                        <span>充电电流(A)</span><input type="text"  placeholder="0~40" value="0"  class="m_in in_dent" id="r_inpl_tw" oninput="value=value.replace(/[^\d]/g,'')">
                     </div>
 
                     <div>
                         <span>充电温度范围</span>
                         <div class="container" style="float:left;width: 14%">
                             <div class="input-group spinner sp_a">
-                                <input type="text" class="form-control " oninput="num(this)" value="2"  onBlur=" " id="r_teml_thglte">
+                                <input type="text" class="form-control "  value="2"  onBlur=" " id="r_teml_thglte">
+                                <!--oninput="num(this)"-->
                                 <div class="input-group-btn-vertical">
                                     <button class="btn btn-default " type="button"><i class="fa fa-caret-up"></i></button>
                                     <button class="btn btn-default jianr" type="button"><i class="fa fa-caret-down "></i></button>
                                 </div>
                             </div>
                         </div>
-                        <p style="float:left;margin: 3% 2% 0px 2.5%;line-height: 34px;">°C</p>
+                        <p style="float:left;margin: 3% 2% 0px 2.5%;line-height: 34px;">°C</p><span style="display: inline-block;width: 10px;">--</span>
                         <div class="container r-container" style="float:left;width: 14%">
                             <div class="input-group spinner sp_a">
-                                <input type="text" class="form-control" oninput="num(this)" value="2"  onBlur=" " id="r_teml_thete">
+                                <input type="text" class="form-control r_feizifu"  value="2"  onBlur=" " id="r_teml_thete" oninput="value=value.replace(/[^\d]/g,'')">
                                 <div class="input-group-btn-vertical">
                                     <button class="btn btn-default jiar" type="button"><i class="fa fa-caret-up"></i></button>
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
@@ -500,7 +475,7 @@
                     </div>
                     <div>
                         <span style="float: left;">充电电压(V)</span>
-                        <input type="text" oninput="num(this)" id="chong" class="in_dent" placeholder="2.5~40" value="2.5">
+                        <input type="text" id="chong" class="in_dent" placeholder="2.5~40" value="2.5" oninput="value=value.replace(/[^\d]/g,'')">
                     </div>
                     <div style="line-height: 34px;clear: both;">
                         <span>巡检时间</span>
@@ -517,17 +492,18 @@
                         <span>放电温度范围</span>
                         <div class="container" style="float:left;width: 14%;margin: 0px 3% 0px 0%; ">
                             <div class="input-group spinner sp_a">
-                                <input type="" oninput="num(this)" class="form-control " aria-valuemax="12" max="12" value="2" id="r_teml_thglt">
+                                <input type=""  class="form-control " value="2" id="r_teml_thglt">
+                                <!--oninput="num(this)"-->
                                 <div class="input-group-btn-vertical">
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
                                     <button class="btn btn-default jianr" type="button"><i class="fa fa-caret-down "></i></button>
                                 </div>
                             </div>
                         </div>
-                        <p style="float:left;margin:3% 2% 0px 3.5%;font-size:12px;">°C</p>
+                        <p style="float:left;margin:3% 2% 0px 3.5%;font-size:12px;">°C</p><span style="display: inline-block;width: 10px;">--</span>
                         <div class="container r-container" style="float:left;width: 14%">
                             <div class="input-group spinner sp_a">
-                                <input type="" oninput="num(this)" min="1" max="99" class="form-control" value="2" id="r_teml_thet">
+                                <input type=""  min="1" max="99" class="form-control r_feizifu" value="2" id="r_teml_thet" oninput="value=value.replace(/[^\d]/g,'')">
                                 <div class="input-group-btn-vertical">
                                     <button class="btn btn-default jiar" type="button"><i class="fa fa-caret-up"></i></button>
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
@@ -558,35 +534,29 @@
     <div class="shade_a shade_add_project"></div>
     <div class="shade_b_project">
         <div class="Bian_j">新增项目<span class="glyphicon glyphicon-remove shade_add_project" style="position: absolute;right:3%;top:5%;cursor: pointer"></span></div>
-        <div class="jei">
+        <div class="jei" style="margin-top:8%;">
             <span>一阶：</span>
-            <div class="progres" style="margin-left:7%">
-                <div id="slideTest_a" class="demo-slider" style="height:10px;"></div>
-            </div>
-            <p class="pro_p">v</p>
-            <div class="progres"style="margin-left:7%">
+            <input type="text" onblur="numa(this)" class="Jei"  value="1" id="slideTest_a">
+            <p class="pro_p">V</p>
+            <div class="progres" style="margin:0px 0px 0px 15% ;width:38% !important;">
                 <div id="slideTest_b" class="demo-slider " style="height:10px;"></div>
             </div>
             <p class="pro_p">%</p>
         </div>
         <div class="jei">
             <span>二阶：</span>
-            <div class="progres"style="margin-left:7%">
-                <div id="slideTest_c" class="demo-slider" style="height:10px;"></div>
-            </div>
+            <input type="text" oninput="numc(this)"  class="Jei" value="1" id="slideTest_c">
             <p class="pro_p">V</p>
-            <div class="progres"style="margin-left:7%">
+            <div class="progres" style="margin:0px 0px 0px 15% ;width:38% !important;">
                 <div id="slideTest_d" class="demo-slider " style="height:10px;"></div>
             </div>
             <p class="pro_p">%</p>
         </div>
         <div class="jei">
             <span>三阶：</span>
-            <div class="progres"style="margin-left:7%">
-                <div id="slideTest_e" class="demo-slider" style="height:10px;"></div>
-            </div>
+            <input type="text" oninput="num_e(this)" class="Jei" value="1" id="slideTest_e" >
             <p class="pro_p">V</p>
-            <div class="progres"style="margin-left:7%">
+            <div class="progres" style="margin:0px 0px 0px 15% ;width:38% !important;">
                 <div id="slideTest_f" class="demo-slider " style="height:10px;"></div>
             </div>
             <p class="pro_p">%</p>
@@ -602,24 +572,14 @@
 </body>
 <script src="${request.contextPath}/statics/js/modules/control/My97DatePicker/WdatePickera.js"></script>
 <style>
-    .WdateDiv #dpTime .tE:last-child{
-        display: none!important;
-    }
-    .WdateDiv #dpTime .tm:last-child{
-        display: none!important;
-    }
-
+    .WdateDiv #dpTime .tE:last-child{display: none!important;}
+    .WdateDiv #dpTime .tm:last-child{display: none!important;}
 </style>
 <script>
-    //input输入框只能输入数字和 小数点后两位
-    function num(obj,val){
-        obj.value = obj.value.replace(/[^\d.]/g,""); //清除"数字"和"."以外的字符
-        obj.value = obj.value.replace(/^\./g,""); //验证第一个字符是数字
-        obj.value = obj.value.replace(/\.{2,}/g,""); //只保留第一个, 清除多余的
-        obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
-        obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3'); //只能输入两个小数
+    function goback(){
+        sessionStorage.setItem('l','1');
+        window.history.back()
     }
-
     layui.use('slider', function(){
         var $ = layui.$
             ,slider = layui.slider;
@@ -631,21 +591,6 @@
             ,max:120
             ,value: 0 //初始值
         });
-        slider.render({
-            elem: '#slideTest4'
-            ,theme: '#1E9FFF' //主题色
-            ,input: true //输入框
-            ,type: 'vertical' //垂直滑块
-            ,value: 0 //初始值
-        });
-        slider.render({
-            elem: '#slideTest5'
-            ,theme: '#1E9FFF' //主题色
-            ,input: true //输入框
-            ,type: 'vertical' //垂直滑块
-            ,value: 0 //初始值
-        });
-
         slider.render({
             elem: '#slideTest6'
             ,value: 80
@@ -714,7 +659,7 @@
             ,theme: '#1E9FFF' //主题色
             ,input: true //输入框
             ,value:0
-            ,min:1
+            ,min:0
             ,max:120
         });
         slider.render({
@@ -725,39 +670,11 @@
             ,value:0
         });
         slider.render({
-            elem: '#slideTest_a'
-            ,theme: '#1E9FFF' //主题色
-            ,input: true //输入框
-            ,value:0
-            ,min:1
-            ,max:100
-            ,change: function(value){
-                slider.render({
-                    elem: '#slideTest_c'
-                    ,theme: '#1E9FFF' //主题色
-                    ,input: true //输入框
-                    ,value:0
-                    ,min:1
-                    ,max:value
-                    ,change: function(value_e) {
-                        slider.render({
-                            elem: '#slideTest_e'
-                            ,theme: '#1E9FFF' //主题色
-                            ,input: true //输入框
-                            ,value:0
-                            ,min:1
-                            ,max:value_e
-                        });
-                    }
-                });
-            }
-        });
-        slider.render({
             elem: '#slideTest_b'
             ,theme: '#1E9FFF' //主题色
             ,input: true //输入框
             ,value:0
-            ,min:1
+            ,min:2
             ,max:100
             ,change: function(value) {
                 slider.render({
@@ -773,7 +690,7 @@
                             ,theme: '#1E9FFF' //主题色
                             ,input: true //输入框
                             ,value:0
-                            ,min:1
+                            ,min:0
                             ,max:value_f
                         });
                     }
@@ -791,18 +708,21 @@
             ,theme: '#1E9FFF' //主题色
             ,input: true //输入框
             ,value:0
+            ,min:0
         });
         slider.render({
             elem: '#slideTest_e'
             ,theme: '#1E9FFF' //主题色
             ,input: true //输入框
             ,value:0
+            ,min:0
         });
         slider.render({
             elem: '#slideTest_f'
             ,theme: '#1E9FFF' //主题色
             ,input: true //输入框
             ,value:0
+            ,min:0
         });
         slider.render({
             elem: '#slideTest_m'

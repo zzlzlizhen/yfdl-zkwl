@@ -3,6 +3,7 @@ package com.remote.modules.device.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.remote.common.enums.AllEnum;
+import com.remote.common.enums.DeviceEnum;
 import com.remote.common.enums.RunStatusEnum;
 import com.remote.common.utils.*;
 import com.remote.modules.device.entity.DeviceEntity;
@@ -82,6 +83,7 @@ public class DeviceController extends AbstractController {
         DeviceQuery deviceQuery = new DeviceQuery();
         if(StringUtils.isNotEmpty(data.getGroupId())){
             deviceQuery.setGroupId(data.getGroupId());
+            deviceQuery.setNoRunState(DeviceEnum.OFFLINE.getCode());
             List<DeviceEntity> deviceEntities = deviceService.queryDeviceNoPage(deviceQuery);
             deviceCodes = deviceEntities.parallelStream().map(deviceEntity -> deviceEntity.getDeviceCode()).collect(Collectors.toCollection(ArrayList::new));
             data.setDeviceCodes(deviceCodes);

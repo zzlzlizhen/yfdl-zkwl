@@ -80,4 +80,8 @@ public interface DeviceMapper extends BaseMapper<DeviceEntity> {
      * @return DeviceEntity
      **/
     DeviceEntity queryDeviceByGroupIdTopOne(@Param("groupId")String groupId);
+    /**
+     * 通过当前用户id查询所有子孙用户的设备数量
+     * */
+    Integer getDeviceCount(@Param("userIds")List<Long> userIds);
 }

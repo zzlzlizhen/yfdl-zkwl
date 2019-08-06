@@ -210,7 +210,18 @@ public class ProjectServiceImpl implements ProjectService {
         logger.info("修改项目信息："+JSONObject.toJSONString(projectEntity));
         return projectMapper.updateProjectById(projectEntity) > 0 ? true : false;
     }
-
+    @Override
+    public int queryProjectByUserCount(Long userId) {
+        List<SysUserEntity> userList = sysUserService.queryAllLevel(userId);
+        ProjectQuery projectQuery = new ProjectQuery();
+        if(CollectionUtils.isNotEmpty(userList)){
+            List<Long> transform = userList.parallelStream().map(sysUserEntity -> sysUserEntity.getUserId()).collect(Collectors.toCollection(ArrayList::new));
+            projectQuery.setUserIds(transform);
+            List<ProjectEntity> list = projectMapper.queryProjectByUserIds(projectQuery);
+            return list.size();
+        }
+        return 0;
+    }
     @Override
     public ProjectEntity queryProjectMap(String projectId) {
         return projectMapper.queryProjectMap(projectId);

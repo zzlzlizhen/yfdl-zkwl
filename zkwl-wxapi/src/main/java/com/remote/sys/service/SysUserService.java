@@ -3,6 +3,7 @@ package com.remote.sys.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.remote.common.utils.PageUtils;
 import com.remote.sys.entity.SysUserEntity;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -52,5 +53,16 @@ public interface SysUserService extends IService<SysUserEntity> {
      * @return List<SysUserEntity>
      **/
     List<SysUserEntity> queryUserByUserIds(List<Long> userIds);
+    /**
+     * 通过当前用户id修改设备数量
+     * */
+    boolean updateDevCount(SysUserEntity curUser);
+
+    /**
+     * 通过当前用户id修改项目数量
+     * */
+    boolean updateProCount(Long curUid);
+    String queryByUid(Long curUid);
+
 
 }

@@ -12,6 +12,7 @@ import com.remote.device.service.DeviceService;
 import com.remote.sys.controller.AbstractController;
 
 import com.remote.sys.entity.SysUserEntity;
+import com.remote.sys.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,8 @@ public class DeviceController extends AbstractController {
 
     @Autowired
     private DeviceService deviceService;
+    @Autowired
+    private SysUserService sysUserService;
 
 
     @RequestMapping(value = "/add", method= RequestMethod.POST)
@@ -55,6 +58,8 @@ public class DeviceController extends AbstractController {
         boolean flag = deviceService.addDevice(deviceEntity);
         if(!flag){
             return R.error(400,"添加设备失败");
+        }else{
+            updateDevCount(deviceEntity.getCreateUser());
         }
         return R.ok();
     }
@@ -80,6 +85,8 @@ public class DeviceController extends AbstractController {
         boolean flag = deviceService.deleteDevice(deviceQuery);
         if(!flag){
             return R.error(400,"删除设备失败");
+        }else{
+            updateDevCount(userId);
         }
         return R.ok();
     }
@@ -91,6 +98,12 @@ public class DeviceController extends AbstractController {
         boolean flag = deviceService.updateById(deviceEntity);
         if(!flag){
             return R.error(400,"修改设备失败");
+        }else{
+            /**
+             * 获取当前用户的设备数量
+             * */
+            updateDevCount(deviceEntity.getCreateUser());
+
         }
         return R.ok();
     }
@@ -102,5 +115,19 @@ public class DeviceController extends AbstractController {
         return R.ok(deviceService.updateOnOffByIds(deviceQuery));
     }
 
-
+    /**
+     * 修改当前用户的设备数量
+     * */
+    private void updateDevCount(Long curUserId){
+        SysUserEntity sysUserEntity = new SysUserEntity();
+        sysUserEntity.setUserId(curUserId);
+        String curAllParentId = null;
+        if(curUserId != null){
+            curAllParentId = sysUserService.queryByUid(curUserId);
+        }
+        if(curAllParentId != null){
+            sysUserEntity.setAllParentId(curAllParentId);
+        }
+        sysUserService.updateDevCount(sysUserEntity);
+    }
 }

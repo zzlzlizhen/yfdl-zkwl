@@ -26,19 +26,33 @@ $(function(){
     var proid //编辑id
 
     //头部导航
-    $("#pa").html(character+">")
-    $("#pb").html(groupName)
+    $("#pa").html(character+">");
+    $("#pb").html(groupName);
+    var $color = localStorage.getItem("mycolor");
 
     //搜索
     $("#proje_search").click(function(){
-        var sing_id=$("#sing_id").val()
-        var sing_name=$("#sing_name").val()
-        var select=$("#sing_se option:selected").text()
-        $("#div").html("")
-        form(pageSize,pageNum,sing_id,sing_name,select)
+        var sing_id=$("#sing_id").val();
+        var sing_name=$("#sing_name").val();
+        var select=$("#sing_se option:selected").text();
+        $("#div").html("");
+        form(pageSize,pageNum,sing_id,sing_name,select);
+        refresh();
     })
+    //自动刷新
+    var t;
+    refresh();
+    function refresh(){
+        if($("#sing_id").val()=="" && $("#sing_name").val()=="" && $("#sing_se").val()=="" ){
+            t=setInterval(function(){
+                form(10,1,"","","");
+            }, 60000);
+        }else{
+            clearInterval(t);
+        }
+    }
 
-    form(10,1,"","","")
+    form(10,1,"","","");
     function form(pageSizea,pagesa,deviceCode,deviceName,deviceType) {
         $.ajax({
             url: baseURL + 'fun/device/queryDevice',
@@ -54,8 +68,8 @@ $(function(){
                 "pageNum": pagesa
             }),
             success: function (res) {
-                console.log("分组下设备")
-                console.log(res)
+                console.log("分组下设备");
+                console.log(res);
                 pages = res.data.pages;
                 pageSize = res.data.pageSize;
                 pageNum = res.data.pageNum
@@ -80,7 +94,7 @@ $(function(){
                         photocellState = "正在充电";
                     }
                     //蓄电池状态
-                    var batteryState=res.data.list[i].batteryState
+                    var batteryState=res.data.list[i].batteryState;
                     if (batteryState == null ) {
                         batteryState = "";
                     } else if(batteryState == 0) {
@@ -203,7 +217,10 @@ $(function(){
                         "</td>\n" +
                         "</tr>"
                 }
-                $("#div").append(html);
+                $("#div").empty().append(html);
+                if($color == 2){
+                    $("#add_single,.particulars_a,.particulars,.deleteq,.switch").hide();
+                }
                 // 地图定位
                 $(".ma_p").click(function(){
                     var longitude=$(this).attr("id");
@@ -275,7 +292,11 @@ $(function(){
                 $("#deleteAll").unbind('click');
                 $("#deleteAll").click(function(){
                     if(arr.length <=0 ){
-                        alert("请选择删除的设备!");
+                        layer.open({
+                            title: '信息',
+                            content: '请选择删除的设备',
+                            skin: 'demo-class'
+                        });
                         return;
                     }
                     var ids = "";
@@ -304,9 +325,13 @@ $(function(){
                         data:{},
                         success: function(res) {
                             if(res.code == "200"){
-                                window.location.reload()
+                               window.location.reload()
                             }else{
-                                alert("删除失败")
+                                layer.open({
+                                    title: '信息',
+                                    content: res.msg,
+                                    skin: 'demo-class'
+                                });
                             }
                         }
                     })
@@ -364,7 +389,11 @@ $(function(){
                         data:{},
                         success: function(res) {
                             if(res.code== "200"){
-                                alert("移动分组成功")
+                                layer.open({
+                                    title: '信息',
+                                    content: '移动分组成功',
+                                    skin: 'demo-class'
+                                });
                                 window.location.reload()
                             }
                         }
@@ -412,7 +441,7 @@ $(function(){
                             "status": 2
                         }),
                         success: function(res) {
-                          console.log(res)
+
                         }
                     })
                     $.ajax({
@@ -425,7 +454,7 @@ $(function(){
                             "onOff":value[0], //0：关；1：开：
                         }),
                         success: function(res) {
-                            console.log(res)
+
                         }
                     })
                 }
@@ -464,9 +493,21 @@ $(function(){
                             }),
                             success: function(res) {
                                 if(res.code == "200"){
-                                    window.location.reload()
+                                    //window.location.reload()
+                                    $(".shade_modifier").hide()
+                                    $(".mistake").hide()
+                                    layer.open({
+                                        title: '信息',
+                                        content: '修改成功',
+                                        skin: 'demo-class'
+                                    });
+                                    form(10, 1, "", "", "", "")
                                 }else{
-                                    alert("编辑失败")
+                                    layer.open({
+                                        title: '信息',
+                                        content: res.msg,
+                                        skin: 'demo-class'
+                                    });
                                 }
                             }
                         })
@@ -474,7 +515,6 @@ $(function(){
                 })
 
                 function fen(projectId){
-                    console.log(projectId)
                     $.ajax({
                         url:baseURL + 'fun/group/queryGroupNoPage?projectId='+projectId,
                         contentType: "application/json;charset=UTF-8",
@@ -511,7 +551,6 @@ $(function(){
             }
         })
 
-
     //    表格渲染数据结束
     }
 
@@ -545,9 +584,9 @@ $(function(){
         })
     })
 
-    $(".shade_add_project").click(function(){
+    $(".shade_add_project,.shade_modifier_project ").click(function(){
         $(".shade_project,.shade_b_project").css("display","none");
-
+        $(".mistake").css("display","none")
     })
     $("#project_confirm").unbind('click');
     $("#project_confirm").click(function(){
@@ -572,9 +611,21 @@ $(function(){
                     if(res.code == "200"){
                        $(".pro_name").val("")
                        $(".pro_s").val("")
-                        window.location.reload()
+                       // window.location.reload()
+                        $(".shade_project").hide()
+                        $(".mistake").hide()
+                        layer.open({
+                            title: '信息',
+                            content: '添加成功',
+                            skin: 'demo-class'
+                        });
+                        form(10,1,"","","","")
                     }else{
-                        alert("添加失败")
+                        layer.open({
+                            title: '信息',
+                            content: '添加失败',
+                            skin: 'demo-class'
+                        });
                     }
                 }
             })
@@ -590,7 +641,5 @@ $(function(){
     $(".shade_modifier_yi").click(function(){
         $(".shade_Yi,.shade_b_yi").css("display","none")
     })
-
-
 
 })

@@ -58,28 +58,61 @@
 	</select>
 	<!--通过用户id跟邮箱查询该用户是否已经绑定邮箱-->
 	<select id="queryByEmailAndUid" resultType="com.remote.sys.entity.SysUserEntity">
-		select <include refid="columns"/> from sys_user as su  where su.flag = 1 and su.type =1 and su.user_id = #{userId} and su.email = #{email}
+		select <include refid="columns"/> from sys_user as su  where su.flag = 1 and su.type =1
+		<if test="userId!=null">
+			and su.user_id = #{userId}
+		</if>
+		<if test="email!=null and email !='' ">
+			and su.email = #{email}
+		</if>
 	</select>
-	<!--通过用户id跟手机查询该手机号是否已绑定-->
-	<select id="queryBySmsAndUid" resultType="com.remote.sys.entity.SysUserEntity">
-		SELECT <include refid="columns"/> from sys_user as su where su.flag = 1 and su.is_bind_mtype = 1 and su.user_id = #{userId} and su.mobile = #{mobile}
-	</select>
+
 <!--	<select id="queryByUser" resultType="com.remote.modules.sys.entity.SysUserEntity">
 		select <include refid="columns"/> from sys_user where 1=1 and username = #{username}
 	</select>-->
 	<!-- 查询用户自身和子用户信息 -->
 	<select id="queryChild" resultType="com.remote.sys.entity.SysUserEntity">
-		select <include refid="columns"/> from sys_user as su where su.flag = 1 and su.parent_id = #{userId} or su.user_id = #{userId}
+		select <include refid="columns"/> from sys_user where flag = 1
+		<if test="userId != null">
+			and parent_id = #{userId}
+			or user_id = #{userId}
+		</if>
+
 	</select>
 	<!-- 查询用户的自身或者子用户信息 -->
 	<select id="queryAllChild" resultType="com.remote.sys.entity.SysUserEntity">
-		select <include refid="columns"/> from sys_user as su where su.flag = 1 and su.all_parent_id like concat(#{allParentId},',%') or su.user_id = #{userId}
+		select <include refid="columns"/> from sys_user as su where su.flag = 1
+		<if test="allParentId != null">
+			and su.all_parent_id like concat(#{allParentId},',%')
+		</if>
+		<if test="userId != null">
+			or su.user_id = #{userId}
+		</if>
+
 	</select>
     <select id="queryByUnameAndPwd" resultType="com.remote.sys.entity.SysUserEntity">
-		select <include refid="columns"/>,sur.role_id as roleId from sys_user as su left JOIN sys_user_role as sur ON su.user_id= sur.user_id where su.flag=1 and su.username=#{username} and su.password=#{password}
+		select <include refid="columns"/>,sur.role_id as roleId from sys_user as su
+		left JOIN sys_user_role as sur ON su.user_id= sur.user_id where su.flag=1
+		<if test="username != null and username != ''">
+			and su.username=#{username}
+		</if>
+		<if test="password != null and password != ''">
+			and su.password=#{password}
+		</if>
 	</select>
 	<select id="queryByUname" resultType="com.remote.sys.entity.SysUserEntity">
-		select <include refid="columns"/>,sur.role_id as roleId from sys_user as su left JOIN sys_user_role as sur ON su.user_id = sur.user_id
-		where su.flag=1 and su.username=#{username}
+		select <include refid="columns"/>,sur.role_id as roleId from sys_user as su
+		left JOIN sys_user_role as sur ON su.user_id = sur.user_id
+		where su.flag=1
+		<if test="username != null and username != ''">
+			and su.username=#{username}
+		</if>
+
+	</select>
+	<select id="queryByUid" resultType="string">
+		select all_parent_id from sys_user where flag = 1
+		<if test="curUid != null">
+			and user_id=#{curUid}
+		</if>
 	</select>
 </mapper>

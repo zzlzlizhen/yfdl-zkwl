@@ -42,7 +42,8 @@ public class FeedbackController extends AbstractController{
     @RequestMapping("/list")
   /*  @RequiresPermissions("sys:feedback:list")*/
     public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = feedbackService.queryPage(params,getUser());
+        SysUserEntity curUser = getUser();
+        PageUtils page = feedbackService.queryPage(params,curUser);
 
         return R.ok().put("page", page);
     }
@@ -52,7 +53,8 @@ public class FeedbackController extends AbstractController{
      * */
     @RequestMapping(value = "/queryCount")
     public R queryCount(){
-        int total = feedbackService.queryCount(getUserId());
+        Map<String, Object> params = new HashMap<String, Object>();
+        int total = feedbackService.queryPageCount(params,getUserId());
         int queryCount = msgBackReadedService.queryCount(getUserId(),1);
         if(total < queryCount){
             return R.error("信息错误");

@@ -11,6 +11,7 @@ import com.remote.project.entity.ProjectQuery;
 import com.remote.project.service.ProjectService;
 import com.remote.sys.controller.AbstractController;
 import com.remote.sys.entity.SysUserEntity;
+import com.remote.sys.service.SysUserService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,8 @@ public class ProjectController extends AbstractController {
 
     @Autowired
     private DeviceService deviceService;
-
+    @Autowired
+    private SysUserService sysUserService;
 
 
 
@@ -54,6 +56,8 @@ public class ProjectController extends AbstractController {
         boolean flag = projectService.addProject(project);
         if(!flag){
             return R.error(400,"添加项目失败");
+        }else{
+            sysUserService.updateProCount(project.getCreateUser());
         }
         return R.ok();
     }
@@ -76,9 +80,9 @@ public class ProjectController extends AbstractController {
 
     @RequestMapping(value = "/delete", method= RequestMethod.GET)
     public R delete(String projectIds,Long userId){
+        DeviceQuery deviceQuery = new DeviceQuery();
         if(StringUtils.isNotEmpty(projectIds)){
             List<String> projectList = Arrays.asList(projectIds.split(","));
-            DeviceQuery deviceQuery = new DeviceQuery();
             deviceQuery.setProjectId(projectList.get(0));
             List<DeviceEntity> deviceList = deviceService.queryDeviceNoPage(deviceQuery);
             if(CollectionUtils.isNotEmpty(deviceList)){
@@ -87,6 +91,8 @@ public class ProjectController extends AbstractController {
             boolean flag = projectService.delProject(projectList,userId);
             if(!flag){
                 return R.error(400,"删除项目失败");
+            }else{
+                sysUserService.updateProCount(userId);
             }
         }
         return R.ok();
@@ -100,6 +106,8 @@ public class ProjectController extends AbstractController {
         boolean flag = projectService.updateProject(projectEntity);
         if(!flag){
             return R.error(400,"修改项目失败");
+        }else{
+            sysUserService.updateProCount(projectEntity.getCreateUser());
         }
         return R.ok();
     }

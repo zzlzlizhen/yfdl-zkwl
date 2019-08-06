@@ -31,7 +31,7 @@ public interface DeviceService {
      * @Param deviceCode
      * @return  int
      **/
-    int updateDeviceTimeOutByCode(String deviceCode);
+    int updateDeviceTimeOutByCode(String deviceCode,Integer runState);
     /*
      * @Author zhangwenping
      * @Description 查询设备
@@ -40,4 +40,12 @@ public interface DeviceService {
      * @return List<DeviceEntity>
      **/
     List<DeviceEntity> queryDeviceNoPage(DeviceQuery deviceQuery);
+    /*
+     * @Author zhangwenping
+     * @Description 操作成功修改版本号
+     * @Date 11:08 2019/7/30
+     * @Param deviceCode
+     * @return int
+     **/
+    int updateDeviceVersionByCode(String deviceCode);
 }

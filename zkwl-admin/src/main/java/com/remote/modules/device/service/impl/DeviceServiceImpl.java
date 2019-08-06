@@ -22,6 +22,7 @@ import com.remote.modules.faultlog.service.FaultlogService;
 import com.remote.modules.group.dao.GroupMapper;
 import com.remote.modules.group.entity.GroupEntity;
 import com.remote.modules.group.entity.GroupQuery;
+import com.remote.modules.group.service.GroupService;
 import com.remote.modules.group.service.impl.GroupServiceImpl;
 import com.remote.modules.project.dao.ProjectMapper;
 import com.remote.modules.project.entity.ProjectEntity;
@@ -73,6 +74,9 @@ public class DeviceServiceImpl implements DeviceService {
     @Autowired
     private DistrictService districtService;
 
+    @Autowired
+    private GroupService groupService;
+
     @Override
     public PageInfo<DeviceEntity> queryDevice(DeviceQuery deviceQuery) throws Exception {
         logger.info("查询设备信息："+JSONObject.toJSONString(deviceQuery));
@@ -112,7 +116,13 @@ public class DeviceServiceImpl implements DeviceService {
             DistrictEntity districtEntity = districtService.queryDistrictById(projectEntity.getCityId());
             deviceEntity.setCityName(districtEntity.getDistrictName());
         }
+        //添加设备分类名称
         deviceEntity.setDeviceType("1");
+        deviceEntity.setDeviceTypeName(DeviceTypeMap.DEVICE_TYPE.get("1"));
+        //添加分组名称
+        String groupId = deviceEntity.getGroupId();
+        GroupEntity groupEntity = groupService.queryGroupById(groupId);
+        deviceEntity.setGroupName(groupEntity.getGroupName());
         return deviceMapper.insert(deviceEntity) > 0 ? true : false;
     }
 

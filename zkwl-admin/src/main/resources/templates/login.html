@@ -1,5 +1,6 @@
-<!DOCTYPE html style="height:100%">
-<html>
+<#import "spring.ftl" as spring/>
+<!DOCTYPE html style="height: 100%;">
+<html lang="en" >
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -25,7 +26,10 @@
 
     </style>
 </head>
-<body class="hold-transition login-page">
+<body class="hold-transition login-page" >
+    <br>
+    <a class="changeLang" href="javascript:void(0);">english</a><br/>
+    <a class="changeLang" href="javascript:void(0);">中文</a><br/>
     <div class="login-box" id="rrapp" v-cloak>
         <div class="zhe_zao"></div>
         <div class="zhe_S"></div>
@@ -47,7 +51,8 @@
                 <div class="r_yonghuming">
                     <span><p></p></span>
                     <img src="${request.contextPath}/statics/image/r1.png" alt="">
-                    <input type="text" v-model="username" placeholder="用户名">
+                   <input type="text" v-model="username"  placeholder='<@spring.message code="message.login.username"/>'/>
+
                 </div>
                  <!--<div class="form-group has-feedback">-->
                      <!--<input type="password" class="form-control" v-model="password" placeholder="密码">-->
@@ -56,7 +61,7 @@
                 <div class="r_yonghuming">
                     <span><p></p></span>
                     <img src="${request.contextPath}/statics/image/r0.png" alt="">
-                    <input type="password" v-model="password" placeholder="密码">
+                    <input type="password" v-model="password"  placeholder='<@spring.message code="message.login.password"/>'/>
                 </div>
                  <div class="form-group has-feedback r_yanzhengma">
                      <span><p></p></span>
@@ -141,6 +146,18 @@ var vm = new Vue({
         }
 	}
 });
+$(".changeLang").on("click", function () {
+    switch ($(this).text()) {
+        case "中文": {
+            window.location.href = "index.html?_lang=zh_CN";
+            break;
+        }
+        case "english": {
+            window.location.href = "index.html?_lang=en_US";
+            break;
+        }
+    }
+})
 </script>
 </body>
 </html>

@@ -72,9 +72,9 @@ public class SysUserEntity implements Serializable {
 	private List<Long> roleIdList;
 
 	/**
-	 * 用户类型 0使用者  1  管理者  2 超级管理员
+	 * 用户类型 2使用者  1  管理者
 	 * */
-	@TableField(exist=false)
+	/*@TableField(exist=false)*/
 	@NotNull(message = "用户类型不能为空",groups = {AddGroup.class, UpdateGroup.class})
 	private Long roleId;
 

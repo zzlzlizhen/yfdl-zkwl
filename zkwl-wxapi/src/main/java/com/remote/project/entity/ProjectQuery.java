@@ -25,6 +25,8 @@ public class ProjectQuery {
 
     private List<Long> userIds = new ArrayList<>();
 
+    public ProjectQuery() {
+    }
     public ProjectQuery(Integer pageSize, Integer pageNum, String projectName) {
         this.pageNum = pageNum;
         this.pageSize = pageSize;

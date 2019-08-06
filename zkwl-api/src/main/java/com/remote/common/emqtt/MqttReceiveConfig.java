@@ -75,7 +75,7 @@ public class MqttReceiveConfig {
     @Bean
     public MessageProducer inbound() {
         MqttPahoMessageDrivenChannelAdapter adapter =
-                new MqttPahoMessageDrivenChannelAdapter("LADG000000000000000", mqttClientFactory(),
+                new MqttPahoMessageDrivenChannelAdapter(UUID.randomUUID().toString(), mqttClientFactory(),
                         "hello");
         adapter.setCompletionTimeout(emqttEntity.getCompletionTimeout());
         adapter.setConverter(new DefaultPahoMessageConverter());

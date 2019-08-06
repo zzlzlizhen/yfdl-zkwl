@@ -5,7 +5,7 @@
 /*侧边栏样式*/
 .logo_m{background-color:#0ECCC2 !important; height:60px !important;}
 .main-sidebar_m{background: url('/statics/image/rbeijingsix.png')!important;padding-top:60px;}
-.skin-blue .wrapper, .skin-blue .main-sidebar, .skin-blue .left-side{background: url('/statics/image/rbeijingsix.png')!important;}
+.skin-blue .wrapper, .skin-blue .main-sidebar, .skin-blue .left-side{background: url('/statics/image/rbeijingsix.png')!important; background-size: 100% 100% !important;}
 .skin-blue .sidebar-menu > li:hover > a, .skin-blue .sidebar-menu > li.active > a{background:rgba(0, 0, 0, 0);}
 /*头部*/
 .navbar_m{background:#fff !important;color:#000 !important;}
@@ -33,7 +33,7 @@
 .shade,.shade_a{width:100%;height:100%;background: #666; opacity: 0.3;}
 .nei_r,.nei_r_a{width:700px;height:600px; background:#fff;position: absolute;z-index: 222222;top:50%;left:50%;margin:-300px 0px 0px -350px;border-radius: 5px;}
 .nei_r_a{width:500px;margin-left:-250px;}
-.nei_r img{background: #ccc;width:100px;height:100px;border-radius: 50%;float:left;margin:5% 0px 0px 310px;}
+.nei_r img{width:100px;height:100px;border-radius: 50%;float:left;margin:5% 0px 0px 310px;}
 .import{width:85%;height:auto;float:left;margin:4% 0px 0px 6%;}
 .import div{width:45%;height:60px;float:left;margin:3% 0px 0px 5%;}
 .import div span{width:100%;height:27px;float:left; font-weight: 500;color:#000 !important;font-size: 14px}
@@ -44,7 +44,7 @@
 .confirm input{width:80px;height:30px;border-radius: 4px; background:#1890FF;margin:2.5% 4% 0px 0px;float:right;border:0;color: #fff; }
 .J_fan{width:100%;height:45px;border-bottom: 1px solid #ccc;line-height:45px;text-indent: 15px;font-weight: bold;background: #27E2D4;text-align: center;color: #FFFFFF;}
 #r_wen_fan{width: 419px;
-    height: 133px;
+    height: 127px;
     border-radius: 4px;
     display: inline-block;
     text-indent: 5px;

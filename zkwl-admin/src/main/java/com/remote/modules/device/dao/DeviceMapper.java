@@ -17,7 +17,7 @@ public interface DeviceMapper extends BaseMapper<DeviceEntity> {
      * @Description 根据分组查询设备信息
      * @Date 13:59 2019/6/4
      * @Param deviceQuery
-     * @return List<DeviceEntity>
+     * @return List<DeviceEsEntity>
      **/
     List<DeviceEntity> queryDevice(@Param("deviceQuery") DeviceQuery deviceQuery);
     /*
@@ -41,7 +41,7 @@ public interface DeviceMapper extends BaseMapper<DeviceEntity> {
      * @Description 查询分组下设备各状态数量
      * @Date 11:23 2019/6/18
      * @Param groupIds deviceStatus projectIds
-     * @return List<DeviceEntity>
+     * @return List<DeviceEsEntity>
      **/
     List<DeviceEntity> queryDeviceByGroupCount(@Param("groupIds") List<String> groupIds,@Param("projectId") String projectId,@Param("deviceStatus") Integer deviceStatus);
     /*
@@ -49,7 +49,7 @@ public interface DeviceMapper extends BaseMapper<DeviceEntity> {
      * @Description 查询分组详情
      * @Date 17:26 2019/6/19
      * @Param deviceId
-     * @return DeviceEntity
+     * @return DeviceEsEntity
      **/
     DeviceEntity queryDeviceByDeviceId(@Param("deviceId")String deviceId);
 
@@ -58,7 +58,7 @@ public interface DeviceMapper extends BaseMapper<DeviceEntity> {
      * @Description 根据城市统计项目下设备的数量
      * @Date 14:40 2019/6/20
      * @Param projectIds
-     * @return List<DeviceEntity>
+     * @return List<DeviceEsEntity>
      **/
     List<Map<Object,Object>> queryDeviceGroupByCity(@Param("userIds") List<Long> userIds);
     /*
@@ -95,7 +95,7 @@ public interface DeviceMapper extends BaseMapper<DeviceEntity> {
      * @Description 根据项目或者分组统计其下所有设备
      * @Date 11:23 2019/6/18
      * @Param projectId groupId
-     * @return List<DeviceEntity>
+     * @return List<DeviceEsEntity>
      **/
     List<DeviceEntity> queryRunStateCount(@Param("projectId")String projectId,@Param("groupId")String groupId);
 
@@ -130,7 +130,7 @@ public interface DeviceMapper extends BaseMapper<DeviceEntity> {
      * @Description 根据分组查询设备的第一条
      * @Date 16:37 2019/7/17
      * @Param groupId
-     * @return DeviceEntity
+     * @return DeviceEsEntity
      **/
     DeviceEntity queryDeviceByGroupIdTopOne(@Param("groupId")String groupId);
     /*
@@ -138,7 +138,7 @@ public interface DeviceMapper extends BaseMapper<DeviceEntity> {
      * @Description 查询项目下设备各状态数量
      * @Date 11:23 2019/6/18
      * @Param groupIds deviceStatus projectIds
-     * @return List<DeviceEntity>
+     * @return List<DeviceEsEntity>
      **/
     List<DeviceEntity> queryDeviceByProjectCount(@Param("projectIds") List<String> projectIds,@Param("deviceStatus") Integer deviceStatus);
     /*
@@ -146,7 +146,7 @@ public interface DeviceMapper extends BaseMapper<DeviceEntity> {
      * @Description 通过ids查询详情
      * @Date 16:26 2019/7/24
      * @Param deviceIds
-     * @return  List<DeviceEntity>
+     * @return  List<DeviceEsEntity>
      **/
     List<DeviceEntity> queryDeviceByDeviceIds(@Param("deviceIds") List<String> deviceIds);
 

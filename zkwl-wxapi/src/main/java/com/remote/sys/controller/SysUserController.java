@@ -9,6 +9,8 @@ import com.remote.common.utils.R;
 
 import com.remote.common.validator.ValidatorUtils;
 import com.remote.common.validator.group.AddGroup;
+import com.remote.device.service.DeviceService;
+import com.remote.project.service.ProjectService;
 import com.remote.sys.entity.SysUserEntity;
 import com.remote.sys.service.SysUserService;
 import org.apache.commons.lang.ArrayUtils;
@@ -31,7 +33,10 @@ import java.util.Map;
 public class SysUserController extends AbstractController {
 	@Autowired
 	private SysUserService sysUserService;
-	
+	@Autowired
+	private ProjectService projectService;
+	@Autowired
+	private DeviceService deviceService;
 	/**
      * 获取所有的用户名
      * */
@@ -80,6 +85,7 @@ public class SysUserController extends AbstractController {
 	 */
 	@RequestMapping(value = "/save",method = RequestMethod.POST)
 	public R save(SysUserEntity user){
+
 		if(StringUtils.isNotBlank(user.getUsername())){
 			SysUserEntity sysUserEntity =	sysUserService.getByUsername(user.getUsername());
 			if(sysUserEntity != null){

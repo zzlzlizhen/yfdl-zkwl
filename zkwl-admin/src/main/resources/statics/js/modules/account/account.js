@@ -4,7 +4,7 @@ $(function () {
     var pageNum
     var Id_a
     var ids
-
+    var $color = localStorage.getItem("mycolor");
     //搜索
     $("#proje_search").unbind('click');
     $("#proje_search").click(function () {
@@ -73,7 +73,7 @@ $(function () {
                         "<td class='username' title=" + res.page.list[i].username + ">" + res.page.list[i].username + "</td>\n" +
                         " <td class='r_user' title=" + res.page.list[i].realName + ">" + res.page.list[i].realName + "</td>\n" +
                         "<td>" + res.page.list[i].projectCount + "</td>\n" +
-                        "<td>" + res.page.list[i].deviceCount + "</td>\n" +
+                        "<td class='roleId' id=" + res.page.list[i].roleId + ">" + res.page.list[i].deviceCount + "</td>\n" +
                         "<td title=" + res.page.list[i].createTime + ">" + res.page.list[i].createTime + "</td>\n" +
                         "<td class='r_termof'>" + termOfValidity + "</td>\n" +
                         "<td>"+state+"</td>\n" +
@@ -92,11 +92,13 @@ $(function () {
                         " <a href='javascript:void(0)'  class='Delete r_bu_sou2'><img src='/statics/image/shanchu.png' alt=''></a>\n" +
                         "</td>\n" +
                         "</tr>"
-                        // 删除的样式<span class="glyphicon glyphicon-pencil " ></span>
-                        // <span class="glyphicon glyphicon-trash "></span>
+
                 }
 
-                $("#div").append(html)
+                $("#div").empty().append(html);
+                if($color == 2){
+                    $(".btn_m_new,.r_bu_sou1,.r_bu_sou2").hide();
+                }
                 //滑動按鈕
                 var Id_a
                 $(".toogle").unbind('click');
@@ -144,7 +146,7 @@ $(function () {
                 var Id_aa
                 $(".compile").unbind('click');
                 $(".compile").click(function () {
-                    $(".shade,.shade_b").css("display", "block")
+                    $(".shade,.shade_b").css("display", "block");
                     //id
                     Id_aa = $(this).parent().attr('id');
                     var na_ma = $(this).parent().siblings(".username").html();
@@ -160,9 +162,21 @@ $(function () {
                     $("#acc_call_b").val(r_typ);
                     var r_emal = $(this).parent().siblings(".r_emal").html();
                     $("#acc_mailbox_b").val(r_emal);
+                    var roleId = $(this).parent().siblings(".roleId").attr("id");
+                    if(roleId == 1){
+                        roleId="管理者"
+                    }else if(roleId == 2){
+                        roleId="使用者"
+                    }
+                    $("#r_Ad_mod").val(roleId);
                     //图片
-                    var url=$(this).attr("id")
-                    $("#pice").attr("src","https://39.97.169.198"+url);
+                    var url=$(this).attr("id");
+                    if(url !=""){
+                        $("#pice").attr("src","https://guangxun-wulian.com"+url);
+                    }else{
+                        $("#pice").attr("src", "/statics/image/ttxa.svg");
+                    }
+
                 })
                 //修改管理员
                 $("#sha_que_can").unbind('click');
@@ -183,10 +197,10 @@ $(function () {
                     //手机
                     var r_typ_mod = $("#acc_call_b").val();
                     //管理者
-                    var r_Ad_mod = $("#r_Ad_mod").val();
+                    var r_Ad_mod = $("#r_Ad_mod option:selected").attr("class");
 
                     if (na_ma_mod == "" || r_user_mod == "" || r_termof_mod == "" || r_emal_mod == "" || r_typ_mod == "" || r_Ad_mod == "") {
-                       $(".rrbol").html("輸入不能為空");
+                       $(".rrbol").html("输入不能为空");
                          lay()
                     } else {
                         //    账号
@@ -236,14 +250,24 @@ $(function () {
                             "&headUrl=" + headUrle +
                             "&realName=" + r_user_mod +
                             "&termOfValidity=" + r_termof_mod +
-                            "&roleId=" + r_Ad_mod,
+                            "&roleId=" + r_Ad_mod+
+                            "&password=" + r_pw_mod,
                             success: function (res) {
-                                console.log(JSON.stringify(res));
                                 if (res.code == "200") {
-                                    alert('修改成功')
-                                    window.location.reload()
+                                    $(".shade").hide()
+                                    $(".mistake").hide()
+                                    layer.open({
+                                        title: '信息',
+                                        content: '修改成功',
+                                        skin: 'demo-class'
+                                    });
+                                    form(10, 1, "", "", "", "")
                                 } else {
-                                    alert(res.msg);
+                                    layer.open({
+                                        title: '信息',
+                                        content: res.msg,
+                                        skin: 'demo-class'
+                                    });
                                 }
                             }
                         })
@@ -268,7 +292,11 @@ $(function () {
                             if (r.code == 200) {
                                 window.location.reload()
                             } else {
-                                alert(r.msg);
+                                layer.open({
+                                    title: '信息',
+                                    content: ''+r.msg,
+                                    skin: 'demo-class'
+                                });
                             }
                         }
                     });
@@ -314,9 +342,11 @@ $(function () {
     })
     //删除弹窗
     $(".shade_a_delete,.sha_cancel_delete,.guan_sha,.sha_cancel_newa").unbind('click');
-    $(".shade_a_delete,.sha_cancel_delete,.guan_sha,.sha_cancel_newa").click(function () {
+    $(".shade_a_delete,.sha_cancel_delete,.guan_sha,.sha_cancel_newa,.layui-layer-btn0,.layui-layer-setwin").click(function () {
         $(".shade_delete,.shade_b_delete").css("display", "none")
+        $(".mistake").css("display", "none")
     })
+
     //新建
     $(".btn_m_new").unbind('click');
     $(".btn_m_new").click(function () {
@@ -328,10 +358,10 @@ $(function () {
         $("#acc_mailbox").val("")
         $("#acc_call").val("");
         $("#role").val("");
-        $("#pic").attr("src","");
     })
     $(".shade_a_new,.sha_cancel_new,.guan_shb").click(function () {
         $(".shade_new,.shade_b_new").css("display", "none")
+        $(".mistake").css("display","none")
     })
 
     $("#confirm_Z").unbind('click');
@@ -405,11 +435,19 @@ $(function () {
                         $("#acc_mailbox").val("")
                         $("#acc_call").val("");
                         $("#role").val("");
-                        alert('保存成功', function () {
-                            window.location.reload()
+                        $(".shade_new").hide()
+                        layer.open({
+                            title: '信息',
+                            content: '保存成功',
+                            skin: 'demo-class'
                         });
+                        form(10, 1, "", "", "", "")
                     } else {
-                        alert(res.msg);
+                        layer.open({
+                            title: '信息',
+                            content: ''+res.msg,
+                            skin: 'demo-class'
+                        });
                     }
                 }
             })
@@ -424,23 +462,32 @@ $(function () {
         responseType:"json",
         onSubmit:function(file, extension){
             if (!(extension && /^(jpg|jpeg|png|gif)$/.test(extension.toLowerCase()))){
-                alert('只支持jpg、png、gif格式的图片！');
+                layer.open({
+                    title: '信息',
+                    content:'只支持jpg、png、gif格式的图片！',
+                    skin: 'demo-class'
+                });
                 return false;
             }
         },
         onComplete : function(file, r){
             if(r.code == 200){
+                console.log("lololo");
+                console.log(r.url)
                 $("#headUrl").val(r.url);
-                console.log("2+")
-                console.log(r.url);
-                console.log(file)
-                $("#pic").attr("src","https://39.97.169.198"+r.url);
+                $("#pic").attr("src","https://guangxun-wulian.com"+r.url);
             }else{
-                alert(r.msg);
+                layer.open({
+                    title: '信息',
+                    content: ''+r.msg,
+                    skin: 'demo-class'
+                });
             }
         }
     });
 });
+
+
 //修改 上传图片
 new AjaxUpload('#uploade', {
     action: baseURL + "sys/upload",
@@ -449,18 +496,26 @@ new AjaxUpload('#uploade', {
     responseType:"json",
     onSubmit:function(file, extension){
         if (!(extension && /^(jpg|jpeg|png|gif)$/.test(extension.toLowerCase()))){
-            alert('只支持jpg、png、gif格式的图片！');
+            layer.open({
+                title: '信息',
+                content:'只支持jpg、png、gif格式的图片！',
+                skin: 'demo-class'
+            });
             return false;
         }
     },
     onComplete : function(file, r){
         if(r.code == 200){
             $("#headUrle").val(r.url);
-            console.log("4+")
-            console.log(r.url);
-            $("#pice").attr("src","https://39.97.169.198"+r.url);
+            $("#pice").attr("src","https://guangxun-wulian.com"+r.url);
         }else{
-            alert(r.msg);
+            layer.open({
+                title: '信息',
+                content: ''+r.msg,
+                skin: 'demo-class'
+            });
         }
     }
 });
+
+

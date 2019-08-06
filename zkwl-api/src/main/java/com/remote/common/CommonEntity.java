@@ -173,4 +173,7 @@ public class CommonEntity{
 
     //软件版本
     private Integer version;
+
+    //软件版本
+    private Integer deviceVersion;
 }

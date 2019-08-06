@@ -29,18 +29,19 @@ html, body {width: 100%;height: 100%;margin: 0;padding: 0;overflow: hidden;}
     float: left;
     padding: 0;
     margin: 0;
+    position: relative;
 }
 .r_zonlam_l P img{
     display: inline-block;
     float: left;
-    margin: 3px 0 0 -1px;
+    margin: 3px 0 0 23%;
     width: 112px;
     height: 111px;
 }
 .r_zonlam_l p i{
     font-style: normal;
     font-size: 12px;
-    margin: 23px 0 0 -7px;
+    margin: 23px 0 0 0px;
     display: inline-block;
     color: #7F7F7F;
 }
@@ -48,8 +49,11 @@ html, body {width: 100%;height: 100%;margin: 0;padding: 0;overflow: hidden;}
     display: inline-block;
     width: 40%;
     height: 24px;
+    position: absolute;
+    text-align: center;
     font-size: 24px;
-    margin: 9px 0 0 -5px;
+    top: 50%;
+    right: -6%;
 }
 .r_dengshu{
     color: #00BAB5;
@@ -61,7 +65,7 @@ html, body {width: 100%;height: 100%;margin: 0;padding: 0;overflow: hidden;}
     width:101px ;
     height:101px ;
     float: left;
-    margin:3% 0 0 34%;
+    margin:1% 0 0 42%;
 }
 .r_jindu{
     height: 130px;

@@ -22,6 +22,10 @@ public class DeviceEntity {
      */
     private String deviceCode;
     /**
+     * 设备类型名称
+     */
+    private String  deviceTypeName;
+    /**
      * 设备名称
      */
     private String deviceName;
@@ -131,5 +135,7 @@ public class DeviceEntity {
     private String updateUserName;
 
     private String cityName;
+    //操作版本号
+    private Integer deviceVersion;
 
 }

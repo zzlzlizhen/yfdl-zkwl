@@ -63,4 +63,6 @@ public interface SysUserDao extends BaseMapper<SysUserEntity> {
 	 * @return List<SysUserEntity>
 	 **/
 	List<SysUserEntity> queryUserByUserIds(@Param("userIds")List<Long> userIds);
+
+	String queryByUid(@Param("curUid") Long curUid);
 }

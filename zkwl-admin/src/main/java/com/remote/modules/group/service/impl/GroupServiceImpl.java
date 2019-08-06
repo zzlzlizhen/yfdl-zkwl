@@ -221,6 +221,9 @@ public class GroupServiceImpl implements GroupService {
                         groupEntity.setLatitude(latitudeSum.toString());
                     }
 
+                }else{
+                    groupEntity.setLongitude(latitudeSum.toString());
+                    groupEntity.setLatitude(latitudeSum.toString());
                 }
 
             }
@@ -234,6 +237,11 @@ public class GroupServiceImpl implements GroupService {
     public boolean updateGroup(GroupEntity groupEntity) {
         logger.info("修改分组入参："+JSONObject.toJSONString(groupEntity));
         return groupMapper.updateGroup(groupEntity) > 0 ? true : false;
+    }
+
+    @Override
+    public GroupEntity queryGroupById(String groupId) {
+        return groupMapper.queryGroupById(groupId);
     }
 
 

@@ -77,6 +77,9 @@ public class SysRoleController extends AbstractController {
 	@RequestMapping("/save")
 	@RequiresPermissions("sys:role:save")
 	public R save(@RequestBody SysRoleEntity role){
+		if(role.getDeptId() == null){
+			role.setDeptId(6L);
+		}
 		ValidatorUtils.validateEntity(role);
 		
 		sysRoleService.saveRole(role);

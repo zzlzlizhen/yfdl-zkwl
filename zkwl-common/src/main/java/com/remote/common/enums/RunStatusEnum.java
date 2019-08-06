@@ -5,7 +5,8 @@ public enum RunStatusEnum {
     NORAML("正常",1),
     WARNING("警告",2),
     FAULT("故障",3),
-    OFFLINE("离线",4);
+    OFFLINE("离线",4),
+    UPGRADE("升级中",5);
 
     private String name;
     private int code;

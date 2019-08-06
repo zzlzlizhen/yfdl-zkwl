@@ -24,6 +24,7 @@ $(function () {
     var pages
     var pageSize
     var pageNum
+    var $color = localStorage.getItem("mycolor");
     //搜索
     $("#proje_search").unbind('click');
     $("#proje_search").click(function(){
@@ -31,7 +32,6 @@ $(function () {
         $("#div").html("")
         form(pageSize,pageNum,select)
     })
-
 
     form(10,1,"")
     function form(pageSizea,pagesa,select) {
@@ -91,7 +91,10 @@ $(function () {
                         "</td>\n" +
                         "</tr>"
                 }
-                $("#div").append(html);
+                $("#div").empty().append(html);
+                if($color == 2){
+                    $("#add_grouping,.modifier_a,.modifier,.deleteq").hide();
+                }
                 // 地图定位
                 $(".ma_p").unbind('click');
                 $(".ma_p").click(function(){
@@ -117,18 +120,18 @@ $(function () {
                         $('input[name="clk"]').each(function(){
                             $(this).prop("checked",true);
                             var devId=$(this).parent().attr('id');
-                            arr.push(devId)
+                            arr.push(devId);
                             var len=arr.length;
-                            $("#mo_sp").html(len+"项")
-                            $(".move_a").show()
+                            $("#mo_sp").html(len+"项");
+                            $(".move_a").show();
                         });
                     }else{
                         $('input[name="clk"]').each(function(){
                             $(this).prop("checked",false);
                             var devId=$(this).parent().attr('id');
                             arr=[]
-                            $("#mo_sp").html(""+"项")
-                            $(".move_a").hide()
+                            $("#mo_sp").html(""+"项");
+                            $(".move_a").hide();
                         });
                     }
                 });
@@ -138,25 +141,25 @@ $(function () {
                     var che_c=$(this).prop('checked');
                     if(che_c == true){
                         $("#checkbox[name=all]:checkbox").prop('checked', true);
-                        var devId=$(this).parent().attr('id')
-                        arr.push(devId)
+                        var devId=$(this).parent().attr('id');
+                        arr.push(devId);
                         var len=arr.length;
-                        $("#mo_sp").html(len+"项")
-                        $(".move_a").show()
+                        $("#mo_sp").html(len+"项");
+                        $(".move_a").show();
                     }
                     else if(che_c == false){
                         if($(".checkbox_i").prop('checked') == true){
                             $("#checkbox[name=all]:checkbox").prop('checked', true);
-                            $(".move_a").show()
+                            $(".move_a").show();
                         }else{
                             $("#checkbox[name=all]:checkbox").prop('checked', false);
-                            $(".move_a").hide()
+                            $(".move_a").hide();
                         }
                         var devId=$(this).parent().attr('id');
                         var index = arr.indexOf(devId);
                         arr.splice(index, 1);
                         var len=arr.length;
-                        $("#mo_sp").html(len+"项")
+                        $("#mo_sp").html(len+"项");
                     }
                 })
 
@@ -164,7 +167,11 @@ $(function () {
                 $(".deleteAll").unbind('click');
                 $(".deleteAll").click(function(){
                     if(arr.length <=0 ){
-                        alert("请选择删除的设备!");
+                        layer.open({
+                            title: '信息',
+                            content: '请选择删除的设备',
+                            skin: 'demo-class'
+                        });
                         return;
                     }
                     var ids = "";
@@ -172,7 +179,7 @@ $(function () {
                         ids = ids + arr[i] + ",";
                     }
                     ids = ids.substr(0,ids.length - 1);
-                    dele(ids)
+                    dele(ids);
                 })
                 //    删除
                 var aproid
@@ -183,7 +190,7 @@ $(function () {
                 })
                 $(".sha_que_delete").unbind('click');
                 $(".sha_que_delete").click(function(){
-                    dele(aproid)
+                    dele(aproid);
                 })
 
                 function dele(aproid){
@@ -194,9 +201,13 @@ $(function () {
                         data: {},
                         success: function (res) {
                             if (res.code == "200") {
-                                window.location.reload()
+                                window.location.reload();
                             } else {
-                                alert("删除失败")
+                                layer.open({
+                                    title: '信息',
+                                    content: '删除失败',
+                                    skin: 'demo-class'
+                                });
                             }
                         }
                     })
@@ -217,12 +228,10 @@ $(function () {
                     $(".shade_modifier,.shade_b_modifier").css("display", "block");
                     proid = $(this).parent().attr('id');
                     var r_inhtml = $(this).parent().siblings(".groupName").html();
-                    $(".pro_s_b").val(r_inhtml)
-
+                    $(".pro_s_b").val(r_inhtml);
                 })
                 $("#confirm_man").unbind('click');
                 $("#confirm_man").click(function () {
-                    console.log("Id+___"+proid)
                     var pro_s_b = $(".pro_s_b").val();
                     if (pro_s_b != "") {
                         $.ajax({
@@ -235,14 +244,28 @@ $(function () {
                             }),
                             success: function (res) {
                                 if (res.code == "200") {
-                                    window.location.reload()
+                                    //window.location.reload()
+                                    $(".shade_modifier").hide();
+                                    $(".mistake").hide();
+                                    layer.open({
+                                        title: '信息',
+                                        content: '修改成功',
+                                        skin: 'demo-class'
+                                    });
+                                    form(10,1,"");
                                 } else {
-                                    alert("编辑失败")
+                                    layer.open({
+                                        title: '信息',
+                                        content: '编辑失败',
+                                        skin: 'demo-class'
+                                    });
                                 }
                             }
                         })
                     } else {
-                        alert("分组名称不能为空")
+                        $(".rrbol").html("分组名称不能为空");
+                        $(".mistake").css("display","block");
+                        return false;
                     }
                 })
 
@@ -259,8 +282,8 @@ $(function () {
                     callback: function (current) {
                         //当前页数current
                         var pagesb = current
-                        $("#div").html("")
-                        form(pageSize, pagesb)
+                        $("#div").html("");
+                        form(pageSize, pagesb);
                     }
                 });
 
@@ -273,23 +296,24 @@ $(function () {
     }
     //确定删除
     $(".rqubtn,.shade_a_delete").click(function () {
-        $(".shade_delete,.shade_b_delete").css("display", "none")
+        $(".shade_delete,.shade_b_delete").css("display", "none");
     })
     //删除彈窗/////////////////////
     $(".glyphicon ,.glyphicon-remove ,.guan_sha").click(function () {
-        $(".shade_delete,.shade_b_delete").css("display", "none")
+        $(".shade_delete,.shade_b_delete").css("display", "none");
     })
     //添加
     $("#add_grouping").click(function(){
         $(".shade_project,.shade_b_project").css("display","block");
-        $(".pro_name").val("")
+        $(".pro_name").val("");
     })
     $(".shade_add_project").click(function(){
-        $(".shade_project,.shade_b_project").css("display","none")
+        $(".shade_project,.shade_b_project").css("display","none");
+        $(".mistake").css("display","none");
     })
     $("#add_queD").unbind('click');
     $("#add_queD").click(function(){
-        var pro_name=$(".pro_name").val()
+        var pro_name=$(".pro_name").val();
         $.ajax({
             url: baseURL + 'fun/group/add',
             contentType: "application/json;charset=UTF-8",
@@ -301,9 +325,16 @@ $(function () {
             success: function (res) {
                 if(res.code == "200"){
                     $(".pro_name").val("")
-                    window.location.reload()
+                    $(".shade_project").hide();
+                    $(".mistake").hide();
+                    layer.open({
+                        title: '信息',
+                        content: '添加成功',
+                        skin: 'demo-class'
+                    });
+                    form(10,1,"","","","")
                 }else{
-                    $(".mistake").css("display","block")
+                    $(".mistake").css("display","block");
                 }
             }
         })
@@ -312,8 +343,9 @@ $(function () {
 
 
 //编辑去弹窗/////////////////////////////////
-    $(".shade_modifier_project").click(function(){
-        $(".shade_modifier,.shade_b_modifier").css("display","none")
+    $(".shade_modifier_project,.glyphicon").click(function(){
+        $(".shade_modifier,.shade_b_modifier").css("display","none");
+        $(".mistake").css("display","none");
     })
 
 

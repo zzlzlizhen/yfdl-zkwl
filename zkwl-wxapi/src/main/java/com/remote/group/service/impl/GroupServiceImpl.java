@@ -235,5 +235,10 @@ public class GroupServiceImpl implements GroupService {
         return groupMapper.updateGroup(groupEntity) > 0 ? true : false;
     }
 
+    @Override
+    public GroupEntity queryGroupById(String groupId) {
+        return groupMapper.queryGroupById(groupId);
+    }
+
 
 }

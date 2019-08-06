@@ -65,7 +65,8 @@ public class SysUserController extends AbstractController {
 	 */
 	@RequestMapping("/info")
 	public R info(){
-		return R.ok().put("user", getUser());
+		SysUserEntity user = getUser();
+		return R.ok().put("user", user);
 	}
 
 	/**
@@ -111,7 +112,7 @@ public class SysUserController extends AbstractController {
 	 * 用户信息
 	 */
 	@RequestMapping("/info/{userId}")
-	@RequiresPermissions("sys:user:info")
+/*	@RequiresPermissions("sys:user:info")*/
 	public R info(@PathVariable("userId") Long userId){
 		SysUserEntity user = sysUserService.getById(userId);
 		
@@ -128,7 +129,7 @@ public class SysUserController extends AbstractController {
 	 */
 	@SysLog("保存用户")
 	@RequestMapping(value = "/save",method = RequestMethod.POST)
-	@RequiresPermissions("sys:user:save")
+/*	@RequiresPermissions("sys:user:save")*/
 	public R save(SysUserEntity user){
 		Assert.isBlank(user.getPassword(), "密码不为能空");
 		ValidatorUtils.validateEntity(user, AddGroup.class);
@@ -170,7 +171,7 @@ public class SysUserController extends AbstractController {
 	 */
 	@SysLog("修改用户")
 	@RequestMapping("/update")
-	@RequiresPermissions("sys:user:update")
+/*	@RequiresPermissions("sys:user:update")*/
 	public R update(SysUserEntity user){
 		ValidatorUtils.validateEntity(user, UpdateGroup.class);
 		if(StringUtils.isNotBlank(user.getEmail())){
@@ -204,7 +205,7 @@ public class SysUserController extends AbstractController {
 	 */
 	@SysLog("删除用户")
 	@RequestMapping("/delete")
-	@RequiresPermissions("sys:user:delete")
+/*	@RequiresPermissions("sys:user:delete")*/
 	public R delete(String ids){
 		if(StringUtils.isEmpty(ids)){
 			return R.error("数据不能为空");
@@ -239,7 +240,7 @@ public class SysUserController extends AbstractController {
 	 */
 	@SysLog("修改用户基本信息")
 	@RequestMapping(value = "/updateBaseInfo",method = RequestMethod.POST)
-	@RequiresPermissions("sys:user:update")
+/*	@RequiresPermissions("sys:user:update")*/
 	public R updateBaseInfo(SysUserEntity user){
 		ValidatorUtils.validateEntity(user, UpdateGroup.class);
 		if(StringUtils.isNotBlank(user.getEmail())){
@@ -275,7 +276,7 @@ public class SysUserController extends AbstractController {
 	 * 用户信息
 	 */
 	@RequestMapping("/baseInfo")
-	@RequiresPermissions("sys:user:info")
+	/*@RequiresPermissions("sys:user:info")*/
 	public R baseInfo(){
 		SysUserEntity user = sysUserService.getById(getUserId());
 

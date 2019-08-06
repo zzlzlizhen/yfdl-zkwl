@@ -18,5 +18,7 @@ public class DeviceQuery extends DeviceEntity{
 
     private Integer pageNum;
 
+    private Integer noRunState;
+
     private List<String> deviceList = new ArrayList<>();
 }

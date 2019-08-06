@@ -41,13 +41,14 @@
         <result property="chargingCapacitySum" column="charging_capacity_sum"/>
         <result property="dischargeCapacitySum" column="discharge_capacity_sum"/>
         <result property="version" column="version"/>
+        <result property="deviceVersion" column="device_version"/>
     </resultMap>
 
     <sql id="Base_Column_List" >
     device_id, device_code,device_name, group_id, device_type, photocell_state, battery_state,load_state,signal_state,
     run_state,light,communication_type,on_off,longitude,latitude,is_del,create_user,create_name,create_time
     update_user,update_time,project_id,battery_margin,battery_voltage,photovoltaic_cell_voltage,charging_current,
-    charging_power,load_voltage,load_power,load_current,lighting_duration,morning_hours,charging_capacity_sum,discharge_capacity_sum,version
+    charging_power,load_voltage,load_power,load_current,lighting_duration,morning_hours,charging_capacity_sum,discharge_capacity_sum,version,device_version
     </sql>
 
     <select id="queryDeviceByCode"  resultMap="BaseResultMap" >
@@ -167,7 +168,12 @@
 
 
     <update id="updateDeviceTimeOutByCode" >
-        update fun_device set run_state = 4
+        update fun_device set run_state = #{runState}
+        where device_code = #{deviceCode}
+    </update>
+
+    <update id="updateDeviceVersionByCode" >
+        update fun_device set device_version = device_version + 1
         where device_code = #{deviceCode}
     </update>
 

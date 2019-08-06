@@ -289,16 +289,16 @@ function Bing(pro_je,groupId) {
         type:"get",
         data:{},
         success: function (res) {
+            console.log("图表")
             console.log(res)
             $(".lu_m_a").html(res.data.sumCount)
             $(".lu_m_c").html(res.data.deviceCount)
             if(res.code == "200"){
-                var dom= document.getElementById("Bing");
+                var dom=document.getElementById("Bing");
                 var myChart = echarts.init(dom);
-                var app = {};
                 option= null;
                 option = {
-                    color: ['#ff6e86', '#00ccb3','#f9b712', '#999999'],
+                    color: ['#f9b712','#3385ff', '#00ccb3','#ff6e86','#999999' ],
                     tooltip: {
                         trigger: 'item',
                         formatter: "{a} <br/>{b}: {c} ({d}%)"
@@ -306,8 +306,13 @@ function Bing(pro_je,groupId) {
                     legend: {
                         orient: 'vertical',
                         x: 'left',
-                        data:['警告'+res.data.deviceScale[0].警告+"%",'正常'+res.data.deviceScale[1].正常+"%",
-                            '故障'+res.data.deviceScale[2].故障+"%",'离线'+res.data.deviceScale[3].离线+"%"]
+                        data:[
+                            '警告'+res.data.deviceMap[0].警告+"台",
+                            '升级中'+res.data.deviceMap[1].升级中+"台",
+                            '正常'+res.data.deviceMap[2].正常+"台",
+                            '故障'+res.data.deviceMap[3].故障+"台",
+                            '离线'+res.data.deviceMap[4].离线+"台"
+                        ]
                     },
                     series: [
                         {
@@ -323,7 +328,7 @@ function Bing(pro_je,groupId) {
                                 emphasis: {
                                     show: true,
                                     textStyle: {
-                                        fontSize: '30',
+                                        fontSize: '14',
                                         fontWeight: 'bold'
                                     }
                                 }
@@ -334,10 +339,11 @@ function Bing(pro_je,groupId) {
                                 }
                             },
                             data:[
-                                {value:res.data.deviceScale[0].警告, name:'警告'+res.data.deviceScale[0].警告+"%"},
-                                {value:res.data.deviceScale[1].正常, name:'正常'+res.data.deviceScale[1].正常+"%"},
-                                {value:res.data.deviceScale[2].故障, name:'故障'+res.data.deviceScale[2].故障+"%"},
-                                {value:res.data.deviceScale[3].离线, name:'离线'+res.data.deviceScale[3].离线+"%"}
+                                {value:res.data.deviceScale[0].警告, name:'警告'+res.data.deviceMap[0].警告+"台"},
+                                {value:res.data.deviceScale[1].升级中, name:'升级中'+res.data.deviceMap[1].升级中+"台"},
+                                {value:res.data.deviceScale[2].正常, name:'正常'+res.data.deviceMap[2].正常+"台"},
+                                {value:res.data.deviceScale[3].故障, name:'故障'+res.data.deviceMap[3].故障+"台"},
+                                {value:res.data.deviceScale[4].离线, name:'离线'+res.data.deviceMap[4].离线+"台"}
                             ]
                         }
                     ]

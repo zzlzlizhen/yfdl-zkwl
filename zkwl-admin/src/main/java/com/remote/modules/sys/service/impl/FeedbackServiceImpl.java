@@ -68,8 +68,7 @@ public class FeedbackServiceImpl extends ServiceImpl<FeedbackDao, FeedbackEntity
         int page = 1;
         if(params.get(Constant.PAGE) != null){
             page = Integer.parseInt((String)params.get(Constant.PAGE));
-        }
-        ;
+        };
         int limit = 10;
         if(params.get(Constant.LIMIT) != null){
             limit = Integer.parseInt((String)params.get(Constant.LIMIT));
@@ -83,6 +82,19 @@ public class FeedbackServiceImpl extends ServiceImpl<FeedbackDao, FeedbackEntity
         List<FeedbackEntity> list = this.feedbackDao.queryPageList(params);
         Integer total = this.feedbackDao.queryPageCount(params);
         return new PageUtils(list,total,limit,page);
+    }
+    public int queryPageCount(Map<String, Object> params,Long curUid){
+        SysUserEntity curUser = new SysUserEntity();
+        curUser.setUserId(curUid);
+        List<SysUserEntity> sysUserEntitys = sysUserService.queryChild(curUser);
+        List<Long> userIds = new ArrayList<Long>();
+        if(CollectionUtils.isNotEmpty(sysUserEntitys)){
+            for(SysUserEntity sysUserEntity : sysUserEntitys){
+                userIds.add(sysUserEntity.getUserId());
+            }
+        }
+        params.put("userIds",userIds);
+        return this.feedbackDao.queryPageCount(params);
     }
 
     @Override

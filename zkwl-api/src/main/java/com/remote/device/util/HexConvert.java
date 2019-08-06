@@ -64,7 +64,9 @@ public class HexConvert {
 
         List<Integer> key = deviceInfo.getKey();
         List<Integer> value = deviceInfo.getValue();
+
         for(int j = 0 ;j<key.size();j++){
+            value.get(j);
             bytes[i++]=(byte)( key.get(j)&0xFF);
             bytes[i++]=(byte)( key.get(j)>>8);
             if(value.size() != 0){

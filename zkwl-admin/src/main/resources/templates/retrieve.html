@@ -3,35 +3,33 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>智控物联</title>
+    <title>光迅物联</title>
     <!-- 告诉浏览器响应屏幕宽度 -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!--头部logo-->
     <link rel="shortcut icon" href="http://pic.nipic.com/2007-11-20/20071120204328625_2.jpg">
     <link rel="stylesheet" href="${request.contextPath}/statics/css/bootstrap.min.css">
     <link rel="stylesheet" href="${request.contextPath}/statics/css/main.css">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]-->
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/layui.css">
+    <script src="${request.contextPath}/statics/js/layui.js"></script>
   </head>
   <body>
    <div class="retr">
-       <div>
+       <div style="margin-top:8%">
            <span>邮箱/手机号：</span>
            <input type="text" placeholder="请输入邮箱/手机号" id="email">
        </div>
        <div>
            <span>验证码：</span>
-           <input type="text" value=" " style="width:100px;">
+           <input type="text" value=" " id="bta" style="width:124px;">
            <input id="btne" value="获取验证码" onclick="sendemail_a()"></input>
        </div>
        <button class="Que">确定</button>
    </div>
    <div class="retr_a">
-       <div>
+       <div style="margin-top:10%;">
            <span>新密码：</span>
            <input type="text" placeholder="请输入新密码" id="new">
        </div>
@@ -54,24 +52,24 @@
                  }
                  return result[1];
              }
-             var user=getQueryStringByName("username")
-
+             var user=getQueryStringByName("username");
              $(".Que_a").click(function(){
                  var New=$("#new").val()
                  $.ajax({
-                     url:'http://localhost:8080/remote-admin/sys/user/updatePwd',
+                     url:'http://localhost/remote-admin/sys/user/updatePwd',
                      type: "post",
                      data:
                          "&username="+user +
                          "&password="+ New
                       ,
                      success: function (res) {
-                         console.log(JSON.stringify(res));
+                         console.log(user)
+
                          if (res.code == "200") {
                              console.log("修改成功")
                              console.log(res)
-                             $(".retr").show()
-                             $(".retr_a").hide()
+                             $(".retr").show();
+                             $(".retr_a").hide();
                          }
                      }
                  })
@@ -81,19 +79,17 @@
          })
          function sendemail_a() {
              console.log("111111111")
-             var email=$("#email").val()
+             var email=$("#email").val();
              var reg = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;
              var Shou=/^1[3456789]\d{9}$/
              if(reg.test(email)) {
-                 alert("邮箱格式对");
                  yan(email,"isEmail");
                  You()
              }else if(Shou.test(email)){
-                 alert("手机格式对");
                  yan(email,"isMobile");
                  Shou_a()
              }else{
-                 alert("邮箱格式不对");
+                 alert("邮箱或手机号格式错误");
                  return false;
              }
          }
@@ -104,7 +100,7 @@
              countdown=60
              settime(obj);
              $.ajax({
-                 url:'http://localhost:8080/remote-admin/repwd/sendForPwd?contact='+contact+"&fPwdType="+fPwdType,
+                 url:'http://localhost/repwd/sendForPwd?contact='+contact+"&fPwdType="+fPwdType,
                  type: "get",
                  data:{},
                  success: function (res) {
@@ -116,22 +112,19 @@
              })
          }
          function You() {
-             console.log("邮箱")
              $(".Que").click(function(){
-                 var securityCode=$("#btne").val();
+                 var securityCode=$("#bta").val();
                  var email_a=$("#email").val();
                  $.ajax({
-                     url: 'http://localhost:8080/remote-admin/repwd/checkRePwdEmail?email='+ email_a+"&securityCode="+securityCode,
+                     url: 'http://localhost/repwd/checkRePwdEmail?email='+ email_a+"&securityCode="+securityCode,
                      type: "get",
                      data:{},
                      success: function (res) {
                          console.log(JSON.stringify(res));
+
                          if (res.code == "200") {
-                             console.log("邮箱验证正确")
-                           $(".Que").click(function(){
-                               $(".retr").hide()
-                               $(".retr_a").show()
-                           })
+                           $(".retr").hide();
+                           $(".retr_a").show();
                          }
                      }
                  })
@@ -139,22 +132,18 @@
          }
 
          function Shou_a() {
-             console.log("手机")
              $(".Que").click(function(){
-                 var securityCode=$("#btne").val();
+                 var securityCode=$("#bta").val();
                  var email_a=$("#email").val();
                  $.ajax({
-                     url:  'http://localhost:8080/remote-admin/repwd/checkRePwdMobile?mobile='+ email_a+"&securityCode="+securityCode,
+                     url:  'http://localhost/repwd/checkRePwdMobile?mobile='+ email_a+"&securityCode="+securityCode,
                      type: "get",
                      data:{},
                      success: function (res) {
                          console.log(JSON.stringify(res));
                          if (res.code == "200") {
-                             console.log("手机验证正确")
-                             $(".Que").click(function(){
-                                 $(".retr").hide()
-                                 $(".retr_a").show()
-                             })
+                             $(".retr").hide();
+                             $(".retr_a").show();
                          }
                      }
                  })

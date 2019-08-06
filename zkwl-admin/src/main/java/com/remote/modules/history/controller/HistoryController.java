@@ -60,6 +60,14 @@ public class HistoryController extends AbstractController {
         return R.error(400,"查询历史数据失败");
     }
 
+
+
+    @RequestMapping(value = "/getUsers", method= RequestMethod.GET)
+    public R getUsers(){
+        return R.ok(getUser());
+    }
+
+
     @RequestMapping(value = "/queryHistoryByYear", method= RequestMethod.GET)
     public R queryHistoryByYear(String deviceCode,String year){
         QueryHistory queryHistory = historyService.queryHistoryYear(deviceCode, year);

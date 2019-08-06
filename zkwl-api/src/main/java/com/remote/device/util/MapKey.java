@@ -17,6 +17,7 @@ public class MapKey {
         mapKey.put(2,"onOff");//开关
         mapKey.put(3,"lightingDuration");//亮灯时长
         mapKey.put(4,"morningHours");//晨亮时长
+        mapKey.put(6,"deviceVersion");//晨亮时长
         mapKey.put(83,"batteryState");//蓄电池状态
         mapKey.put(84,"batteryMargin");//蓄电池余量
         mapKey.put(88,"photocellState");//光电池状态

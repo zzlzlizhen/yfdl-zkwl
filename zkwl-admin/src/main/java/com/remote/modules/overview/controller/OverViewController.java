@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -45,13 +46,18 @@ public class OverViewController extends AbstractController{
             userIds.add(sysUserEntity.getUserId());
         }
         List<String> deviceCodes = deviceService.getDeviceCode(userIds);
+        DecimalFormat df = new DecimalFormat("#.000");
         Integer lampsNum = getDeviceCount(userIds);
         overViewEntity.setLampsNum(lampsNum);
         overViewEntity.setGatewaysNum(0);
         overViewEntity.setFailRate((getDevFailRate(userIds)*100) + "%");
-        overViewEntity.setLightingArea(getLightArea(userIds));
+        double lightArea = getLightArea(userIds)*lampsNum;
+        String lightAreaStr = df.format(lightArea);
+        overViewEntity.setLightingArea(Double.parseDouble(lightAreaStr));
         //总放电量（碳排放量）
-        overViewEntity.setReduCarbonEmi(getTotalDischarge(deviceCodes)*0.875);
+        double reduCarEmi = getTotalDischarge(deviceCodes)*0.875 ;
+        String str = df.format(reduCarEmi);
+        overViewEntity.setReduCarbonEmi(Double.parseDouble(str));
         overViewEntity.setCuntGroupByCity(queryCountGroupByCity());
         overViewEntity.setDeviceInfoList(getDeviceInfoList(userIds));
         overViewEntity.setTotalDc(getDischargeCapacity(deviceCodes));
@@ -69,7 +75,7 @@ public class OverViewController extends AbstractController{
     public double getDevFailRate(List<Long> userIds){
         Integer failRate = deviceService.getDevFailNum(userIds);
         Integer getTotal = getDeviceCount(userIds);
-        if(getTotal != null){
+        if(getTotal != null&&getTotal != 0){
             return failRate/getTotal;
         }
         return 0.0;

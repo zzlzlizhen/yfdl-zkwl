@@ -137,4 +137,6 @@ public class DeviceEntity {
     private String cityName;
 
     private Integer version;
+    //设备版本号
+    private Integer deviceVersion;
 }
