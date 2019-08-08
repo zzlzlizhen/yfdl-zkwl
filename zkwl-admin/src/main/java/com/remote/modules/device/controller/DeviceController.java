@@ -193,14 +193,35 @@ public class DeviceController extends AbstractController {
     }
 
     @RequestMapping(value = "/getDeviceByGroupIdNoPage", method= RequestMethod.GET)
-    public R getDeviceByGroupIdNoPage(String groupId,String projectId,Integer status){
+    public R getDeviceByGroupIdNoPage(String groupId,String projectId,Integer status,String deviceCode){
         DeviceQuery deviceQuery = new DeviceQuery();
-        deviceQuery.setGroupId(groupId);
-        deviceQuery.setProjectId(projectId);
+        if(StringUtils.isNotEmpty(groupId)){
+            deviceQuery.setGroupId(groupId);
+        }
+        if(StringUtils.isNotEmpty(projectId)){
+            deviceQuery.setProjectId(projectId);
+        }
+        if(StringUtils.isNotEmpty(deviceCode)){
+            deviceQuery.setDeviceCode(deviceCode);
+        }
         if(!status.equals(new Integer(0))){
             deviceQuery.setRunState(status);
         }
         return R.ok(deviceService.queryDeviceNoPage(deviceQuery));
+    }
+
+
+
+    @RequestMapping(value = "/getDeviceByGroupIdNoPageLike", method= RequestMethod.GET)
+    public R getDeviceByGroupIdNoPage(Integer status,String deviceCode){
+        DeviceQuery deviceQuery = new DeviceQuery();
+        if(StringUtils.isNotEmpty(deviceCode)){
+            deviceQuery.setDeviceCode(deviceCode);
+        }
+        if(!status.equals(new Integer(0))){
+            deviceQuery.setRunState(status);
+        }
+        return R.ok(deviceService.getDeviceByGroupIdNoPageLike(deviceQuery));
     }
 
     @RequestMapping(value = "/getDeviceById", method= RequestMethod.GET)
@@ -238,5 +259,6 @@ public class DeviceController extends AbstractController {
         }
         return R.ok(list);
     }
+
 
 }

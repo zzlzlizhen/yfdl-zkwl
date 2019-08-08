@@ -2,7 +2,6 @@
 package com.remote;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.servlet.MultipartAutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +10,8 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 @SpringBootApplication(exclude = {MultipartAutoConfiguration.class})
 public class AdminApplication {
+
+
 
 	public static void main(String[] args) {
 		SpringApplication.run(AdminApplication.class, args);
@@ -26,5 +27,7 @@ public class AdminApplication {
 		resolver.setMaxUploadSize(10 * 1024 * 1024);//上传文件大小
 		return resolver;
 	}
+
+
 
 }

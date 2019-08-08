@@ -1229,13 +1229,13 @@ function  f(hours,newHours,newH,dischargeCapacityList,chargingCapacityList,charg
                 type: 'bar',
                 smooth: true,
                 barGap: 0,
-                data: chargingCapacityList
+                data: dischargeCapacityList
             },
             {
                 name: '充电功率',
                 type: 'bar',
                 smooth: true,
-                data: dischargeCapacityList
+                data: chargingCapacityList
             }
         ]
     };

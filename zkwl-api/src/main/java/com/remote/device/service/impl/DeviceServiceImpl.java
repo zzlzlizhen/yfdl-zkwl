@@ -62,10 +62,12 @@ public class DeviceServiceImpl implements DeviceService {
         double longitudeUp = Double.valueOf(longitudeInt+"."+(h+Integer.valueOf(longitudeL)));
 
         //经纬度转换成百度地图经纬度
-        LngLat lngLat_bd = new LngLat(longitudeUp,latitudeUp);
-        LngLat lngLat = CoodinateCovertor.bd_encrypt(lngLat_bd);
-        deviceEntity.setLatitude(String.valueOf(lngLat.getLantitude()));
-        deviceEntity.setLongitude(String.valueOf(lngLat.getLongitude()));
+//        LngLat lngLat_bd = new LngLat(longitudeUp,latitudeUp);
+//        LngLat lngLat = CoodinateCovertor.bd_encrypt(lngLat_bd);
+//        deviceEntity.setLatitude(String.valueOf(lngLat.getLantitude()));
+//        deviceEntity.setLongitude(String.valueOf(lngLat.getLongitude()));
+        deviceEntity.setLatitude(String.valueOf(latitudeUp));
+        deviceEntity.setLongitude(String.valueOf(longitudeUp));
 
         //负载状态 loadState  蓄电池状态 batteryState 光电池状态  photocellState
         Integer loadState = deviceEntity.getLoadState();

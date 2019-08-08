@@ -238,7 +238,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
         if(cmdId == 5){
             length = 204;
-        }else if(cmdId == 6 || cmdId == 8 || cmdId == 1){
+        }else if(cmdId == 6 || cmdId == 8 || cmdId == 1 || cmdId == 10){
             length = 56;
         }
 
@@ -253,6 +253,10 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             }
             if(cmdId == 1){
                 log.info(deviceInfo.getDevSN()+"操作设备成功!");
+                return;
+            }
+            if(cmdId == 10){
+                log.info(deviceInfo.getDevSN()+"心跳");
                 return;
             }
             if(StringUtils.isEmpty(deviceInfo.getDevSN()) || StringUtils.isEmpty(deviceInfo.getDevKey()) || StringUtils.isEmpty(deviceInfo.getDevType())){

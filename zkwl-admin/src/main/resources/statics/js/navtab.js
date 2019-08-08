@@ -75,7 +75,11 @@ layui.define(['element'], function(exports){
         var _this = this;
 	    var tabIndex = _this.exists(data.title);
 	    // 若不存在
-	    if(tabIndex === -1){
+	    //if(tabIndex === -1){
+		if(true){
+			if(tabIndex>-1){
+				element.tabDelete(ELEM.tabFilter, tabIndex);
+			}
 	    	globalTabIdIndex++;
 	    	var content = '<iframe src="' + data.href + '" data-id="' + globalTabIdIndex + '" class="larry-iframe"></iframe>';
 		    var title = '';

@@ -114,4 +114,20 @@
         </set>
         where project_id = #{projectId}
     </update>
+
+
+    <select id="queryProjectByIds" resultMap="BaseResultMap" >
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        fun_project
+        <where>
+            <if test="projectIds !=null and projectIds.size()!= 0">
+                and project_id in
+                <foreach collection="projectIds" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
 </mapper>

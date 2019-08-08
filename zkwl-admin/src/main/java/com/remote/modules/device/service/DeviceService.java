@@ -5,6 +5,7 @@ import com.remote.common.utils.R;
 import com.remote.modules.device.entity.DeviceEntity;
 import com.remote.modules.device.entity.DeviceQuery;
 import com.remote.modules.device.entity.DeviceResult;
+import com.remote.modules.device.entity.DeviceTree;
 import com.remote.modules.sys.entity.SysUserEntity;
 import org.apache.ibatis.annotations.Param;
 
@@ -174,4 +175,13 @@ public interface DeviceService {
      * @return int
      **/
     boolean updateDeviceRunStatus(List<String> deviceCodes);
+
+    /*
+     * @Author  zhangwenping
+     * @Description 查询返回树结构
+     * @Date 12:20 2019/8/7
+     * @Param deviceQuery
+     * @return  List<DeviceTree>
+     **/
+    List<DeviceTree> getDeviceByGroupIdNoPageLike(DeviceQuery deviceQuery);
 }

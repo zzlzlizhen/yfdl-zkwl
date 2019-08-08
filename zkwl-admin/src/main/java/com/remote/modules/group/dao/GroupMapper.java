@@ -50,4 +50,12 @@ public interface GroupMapper extends BaseMapper<GroupEntity> {
      * @return int
      **/
     int deleteGroupById(@Param("groupId")String groupId);
+    /*
+     * @Author zhangwenping
+     * @Description 根据ids 查询分组信息
+     * @Date 12:11 2019/8/7
+     * @Param groupIds
+     * @return  List<GroupEntity>
+     **/
+    List<GroupEntity> queryGroupByIds(@Param("groupIds")List<String> groupIds);
 }

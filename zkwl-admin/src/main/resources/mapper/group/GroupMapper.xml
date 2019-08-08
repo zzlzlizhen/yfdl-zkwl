@@ -57,4 +57,19 @@
         delete from fun_group where group_id = #{groupId}
     </delete>
 
+
+    <select id="queryGroupByIds" resultMap="BaseResultMap" >
+        SELECT
+         <include refid="Base_Column_List"/>
+        FROM
+        fun_group
+        <where>
+            <if test="groupIds !=null and groupIds.size()!= 0">
+                and group_id in
+                <foreach collection="groupIds" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
 </mapper>

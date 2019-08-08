@@ -244,5 +244,10 @@ public class GroupServiceImpl implements GroupService {
         return groupMapper.queryGroupById(groupId);
     }
 
+    @Override
+    public List<GroupEntity> queryGroupByIds(List<String> groupIds) {
+        return groupMapper.queryGroupByIds(groupIds);
+    }
+
 
 }

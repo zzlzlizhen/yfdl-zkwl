@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.remote.common.enums.CommunicationEnum;
 import com.remote.common.enums.FaultlogEnum;
+import com.remote.common.es.utils.ESUtil;
 import com.remote.common.utils.DeviceTypeMap;
 import com.remote.common.utils.R;
 import com.remote.common.utils.ValidateUtils;
@@ -14,6 +15,7 @@ import com.remote.modules.device.dao.DeviceMapper;
 import com.remote.modules.device.entity.DeviceEntity;
 import com.remote.modules.device.entity.DeviceQuery;
 import com.remote.modules.device.entity.DeviceResult;
+import com.remote.modules.device.entity.DeviceTree;
 import com.remote.modules.device.service.DeviceService;
 import com.remote.modules.district.entity.DistrictEntity;
 import com.remote.modules.district.service.DistrictService;
@@ -23,27 +25,27 @@ import com.remote.modules.group.dao.GroupMapper;
 import com.remote.modules.group.entity.GroupEntity;
 import com.remote.modules.group.entity.GroupQuery;
 import com.remote.modules.group.service.GroupService;
-import com.remote.modules.group.service.impl.GroupServiceImpl;
 import com.remote.modules.project.dao.ProjectMapper;
 import com.remote.modules.project.entity.ProjectEntity;
-import com.remote.modules.project.entity.ProjectQuery;
 import com.remote.modules.sys.entity.SysUserEntity;
 import com.remote.modules.sys.service.SysUserService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.ibatis.annotations.Param;
+import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestHighLevelClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static com.remote.common.utils.DeviceTypeMap.DEVICE_TYPE;
 
 /**
  * @Author zhangwenping
@@ -76,6 +78,11 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Autowired
     private GroupService groupService;
+    @Autowired
+    private RestHighLevelClient restHighLevelClient;
+
+    @Autowired
+    private ESUtil esUtil;
 
     @Override
     public PageInfo<DeviceEntity> queryDevice(DeviceQuery deviceQuery) throws Exception {
@@ -123,6 +130,33 @@ public class DeviceServiceImpl implements DeviceService {
         String groupId = deviceEntity.getGroupId();
         GroupEntity groupEntity = groupService.queryGroupById(groupId);
         deviceEntity.setGroupName(groupEntity.getGroupName());
+        //添加es start
+        Field[] declaredFields = deviceEntity.getClass().getDeclaredFields();
+        Map<String,Object> temp = new HashMap<String,Object>();
+
+        for (Field field : declaredFields){
+            field.setAccessible(true);
+            try {
+                if (field.getGenericType().toString().equals("class java.lang.String")) {
+                    temp.put(field.getName(),field.get(deviceEntity) == null ? "" : field.get(deviceEntity));
+                }else if (field.getGenericType().toString().equals("class java.lang.Integer")) {
+                    temp.put(field.getName(),field.get(deviceEntity) == null ? 0 : field.get(deviceEntity));
+                }else if (field.getGenericType().toString().equals("class java.lang.Double")) {
+                    temp.put(field.getName(),field.get(deviceEntity) == null ? 0.0 :field.get(deviceEntity));
+                }else if(field.getGenericType().toString().equals("class java.util.Date")){
+                    temp.put(field.getName(),field.get(deviceEntity) == null ? new Date() :field.get(deviceEntity));
+                }
+
+            } catch (IllegalAccessException e1) {
+                e1.printStackTrace();
+            }
+
+        }
+        IndexResponse indexResponse = esUtil.addES(temp);
+
+        //添加es end
+
+
         return deviceMapper.insert(deviceEntity) > 0 ? true : false;
     }
 
@@ -344,5 +378,72 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public boolean updateDeviceRunStatus(List<String> deviceCodes) {
         return deviceMapper.updateDeviceRunStatus(deviceCodes) > 0 ? true :false;
+    }
+
+    @Override
+    public List<DeviceTree> getDeviceByGroupIdNoPageLike(DeviceQuery deviceQuery) {
+        List<DeviceTree> list = new ArrayList<>();
+        List<DeviceEntity> deviceList = deviceMapper.queryDevice(deviceQuery);
+        for (DeviceEntity deviceEntity : deviceList){
+            DeviceTree deviceTree = new DeviceTree();
+            deviceTree.setId(deviceEntity.getDeviceId());
+            deviceTree.setParentId(deviceEntity.getGroupId());
+            deviceTree.setName(deviceEntity.getDeviceName());
+            deviceTree.setRunState(deviceEntity.getRunState());
+            list.add(deviceTree);
+        }
+        List<String> groupIds = deviceList.parallelStream().map(deviceEntity -> deviceEntity.getGroupId()).collect(Collectors.toCollection(ArrayList::new));
+        List<GroupEntity> groupList = groupService.queryGroupByIds(groupIds);
+        for (GroupEntity groupEntity : groupList){
+            DeviceTree deviceTree = new DeviceTree();
+            deviceTree.setId(groupEntity.getGroupId());
+            deviceTree.setParentId(groupEntity.getProjectId());
+            deviceTree.setName(groupEntity.getGroupName());
+            list.add(deviceTree);
+        }
+        List<String> projectIds = deviceList.parallelStream().map(deviceEntity -> deviceEntity.getProjectId()).collect(Collectors.toCollection(ArrayList::new));
+        List<ProjectEntity> projectList = projectMapper.queryProjectByIds(projectIds);
+        for (ProjectEntity projectEntity : projectList){
+            DeviceTree deviceTree = new DeviceTree();
+            deviceTree.setId(projectEntity.getProjectId());
+            deviceTree.setParentId("");
+            deviceTree.setName(projectEntity.getProjectName());
+            deviceTree.setProjectStatus(projectEntity.getProjectStatus());
+            list.add(deviceTree);
+        }
+        List<DeviceTree> trees = new ArrayList<DeviceTree>();
+        if(CollectionUtils.isNotEmpty(list)){
+            if (list.size() == 1) {
+                trees.addAll(list);
+                return trees;
+            }
+            for (DeviceTree deviceTree : list) {
+                if ("".equals(deviceTree.getParentId())) {
+                    trees.add(deviceTree);
+                }
+                for (DeviceTree deviceTree1 : list) {
+                    if (deviceTree1.getParentId().equals(deviceTree.getId())) {
+                        if (deviceTree.getChildren() == null) {
+                            List<DeviceTree> myChildrens = new ArrayList<DeviceTree>();
+                            myChildrens.add(deviceTree1);
+                            deviceTree.setChildren(myChildrens);
+                        } else {
+                            deviceTree.getChildren().add(deviceTree1);
+                        }
+                    }
+                }
+            }
+        }
+        if(CollectionUtils.isNotEmpty(trees)){
+            for (DeviceTree deviceTree : trees){
+                List<DeviceTree> group = deviceTree.getChildren();
+                for(DeviceTree deviceTree1 : group){
+                    if(CollectionUtils.isNotEmpty(deviceTree1.getChildren())){
+                        deviceTree1.setDeviceNumber(deviceTree1.getChildren().size());
+                    }
+                }
+            }
+        }
+        return trees;
     }
 }

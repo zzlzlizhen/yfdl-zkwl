@@ -44,6 +44,8 @@
             <version>1.5.2.RELEASE</version>
         </dependency>
 
+
+
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz</artifactId>

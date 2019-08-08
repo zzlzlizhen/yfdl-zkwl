@@ -43,6 +43,38 @@ $(function () {
     var na_me;
     var deviceStatus = 0;
 
+//搜索
+    $("#seek").click(function(){
+        console.log($("#seek_a").val());
+        var SN=$("#seek_a").val();
+        $("#nav_a").html("");
+        if(SN !=""){
+            unit(deviceStatus,SN);
+        }else{
+            console.log(ass)
+            window.location.reload()
+        }
+    })
+    //搜索功能
+    function unit(deviceStatus,SN){
+        console.log("++++")
+        console.log(deviceStatus)
+        console.log(SN)
+        console.log("-----");
+        var arr=[];
+        $.ajax({
+            url: baseURL + 'fun/device/getDeviceByGroupIdNoPageLike?status=' + deviceStatus + "&deviceCode=" + SN,
+            contentType: "application/json;charset=UTF-8",
+            type: "get",
+            data: {},
+            success: function (res) {
+                console.log("设备返回12");
+                console.log(res);
+
+            }
+        })
+    }
+
     map(ass);
     function map(ass) {
         var ass; //跳转
@@ -91,10 +123,16 @@ $(function () {
                 //左侧边栏
                 $(".She,.She_a").hide();
                 $(".grouping").show();
-
                 $(".nav_pro_v").attr("t","0");
 
+                $(".nav_pro_v").click(function () {
+                    $(".nav_gro").slideToggle("slow");
+                })
+
+
                 $(".nav_pro_v").click(function(){
+
+
                     $(".D_xuan").hide();
                     var pro_je=$(this).parents(".pro_li").attr("id");
                     if( $(this).attr("t")=="0"){
@@ -133,8 +171,8 @@ $(function () {
                                 Bing(pro_je,"");//控制项目
                                 // 分组下设备
                                 if(sessionStorage.getItem('l')=='1'){
-                                    console.log(   $(".nav_a").find(".pro_li").eq(lindex).find(".pro_li_a").length)
-                                    $(".nav_a").find(".pro_li").eq(lindex).find(".pro_li_a").eq(lindexs).find('.nav_pro_v_b').click()
+                                    console.log(   $(".nav_a").find(".pro_li").eq(lindex).find(".pro_li_a").length);
+                                    $(".nav_a").find(".pro_li").eq(lindex).find(".pro_li_a").eq(lindexs).find('.nav_pro_v_b').click();
                                 }
                                 //    分组下设备结束
                             }
@@ -151,12 +189,11 @@ $(function () {
                     if($("#"+pro_je+"1").html() == ""){
                         $("#"+pro_je+"1").html("");
                         return
-                    }else {
-
                     }
                 })
                 $(".nav_pro_v_b").attr('t','0')
                $(document).delegate(".nav_pro_v_b","click",function () {
+                   console.log("================++++++++++++");
                     //    单选
                     console.log($(this).attr('t'))
                     var pro_je=$(this).parents(".pro_li").attr("id");
@@ -189,23 +226,25 @@ $(function () {
                                 $(".ra_state_d").css("transform","rotate(-145deg)");
                                 $(".ra_state_d").css("left","40px");
                                 $(".ra_state_d").css("top","38px");
-                            }else if(deviceStatus == "4"){
+                            }else if(deviceStatus == "4"){s
                                 $(".ra_state_d").css("transform","rotate(145deg)");
                                 $(".ra_state_d").css("left","39px");
                                 $(".ra_state_d").css("top","38px");
                             }
                             //调用地图
                             $(".nav_gro_b").html("");
-                            zu(deviceStatus)
+                            zu(deviceStatus);
                         });
                         zu(deviceStatus);
                         function zu(deviceStatus) {
                             $.ajax({
-                                url: baseURL + 'fun/device/getDeviceByGroupIdNoPage?groupId=' + groupId + "&projectId=" + pro_je + "&status=" + deviceStatus,
+                                url: baseURL + 'fun/device/getDeviceByGroupIdNoPage?groupId=' + groupId + "&projectId=" + pro_je + "&status=" + deviceStatus ,
                                 contentType: "application/json;charset=UTF-8",
                                 type: "get",
-                                data: {},
+                                data: { },
                                 success: function (res) {
+                                    console.log("设备返回");
+                                    console.log(res);
                                     arr = [];
                                     arra = [];
                                     var htmlb = "";
@@ -250,8 +289,8 @@ $(function () {
                                     f_en(pro_je, groupId);   //控制分组
                                     fu("", "", groupId);//日志信息
                                     if(sessionStorage.getItem('l')=='1'){
-                                        console.log( $(".nav_a").find(".pro_li").eq(lindex).find(".pro_li_a").length)
-                                        $(".nav_a").find(".pro_li").eq(lindex).find(".pro_li_a").eq(lindexs).find('li').eq(xindex).find(".nav_bb").click()
+                                        console.log( $(".nav_a").find(".pro_li").eq(lindex).find(".pro_li_a").length);
+                                        $(".nav_a").find(".pro_li").eq(lindex).find(".pro_li_a").eq(lindexs).find('li').eq(xindex).find(".nav_bb").click();
                                     }
                                 }
                             });
@@ -304,16 +343,17 @@ $(function () {
                 var lindexs=localStorage.getItem('keys')
                 var xindex=localStorage.getItem('key2')
                 if(sessionStorage.getItem('l')=='1'){
-                    $("#drawer_img").click()
-                    $(".nav_a").find("li").eq(lindex).find(".nav_pro_v").click()
-                    console.log(   $(".nav_a").find(".pro_li").eq(lindex).find(".pro_li_a").length)
-                    $(".nav_a").find(".pro_li").eq(lindex).find(".pro_li_a").eq(lindexs).find('.nav_pro_v_b').click()
+                    $("#drawer_img").click();
+                    $(".nav_a").find("li").eq(lindex).find(".nav_pro_v").click();
+                    console.log(   $(".nav_a").find(".pro_li").eq(lindex).find(".pro_li_a").length);
+                    $(".nav_a").find(".pro_li").eq(lindex).find(".pro_li_a").eq(lindexs).find('.nav_pro_v_b').click();
 
                 }
                 //    项目下分组
             }
         });
     }
+
 
     //高德地图方法
     var center=[108.06345,34.913385]
@@ -376,7 +416,7 @@ $(function () {
         }
     }
 
-    //单击
+    //单击（项目数据）
     function showInfoClick(e){
         var text = '您在 [ '+e.lnglat.getLng()+','+e.lnglat.getLat()+' ] 的位置单击了地图！'
         infoWindow.setContent(e.target.content);
@@ -385,6 +425,7 @@ $(function () {
         var lng = e.lnglat.getLng() + Math.floor(Math.random() * 589828) / 1e6;
         var lat = e.lnglat.getLat() + Math.floor(Math.random() * 514923) / 1e6;
         map.setZoomAndCenter(zoom, [lng, lat]); //同时设置地图层级与中心点
+
     }
     //双击
     function showInfoDbClick(e){
@@ -476,5 +517,4 @@ $(function () {
         });
 
     });
-
 });

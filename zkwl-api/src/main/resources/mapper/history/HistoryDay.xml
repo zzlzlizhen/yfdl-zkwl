@@ -43,7 +43,7 @@
         SELECT
             sum(discharge_capacity) AS discharge_capacity,
             sum(charging_capacity) AS charging_capacity,
-            sum(induction_frequency) AS induction_frequency,
+            TRUNCATE(avg(induction_frequency),2) AS induction_frequency,
             sum(visitors_flowrate) AS visitors_flowrate,
             sum(fillings_number) AS fillings_number,
             sum(discharge_number) AS discharge_number,
