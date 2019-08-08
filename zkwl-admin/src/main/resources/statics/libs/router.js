@@ -6,9 +6,9 @@
 		self.index = null;
 		self.key = '!';
 
-		window.onhashchange = function() {
+		/*window.onhashchange = function() {
 			self.reload();
-		};
+		};*/
 	};
 
 	/**
