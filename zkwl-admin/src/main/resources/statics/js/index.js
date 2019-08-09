@@ -17,18 +17,21 @@ var menuItem = Vue.extend({
         '		<i v-if="item.icon != null" :class="item.icon"></i>',
         '		<span style="margin-left:18%;font-size:16px;">{{item.name}}</span>',
         '	</a>',
-        '	<a v-if="item.type === 1 && item.parentId != 0" :href="\'#\'+item.url"><i v-if="item.icon != null" :class="item.icon"></i><i v-else class="fa fa-circle-o"></i> {{item.name}}</a>',
+        '	<a v-if="item.type === 1 && item.parentId != 0" v-on:click="clickTest($event)" :href="\'#\'+item.url"><i v-if="item.icon != null" :class="item.icon"></i><i v-else class="fa fa-circle-o"></i> {{item.name}}</a>',
         '</li>'
     ].join(''),
     methods: {
         clickTest: function (e) {
             var url = e.currentTarget.toString().split("#")[1];
-            vm.main = url+"?t="+new Date().getTime();
-            //导航菜单展开
-            $(".treeview-menu li").removeClass("active");
-            $("a[href='"+url+"']").parents("li").addClass("active");
-            $("a[href='"+url+"']").parents().siblings("li").removeClass("active");
-            vm.navTitle = $("a[href='"+url+"']").text();
+            var hash = window.location.hash.split("#")[1];
+            if(url.indexOf(hash)>-1){
+                vm.main = url+"?t="+new Date().getTime();
+                //导航菜单展开
+                $(".treeview-menu li").removeClass("active");
+                $("a[href='"+url+"']").parents("li").addClass("active");
+                $("a[href='"+url+"']").parents().siblings("li").removeClass("active");
+                vm.navTitle = $("a[href='"+url+"']").text();
+            }
          }
    },
 
@@ -150,12 +153,12 @@ function routerList(router, menuList){
 			router.add('#'+menu.url, function() {
 				var url = window.location.hash;
 				//替换iframe的url
-			    //vm.main = url.replace('#', '');
+			    vm.main = url.replace('#', '');
 			    //导航菜单展开
-			    //$(".treeview-menu li").removeClass("active");
-			    //$("a[href='"+url+"']").parents("li").addClass("active");
-			    //$("a[href='"+url+"']").parents().siblings("li").removeClass("active");
-			    //vm.navTitle = $("a[href='"+url+"']").text();
+			    $(".treeview-menu li").removeClass("active");
+			    $("a[href='"+url+"']").parents("li").addClass("active");
+			    $("a[href='"+url+"']").parents().siblings("li").removeClass("active");
+			    vm.navTitle = $("a[href='"+url+"']").text();
 			});
 		}
 	}
