@@ -55,7 +55,6 @@ public class AdvancedSettingController extends AbstractController{
     @RequestMapping(value = "/updateGroup",method = RequestMethod.POST)
     public R update(AdvancedSettingEntity advancedSetting){
         ValidatorUtils.validateEntity(advancedSetting, AddGroup.class);
-        boolean flag = false;
         String groupId = advancedSetting.getGroupId();
         if(StringUtils.isBlank(groupId)){
             return R.error("组id不能为空");
@@ -64,8 +63,7 @@ public class AdvancedSettingController extends AbstractController{
         if(!"".equals(msg)){
             return R.error(msg);
         }
-        flag = advancedSettingService.addUpdateGroup(advancedSetting,getUser());
-        if(!flag){
+        if(!advancedSettingService.addUpdateGroup(advancedSetting,getUser())){
             return R.error("数据保存失败");
         }
         return R.ok();
@@ -85,9 +83,10 @@ public class AdvancedSettingController extends AbstractController{
         if(!"".equals(msg)){
             return R.error(msg);
         }
-
-
-
+        if(!advancedSettingService.addUpdateDevice(advancedSetting,getUser())){
+            return R.error("数据保存失败");
+        }
+        return R.ok();
     }
 
 
