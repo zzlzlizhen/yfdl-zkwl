@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.remote.common.enums.AllEnum;
 import com.remote.common.enums.DeviceEnum;
 import com.remote.common.enums.RunStatusEnum;
+import com.remote.common.redis.CacheUtils;
 import com.remote.common.utils.*;
 import com.remote.modules.device.entity.DeviceEntity;
 import com.remote.modules.device.entity.DeviceQuery;
@@ -40,11 +41,24 @@ public class DeviceController extends AbstractController {
     @Autowired
     private RabbitTemplate template;
 
+    @Autowired
+    private CacheUtils cacheUtils;
+
     @RequestMapping(value = "/queryDevice", method= RequestMethod.POST)
     public R queryDevice(@RequestBody DeviceQuery deviceQuery) throws Exception {
-        PageInfo<DeviceEntity> pageInfo = deviceService.queryDevice(deviceQuery);
-        if(pageInfo != null){
-            return R.ok(pageInfo);
+        String esFlag = cacheUtils.get("ES_FLAG").toString();
+        // 1 代表 查询es
+        if(esFlag.equals(esFlag)){
+            Pager<Map<String, Object>> mapPager = deviceService.queryDevice(deviceQuery);
+            if(mapPager != null){
+                return R.ok(mapPager);
+            }
+            //2 代表 查询 mysql
+        }else if(esFlag.equals(esFlag)){
+            PageInfo<DeviceEntity> pageInfo = deviceService.queryDeviceByMysql(deviceQuery);
+            if(pageInfo != null){
+                return R.ok(pageInfo);
+            }
         }
         return R.error(400,"查询设备失败");
     }
@@ -258,6 +272,13 @@ public class DeviceController extends AbstractController {
             list.add(deviceEntity);
         }
         return R.ok(list);
+    }
+
+
+    @RequestMapping(value = "/updateEsFlag", method= RequestMethod.GET)
+    public R updateEsFlag(String esFlag){
+        cacheUtils.set("ES_FLAG",esFlag);
+        return R.ok();
     }
 
 

@@ -1,6 +1,7 @@
 package com.remote.modules.device.service;
 
 import com.github.pagehelper.PageInfo;
+import com.remote.common.utils.Pager;
 import com.remote.common.utils.R;
 import com.remote.modules.device.entity.DeviceEntity;
 import com.remote.modules.device.entity.DeviceQuery;
@@ -16,12 +17,21 @@ import java.util.Map;
 public interface DeviceService {
     /*
      * @Author zhangwenping
-     * @Description 根据分组查询设备（分页）
+     * @Description 根据分组查询设备（分页） es
      * @Date 13:50 2019/6/4
      * @Param deviceQuery
      * @return PageInfo<DeviceEsEntity>
      **/
-    PageInfo<DeviceEntity> queryDevice(DeviceQuery deviceQuery) throws Exception;
+    Pager<Map<String, Object>> queryDevice(DeviceQuery deviceQuery) throws Exception;
+
+    /*
+     * @Author zhangwenping
+     * @Description 根据分组查询设备（分页） mysql
+     * @Date 10:27 2019/8/9
+     * @Param deviceQuery
+     * @return PageInfo<DeviceEntity>
+     **/
+    PageInfo<DeviceEntity> queryDeviceByMysql(DeviceQuery deviceQuery) throws Exception;
     /*
      * @Author zhangwenping
      * @Description 添加设备
@@ -184,4 +194,6 @@ public interface DeviceService {
      * @return  List<DeviceTree>
      **/
     List<DeviceTree> getDeviceByGroupIdNoPageLike(DeviceQuery deviceQuery);
+
+
 }

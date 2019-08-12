@@ -328,8 +328,6 @@ $(function(){
                     return
                 }
 
-
-
                 //负载
                 var loadWorkMode = parseInt($("#select1_b option:selected").attr("class"));   //负载工作模式
                 var powerLoad = parseInt($("#r_Load_power").val()*100); //负载功率
@@ -386,13 +384,13 @@ $(function(){
                 var icharge= parseInt($("#r_inpl_tw").val())*100;//充电电流
                 // 第一阶段
                 var firDownPower = parseInt($("#slideTest_a").val()*100 );//一阶降压功率
-                var firReducAmplitude = parseInt($("#slideTest_b").children().children(".layui-slider-bar").width());//一阶降功率幅度
+                var firReducAmplitude = parseInt($("#slideTest_b").children().children(".layui-slider-input-txt").children("input").val());//一阶降功率幅度
                 // 第二阶段
                 var twoDownPower = parseInt($("#slideTest_c").val()*100);//二阶降压功率
-                var twoReducAmplitude = parseInt($("#slideTest_d").children().children(".layui-slider-bar").width());//二阶降功率幅度
+                var twoReducAmplitude = parseInt($("#slideTest_d").children().children(".layui-slider-input-txt").children("input").val());//二阶降功率幅度
                 // 第三阶段
                 var threeDownPower = parseInt($("#slideTest_e").val()*100);//三阶降压功率
-                var threeReducAmplitude = parseInt($("#slideTest_f").children().children(".layui-slider-bar").width());//三阶降功率幅度
+                var threeReducAmplitude = parseInt($("#slideTest_f").children().children(".layui-slider-input-txt").children("input").val());//三阶降功率幅度
                 var se_a
                 var se_b
                 var se_c
@@ -598,13 +596,14 @@ $(function(){
                 //自定义
                 // 第一阶段
                 var firDownPower = parseInt($("#slideTest_a").val()*100 );//一阶降压功率
-                var firReducAmplitude = parseInt($("#slideTest_b").children().children(".layui-slider-bar").width());//一阶降功率幅度
+                var firReducAmplitude = parseInt($("#slideTest_b").children().children(".layui-slider-input-txt").children("input").val());//一阶降功率幅度
                 // 第二阶段
                 var twoDownPower = parseInt($("#slideTest_c").val()*100);//二阶降压功率
-                var twoReducAmplitude = parseInt($("#slideTest_d").children().children(".layui-slider-bar").width());//二阶降功率幅度
+                var twoReducAmplitude = parseInt($("#slideTest_d").children().children(".layui-slider-input-txt").children("input").val());//二阶降功率幅度
                 //第三阶段
                 var threeDownPower = parseInt($("#slideTest_e").val()*100);//三阶降压功率
-                var threeReducAmplitude = parseInt($("#slideTest_f").children().children(".layui-slider-bar").width());//三阶降功率幅度
+                var threeReducAmplitude = parseInt($("#slideTest_f").children().children(".layui-slider-input-txt").children("input").val());//三阶降功率幅度
+
                 var se_a
                 var se_b
                 var se_c
@@ -1041,6 +1040,7 @@ $(function(){
                         $("#slideTest_d").children().children(".layui-slider-bar").css("width",res.info.twoReducAmplitude+"%");//2阶后
                         $("#slideTest_d").children().children(".layui-slider-wrap").css("left",res.info.twoReducAmplitude+"%");
                         $("#slideTest_d").children().children().children(".layui-input").val(res.info.twoReducAmplitude);
+
                         $("#slideTest_e").val(res.info.threeDownPower/100);//3阶前
                         $("#slideTest_f").children().children(".layui-slider-bar").css("width",res.info.threeReducAmplitude+"%");//3阶后
                         $("#slideTest_f").children().children(".layui-slider-wrap").css("left",res.info.threeReducAmplitude+"%");

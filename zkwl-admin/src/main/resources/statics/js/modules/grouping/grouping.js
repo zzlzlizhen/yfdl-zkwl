@@ -95,8 +95,9 @@ $(function(){
        // var select=$("#se_for option:selected").attr("id")
         var select=$("#se_for").val();
        var selecta=$("#se_fora option:selected").attr("id")
+        var selectr="";
         $("#div").html("");
-        form(pageSize,pageNum,Se_id,Se_name,select,selecta);
+        form(pageSize,pageNum,Se_id,Se_name,select,selecta,selectr);
         refresh();
     })
     //自动刷新
@@ -114,7 +115,7 @@ $(function(){
 
     //渲染表格
     form(10,1,"","","","");
-    function form(pageSizea,pagesa,deviceCode,deviceName,groupId,deviceType){
+    function form(pageSizea,pagesa,deviceCode,deviceName,groupId,deviceType,selectr){
         $.ajax({
             url: baseURL + 'fun/device/queryDevice',
             contentType: "application/json;charset=UTF-8",
@@ -122,11 +123,12 @@ $(function(){
             data: JSON.stringify({
                 "deviceCode":deviceCode,//设备编号
                 "deviceName":deviceName,//设备名称
-                "groupId":groupId,//分组id
+                "groupName":groupId,
                 "deviceType":deviceType,//设备类型
                 "projectId":Id,
                 "pageSize":pageSizea,
-                "pageNum":pagesa
+                "pageNum":pagesa,
+                "groupId":selectr//分组id
             }),
             success: function (res) {
                 console.log("项目下设备数据")
@@ -505,6 +507,12 @@ $(function(){
                                     });
                                     form(10,1,"","","","");
                                     $(".shade_modifier,.shade_b_modifier").css("display","none");
+                                }else {
+                                    layer.open({
+                                        title: '信息',
+                                        content: res.msg,
+                                        skin: 'demo-class'
+                                    });
                                 }
 
                             }
@@ -538,10 +546,12 @@ $(function(){
      //    添加
     $("#add_equipments").unbind('click');
     $("#add_equipments").click(function(){
+        $("#select1").empty()
+        $("#select1").val("");
         $(".shade_project,.shade_b_project").css("display","block");
         $(".pro_name").val("");
         $(".pro_s").val("");
-        $("#select1").append("<option class='option opti_a' ></option>");
+       // $("#select1").append("<option class='option opti_a' ></option>");
         $.ajax({
             url:baseURL + 'fun/group/queryGroupNoPage?projectId='+Id,
             contentType: "application/json;charset=UTF-8",
@@ -550,10 +560,13 @@ $(function(){
             success: function(res) {
                 var html=""
                 for (var i = 0; i < res.data.length; i++) {
+                    // console.log(res.data[i].groupName);
+                    // console.log("lllllllllllllllll");
                     html += "<option class='option opti_a' id="+res.data[i].groupId+">"+res.data[i].groupName+"</option>\n"
                 }
                 $("#select1").append(html);
             }
+
         })
         //添加设备-分组id
         // fen()
@@ -575,7 +588,7 @@ $(function(){
     // }
     $(".shade_add_project").click(function(){
         $(".shade_project,.shade_b_project").css("display","none");
-        $("#select1").html("");
+        $("#select1").val("");
 
     })
     $(".glyphicon,.rqubtn").click(function(){
@@ -605,6 +618,7 @@ $(function(){
                     if(res.code == "200"){
                         $(".pro_name").val("");
                         $(".pro_s").val("");
+                        $("#select1").val("");
                         $(".shade_project").hide();
                         $(".mistake").hide();
                         layer.open({
@@ -677,7 +691,7 @@ $(function(){
                             }else if(newList[i]=="云"){
                                 $("#img").attr("src","/statics/image/duoyun.svg");
                             }else if(newList[i]=="雨"){
-                                $("#img").attr("src","/statics/image/yu.svg");
+                                $("#img").attr("src","/statics/image/xiaoyu.svg");
                             }else if(newList[i]== "雪"){
                                 $("#img").attr("src","/statics/image/xue.svg");
                             }else if(newList[i]== "阴"){

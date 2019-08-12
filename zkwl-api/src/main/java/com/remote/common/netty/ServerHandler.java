@@ -423,6 +423,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             }
             AdvancedSettingEntity advancedSettingEntity = advancedSettingService.queryByDeviceCode(deviceEntity.getDeviceCode());
             BeanUtils.copyProperties(advancedSettingEntity, deviceEntity);
+            deviceEntity.setUpdateUser(advancedSettingEntity.getUid().toString());
             BeanUtils.copyProperties(deviceEntity, setUp);
             if(key != null && key.size() > 0){
                 for (Integer inde : key){

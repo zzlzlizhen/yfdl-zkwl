@@ -106,7 +106,7 @@
                         <div class="container_a">
                             <div class="input-group spinner">
                                 <!--oninput="num(this)"-->
-                                <input type="text"  class="form-control in_dent"  value="12" id="r_Load_power" oninput="value=value.replace(/[^\d]/g,'')" >
+                                <input type="text"  class="form-control in_dent"  value="12" id="r_Load_power" onkeyup="value=value.replace(/[^\d.]/g,'')" >
                                 <div class="input-group-btn-vertical">
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
@@ -432,10 +432,10 @@
                         </div>
                     </div>
                     <div>
-                        <span>过放电压(V)</span><input type="text"  value="2.5" placeholder="2.5~40"  class="m_in in_dent"  id="r_inpl_one" oninput="value=value.replace(/[^\d]/g,'')">
+                        <span>过放电压(V)</span><input type="text"  value="2.5" placeholder="2.5~40"  class="m_in in_dent"  id="r_inpl_one" onkeyup="value=value.replace(/[^\d.]/g,'')">
                     </div>
                     <div>
-                        <span>充电电流(A)</span><input type="text"  placeholder="0~40" value="0"  class="m_in in_dent" id="r_inpl_tw" oninput="value=value.replace(/[^\d]/g,'')">
+                        <span>充电电流(A)</span><input type="text"  placeholder="0~40" value="0"  class="m_in in_dent" id="r_inpl_tw" onkeyup="value=value.replace(/[^\d.]/g,'')">
                     </div>
 
                     <div>
@@ -475,7 +475,7 @@
                     </div>
                     <div>
                         <span style="float: left;">充电电压(V)</span>
-                        <input type="text" id="chong" class="in_dent" placeholder="2.5~40" value="2.5" oninput="value=value.replace(/[^\d]/g,'')">
+                        <input type="text" id="chong" class="in_dent" placeholder="2.5~40" value="2.5" onkeyup="value=value.replace(/[^\d.]/g,'')">
                     </div>
                     <div style="line-height: 34px;clear: both;">
                         <span>巡检时间</span>
@@ -723,6 +723,7 @@
             ,input: true //输入框
             ,value:0
             ,min:0
+            ,disabled:true
         });
         slider.render({
             elem: '#slideTest_e'
@@ -737,6 +738,7 @@
             ,input: true //输入框
             ,value:0
             ,min:0
+            ,disabled:true
         });
         slider.render({
             elem: '#slideTest_m'

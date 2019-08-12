@@ -1,3 +1,9 @@
+elasticsearch:
+  host: 192.168.0.11
+  port: 9200
+  client:
+    connectNum: 10
+    connectPerRoute: 50
 spring:
   redis:
     database: 0

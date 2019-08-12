@@ -3,9 +3,7 @@ package com.remote.modules.sys.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.remote.common.utils.PageUtils;
-import com.remote.modules.sys.entity.SecurityEntity;
 import com.remote.modules.sys.entity.SysUserEntity;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;

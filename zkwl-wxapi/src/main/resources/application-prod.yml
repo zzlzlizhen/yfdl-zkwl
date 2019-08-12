@@ -1,3 +1,9 @@
+elasticsearch:
+  host: 39.97.169.198
+  port: 9200
+  client:
+    connectNum: 10
+    connectPerRoute: 50
 spring:
   rabbitmq:
     host : 39.97.169.198

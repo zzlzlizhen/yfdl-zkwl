@@ -207,7 +207,7 @@ thead>th{text-align: center !important;}
 .nav_a>li{width:90%;height:auto;float:left;margin-left:5%;list-style:none;margin-top: 10px ;color: #ffffff;
    ;-background:rgba(0,165,160,0.7) ;-border-radius: 8px;}
 .nav_pro_v,.nav_pro_v_b,.nav_pro_v_ba{width:100%;height:40px;;cursor: pointer;float:left;}
-.nav_pro_v_b{border-bottom:1px dashed #ccc;}
+.nav_pro_v_b{border-bottom:1px dashed #ccc;position:relative}
 .nav_bb_color{background: rgba(0,165,160,0.7); color:#fff;}
 .nav_pro_v{padding: 0 14px;background: rgba(0,165,160,0.7);border-radius: 8px;}
 .nav_project{width:40%;height:100%;float:left;line-height: 40px;font-size:12px;font-weight: bold;margin-right:6%;}
@@ -268,9 +268,9 @@ thead>th{text-align: center !important;}
 .cake{width:100%;height:220px;float:left;}
 .cake_B{width:100%;height:220px;}
 .Jan_r{width:84px !important;text-align: left !important;}
-.search{width:90%;height:30px;position: relative;top:8%;left:5%;background: #ccc}
-.search input{left:0;position: absolute;height:28px;border:1px solid #ccc;border-radius:5px;text-indent: 5px;font-size:14px;}
-.search button{position: absolute;right:0;height:30px;width:25%;background: #4cc0bc;border-radius: 4px;border:0;color:#fff;}
+.search{width:90%;height:37px;position: relative;top:8%;left:5%;}
+.search input{left:0;position: absolute;height:37px; border:1px solid #ccc;border-radius: 5px 0px 0px 5px;text-indent: 5px;font-size:14px;width: 75%;}
+.search button{position: absolute;right:0;height:37px;width:25%;background: #4cc0bc;border-radius:0px 5px 5px 0px;border:0;color:#fff;}
 .search button:hover{color:#666;}
 /*丸子*/
 .progres{width: 24%;float: left;margin-top: 18px;margin-left: 5%;}
@@ -534,6 +534,17 @@ body .demo-class .layui-layer-btn0{background:#27E2D4; color:#fff;border: none;}
     height: 20px;
     top: 68.5px;
 }
-.nav_gro{
-    transition: transform .5s;
+
+
+.nav_pro_v_b img.active{
+    -webkit-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+    width: 15px;height: 15px;margin-top: 12px;margin-right: 20px; float: right;
 }
+.rllimg{width: 15px;height: 15px;margin-top: 12px;margin-right: 20px; float: right;}
+
+
+
+

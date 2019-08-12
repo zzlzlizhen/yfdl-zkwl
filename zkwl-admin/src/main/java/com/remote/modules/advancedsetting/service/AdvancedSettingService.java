@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.remote.common.utils.PageUtils;
 import com.remote.common.utils.StringUtils;
 import com.remote.modules.advancedsetting.entity.AdvancedSettingEntity;
+import com.remote.modules.sys.entity.SysUserEntity;
 import org.apache.ibatis.annotations.Param;
 
 
@@ -19,15 +20,11 @@ import java.util.Map;
  */
 public interface AdvancedSettingService extends IService<AdvancedSettingEntity> {
 
-    PageUtils queryPage(Map<String, Object> params);
 
     AdvancedSettingEntity queryByProGroupId(String deviceCode,String groupId);
-    boolean upadateAdvanceSteing(AdvancedSettingEntity advancedSettingEntity);
     AdvancedSettingEntity queryByGroupId(String groupId);
     List<AdvancedSettingEntity> queryByDeviceCode(List<String> deviceCode);
-    boolean upadateAdvanceSteingById(AdvancedSettingEntity advancedSettingEntity,Long advSetId);
     boolean updateAdvance(Long advSetId,AdvancedSettingEntity advancedSettingEntity);
-    AdvancedSettingEntity queryByDevGroupId(String deviceCode,String groupId);
     AdvancedSettingEntity queryByDevOrGroupId(String groupId,String deviceCode);
     /*
      * @Author zhangwenoping
@@ -45,5 +42,7 @@ public interface AdvancedSettingService extends IService<AdvancedSettingEntity> 
      * @return  int
      **/
     int deleteAdvancedByDeviceCode(String deviceCode,String groupId);
+
+    boolean addUpdateGroup(AdvancedSettingEntity advancedSettingEntity, SysUserEntity curUser);
 }
 

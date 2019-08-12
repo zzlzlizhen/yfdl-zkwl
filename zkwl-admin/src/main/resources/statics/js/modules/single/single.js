@@ -469,8 +469,6 @@ $(function(){
                     projectId = $(this).parent().siblings(".li_deviceType").attr("id");
                     $(".pro_s_b").val(r_namem)
                     // var r_rrenae = $(this).parent().siblings(".sha").attr("id");
-                    $("#select1_b").val(groupName);
-
                     fen(projectId)
                 })
                 $("#confirm_x").unbind('click');
@@ -478,7 +476,7 @@ $(function(){
                     var pro_s_b=$(".pro_s_b").val();
                     var groupId=$("#select1_b option:selected").attr("id");
                     if(pro_s_b == ""){
-                        $(".mistake").css("display","block")
+                        $(".mistake").css("display","block");
                         return
                     }else{
                         $.ajax({
@@ -528,6 +526,9 @@ $(function(){
                             $("#select1,#select1_b").html(html)
                         }
                     })
+                    console.log("12222222222222212121212")
+                    console.log(groupName)
+                    $("#select1_b").val(groupName);
                 }
                 //    分页
                 $("#pagination3").pagination({

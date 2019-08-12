@@ -36,8 +36,8 @@ public class ESClientSpringFactory {
         return  esClientSpringFactory;
     }
 
-    public static ESClientSpringFactory build(HttpHost httpHost,Integer connectTimeOut, Integer socketTimeOut,
-                                              Integer connectionRequestTime,Integer maxConnectNum, Integer maxConnectPerRoute){
+    public static ESClientSpringFactory build(HttpHost httpHost, Integer connectTimeOut, Integer socketTimeOut,
+                                              Integer connectionRequestTime, Integer maxConnectNum, Integer maxConnectPerRoute){
         HTTP_HOST = httpHost;
         CONNECT_TIMEOUT_MILLIS = connectTimeOut;
         SOCKET_TIMEOUT_MILLIS = socketTimeOut;

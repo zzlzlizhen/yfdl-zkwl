@@ -3,6 +3,7 @@ package com.remote.device.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.remote.common.es.utils.ESUtil;
 import com.remote.common.utils.CoodinateCovertor;
 import com.remote.common.utils.LngLat;
 import com.remote.device.dao.DeviceMapper;
@@ -23,11 +24,13 @@ import com.remote.project.service.ProjectService;
 import com.remote.utils.DeviceTypeMap;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.elasticsearch.rest.RestStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 import static com.remote.utils.DeviceTypeMap.DEVICE_TYPE;
@@ -54,6 +57,9 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Autowired
     private GroupService groupService;
+
+    @Autowired
+    private ESUtil esUtil;
 
     @Override
     public List<DeviceEntity> queryDeviceByGroupCount(List<String> groupIds, String projectId, Integer deviceStatus) {
@@ -89,7 +95,37 @@ public class DeviceServiceImpl implements DeviceService {
             DistrictEntity districtEntity = districtService.queryDistrictById(projectEntity.getCityId());
             deviceEntity.setCityName(districtEntity.getDistrictName());
         }
-        return deviceMapper.insert(deviceEntity) > 0 ? true : false;
+        int insert = deviceMapper.insert(deviceEntity);
+        if(insert > 0){
+            //添加es start
+            Map<String, Object> stringObjectMap = convertAddES(deviceEntity);
+            RestStatus restStatus = esUtil.addES(stringObjectMap);
+            //添加es end
+        }
+
+        return insert > 0 ? true : false;
+    }
+
+    private Map<String, Object> convertAddES(DeviceEntity deviceEntity) {
+        Field[] declaredFields = deviceEntity.getClass().getDeclaredFields();
+        Map<String,Object> temp = new HashMap<String,Object>();
+        for (Field field : declaredFields){
+            field.setAccessible(true);
+            try {
+                if (field.getGenericType().toString().equals("class java.lang.String")) {
+                    temp.put(field.getName(),field.get(deviceEntity) == null ? "" : field.get(deviceEntity));
+                }else if (field.getGenericType().toString().equals("class java.lang.Integer")) {
+                    temp.put(field.getName(),field.get(deviceEntity) == null ? 0 : field.get(deviceEntity));
+                }else if (field.getGenericType().toString().equals("class java.lang.Double")) {
+                    temp.put(field.getName(),field.get(deviceEntity) == null ? 0.0 :field.get(deviceEntity));
+                }else if(field.getGenericType().toString().equals("class java.util.Date")){
+                    temp.put(field.getName(),field.get(deviceEntity) == null ? new Date() :field.get(deviceEntity));
+                }
+            } catch (IllegalAccessException e1) {
+                e1.printStackTrace();
+            }
+        }
+        return temp;
     }
 
     @Override

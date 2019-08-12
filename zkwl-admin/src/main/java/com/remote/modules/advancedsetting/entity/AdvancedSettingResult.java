@@ -1,13 +1,7 @@
 package com.remote.modules.advancedsetting.entity;
 
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.remote.common.validator.group.AddGroup;
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
-import java.util.Date;
 
 /**
  * 

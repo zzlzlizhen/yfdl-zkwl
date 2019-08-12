@@ -6,7 +6,9 @@ import org.apache.http.HttpHost;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 
 /**
  * @Author EDZ
@@ -15,17 +17,15 @@ import org.springframework.context.annotation.*;
  **/
 @Configuration
 @Slf4j
-@ComponentScan(basePackageClasses=ESClientSpringFactory.class)
-@PropertySource(value = {"classpath:es-info.properties"}, encoding = "utf-8")
 @Data
 public class EsConfig {
-    @Value("${elasticSearch.host}")
+    @Value("${elasticsearch.host}")
     private String host;
-    @Value("${elasticSearch.port}")
+    @Value("${elasticsearch.port}")
     private int port;
-    @Value("${elasticSearch.client.connectNum}")
+    @Value("${elasticsearch.client.connectNum}")
     private Integer connectNum;
-    @Value("${elasticSearch.client.connectPerRoute}")
+    @Value("${elasticsearch.client.connectPerRoute}")
     private Integer connectPerRoute;
 
     @Bean

@@ -126,11 +126,9 @@ public class GroupServiceImpl implements GroupService {
         for(String groupId : groupList){
             //根据跟组id 查询下面设备
             DeviceQuery deviceQuery = new DeviceQuery();
-            deviceQuery.setPageNum(1);
-            deviceQuery.setPageSize(10);
             deviceQuery.setGroupId(groupId);
-            PageInfo<DeviceEntity> pageInfo = deviceService.queryDevice(deviceQuery);
-            if(CollectionUtils.isNotEmpty(pageInfo.getList())){
+            List<DeviceEntity> deviceEntities = deviceService.queryDeviceNoPage(deviceQuery);
+            if(CollectionUtils.isNotEmpty(deviceEntities)){
                 //查询出list 如果有把不可删除的分组名称追加到sb变量中
                 GroupEntity groupEntity = groupMapper.queryGroupById(groupId);
                 sb.append(groupEntity.getGroupName()).append(",");

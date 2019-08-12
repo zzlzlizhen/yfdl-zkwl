@@ -5,6 +5,8 @@ import com.remote.common.enums.BatteryStatusEnum;
 import com.remote.common.enums.LoadStatusEnum;
 import com.remote.common.enums.PhotovoltaicCellStatusEnum;
 import com.remote.common.enums.RunStatusEnum;
+import com.remote.common.es.utils.ESUtil;
+import com.remote.common.netty.ServerHandler;
 import com.remote.common.utils.CoodinateCovertor;
 import com.remote.common.utils.LngLat;
 import com.remote.device.dao.DeviceMapper;
@@ -14,13 +16,13 @@ import com.remote.device.service.DeviceService;
 import com.remote.device.util.XYmatch;
 import com.remote.faultlog.entity.FaultlogEntity;
 import com.remote.faultlog.service.FaultlogService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.lang.reflect.Field;
+import java.util.*;
 
 /**
  * @Author EDZ
@@ -29,12 +31,15 @@ import java.util.UUID;
  **/
 @Service
 public class DeviceServiceImpl implements DeviceService {
-
+    private Logger log = LoggerFactory.getLogger(DeviceServiceImpl.class);
     @Autowired
     private DeviceMapper deviceMapper;
 
     @Autowired
     private FaultlogService faultlogService;
+
+    @Autowired
+    private ESUtil esUtil;
 
     @Override
     public DeviceEntity queryDeviceByCode(String deviceCode) {
@@ -124,12 +129,49 @@ public class DeviceServiceImpl implements DeviceService {
             }
             faultlogService.addFaultlog(faultlogEntity);
         }
-        return deviceMapper.updateDeviceByCode(deviceEntity);
+        int k = deviceMapper.updateDeviceByCode(deviceEntity);
+        if(k > 0){
+            log.info("设备编号："+deviceEntity.getDeviceCode()+"，修改es实时数据");
+            //修改 ES start
+            Map<String, Object> stringObjectMap = convertUpdateES(deviceEntity);
+            esUtil.updateES(stringObjectMap,deviceEntity.getDeviceId());
+            //修改 ES end
+        }
+        return k;
+    }
+
+    public Map<String,Object> convertUpdateES(DeviceEntity deviceEntity){
+        Field[] declaredFields = deviceEntity.getClass().getDeclaredFields();
+        Map<String,Object> temp = new HashMap<String,Object>();
+        for (Field field : declaredFields){
+            field.setAccessible(true);
+            try {
+                if(field.get(deviceEntity) != null){
+                    temp.put(field.getName(),field.get(deviceEntity));
+                }
+            } catch (IllegalAccessException e1) {
+                e1.printStackTrace();
+            }
+        }
+        return temp;
     }
 
     @Override
     public int updateDeviceTimeOutByCode(String deviceCode,Integer runState) {
-        return deviceMapper.updateDeviceTimeOutByCode(deviceCode,runState);
+        DeviceEntity deviceEntity = deviceMapper.queryDeviceByCode(deviceCode);
+        int i = deviceMapper.updateDeviceTimeOutByCode(deviceCode, runState);
+        if(i > 0){
+            log.info("设备编号："+deviceEntity.getDeviceCode()+"，修改es超时数据");
+            //修改 ES start
+            DeviceEntity deviceEsEntity = new DeviceEntity();
+            deviceEsEntity.setRunState(runState);
+            deviceEsEntity.setDeviceId(deviceEntity.getDeviceId());
+
+            Map<String, Object> stringObjectMap = convertUpdateES(deviceEsEntity);
+            esUtil.updateES(stringObjectMap,deviceEsEntity.getDeviceId());
+            //修改 ES end
+        }
+        return i;
     }
 
     @Override
@@ -139,7 +181,21 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public int updateDeviceVersionByCode(String deviceCode) {
-        return deviceMapper.updateDeviceVersionByCode(deviceCode);
+        DeviceEntity deviceEntity = deviceMapper.queryDeviceByCode(deviceCode);
+
+        int i = deviceMapper.updateDeviceVersionByCode(deviceCode);
+        if(i > 0){
+            log.info("设备编号："+deviceEntity.getDeviceCode()+"，修改es版本更新数据");
+            //修改 ES start
+            DeviceEntity deviceEsEntity = new DeviceEntity();
+            deviceEsEntity.setDeviceId(deviceEntity.getDeviceId());
+            deviceEsEntity.setDeviceVersion(deviceEntity.getDeviceVersion() + 1);
+
+            Map<String, Object> stringObjectMap = convertUpdateES(deviceEntity);
+            esUtil.updateES(stringObjectMap,deviceEntity.getDeviceId());
+            //修改 ES end
+        }
+        return i;
     }
 
 

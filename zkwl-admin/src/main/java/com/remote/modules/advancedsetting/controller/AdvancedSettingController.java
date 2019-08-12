@@ -2,22 +2,16 @@ package com.remote.modules.advancedsetting.controller;
 
 import java.util.*;
 
-import com.remote.common.utils.CollectionUtils;
-import com.remote.common.utils.PageUtils;
 import com.remote.common.utils.R;
 import com.remote.common.utils.StringUtils;
 import com.remote.common.validator.ValidatorUtils;
 import com.remote.common.validator.group.AddGroup;
 import com.remote.modules.advancedsetting.entity.AdvancedSettingEntity;
-import com.remote.modules.advancedsetting.entity.AdvancedSettingResult;
 import com.remote.modules.advancedsetting.service.AdvancedSettingService;
-import com.remote.modules.device.service.DeviceService;
 import com.remote.modules.sys.controller.AbstractController;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -30,51 +24,45 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdvancedSettingController extends AbstractController{
     @Autowired
     private AdvancedSettingService advancedSettingService;
-    @Autowired
-    DeviceService deviceService;
     /**
-     * 列表
+     * 查询设备的信息时，必须传组id跟设备code
      */
-    @RequestMapping(value = "/list",method = RequestMethod.GET)
-    public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = advancedSettingService.queryPage(params);
-        return R.ok().put("page", page);
-    }
+    @RequestMapping(value = "/queryDevAdvInfo",method = RequestMethod.GET)
+    public R queryDevAdvInfo(String groupId,String deviceCode){
+        if(StringUtils.isBlank(groupId)||StringUtils.isBlank(deviceCode)){
+            return R.error("组id跟设备编号不能为空");
+        }
+        AdvancedSettingEntity advancedSettingEntity = queryDefail(groupId,deviceCode);
+        return R.ok().put("info",advancedSettingEntity);
 
+    }
+    public AdvancedSettingEntity queryDefail(String groupId,String deviceCode){
+        AdvancedSettingEntity advancedSettingEntity = null;
+        if(StringUtils.isNotBlank(groupId)){
+            if(StringUtils.isNotBlank(deviceCode)){
+                advancedSettingEntity = advancedSettingService.queryByDevOrGroupId(groupId,deviceCode);
+
+            }
+        }
+       return advancedSettingEntity;
+
+    }
     /**
      * 组高级设置信息查看接口
      */
     @RequestMapping(value = "/settingInfo",method = RequestMethod.GET)
     public R info(String groupId){
+        if (StringUtils.isBlank(groupId)|| "".equals(groupId)){
+            return R.error("组id不能为空");
+        }
+        AdvancedSettingEntity advancedSettingEntity = null;
         if(StringUtils.isNotBlank(groupId)){
             String deviceCode = "0";
-            AdvancedSettingEntity advancedSettingEntity = advancedSettingService.queryByDevOrGroupId(groupId,deviceCode);
-            if(advancedSettingEntity != null){
-                advancedSettingEntity.setDeviceCode(deviceCode);
-                Integer sum = 0;
-                if(advancedSettingEntity.getTime1() != null){
-                    sum+=advancedSettingEntity.getTime1();
-                }
-                if(advancedSettingEntity.getTime2() != null){
-                    sum+=advancedSettingEntity.getTime2();
-                }
-                if(advancedSettingEntity.getTime3() != null){
-                    sum+=advancedSettingEntity.getTime3();
-                }
-                if(advancedSettingEntity.getTime4() != null){
-                    sum+=advancedSettingEntity.getTime4();
-                }
-                if(advancedSettingEntity.getTime5() != null){
-                    sum+=advancedSettingEntity.getTime5();
-                }
-                AdvancedSettingResult advancedSettingResult = new AdvancedSettingResult();
-                BeanUtils.copyProperties(advancedSettingEntity, advancedSettingResult);
-                advancedSettingResult.setSumTimer(sum);
-                return R.ok().put("info",advancedSettingResult);
-            }
+            advancedSettingEntity = advancedSettingService.queryByDevOrGroupId(groupId,deviceCode);
         }
-        return R.ok().put("info","");
+        return R.ok().put("info",advancedSettingEntity);
     }
+
 
 
     /**
@@ -88,83 +76,17 @@ public class AdvancedSettingController extends AbstractController{
         if(StringUtils.isBlank(groupId)){
             return R.error("组id不能为空");
         }
-        String devCode = advancedSetting.getDeviceCode();
-        if(StringUtils.isBlank(devCode)||"0".equals(devCode)&&StringUtils.isNotBlank(groupId)){
-             advancedSetting.setDeviceCode("0");
-            AdvancedSettingEntity advancedSettingEntity = advancedSettingService.queryByDevOrGroupId(groupId,"0");
-            advancedSetting.setUpdateUser(getUser().getRealName());
-            advancedSetting.setUid(getUserId());
-            if(advancedSettingEntity != null){
-                String msg = volatileData(advancedSetting);
-                if(!"".equals(msg)){
-                    return R.error(msg);
-                }
-                falg = advancedSettingService.updateAdvance(advancedSettingEntity.getId(),advancedSetting);
-                if(!falg){
-                    return R.error("更新数据失败");
-                }
-            }else{
-                advancedSetting.setCreateTime(new Date());
-                falg = advancedSettingService.save(advancedSetting);
-                if(!falg){
-                    return R.error("保存数据失败");
-                }
-            }
-            List<String> deviceCodes = deviceService.queryByGroupId(groupId);
-            if(CollectionUtils.isNotEmpty(deviceCodes)&&deviceCodes.size()>0){
-                List<AdvancedSettingEntity> advList= advancedSettingService.queryByDeviceCode((ArrayList<String>)deviceCodes);
-                if(CollectionUtils.isNotEmpty(advList)){
-                    for(AdvancedSettingEntity adv: advList)
-                    if(adv.getId() != null){
-                        //通过设备code把组最新设置的高级设置信息同步到对应的code中
-                        advancedSetting.setDeviceCode(adv.getDeviceCode());
-                        advancedSetting.setUpdateTime(new Date());
-                        advancedSettingService.updateAdvance(adv.getId(),advancedSetting);
-                    }
-                }
-            }
+        String msg = volatileData(advancedSetting);
+        if(!"".equals(msg)){
+            return R.error(msg);
+        }
+        falg = advancedSettingService.addUpdateGroup(advancedSetting,getUser());
+        if(!falg){
+            return R.error("数据保存失败");
         }
         return R.ok();
     }
-    /**
-     * 查询设备的信息时，必须传组id跟设备code
-     */
-    @RequestMapping(value = "/queryDevAdvInfo",method = RequestMethod.GET)
-    public R queryDevAdvInfo(String groupId,String deviceCode){
-        //设备code不为空并且设备code不等于0
-        if(StringUtils.isNotBlank(groupId)&&StringUtils.isNotBlank(deviceCode)|| !"0".equals(deviceCode)){
-            AdvancedSettingEntity advancedSettingEntity  = advancedSettingService.queryByDevOrGroupId(groupId,deviceCode);
-            if(advancedSettingEntity != null){
-                Integer sum = 0;
-                if(advancedSettingEntity.getTime1() != null){
-                    sum+=advancedSettingEntity.getTime1();
-                }
-                if(advancedSettingEntity.getTime2() != null){
-                    sum+=advancedSettingEntity.getTime2();
-                }
-                if(advancedSettingEntity.getTime3() != null){
-                    sum+=advancedSettingEntity.getTime3();
-                }
-                if(advancedSettingEntity.getTime4() != null){
-                    sum+=advancedSettingEntity.getTime4();
-                }
-                if(advancedSettingEntity.getTime5() != null){
-                    sum+=advancedSettingEntity.getTime5();
-                }
-                AdvancedSettingResult advancedSettingResult = new AdvancedSettingResult();
-                BeanUtils.copyProperties(advancedSettingEntity, advancedSettingResult);
-                advancedSettingResult.setSumTimer(sum);
-                return R.ok().put("info",advancedSettingResult);
-            }
-            return R.ok().put("info","");
-    /*        AdvancedSettingEntity advSE = advancedSettingService.queryByGroupId(groupId);
-            if(advSE == null){
-                return R.ok().put("info","");
-            }
-            return R.ok().put("info",advSE);*/
-        }
-        return R.error("组id跟设备编号不能为空");
-    }
+
     /**
      * 更改设备高级设置 组id跟设备code必传
      */
@@ -174,6 +96,10 @@ public class AdvancedSettingController extends AbstractController{
         String deviceCode = advancedSetting.getDeviceCode();
         if(StringUtils.isBlank(deviceCode)||StringUtils.isBlank(advancedSetting.getGroupId())){
             return R.error("设备编号或组不能为空");
+        }
+        String msg = volatileData(advancedSetting);
+        if(!"".equals(msg)){
+            return R.error(msg);
         }
         if(StringUtils.isNotBlank(advancedSetting.getGroupId())&&StringUtils.isNotBlank(deviceCode)&&!"0".equals(deviceCode)){
             AdvancedSettingEntity advSE = advancedSettingService.queryByDevOrGroupId(advancedSetting.getGroupId(),deviceCode);

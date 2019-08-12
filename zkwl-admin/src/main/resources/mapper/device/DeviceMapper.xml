@@ -148,6 +148,9 @@
         <if test="deviceQuery.isDel != null">
             is_del = #{deviceQuery.isDel},
         </if>
+        <if test="deviceQuery.groupName != null">
+            group_name = #{deviceQuery.groupName},
+        </if>
         update_user = #{deviceQuery.updateUser},update_time = #{deviceQuery.updateTime}
         <where>
             <if test="deviceQuery.deviceList !=null and deviceQuery.deviceList.size()!= 0">
