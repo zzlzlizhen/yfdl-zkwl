@@ -106,7 +106,7 @@ public class AdvancedSettingServiceImpl extends ServiceImpl<AdvancedSettingDao, 
                 }
                 //更新组下所有的设备的高级设置信息（排除组的高级设置本身）
                 advancedSetting.setDeviceCode(null);
-                this.update(advancedSettingEntity,new QueryWrapper<AdvancedSettingEntity>().eq("groupId",groupId).notIn("deviceCode","0"));
+                this.update(advancedSetting,new QueryWrapper<AdvancedSettingEntity>().eq("groupId",groupId).notIn("deviceCode","0"));
             }
             return true;
         }catch (Exception e){
