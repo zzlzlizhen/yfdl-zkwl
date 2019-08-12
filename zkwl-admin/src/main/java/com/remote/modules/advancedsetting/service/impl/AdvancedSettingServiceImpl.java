@@ -16,6 +16,9 @@ import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service("advancedSettingService")
@@ -72,44 +75,72 @@ public class AdvancedSettingServiceImpl extends ServiceImpl<AdvancedSettingDao, 
         return advancedSettingDao.deleteAdvancedByDeviceCode(deviceCode,groupId);
     }
 
+    /**
+     * 功能描述:组的高级设置信息修改
+     * 1、如果没有设置，则新增一条该组下的高级设置信息
+     * 2、如果已经有设置，则更新其原来的设置信息
+     * 3、将该组下所有的设备信息对应的高级设置信息，统一修改成和该次变更后的组高级设置一致
+     * @author lizhen
+     * @date 2019/8/12 19:49
+     * @param
+     * @return boolean
+     */
     @Override
+    @Transactional(readOnly = false, isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public boolean addUpdateGroup(AdvancedSettingEntity advancedSetting, SysUserEntity curUser) {
-        String groupId = advancedSetting.getGroupId();
-        String devCode = advancedSetting.getDeviceCode();
-        boolean falg = false;
-        if(StringUtils.isBlank(devCode)||"0".equals(devCode)&&StringUtils.isNotBlank(groupId)){
-            advancedSetting.setDeviceCode("0");
-            AdvancedSettingEntity advancedSettingEntity = queryByDevOrGroupId(groupId,"0");
-            advancedSetting.setUpdateUser(curUser.getRealName());
-            advancedSetting.setUid(curUser.getUserId());
-            if(advancedSettingEntity != null){
-                falg = updateAdvance(advancedSettingEntity.getId(),advancedSetting);
-                if(!falg){
-                    return false;
+        try {
+            String groupId = advancedSetting.getGroupId();
+            String devCode = advancedSetting.getDeviceCode();
+            if(StringUtils.isBlank(devCode)||"0".equals(devCode)){
+                AdvancedSettingEntity advancedSettingEntity = queryByDevOrGroupId(groupId,"0");
+                if(advancedSettingEntity != null){
+                    advancedSetting.setUpdateUser(curUser.getRealName());
+                    advancedSetting.setUid(curUser.getUserId());
+                    updateAdvance(advancedSettingEntity.getId(),advancedSetting);
+                }else{
+                    advancedSetting.setUpdateUser(curUser.getRealName());
+                    advancedSetting.setUid(curUser.getUserId());
+                    advancedSetting.setCreateTime(new Date());
+                    advancedSetting.setDeviceCode("0");
+                    save(advancedSetting);
                 }
-            }else{
-                advancedSetting.setCreateTime(new Date());
-                falg = save(advancedSetting);
-                if(!falg){
-                    return false;
-                }
+                //更新组下所有的设备的高级设置信息（排除组的高级设置本身）
+                advancedSetting.setDeviceCode(null);
+                this.update(advancedSettingEntity,new QueryWrapper<AdvancedSettingEntity>().eq("groupId",groupId).notIn("deviceCode","0"));
             }
-            List<String> deviceCodes = deviceService.queryByGroupId(groupId);
-            if(CollectionUtils.isNotEmpty(deviceCodes)&&deviceCodes.size()>0){
-                List<AdvancedSettingEntity> advList= queryByDeviceCode((ArrayList<String>)deviceCodes);
-                if(CollectionUtils.isNotEmpty(advList)){
-                    for(AdvancedSettingEntity adv: advList)
-                        if(adv.getId() != null){
-                            //通过设备code把组最新设置的高级设置信息同步到对应的code中
-                            advancedSetting.setDeviceCode(adv.getDeviceCode());
-                            advancedSetting.setUpdateTime(new Date());
-                            updateAdvance(adv.getId(),advancedSetting);
-                        }
-                }
-            }
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
         }
-        return true;
     }
 
+    /**
+     * 功能描述:更新设备的高级设置。如有已经存在则更新，否则插入
+     * @author lizhen
+     * @date 2019/8/12 19:57
+     * @param
+     * @return boolean
+     */
+    @Override
+    @Transactional(readOnly = false, isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public boolean addUpdateDevice(AdvancedSettingEntity advancedSetting, SysUserEntity curUser) {
+        try {
+            advancedSetting.setUid(curUser.getUserId());
+            advancedSetting.setUpdateUser(curUser.getRealName());
+
+            AdvancedSettingEntity advancedSettingEntity = queryByDevOrGroupId(advancedSetting.getGroupId(),advancedSetting.getDeviceCode());
+            if(advancedSettingEntity != null){
+                updateAdvance(advancedSettingEntity.getId(),advancedSetting);
+            }else{
+                advancedSetting.setCreateTime(new Date());
+                save(advancedSetting);
+            }
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
 
 }

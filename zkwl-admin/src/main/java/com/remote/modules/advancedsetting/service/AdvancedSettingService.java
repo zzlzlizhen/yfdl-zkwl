@@ -44,5 +44,7 @@ public interface AdvancedSettingService extends IService<AdvancedSettingEntity> 
     int deleteAdvancedByDeviceCode(String deviceCode,String groupId);
 
     boolean addUpdateGroup(AdvancedSettingEntity advancedSettingEntity, SysUserEntity curUser);
+
+    boolean addUpdateDevice(AdvancedSettingEntity advancedSettingEntity,SysUserEntity curUser);
 }
 

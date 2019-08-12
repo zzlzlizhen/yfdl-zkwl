@@ -29,38 +29,22 @@ public class AdvancedSettingController extends AbstractController{
      */
     @RequestMapping(value = "/queryDevAdvInfo",method = RequestMethod.GET)
     public R queryDevAdvInfo(String groupId,String deviceCode){
-        if(StringUtils.isBlank(groupId)||StringUtils.isBlank(deviceCode)){
+        if(StringUtils.isBlank(groupId) || StringUtils.isBlank(deviceCode)){
             return R.error("组id跟设备编号不能为空");
         }
-        AdvancedSettingEntity advancedSettingEntity = queryDefail(groupId,deviceCode);
-        return R.ok().put("info",advancedSettingEntity);
+        return R.ok().put("info",advancedSettingService.queryByDevOrGroupId(groupId,deviceCode));
 
     }
-    public AdvancedSettingEntity queryDefail(String groupId,String deviceCode){
-        AdvancedSettingEntity advancedSettingEntity = null;
-        if(StringUtils.isNotBlank(groupId)){
-            if(StringUtils.isNotBlank(deviceCode)){
-                advancedSettingEntity = advancedSettingService.queryByDevOrGroupId(groupId,deviceCode);
 
-            }
-        }
-       return advancedSettingEntity;
-
-    }
     /**
      * 组高级设置信息查看接口
      */
     @RequestMapping(value = "/settingInfo",method = RequestMethod.GET)
     public R info(String groupId){
-        if (StringUtils.isBlank(groupId)|| "".equals(groupId)){
+        if (StringUtils.isBlank(groupId)){
             return R.error("组id不能为空");
         }
-        AdvancedSettingEntity advancedSettingEntity = null;
-        if(StringUtils.isNotBlank(groupId)){
-            String deviceCode = "0";
-            advancedSettingEntity = advancedSettingService.queryByDevOrGroupId(groupId,deviceCode);
-        }
-        return R.ok().put("info",advancedSettingEntity);
+        return R.ok().put("info",advancedSettingService.queryByDevOrGroupId(groupId,"0"));
     }
 
 
@@ -71,7 +55,7 @@ public class AdvancedSettingController extends AbstractController{
     @RequestMapping(value = "/updateGroup",method = RequestMethod.POST)
     public R update(AdvancedSettingEntity advancedSetting){
         ValidatorUtils.validateEntity(advancedSetting, AddGroup.class);
-        boolean falg = false;
+        boolean flag = false;
         String groupId = advancedSetting.getGroupId();
         if(StringUtils.isBlank(groupId)){
             return R.error("组id不能为空");
@@ -80,8 +64,8 @@ public class AdvancedSettingController extends AbstractController{
         if(!"".equals(msg)){
             return R.error(msg);
         }
-        falg = advancedSettingService.addUpdateGroup(advancedSetting,getUser());
-        if(!falg){
+        flag = advancedSettingService.addUpdateGroup(advancedSetting,getUser());
+        if(!flag){
             return R.error("数据保存失败");
         }
         return R.ok();
@@ -94,25 +78,16 @@ public class AdvancedSettingController extends AbstractController{
     public R updateDevice(AdvancedSettingEntity advancedSetting){
         ValidatorUtils.validateEntity(advancedSetting, AddGroup.class);
         String deviceCode = advancedSetting.getDeviceCode();
-        if(StringUtils.isBlank(deviceCode)||StringUtils.isBlank(advancedSetting.getGroupId())){
+        if((StringUtils.isBlank(deviceCode) && "0".equals(deviceCode)) || StringUtils.isBlank(advancedSetting.getGroupId())){
             return R.error("设备编号或组不能为空");
         }
         String msg = volatileData(advancedSetting);
         if(!"".equals(msg)){
             return R.error(msg);
         }
-        if(StringUtils.isNotBlank(advancedSetting.getGroupId())&&StringUtils.isNotBlank(deviceCode)&&!"0".equals(deviceCode)){
-            AdvancedSettingEntity advSE = advancedSettingService.queryByDevOrGroupId(advancedSetting.getGroupId(),deviceCode);
-            advancedSetting.setUid(getUserId());
-            advancedSetting.setUpdateUser(getUser().getRealName());
-            int i = advancedSettingService.deleteAdvancedByDeviceCode(deviceCode, advancedSetting.getGroupId());
-            if(advancedSettingService.save(advancedSetting)){
-                return R.ok();
-            }else{
-                return R.error(101,"保存失败");
-            }
-        }
-        return R.ok();
+
+
+
     }
 
 
