@@ -1,7 +1,5 @@
 package com.remote.modules.advancedsetting.controller;
 
-import java.util.*;
-
 import com.remote.common.utils.R;
 import com.remote.common.utils.StringUtils;
 import com.remote.common.validator.ValidatorUtils;
@@ -13,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Date;
 
 /**
  * @author zsm
@@ -46,9 +46,7 @@ public class AdvancedSettingController extends AbstractController{
         }
         return R.ok().put("info",advancedSettingService.queryByDevOrGroupId(groupId,"0"));
     }
-
-
-
+    
     /**
      * 修改组的高级设置
      */
@@ -63,10 +61,13 @@ public class AdvancedSettingController extends AbstractController{
         if(!"".equals(msg)){
             return R.error(msg);
         }
-        if(!advancedSettingService.addUpdateGroup(advancedSetting,getUser())){
+        try {
+            advancedSettingService.addUpdateGroup(advancedSetting,getUser());
+            return R.ok();
+        }catch (Exception e){
+            logger.error("updateGroup error:",e);
             return R.error("数据保存失败");
         }
-        return R.ok();
     }
 
     /**
@@ -83,10 +84,13 @@ public class AdvancedSettingController extends AbstractController{
         if(!"".equals(msg)){
             return R.error(msg);
         }
-        if(!advancedSettingService.addUpdateDevice(advancedSetting,getUser())){
+        try {
+            advancedSettingService.addUpdateDevice(advancedSetting,getUser());
+            return R.ok();
+        }catch (Exception e){
+            logger.error("updateDevice error:",e);
             return R.error("数据保存失败");
         }
-        return R.ok();
     }
 
 

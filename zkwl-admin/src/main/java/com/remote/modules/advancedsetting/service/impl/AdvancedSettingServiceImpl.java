@@ -87,31 +87,25 @@ public class AdvancedSettingServiceImpl extends ServiceImpl<AdvancedSettingDao, 
      */
     @Override
     @Transactional(readOnly = false, isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public boolean addUpdateGroup(AdvancedSettingEntity advancedSetting, SysUserEntity curUser) {
-        try {
-            String groupId = advancedSetting.getGroupId();
-            String devCode = advancedSetting.getDeviceCode();
-            if(StringUtils.isBlank(devCode)||"0".equals(devCode)){
-                AdvancedSettingEntity advancedSettingEntity = queryByDevOrGroupId(groupId,"0");
-                if(advancedSettingEntity != null){
-                    advancedSetting.setUpdateUser(curUser.getRealName());
-                    advancedSetting.setUid(curUser.getUserId());
-                    updateAdvance(advancedSettingEntity.getId(),advancedSetting);
-                }else{
-                    advancedSetting.setUpdateUser(curUser.getRealName());
-                    advancedSetting.setUid(curUser.getUserId());
-                    advancedSetting.setCreateTime(new Date());
-                    advancedSetting.setDeviceCode("0");
-                    save(advancedSetting);
-                }
-                //更新组下所有的设备的高级设置信息（排除组的高级设置本身）
-                advancedSetting.setDeviceCode(null);
-                this.update(advancedSetting,new QueryWrapper<AdvancedSettingEntity>().eq("groupId",groupId).notIn("deviceCode","0"));
+    public void addUpdateGroup(AdvancedSettingEntity advancedSetting, SysUserEntity curUser) throws Exception {
+        String groupId = advancedSetting.getGroupId();
+        String devCode = advancedSetting.getDeviceCode();
+        if (StringUtils.isBlank(devCode) || "0".equals(devCode)) {
+            AdvancedSettingEntity advancedSettingEntity = queryByDevOrGroupId(groupId, "0");
+            if (advancedSettingEntity != null) {
+                advancedSetting.setUpdateUser(curUser.getRealName());
+                advancedSetting.setUid(curUser.getUserId());
+                updateAdvance(advancedSettingEntity.getId(), advancedSetting);
+            } else {
+                advancedSetting.setUpdateUser(curUser.getRealName());
+                advancedSetting.setUid(curUser.getUserId());
+                advancedSetting.setCreateTime(new Date());
+                advancedSetting.setDeviceCode("0");
+                save(advancedSetting);
             }
-            return true;
-        }catch (Exception e){
-            e.printStackTrace();
-            return false;
+            //更新组下所有的设备的高级设置信息（排除组的高级设置本身）
+            advancedSetting.setDeviceCode(null);
+            this.update(advancedSetting, new QueryWrapper<AdvancedSettingEntity>().eq("groupId", groupId).notIn("deviceCode", "0"));
         }
     }
 
@@ -124,22 +118,15 @@ public class AdvancedSettingServiceImpl extends ServiceImpl<AdvancedSettingDao, 
      */
     @Override
     @Transactional(readOnly = false, isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public boolean addUpdateDevice(AdvancedSettingEntity advancedSetting, SysUserEntity curUser) {
-        try {
-            advancedSetting.setUid(curUser.getUserId());
-            advancedSetting.setUpdateUser(curUser.getRealName());
-
-            AdvancedSettingEntity advancedSettingEntity = queryByDevOrGroupId(advancedSetting.getGroupId(),advancedSetting.getDeviceCode());
-            if(advancedSettingEntity != null){
-                updateAdvance(advancedSettingEntity.getId(),advancedSetting);
-            }else{
-                advancedSetting.setCreateTime(new Date());
-                save(advancedSetting);
-            }
-            return true;
-        }catch (Exception e){
-            e.printStackTrace();
-            return false;
+    public void addUpdateDevice(AdvancedSettingEntity advancedSetting, SysUserEntity curUser) throws Exception {
+        advancedSetting.setUid(curUser.getUserId());
+        advancedSetting.setUpdateUser(curUser.getRealName());
+        AdvancedSettingEntity advancedSettingEntity = queryByDevOrGroupId(advancedSetting.getGroupId(),advancedSetting.getDeviceCode());
+        if(advancedSettingEntity != null){
+            updateAdvance(advancedSettingEntity.getId(),advancedSetting);
+        }else{
+            advancedSetting.setCreateTime(new Date());
+            save(advancedSetting);
         }
     }
 
