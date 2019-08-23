@@ -13,7 +13,9 @@ $(function() {
         //另一种方法: $("div").eq($(".tab li").index(this)).addClass("on").siblings().removeClass('on');
     });
 
+
     r_fenye(10,1)
+
     //系统消息
     function r_fenye(pageSizea, pagesa){
         $.ajax({
@@ -41,7 +43,7 @@ $(function() {
                         "<span>" + res.page.list[i].createDate+"</span>"+
                         "</li>"
                 }
-                $(".r_op>ul").append(inhtml);
+                $(".r_op>ul").empty().append(inhtml);
 
                 //  分頁
                 $("#pagination5").pagination({
@@ -65,6 +67,12 @@ $(function() {
     }
     r_ffye(10,1)
     //反馈详情列表
+    setInterval(
+        function(){
+            empty()
+            r_ffye(10,1)
+            console.log("pp")
+        }, 60000);
   function r_ffye(pageSizea, pagesa){
       $.ajax({
           url: baseURL + 'sys/feedback/list',
@@ -78,8 +86,11 @@ $(function() {
               pageSize = res.page.pageSize;//每页条数
               pageNum = res.page.totalPage;  //总页数
               var html="";
+              console.log(res)
+              console.log(";;;;;;;;;;;;;;;;;;;;;;")
               for (var i = 0; i < res.page.list.length; i++) {
                   var head="https://guangxun-wulian.com"+res.page.list[i].headUrl
+                  var heade="https://guangxun-wulian.com"+res.page.list[i].answerHeadUrl
                   html +=
                       "<li id="+ res.page.list[i].uid+">"+
                       "<div class='D_img'>"+
@@ -90,27 +101,44 @@ $(function() {
                       "<span>"+res.page.list[i].backContent+"</span>"+
                       "</p>"+
                       " <div>"+
-                      "<span >"+ res.page.list[i].backCreateTime+"</span>"+
+                      "<span  class='slbl'>"+ res.page.list[i].backCreateTime+"</span>"+
+                      "</div>"+
+                      "<div id='sljia'>" +
+                      "<img  src="+heade+">"+
+                      "<p>"+ res.page.list[i].answerUserName+"</p>" +
+                      "<span class='spsl'>"+ res.page.list[i].answerContent+"</span>" +
+                      "<div class='slll'>"+
+                      "<span class='slk'>"+ res.page.list[i].answerCreateTime+"</span>" +
                       "<span class='r_details' id="+ res.page.list[i].backId+"><img src='/statics/image/rxiangqing.png' alt=''> 详情</span>"+
+                      "</div>"+
                       "</div>"+
                       "</li>"
               }
 
               $(".r_llis>ul").append(html);
               //未读条数
-              $.ajax({
-                  url: baseURL + 'sys/feedback/queryCount ',
-                  type: "GET",
-                  success: function (res) {
-                      var r_num_in = res.queryCount;
-                      $("#r_num_in").html(r_num_in)
-                      if(res.code == "200"){
-                          console.log(res)
-                      }else{
-                          alert("失败")
+              weidu()
+              setInterval(
+                  function(){
+                      weidu()
+                      console.log("vvvv")
+                  }, 60000);
+              function weidu(){
+                  $.ajax({
+                      url: baseURL + 'sys/feedback/queryCount ',
+                      type: "GET",
+                      success: function (res) {
+                          var r_num_in = res.queryCount;
+                          $("#r_num_in").html(r_num_in)
+                          if(res.code == "200"){
+                              console.log(res)
+                          }else{
+                              alert("失败")
+                          }
                       }
-                  }
-              })
+                  })
+              }
+
               // 详情
               var backId
               var uid
@@ -160,6 +188,8 @@ $(function() {
                       type: "GET",
                       success: function (res) {
                           var headUrl = "https://guangxun-wulian.com"+res.feedback.headUrl;
+                          // var answerHeadUrl = "https://guangxun-wulian.com"+res.feedback.answerHeadUrl ;
+                          // $("#ulo").attr("src",answerHeadUrl)
                           $("#r_imgs").attr("src",headUrl)
                           var username = res.feedback.username;
                           $("#r_tents").html(username)

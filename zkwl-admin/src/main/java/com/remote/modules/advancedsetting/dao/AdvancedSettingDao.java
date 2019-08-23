@@ -2,6 +2,7 @@ package com.remote.modules.advancedsetting.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.remote.modules.advancedsetting.entity.AdvancedSettingEntity;
+import com.remote.modules.advancedsetting.entity.AdvancedSettingResult;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -34,4 +35,8 @@ public interface AdvancedSettingDao extends BaseMapper<AdvancedSettingEntity> {
      * @return int
      **/
     int deleteAdvancedByDeviceCode(@Param("deviceCode")String deviceCode,@Param("groupId") String groupId);
+
+    AdvancedSettingResult queryVol(@Param("deviceCode")String deviceCode);
+    int updateAdvancedByDeviceCode(@Param("deviceCode")String deviceCode,@Param("groupId")String groupId,@Param("oldGroupId")String oldGroupId);
+    boolean deleteAdvSet(@Param("deviceCodes")List<String> deviceCodes);
 }

@@ -107,12 +107,12 @@ public interface SysUserService extends IService<SysUserEntity> {
 	/**
 	 * 通过当前用户id修改项目数量
 	 * */
-	boolean updateProCount(Long curUid);
+	boolean updateProCount(Long userId,int count);
 
 	/**
 	 * 通过当前用户id修改设备数量
 	 * */
-	boolean updateDevCount(SysUserEntity curUser);
+	boolean updateDevCount(Long exclUserId,int count);
 	/**
 	 * 通过邮箱查询用户信息是否存在
 	 * */
@@ -133,4 +133,5 @@ public interface SysUserService extends IService<SysUserEntity> {
 	 * 通过用户名查询该用户是否存在
 	 * */
 	SysUserEntity getByUsername(String username);
+
 }

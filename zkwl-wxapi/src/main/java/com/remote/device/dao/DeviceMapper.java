@@ -84,4 +84,25 @@ public interface DeviceMapper extends BaseMapper<DeviceEntity> {
      * 通过当前用户id查询所有子孙用户的设备数量
      * */
     Integer getDeviceCount(@Param("userIds")List<Long> userIds);
+    /**
+     * 通过设备ids获取所属用户ids
+     * */
+    List<Long> queryExclUserId(@Param("deviceIds")List<String> deviceIds);
+    /**
+     * 通过设备code去查询组id
+     * */
+    String queryByDevCode(@Param("deviceCode")String deviceCode);
+    /**
+     * 通过组id查询所有的设备code
+     * */
+    List<String> queryByGroupId(@Param("groupId")String groupId);
+    /*
+ * @Author zhangwenping
+ * @Description 通过ids查询详情
+ * @Date 16:26 2019/7/24
+ * @Param deviceIds
+ * @return  List<DeviceEsEntity>
+ **/
+    List<DeviceEntity> queryDeviceByDeviceIds(@Param("deviceIds") List<String> deviceIds);
 }
+

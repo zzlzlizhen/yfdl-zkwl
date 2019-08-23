@@ -233,8 +233,11 @@ $(function(){
                     var deviceCode=$(this).parent().siblings(".li_deviceCode").html();
                     var grod=$(this).parent().siblings(".grod").attr('id');
                     var type=$(this).parent().siblings(".li_deviceType").html();
-                    var name=$(this).parent().siblings("#r_namem").html()
-                    var searchUrl=encodeURI('../control/control.html?deviceCode='+deviceCode+"&grod="+grod+"&type="+type+"&name="+name)
+                    var name=$(this).parent().siblings("#r_namem").html();
+                    var deviceId=$(this).parent().attr("id");
+                    var projectId=$(this).parent().siblings(".li_deviceType").attr('id');
+                    console.log(projectId)
+                    var searchUrl=encodeURI('../control/control.html?deviceCode='+deviceCode+"&grod="+grod+"&type="+type+"&name="+name+"&deviceId="+deviceId+"&projectId="+projectId)
                     location.href =searchUrl;
                 })
                 //移动分组删除
@@ -476,7 +479,8 @@ $(function(){
                     var pro_s_b=$(".pro_s_b").val();
                     var groupId=$("#select1_b option:selected").attr("id");
                     if(pro_s_b == ""){
-                        $(".mistake").css("display","block");
+                        $(".mistake").css("display","block")
+                        $(".rrbol").html("输入不能为空");
                         return
                     }else{
                         $.ajax({
@@ -519,9 +523,18 @@ $(function(){
                         type:"get",
                         data:{},
                         success: function(res) {
+                            var arra=[];
+                            for(var i = 0; i < res.data.length; i++){
+                                if(res.data[i].groupName == groupName){
+                                    arra.unshift({groupId:res.data[i].groupId,groupName:res.data[i].groupName})
+                                }
+                                if(res.data[i].groupName != groupName){
+                                    arra.push({groupId:res.data[i].groupId,groupName:res.data[i].groupName})//剩下的
+                                }
+                            }
                             var html=""
-                            for (var i = 0; i < res.data.length; i++) {
-                                html += "<option class='option opti_a' id="+res.data[i].groupId+">"+res.data[i].groupName+"</option>\n"
+                            for (var i = 0; i < arra.length; i++) {
+                                html += "<option class='option opti_a' id="+arra[i].groupId+">"+arra[i].groupName+"</option>\n"
                             }
                             $("#select1,#select1_b").html(html)
                         }
@@ -589,13 +602,17 @@ $(function(){
         $(".shade_project,.shade_b_project").css("display","none");
         $(".mistake").css("display","none")
     })
+    $(".glyphicon").click(function(){
+        $(".mistake").css("display","none")
+    })
     $("#project_confirm").unbind('click');
     $("#project_confirm").click(function(){
         var pro_name=$(".pro_name").val()
         var pro_s=$(".pro_s").val()
         var groupId=$("#select1 option:selected").attr("id");
-        if(pro_name =="" || pro_s==""){
+        if(pro_name =="" || pro_s==""||groupId==""){
             $(".mistake").css("display","block")
+             $(".rrbol").html("输入不能为空");
             return
         }else{
             $.ajax({

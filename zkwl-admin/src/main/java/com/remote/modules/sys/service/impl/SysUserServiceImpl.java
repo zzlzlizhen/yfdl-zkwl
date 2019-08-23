@@ -2,15 +2,14 @@
 package com.remote.modules.sys.service.impl;
 
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.remote.common.annotation.DataFilter;
-import com.remote.common.utils.Constant;
+
 import com.remote.common.utils.PageUtils;
 import com.remote.common.utils.Query;
-import com.remote.modules.device.entity.DeviceEntity;
+
 import com.remote.modules.device.service.DeviceService;
 import com.remote.modules.project.service.ProjectService;
 import com.remote.modules.sys.dao.SysUserDao;
@@ -19,7 +18,7 @@ import com.remote.modules.sys.service.SysDeptService;
 import com.remote.modules.sys.service.SysUserRoleService;
 import com.remote.modules.sys.service.SysUserService;
 import com.remote.modules.sys.shiro.ShiroUtils;
-import javafx.animation.Interpolatable;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
@@ -27,7 +26,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.Serializable;
 import java.util.*;
 import java.util.function.Function;
 
@@ -304,60 +302,73 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 		SysUserEntity userEntity = new SysUserEntity();
 		userEntity.setPassword(password);
 		return this.update(userEntity,
-				new QueryWrapper<SysUserEntity>().eq("username", username));
+				new QueryWrapper<SysUserEntity>().eq("flag",1).eq("username", username));
 	}
-
+	/**
+	 * 查询用户盐值用于加密通过用户名
+	 * */
 	@Override
 	public String selectSlat(String username) {
 		return this.sysUserDao.selectSlat(username);
 	}
-
+	/**
+	 * 通过联系方式查询用户id
+	 * */
 	@Override
 	public Long getUidByContact(String contact) {
 		return this.sysUserDao.getUidByContact(contact);
 	}
-
+	/**
+	 * 通过用户ids查询用户列表
+	 * */
 	@Override
 	public List<SysUserEntity> queryUserByUserIds(List<Long> userIds) {
 		return sysUserDao.queryUserByUserIds(userIds);
 	}
 
+	/**
+	 * 更新所属用户的所有父用户以及自身的项目数量根据项目所属用户id
+	 * */
+	@Override
+	public boolean updateProCount(Long exclUserId,int count) {
+		if(exclUserId != null){
+			/**
+			 * 通过所属用户id查询所有父id
+			 * */
+			List<Long> allParents = getUserId(exclUserId);
+			if(CollectionUtils.isNotEmpty(allParents)||allParents.size()>0){
+				return this.sysUserDao.updateProjdectCount(allParents,count);
+			}
+		}
+		return false;
+	}
 
 	@Override
-	public boolean updateProCount(Long curUid) {
-		SysUserEntity userEntity = new SysUserEntity();
+	public boolean updateDevCount(Long exclUserId,int count) {
+		if(exclUserId != null){
+			/**
+			 * 通过所属用户id查询所有父id
+			 * */
+			List<Long> allParents = getUserId(exclUserId);
+			if(CollectionUtils.isNotEmpty(allParents)||allParents.size()>0){
+				return this.sysUserDao.updateDeviceCount(allParents,count);
+			}
+		}
+		return false;
+	}
+    public List<Long> getUserId(Long exclUserId){
+		String allParentId  = sysUserDao.queryByUserId(exclUserId);
+		List<String>  allParentIdList = Arrays.asList( allParentId.split(","));
+		List<Long> allParents = new ArrayList<Long>();
+		if(CollectionUtils.isNotEmpty(allParentIdList)||allParentIdList.size()>0){
+			for(String userId:allParentIdList){
+				allParents.add(Long.parseLong(userId));
+			}
+			if(CollectionUtils.isNotEmpty(allParents)||allParents.size()>0){
+				return allParents;
+			}
+		}
+		return allParents;
+	}
 
-		Integer proCount = projectService.queryProjectByUserCount(curUid);
-		if(proCount == null){
-			proCount = 0;
-		}else{
-			proCount = proCount;
-		}
-		userEntity.setProjectCount(proCount);
-		return this.update(userEntity,
-				new QueryWrapper<SysUserEntity>().eq("user_id", curUid));
-	}
-	@Override
-	public boolean updateDevCount(SysUserEntity curUser) {
-		SysUserEntity userEntity = new SysUserEntity();
-		List<SysUserEntity> userEntityList =  queryAllChild(curUser);
-		List<Long> userIds = new ArrayList<Long>();
-		if(CollectionUtils.isNotEmpty(userEntityList)&&userEntityList.size()>0){
-			for(SysUserEntity sysUserEntity: userEntityList){
-				userIds.add(sysUserEntity.getUserId());
-			}
-			Integer devCount = null;
-			if(CollectionUtils.isNotEmpty(userIds)&&userIds.size()>0){
-				devCount = deviceService.getDeviceCount(userIds);
-				if(devCount == null){
-					devCount =0;
-				}else{
-					devCount = devCount;
-				}
-			}
-			userEntity.setDeviceCount(devCount);
-		}
-		return this.update(userEntity,
-				new QueryWrapper<SysUserEntity>().eq("user_id", curUser.getUserId()));
-	}
 }

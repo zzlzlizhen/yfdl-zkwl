@@ -30,4 +30,6 @@ public class DeviceTree {
      * 纬度
      */
     private String latitude;
+
+    private String deviceCode;
 }

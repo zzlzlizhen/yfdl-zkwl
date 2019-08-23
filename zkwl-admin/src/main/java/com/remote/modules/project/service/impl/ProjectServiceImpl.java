@@ -128,7 +128,7 @@ public class ProjectServiceImpl implements ProjectService {
                     }
 
                 }else{
-                    projectEntity.setLongitude(latitudeSum.toString());
+                    projectEntity.setLongitude(longitudeSum.toString());
                     projectEntity.setLatitude(latitudeSum.toString());
                 }
 
@@ -331,6 +331,36 @@ public class ProjectServiceImpl implements ProjectService {
         return 0;
     }
 
+    /**
+     * 根据所属用户的父ids查询每个用户的项目数量
+     * */
+    @Override
+    public List<Integer> queryProjectCountByAllParentIds(List<Long> userIds){
+        List<Integer> projectCounts = new ArrayList<Integer>();
+        if(CollectionUtils.isNotEmpty(userIds)||userIds.size()>0){
+            ProjectQuery projectQuery = new ProjectQuery();
+            for(Long userId : userIds){
+                /**
+                 * 查出每个用户下的所有 用户
+                 * */
+                List<SysUserEntity> userList = sysUserService.queryAllLevel(userId);
+                if(CollectionUtils.isNotEmpty(userList)||userList.size()>0){
+                    List<Long> transform = userList.parallelStream().map(sysUserEntity -> sysUserEntity.getUserId()).collect(Collectors.toCollection(ArrayList::new));
+                    projectQuery.setUserIds(transform);
+                    List<ProjectEntity> list = projectMapper.queryProjectByUserIds(projectQuery);
+                    projectCounts.add(list.size());
+                }
+            }
+        }
+
+        return projectCounts;
+    }
+
+    @Override
+    public List<Long> queryExclusiveIds(List<String> projectIds) {
+        return projectMapper.queryExclusiveIds(projectIds);
+    }
+
     @Override
     public ProjectResult queryProjectById(String projectId,String groupId) {
         List<Map<String,Integer>> deviceMapList = new ArrayList<>();
@@ -403,5 +433,10 @@ public class ProjectServiceImpl implements ProjectService {
         projectResult.setDeviceMap(deviceMapList);
         projectResult.setDeviceScale(deviceScaleList);
         return projectResult;
+    }
+
+    @Override
+    public Long queryExclusiveId(String projectId) {
+        return this.projectMapper.queryExclusiveId(projectId);
     }
 }

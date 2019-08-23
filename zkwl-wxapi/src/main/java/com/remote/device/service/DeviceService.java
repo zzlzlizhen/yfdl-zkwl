@@ -98,4 +98,16 @@ public interface DeviceService {
      * 通过当前用户id查询所有子孙用户的设备数量
      * */
     Integer getDeviceCount(List<Long> userIds);
+
+    /**
+     * 通过设备ids查询设备所属ids
+     * */
+    List<Long> queryExclUserId(List<String> deviceIds);
+
+    /**
+     * 功能描述：通过设备code查询分组id
+     * @param deviceCode
+     * @return
+     */
+    String queryByDevCode(String deviceCode);
 }

@@ -66,4 +66,19 @@ public interface SysUserDao extends BaseMapper<SysUserEntity> {
 	List<SysUserEntity> getByEmailAndUid(@Param("email")String email,@Param("userId")Long userId);
 	List<SysUserEntity> getByMobileAndUid(@Param("mobile")String mobile,@Param("userId")Long userId);
 	SysUserEntity queryByIdEAndM(@Param("userId")Long userId);
+	/**
+	 *通过用户id查询出所有父id
+	 * */
+	String queryByUserId(@Param("userId")Long userId);
+
+	/**
+	 * 原项目数
+	 * */
+	List<Integer> queryProjectCount(@Param("userIds") List<Long> userIds);
+	/**
+	 * 原设备数
+	 * */
+	List<Integer> queryDeviceCount(@Param("userIds") List<Long> userIds);
+	boolean updateProjdectCount(@Param("userIds")List<Long> userIds,@Param("count") int count);
+	boolean updateDeviceCount(@Param("userIds")List<Long> userIds,@Param("count") int count);
 }

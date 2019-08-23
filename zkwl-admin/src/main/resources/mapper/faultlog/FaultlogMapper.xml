@@ -31,9 +31,6 @@
             <if test="deviceId != null and deviceId!=''">
                and device_id = #{deviceId}
             </if>
-            <if test="logStatus != null and logStatus!=''">
-                and log_status = #{logStatus}
-            </if>
             <if test="groupId != null and groupId!=''">
                 and group_id = #{groupId}
             </if>

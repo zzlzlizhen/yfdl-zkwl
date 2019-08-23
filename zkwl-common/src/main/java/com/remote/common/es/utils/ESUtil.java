@@ -1,6 +1,7 @@
 package com.remote.common.es.utils;
 
-import org.apache.commons.lang.StringUtils;
+import org.elasticsearch.action.bulk.BulkRequest;
+import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
@@ -19,9 +20,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Field;
+import java.util.*;
 
 /**
  * @Author zhangwenping
@@ -34,11 +34,50 @@ public class ESUtil {
     @Autowired
     private RestHighLevelClient restHighLevelClient;
 
+    public Map<String,Object> convertAddES(Object obj){
+        Field[] declaredFields = obj.getClass().getDeclaredFields();
+        Map<String,Object> temp = new HashMap<String,Object>();
+        for (Field field : declaredFields){
+            field.setAccessible(true);
+            try {
+                if (field.getGenericType().toString().equals("class java.lang.String")) {
+                    temp.put(field.getName(),field.get(obj) == null ? "" : field.get(obj));
+                }else if (field.getGenericType().toString().equals("class java.lang.Integer")) {
+                    temp.put(field.getName(),field.get(obj) == null ? 0 : field.get(obj));
+                }else if (field.getGenericType().toString().equals("class java.lang.Double")) {
+                    temp.put(field.getName(),field.get(obj) == null ? 0.0 :field.get(obj));
+                }else if(field.getGenericType().toString().equals("class java.util.Date")){
+                    temp.put(field.getName(),field.get(obj) == null ? new Date() :field.get(obj));
+                }
+            } catch (Exception e1) {
+                log.error("添加es：",e1);
+            }
+        }
+        return temp;
+    }
 
-    public RestStatus addES(Map<String,Object> temp) {
+
+    public Map<String,Object> convertUpdateES(Object obj){
+        Field[] declaredFields = obj.getClass().getDeclaredFields();
+        Map<String,Object> temp = new HashMap<String,Object>();
+        for (Field field : declaredFields){
+            field.setAccessible(true);
+            try {
+                if(field.get(obj) != null){
+                    temp.put(field.getName(),field.get(obj));
+                }
+            } catch (Exception e) {
+                log.error("添加es：",e);
+            }
+        }
+        return temp;
+    }
+
+
+    public RestStatus addES(Map<String,Object> temp,String indexName,String indexId) {
         try{
-            IndexRequest request=new IndexRequest("device_index");
-            request.id(temp.get("deviceId").toString()).opType("create").source(temp);
+            IndexRequest request=new IndexRequest(indexName);
+            request.id(indexId).opType("create").source(temp);
             request.setRefreshPolicy(WriteRequest.RefreshPolicy.WAIT_UNTIL);
             IndexResponse index = restHighLevelClient.index(request, RequestOptions.DEFAULT);
             return index.status();
@@ -48,24 +87,40 @@ public class ESUtil {
         return null;
     }
 
-    public RestStatus updateES(Map<String,Object> temp,String id) {
+    public RestStatus updateES(Map<String,Object> temp,String indexId,String indexName) {
         try{
-            UpdateRequest request=new UpdateRequest ("device_index",id);
+
+            UpdateRequest request=new UpdateRequest (indexName,indexId);
             request.setRefreshPolicy(WriteRequest.RefreshPolicy.WAIT_UNTIL);
             request.doc(temp);
             UpdateResponse update = restHighLevelClient.update(request, RequestOptions.DEFAULT);
 
             return update.status();
         }catch (Exception e){
-            log.error("更新es"+id+":",e);
+            log.error("更新es"+indexId+":",e);
         }
         return null;
     }
 
-    public List<Map<String,Object>> queryDevice(SearchSourceBuilder searchSourceBuilder){
+    public RestStatus updateListES(List<Map<String,Object>> temp,String indexName,String indexId) {
+        try{
+            BulkRequest request = new BulkRequest();
+            for (Map<String,Object> map : temp){
+                String deviceId = map.get(indexId).toString();
+                request.add(new UpdateRequest (indexName,deviceId).doc(map));
+            }
+            BulkResponse bulk = restHighLevelClient.bulk(request,RequestOptions.DEFAULT);
+            return bulk.status();
+        }catch (Exception e){
+            log.error("批量更新es失败:",e);
+        }
+        return null;
+    }
+
+    public List<Map<String,Object>> queryDevice(SearchSourceBuilder searchSourceBuilder,String indexName){
         List<Map<String, Object>> listES = new ArrayList<>();
         try{
-            SearchRequest request = new SearchRequest("device_index");
+            SearchRequest request = new SearchRequest(indexName);
             //排序
             searchSourceBuilder.sort(SortBuilders.fieldSort("createTime").order(SortOrder.DESC));
             request.source(searchSourceBuilder);
@@ -79,10 +134,10 @@ public class ESUtil {
 
     }
 
-    public List<Map<String,Object>> queryAllDevice(SearchSourceBuilder searchSourceBuilder){
+    public List<Map<String,Object>> queryAllDevice(SearchSourceBuilder searchSourceBuilder,String indexName){
         List<Map<String, Object>> listES = new ArrayList<>();
         try{
-            SearchRequest request = new SearchRequest("device_index");
+            SearchRequest request = new SearchRequest(indexName);
             ///设置每批读取的数据量 待改进
             searchSourceBuilder.size(10000000);
             //排序

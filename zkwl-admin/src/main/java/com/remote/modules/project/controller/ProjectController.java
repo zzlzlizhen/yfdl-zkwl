@@ -52,11 +52,14 @@ public class ProjectController  extends AbstractController {
         project.setCreateName(user.getRealName());
         project.setCreateTime(new Date());
         project.setProjectCode(ProjectCodeUitls.getProjectCode());
+
+
         boolean flag = projectService.addProject(project);
         if(!flag){
             return R.error(400,"添加项目失败");
         }else{
-            sysUserService.updateProCount(getUserId());
+            sysUserService.updateProCount(project.getExclusiveUser(),1);
+
         }
         return R.ok();
     }
@@ -84,6 +87,8 @@ public class ProjectController  extends AbstractController {
             List<String> projectList = Arrays.asList(projectIds.split(","));
             DeviceQuery deviceQuery = new DeviceQuery();
             deviceQuery.setProjectId(projectList.get(0));
+            List<Long> exclUserIds = projectService.queryExclusiveIds(projectList);
+
             List<DeviceEntity> deviceList = deviceService.queryDeviceNoPage(deviceQuery);
             if(CollectionUtils.isNotEmpty(deviceList)){
                 return R.error(201,"当前项目下有未删除设备，删除失败");
@@ -92,7 +97,11 @@ public class ProjectController  extends AbstractController {
             if(!flag){
                 return R.error(400,"删除项目失败");
             }else{
-                sysUserService.updateProCount(getUserId());
+                if(CollectionUtils.isNotEmpty(exclUserIds)||exclUserIds.size()>0){
+                    for(Long exclUserId:exclUserIds){
+                        sysUserService.updateProCount(exclUserId,-1);
+                    }
+                }
             }
         }
         return R.ok();
@@ -109,12 +118,18 @@ public class ProjectController  extends AbstractController {
         SysUserEntity user = getUser();
         projectEntity.setUpdateTime(new Date());
         projectEntity.setUpdateUser(user.getUserId());
+        Long excelUserId = projectService.queryExclusiveId(projectEntity.getProjectId());
         projectEntity.setCreateUser(Long.valueOf(projectEntity.getExclusiveUser()));
         boolean flag = projectService.updateProject(projectEntity);
+        int count = 0;
+        if(projectEntity.getExclusiveUser() != excelUserId){
+            count = 1;
+            sysUserService.updateProCount(excelUserId,-1);
+        }
         if(!flag){
             return R.error(400,"修改项目失败");
         }else{
-            sysUserService.updateProCount(getUserId());
+            sysUserService.updateProCount(projectEntity.getExclusiveUser(),count);
         }
         return R.ok();
     }

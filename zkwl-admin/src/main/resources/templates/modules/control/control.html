@@ -37,10 +37,46 @@
         .r_shx p{width:auto;height:100%;float:left;display: block;line-height: 60px;}
         .p{text-indent: 0px;}
         #select1_b{width:48%;padding:0;float:left;margin-top:2%;margin-left: 1%;}
-        #chong{float: left;line-height:28px;margin-top:2%;width: 49%;border-radius: 4px;border: 1px solid #ccc;height: 70%;}
+        #chong{float: left;line-height:28px;margin-top:1%;width: 49%;border-radius: 4px;border: 1px solid #ccc;height: 70%;}
         .fan_h{padding:0px; float:right;width: 80px;height: 35px;text-align: center;font-size:12px;cursor: pointer;text-indent: 0;}
         #hardware,#hardware_a{display: none;}
-        .Jei{width:30%;height:30px;float:left;border:1px solid #ccc;border-radius:4px;margin:1.3% 0.8% 0px 0px;text-indent: 5px;}
+        .kai_b{width:50% !important;}
+        .WdateDiv #dpTime .tE:last-child{display: none!important;}
+        .WdateDiv #dpTime .tm:last-child{display: none!important;}
+        @media screen and (max-width:1100px) {
+            .con_Gu ul img {margin-left: 0%;}
+            .con_Xu ul span, .con_Gu ul span {width: 66%;}
+            .kuang {width: 48%;height: 175px;border: 1px solid #999999;float: left;margin-left: 3%;}
+            .clbos{clear: both;margin-left: 0;margin-top: 41px;}
+            .kuang > div > div > p {float: left;display: inline-block;width: 48%;background: #ccc;}
+            .kuang > div > div > span {float: left;display: inline-block;width: 50%;}
+            .kuang > p,.dkuang > p {width: 20px;height: 110px;background: #4BBFBB;margin: 30px 14px;writing-mode: vertical-rl;letter-spacing: 5px;
+                padding: 25px 19px;float: left;color: #fff;text-align: center;line-height: 1px;}
+            .shul > p {display: inline-block;width: 21%;float: left;font-size: 12px;}
+            .dkuang {clear: both;width: 100%;height: 175px;border: 1px solid #ccc;float: left;margin-top: 40px;}
+            .dkuang > div > div {width: 100%;height: 30px;}
+            .dkuang > div > div > span {display: inline-block;float: left;width: 50%;}
+            .dkuang > div {float: left;width: 79%;margin: 43px auto;}
+        }
+        @media screen and (min-width:800px) and (max-width:1400px) {
+            .htn{
+                margin: 5.5% 0 0 -1%!important;
+            }
+            .sp_a{
+                margin-top: 9%;
+            }
+            .con_Gu ul img {margin-left: 0%;}
+            .con_Xu ul span, .con_Gu ul span {width: 66%;}
+            .kuang {width: 42%;height: 175px;border: 1px solid #999999;float: left;margin-left: 16%;}
+            .clbos{clear: both;margin-left: 0;margin-top: 41px;}
+            .shul > p {display: inline-block;width: 14%;float: left;font-size: 12px;}
+            .dkuang {width:100%;height: 175px;border: 1px solid #ccc;float: left;margin-top: 40px;}
+            .kuang > p ,.dkuang > p{width: 20px;height: 110px;background: #4BBFBB;margin: 30px 14px;writing-mode: vertical-rl;letter-spacing: 5px;
+                padding: 25px 19px;float: left;color: #fff;text-align: center;line-height: 1px;}
+            .kuang > div > div > p {float: left;display: inline-block;width: 53%;background: #ccc;}
+            .kuang > div > div > span {float: left;display: inline-block;width: 47%;}
+            .tnslo{width: 100%;margin-top: 103px;}
+        }
     </style>
 </head>
 <body>
@@ -52,8 +88,10 @@
     <li class="cur history" style="margin-left:10%;">历史数据</li>
     <li id="opt">高级配置</li>
     <li id="hardware">硬件升级</li>
+    <li id="shuju">实时数据</li>
 </ul>
 <div class="option_a">
+<!--历史数据-->
     <div class="option on">
         <div class="Shu_r">
             <span class="hear_w">统计方式：</span>
@@ -76,58 +114,87 @@
             <div class="B_left" id="tian_q"></div>
         </div>
     </div>
-
+<!--高级设置-->
     <div class="option" id="op_a">
         <!--11111-->
         <div class="r-load">
-            <div class="r-heade">负载</div>
+            <div class="r-heade">
+                <img src="${request.contextPath}/statics/image/fuzaip.png" alt="" style=" width: 20px;margin-top: -4px; margin-right: 5px;">
+                负载设置</div>
             <div class="r-content">
-                <div class="le-con">
-                    <p class="r-bt" id="r_btn_l" style="margin: 0;">
-                        <span>负载工作模式</span>
-                        <select class="form-control in_dent" id="select1_b">
-                            <option class="0">定时模式</option>
-                            <option class="1">光控模式</option>
-                            <option class="3">常开</option>
-                            <option class="4">常关</option>
-                            <option class="5">测试</option>
-                        </select>
-                    </p>
-                    <div>
-                        <span>开灯时刻</span>
-                        <input type="text" class="Wdate wd_hang" value="18:00" id="d414" onclick="WdatePicker({autoShowQS:false,qsEnabled:false,
+              <div class="nnbde">
+                  <div class="le-con">
+                      <p class="r-bt" id="r_btn_l" style="margin: 0;">
+                          <span>负载工作模式</span>
+                          <select class="form-control in_dent" id="select1_b">
+                              <option class="5">测试</option>
+                              <option class="0">定时模式</option>
+                              <option class="1">光控模式</option>
+                              <option class="3">常开</option>
+                              <option class="4">常关</option>
+                          </select>
+                      </p>
+                      <div class="dinstn">
+                          <span>开灯时刻</span>
+                          <input type="text" class="Wdate wd_hang" value="18:00" id="d414" onclick="WdatePicker({autoShowQS:false,qsEnabled:false,
                         isShowClear:false,isShowOK:false,isShowToday:false,dateFmt:'H:mm',minDate:'0:00',maxDate:'23:59'})"/>
-                    </div>
-                </div>
+                      </div>
+                      <div class="mositn">
+                          <span>光控电压(v)</span>
+                          <div class="container" style="width:48%;margin:1.7% 0px 0px 1%;">
+                              <div class="input-group spinner">
+                                  <input type="text"  class="form-control in_dent" value="2" id="r_teml_tgl" oninput="value=value.replace(/[^\d]/g,'')">
+                                  <div class="input-group-btn-vertical">
+                                      <button class="btn btn-default" type="button" style="padding: 8.3px 7px !important;"><i class="fa fa-caret-up" style="top: 2px !important;
+left: 3px !important;"></i></button>
+                                      <button class="btn btn-default" type="button" style="padding: 8.3px 7px !important;"><i class="fa fa-caret-down" style="top: 2px !important;
+left: 3px !important;"></i></button>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="mositn">
+                          <span >光控延时时间(s)</span>
+                          <div class="progres kai_b" style="margin-left: -3%!important;margin-top: 5%!important;">
+                              <div id="slideTest_m" class="demo-slider" style="height:10px;"></div>
+                          </div>
+                      </div>
+                  </div>
 
-                <div class="rg-con">
-                    <div class="r-bt">
-                        <span> 负载功率</span>
-                        <div class="container_a">
-                            <div class="input-group spinner">
-                                <!--oninput="num(this)"-->
-                                <input type="text"  class="form-control in_dent"  value="12" id="r_Load_power" onkeyup="value=value.replace(/[^\d.]/g,'')" >
-                                <div class="input-group-btn-vertical">
-                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
-                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <span>关灯时刻</span>
-                        <input type="text" class="Wdate rda wd_hang" value="6:00" id="d4141" onclick="WdatePicker({autoShowQS:false,qsEnabled:false,
+                  <div class="rg-con">
+                      <div class="r-bt">
+                          <span> 负载功率</span>
+                          <div class="container_a">
+                              <div class="input-group spinner">
+                                  <!--oninput="num(this)"-->
+                                  <input type="text"  class="form-control in_dent "  value="1" id="r_Load_power" onkeyup="value=value.replace(/[^\d.]/g,'')" >
+                                  <div class="input-group-btn-vertical">
+                                      <button class="btn btn-default" type="button" style="padding: 8.4px 7px!important;"><i class="fa fa-caret-up" style="top: 2px!important;left: 3px!important;"></i></button>
+                                      <button class="btn btn-default" type="button" style="padding: 8.4px 7px!important;"><i class="fa fa-caret-down" style="top: 2px!important;left: 3px!important;"></i></button>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div  class="dinstn">
+                          <span>关灯时刻</span>
+                          <input type="text" class="Wdate rda wd_hang" value="6:00" id="d4141" onclick="WdatePicker({autoShowQS:false,qsEnabled:false,
                         isShowClear:false,isShowOK:false,isShowToday:false,dateFmt:'H:mm',minDate:'00:00',maxDate:'23:59'})" />
-                    </div>
-                </div>
-
-                <div class="r_sa_bx">
+                      </div>
+                      <div class="mositn">
+                          <p class="r-bt" id="r_btl_th" style="width: 100%;">
+                              <span >光控关灯开关</span>
+                              <input name="sexa4" type="radio"  class="che_gua r_btl_th"  value="1" checked/>开
+                              <input name="sexa4" type="radio" class="che_gua r_btl_th" value="0"/>关
+                          </p>
+                      </div>
+                  </div>
+              </div>
+                <div class="stnl">
                     <div>
-                      <span>时段:1
-                      </span>
+                        <span>时段:1</span>
                         <div class="container">
                             <div class="input-group spinner">
-                                <input type="text" class="form-control r_feizifu" value="12" id="r_one_teml" oninput="value=value.replace(/[^\d]/g,'')" >
+                                <input type="text" class="form-control r_feizifu" value="12" id="r_one_teml" style="height: 24px!important;" oninput="value=value.replace(/[^\d]/g,'')">
                                 <div class="input-group-btn-vertical">
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i>
                                     </button>
@@ -138,7 +205,7 @@
                         </div>
                         <div class="container r-container">
                             <div class="input-group spinner">
-                                <input type="text"  class="form-control r_feizifu" value="50" id="r_teml_tw" oninput="value=value.replace(/[^\d]/g,'')" >
+                                <input type="text"  class="form-control r_feizifu" value="50" id="r_teml_tw" style="height: 24px!important;" oninput="value=value.replace(/[^\d]/g,'')">
                                 <div class="input-group-btn-vertical">
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i>
                                     </button>
@@ -147,24 +214,16 @@
                                 </div>
                             </div>
                         </div>
-                        <div style="margin-top: 87px;">
-                            <p style="float: left;margin:-39px 2px 9px 32px;position: relative;">%</p>
-                            <div class="progres">
-                                <div id="slideTest4" class="demo-slider" style="height:10px;"></div>
-                                <i class="someone"><span>有人功率</span>有人</i>
-                            </div>
-                            <p style="float: left;margin:-39px 2px 9px 57px;position: relative;">%</p>
-                            <div class="progres de_i">
-                                <div id="slideTest5" class="demo-slider" style="height:10px;"></div>
-                                <i class="unmanned"><input name="sex" type="checkbox"  checked="" value="0" class="se_a"/><span>无人功率</span> 无人</i>
-                            </div>
+                        <i class="someone"><span>有人功率</span>有人</i>
+                        <div class="progres">
+                            <div id="slideTest4" class="demo-slider" style="height:10px;"></div>
                         </div>
                     </div>
-                    <div>
+                    <div style="float: left;">
                         <span>时段:2</span>
                         <div class="container">
                             <div class="input-group spinner">
-                                <input type="text"  class="form-control r_feizifu" value="2" id="r_teml_sv" oninput="value=value.replace(/[^\d]/g,'')">
+                                <input type="text"  class="form-control r_feizifu" value="2" id="r_teml_sv" style="height: 24px!important;" oninput="value=value.replace(/[^\d]/g,'')">
                                 <div class="input-group-btn-vertical">
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i>
                                     </button>
@@ -175,7 +234,7 @@
                         </div>
                         <div class="container r-container">
                             <div class="input-group spinner">
-                                <input type="text"  class="form-control r_feizifu" value="2" id="r_teml_eg" oninput="value=value.replace(/[^\d]/g,'')">
+                                <input type="text"  class="form-control r_feizifu" value="2" id="r_teml_eg" style="height: 24px!important;" oninput="value=value.replace(/[^\d]/g,'')">
                                 <div class="input-group-btn-vertical">
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i>
                                     </button>
@@ -184,24 +243,16 @@
                                 </div>
                             </div>
                         </div>
-                        <div style="margin-top: 87px;">
-                            <p style="float: left;margin:-39px 2px 9px 32px;position: relative;">%</p>
-                            <div class="progres">
-                                <div id="slideTest12" class="demo-slider" style="height:10px;"></div>
-                                <i class="someone"><span>有人功率</span>有人</i>
-                            </div>
-                            <p style="float: left;margin:-39px 2px 9px 57px;position: relative;">%</p>
-                            <div class="progres de_i">
-                                <div id="slideTest16" class="demo-slider" style="height:10px;"></div>
-                                <i class="unmanned"><input name="sex" type="checkbox" value="1" checked=""  class="se_b"/><span>无人功率</span>无人</i>
-                            </div>
+                        <i class="someone"><span>有人功率</span>有人</i>
+                        <div class="progres">
+                            <div id="slideTest12" class="demo-slider" style="height:10px;"></div>
                         </div>
                     </div>
                     <div>
                         <span>时段:3</span>
                         <div class="container">
                             <div class="input-group spinner">
-                                <input type="text"  class="form-control r_feizifu" value="2" id="r_teml_th" oninput="value=value.replace(/[^\d]/g,'')">
+                                <input type="text"  class="form-control r_feizifu" value="2" id="r_teml_th" style="height: 24px!important;" oninput="value=value.replace(/[^\d]/g,'')">
                                 <div class="input-group-btn-vertical">
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
@@ -210,23 +261,17 @@
                         </div>
                         <div class="container r-container">
                             <div class="input-group spinner">
-                                <input type="text"  class="form-control r_feizifu" value="2" id="r_teml_for" oninput="value=value.replace(/[^\d]/g,'')">
+                                <input type="text"  class="form-control r_feizifu" value="2" id="r_teml_for" style="height: 24px!important;" oninput="value=value.replace(/[^\d]/g,'')">
                                 <div class="input-group-btn-vertical">
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
                                 </div>
                             </div>
                         </div>
-                        <div style="margin-top: 87px;">
-                            <p style="float: left;margin:-39px 2px 9px 32px;position: relative;">%</p>
+                        <div >
+                            <i class="someone"><span>有人功率</span>有人</i>
                             <div class="progres">
                                 <div id="slideTest8" class="demo-slider" style="height:10px;"></div>
-                                <i class="someone"><span>有人功率</span>有人</i>
-                            </div>
-                            <p style="float: left;margin:-39px 2px 9px 57px;position: relative;">%</p>
-                            <div class="progres de_i">
-                                <div id="slideTest9" class="demo-slider" style="height:10px;"></div>
-                                <i class="unmanned"><input name="sex" type="checkbox"  checked="" value="2" class="se_c"/><span>无人功率</span>无人</i>
                             </div>
                         </div>
                     </div>
@@ -234,7 +279,7 @@
                         <span>时段:4</span>
                         <div class="container">
                             <div class="input-group spinner">
-                                <input type="text"  class="form-control r_feizifu" value="2" id="r_teml_ng" oninput="value=value.replace(/[^\d]/g,'')">
+                                <input type="text"  class="form-control r_feizifu" value="2" id="r_teml_ng" style="height: 24px!important;" oninput="value=value.replace(/[^\d]/g,'')">
                                 <div class="input-group-btn-vertical">
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i>
                                     </button>
@@ -245,7 +290,7 @@
                         </div>
                         <div class="container r-container">
                             <div class="input-group spinner">
-                                <input type="text"  class="form-control r_feizifu" value="2" id="r_teml_te" oninput="value=value.replace(/[^\d]/g,'')">
+                                <input type="text"  class="form-control r_feizifu" value="2" id="r_teml_te" style="height: 24px!important;" oninput="value=value.replace(/[^\d]/g,'')">
                                 <div class="input-group-btn-vertical">
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i>
                                     </button>
@@ -254,16 +299,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div style="margin-top: 87px;">
-                            <p style="float: left;margin:-39px 2px 9px 32px;position: relative;">%</p>
+                        <div>
+                            <i class="someone"><span>有人功率</span>有人</i>
                             <div class="progres">
                                 <div id="slideTest10" class="demo-slider" style="height:10px;"></div>
-                                <i class="someone"><span>有人功率</span>有人</i>
-                            </div>
-                            <p style="float: left;margin:-39px 2px 9px 57px;position: relative;">%</p>
-                            <div class="progres de_i">
-                                <div id="slideTest11" class="demo-slider" style="height:10px;"></div>
-                                <i  class="unmanned"><input name="sex" type="checkbox" value="3"  checked="checked" class="se_d"/><span>无人功率</span>无人</i>
                             </div>
                         </div>
                     </div>
@@ -271,7 +310,7 @@
                         <span>时段:5</span>
                         <div class="container">
                             <div class="input-group spinner">
-                                <input type="text"  class="form-control r_feizifu" value="2" id="r_teml_fif" oninput="value=value.replace(/[^\d]/g,'')">
+                                <input type="text"  class="form-control r_feizifu" value="2" id="r_teml_fif" style="height: 24px!important;" oninput="value=value.replace(/[^\d]/g,'')">
                                 <div class="input-group-btn-vertical">
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
@@ -280,7 +319,7 @@
                         </div>
                         <div class="container r-container">
                             <div class="input-group spinner">
-                                <input type="text"  class="form-control r_feizifu" value="2" id="r_teml_six" oninput="value=value.replace(/[^\d]/g,'')">
+                                <input type="text"  class="form-control r_feizifu" value="2" id="r_teml_six" style="height: 24px!important;" oninput="value=value.replace(/[^\d]/g,'')">
                                 <div class="input-group-btn-vertical">
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i>
                                     </button>
@@ -289,16 +328,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div style="margin-top: 87px;">
-                            <p style="float: left;margin:-39px 2px 9px 32px;position: relative;">%</p>
+                        <div >
+                            <i class="someone"><span>有人功率</span>有人</i>
                             <div class="progres">
                                 <div id="slideTest13" class="demo-slider" style="height:10px;"></div>
-                                <i class="someone"><span>有人功率</span>有人</i>
-                            </div>
-                            <p style="float: left;margin:-39px 2px 9px 57px;position: relative;">%</p>
-                            <div class="progres de_i">
-                                <div id="slideTest14" class="demo-slider" style="height:10px;"></div>
-                                <i class="unmanned"><input name="sex" type="checkbox" value="4"  checked="" class="se_e"/><span>无人功率</span>无人</i>
                             </div>
                         </div>
                     </div>
@@ -306,7 +339,7 @@
                         <span>晨亮</span>
                         <div class="container">
                             <div class="input-group spinner">
-                                <input type="text"  class="form-control r_feizifu" value="2" id="r_teml_el" oninput="value=value.replace(/[^\d]/g,'')">
+                                <input type="text"  class="form-control r_feizifu" value="2" id="r_teml_el" style="height: 24px!important;" oninput="value=value.replace(/[^\d]/g,'')">
                                 <div class="input-group-btn-vertical">
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i>
                                     </button>
@@ -317,7 +350,7 @@
                         </div>
                         <div class="container r-container">
                             <div class="input-group spinner">
-                                <input type="text"  class="form-control r_feizifu" value="2" id="r_teml_egl" oninput="value=value.replace(/[^\d]/g,'')">
+                                <input type="text"  class="form-control r_feizifu" value="2" id="r_teml_egl" style="height: 24px!important;" oninput="value=value.replace(/[^\d]/g,'')">
                                 <div class="input-group-btn-vertical">
                                     <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i>
                                     </button>
@@ -326,47 +359,67 @@
                                 </div>
                             </div>
                         </div>
-                        <div style="margin-top: 87px;">
-                            <p style="float: left;margin:-39px 2px 9px 32px;position: relative;">%</p>
+                        <div >
+                            <i class="someone"><span>有人功率</span>有人</i>
                             <div class="progres">
                                 <div id="slideTest6" class="demo-slider" style="height:10px;"></div>
-                                <i class="someone"><span>有人功率</span>有人</i>
-                            </div>
-                            <p style="float: left;margin:-39px 2px 9px 57px;position: relative;">%</p>
-                            <div class="progres de_i">
-                                <div id="slideTest7" class="demo-slider" style="height:10px;"></div>
-                                <i class="unmanned"><input name="sex" type="checkbox"  value="5"  checked="" class="se_f"/><span>无人功率</span>无人</i>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div style="height: auto;float: left;width: 100%;padding: 0 0 3% 3%;">
-                    <div class="form-group col-sm-2 " style="width:50%;padding:0;margin:0;">
-                        <span style="width:24%;height:100%;float: left;line-height:34px;font-size:12px;color:#333">节能智能开关</span>
-                        <select class="form-control"  id="custom" style="width:50%;" >
-                            <option class="0">关</option>
-                            <option class="1">自定义</option>
-                            <option class="2">智能1级</option>
-                            <option class="3">智能2级</option>
-                            <option class="4">智能3级</option>
-                        </select>
+                <div class="stnr">
+                    <div>
+                        <p class="r-bt" id="r_btl_th3" style="margin-left: 3%">
+                            <span >人体感应开关</span>
+                            <input name="sexa" type="radio"  class="che_guad r_btl_th sdk"  value="1" checked/>开
+                            <input name="sexa" type="radio" class="che_guad r_btl_th sdke" value="0"/>关
+                        </p>
                     </div>
-                    <div style="width:46%;float: left;">
-                        <span style="float:left;width:26%;height:100%;margin:0px 0px 0px 10%;line-height:34px;font-size: 12px">自动休眠时间</span>
-                        <div class="progres pro_a" style="width:53%;">
-                            <div id="slideTest15" class="demo-slider" style="height:10px;"></div>
+                    <div>
+                        <div class="progres de_i">
+                            <i class="unmanned"><input name="sex" type="checkbox"  checked="" value="0" class="se_a"/><span>无人功率</span> 无人</i>
+                            <div id="slideTest5" class="demo-slider" style="height:10px;"></div>
                         </div>
-                        <p style="float:left;margin:8px 0px 0px -3px;">min</p>
                     </div>
-                    <div style="height: 50px;float: left;width: 60%;">
-                        <span style="width:32%;margin-top:0.5%;float: left;line-height: 50px;font-size: 12px;">人体感应后的亮灯延时</span>
-                        <div class="container" style="width:28%;margin:2.1% 0px 0px 1.4%;">
-                            <div class="input-group spinner">
-                                <input type="text"  class="form-control" value="1" id="r_teml_ma" oninput="value=value.replace(/[^\d]/g,'')">
-                                <div class="input-group-btn-vertical">
-                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
-                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
-                                </div>
+                    <div>
+                        <div class="progres de_i">
+                            <i class="unmanned"><input name="sex" type="checkbox" value="1" checked=""  class="se_b"/><span>无人功率</span>无人</i>
+                            <div id="slideTest16" class="demo-slider" style="height:10px;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="progres de_i">
+                            <i class="unmanned"><input name="sex" type="checkbox"  checked="" value="2" class="se_c"/><span>无人功率</span>无人</i>
+                            <div id="slideTest9" class="demo-slider" style="height:10px;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="progres de_i">
+                            <i  class="unmanned"><input name="sex" type="checkbox" value="3"  checked="checked" class="se_d"/><span>无人功率</span>无人</i>
+                            <div id="slideTest11" class="demo-slider" style="height:10px;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="progres de_i">
+                            <i class="unmanned"><input name="sex" type="checkbox" value="4"  checked="" class="se_e"/><span>无人功率</span>无人</i>
+                            <div id="slideTest14" class="demo-slider" style="height:10px;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="progres de_i">
+                            <i class="unmanned"><input name="sex" type="checkbox"  value="5"  checked="" class="se_f"/><span>无人功率</span>无人</i>
+                            <div id="slideTest7" class="demo-slider" style="height:10px;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="sdsds" style="width:36%">感应亮灯时长(s)</span>
+                        <div class="container" style="width:20%;margin:2.1% 0px 0px 1.4%;">
+                            <div class="input-group spinner nbo">
+                                <input type="text"  class="form-control" value="1" id="r_teml_ma" oninput="value=value.replace(/[^\d]/g,'')" style="padding-left: 13%;">
+                                <!--<div class="input-group-btn-vertical">-->
+                                    <!--<button class="btn btn-default" type="button" style="padding: 8.3px 7px!important;"><i class="fa fa-caret-up" style="top: 2px!important;left: 3px!important;"></i></button>-->
+                                    <!--<button class="btn btn-default" type="button" style="padding: 8.3px 7px!important;"><i class="fa fa-caret-down" style="top: 2px!important;left: 3px!important;"></i></button>-->
+                                <!--</div>-->
                             </div>
                         </div>
                     </div>
@@ -374,96 +427,12 @@
             </div>
         </div>
     <!--22222-->
-        <div class="r-Battery">
-            <div class="r-heade">光电池</div>
-            <div class="r-content" style="height: 232px;">
-                <div class="r-Battery-lef">
-                    <div>
-                        <span>光控电压(v)</span>
-                        <div class="container" style="width:48%;margin:1.7% 0px 0px 2%;">
-                            <div class="input-group spinner">
-                                <input type="text"  class="form-control in_dent" value="2" id="r_teml_tgl" oninput="value=value.replace(/[^\d]/g,'')">
-                                <div class="input-group-btn-vertical">
-                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
-                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <span>开/关灯延时(min)</span>
-                        <div class="progres kai_a">
-                            <div id="slideTest1" class="demo-slider" style="height:10px;" lay-percent="70%"></div>
-                        </div>
-                        <p class="kai_c">min</p>
-                    </div>
-                </div>
-                <div class="r-Battery-reg">
-                    <p class="r-bt" id="r_btl_th">
-                        <span >光控关灯开关</span>
-                        <input name="sexa" type="radio"  class="che_gua r_btl_th"  value="1" checked/>开
-                        <input name="sexa" type="radio" class="che_gua r_btl_th" value="0"/>关
-                    </p>
-                    <div>
-                        <span >光控延时时间</span>
-                        <div class="progres kai_b">
-                            <div id="slideTest_m" class="demo-slider" style="height:10px;"></div>
-                        </div>
-                        <p class="kai_c"  style="margin:4.5% 0px 0px -2%;width: auto;float:left;font-size:14px;">s</p >
-                    </div>
-                </div>
-            </div>
-        </div>
+
         <!--蓄电池-->
         <div class="r-Battery-tw">
-            <div class="r-heade">蓄电池</div>
+            <div class="r-heade"><img src="${request.contextPath}/statics/image/dianchishezhip.png" alt="" style="margin-right: 10px;width: 20px;margin-top: -4px;">电池设置</div>
             <div class="r-Battery-tw-con">
                 <div class="r-Battery-lef">
-                    <div>
-                        <span>电池串数</span>
-                        <div class="container" style="width:49%;margin-top:2%;">
-                            <div class="input-group spinner">
-                                <input type="text"  class="form-control in_dent" value="3" id="r_teml_forl" oninput="value=value.replace(/[^\d]/g,'')">
-                                <div class="input-group-btn-vertical">
-                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
-                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <span>过放电压(V)</span><input type="text"  value="2.5" placeholder="2.5~40"  class="m_in in_dent"  id="r_inpl_one" onkeyup="value=value.replace(/[^\d.]/g,'')">
-                    </div>
-                    <div>
-                        <span>充电电流(A)</span><input type="text"  placeholder="0~40" value="0"  class="m_in in_dent" id="r_inpl_tw" onkeyup="value=value.replace(/[^\d.]/g,'')">
-                    </div>
-
-                    <div>
-                        <span>充电温度范围</span>
-                        <div class="container" style="float:left;width: 14%">
-                            <div class="input-group spinner sp_a">
-                                <input type="text" class="form-control "  value="2"  onBlur=" " id="r_teml_thglte">
-                                <!--oninput="num(this)"-->
-                                <div class="input-group-btn-vertical">
-                                    <button class="btn btn-default " type="button"><i class="fa fa-caret-up"></i></button>
-                                    <button class="btn btn-default jianr" type="button"><i class="fa fa-caret-down "></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        <p style="float:left;margin: 3% 2% 0px 2.5%;line-height: 34px;">°C</p><span style="display: inline-block;width: 10px;">--</span>
-                        <div class="container r-container" style="float:left;width: 14%">
-                            <div class="input-group spinner sp_a">
-                                <input type="text" class="form-control r_feizifu"  value="2"  onBlur=" " id="r_teml_thete" oninput="value=value.replace(/[^\d]/g,'')">
-                                <div class="input-group-btn-vertical">
-                                    <button class="btn btn-default jiar" type="button"><i class="fa fa-caret-up"></i></button>
-                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        <p style="float:left;margin:3% 0px 0px 2.5%;line-height: 34px;">°C</p>
-                    </div>
-                </div>
-                <div class="r-Battery-rge">
                     <div>
                         <span>电池类型</span>
                         <div class="form-group col-sm-2 " style="width:49%;padding:0;margin:0;margin-top: 2%;">
@@ -473,10 +442,163 @@
                             </select>
                         </div>
                     </div>
+                </div>
+                <div class="r-Battery-rge">
                     <div>
-                        <span style="float: left;">充电电压(V)</span>
-                        <input type="text" id="chong" class="in_dent" placeholder="2.5~40" value="2.5" onkeyup="value=value.replace(/[^\d.]/g,'')">
+                        <span>电池串数</span>
+                        <div class="container" style="width:49%;margin-top:2%;">
+                            <div class="input-group spinner">
+                                <input type="text"  class="form-control in_dent" value="3" id="r_teml_forl" oninput="value=value.replace(/[^\d]/g,'')">
+                                <div class="input-group-btn-vertical">
+                                    <button class="btn btn-default" type="button" style="padding: 8.4px 7px!important;"><i class="fa fa-caret-up" style="top: 2px!important;left: 3px!important;"></i></button>
+                                    <button class="btn btn-default" type="button" style="padding: 8.4px 7px!important;"><i class="fa fa-caret-down" style="top: 2px!important;left: 3px!important;"></i></button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                </div>
+
+            <!--最新改版-->
+                <div class="snds">
+                    <p class="r-bt" id="r_btl_th0">
+                        <span >自定义</span>
+                        <input name="sexa1" type="radio"  class="che_guad r_btl_th nqde"  value="1" checked/>自定义
+                        <input name="sexa1" type="radio" class="che_guad r_btl_th nqd" value="0"/>默认
+                    </p>
+                    <div class=" sndsa">
+                        <div>
+                            <span style="float: left;" class="slgn">充电电压(V)</span>
+                            <input type="text" id="chong" class="in_dent" placeholder="2.5~40" value="" onkeyup="value=value.replace(/[^\d.]/g,'')">
+                        </div>
+                        <div>
+                            <span  class="slgn">过放电压(V)</span><input type="text"  value="" placeholder="2.5~40"  class="mms m_in in_dent "  id="r_inpl_one" onkeyup="value=value.replace(/[^\d.]/g,'')">
+                        </div>
+                        <div>
+                            <span  class="slgn">充电电流(A)</span><input type="text"  placeholder="0~40" value=""  class="mms m_in in_dent " id="r_inpl_tw" onkeyup="value=value.replace(/[^\d.]/g,'')">
+                        </div>
+                    </div>
+                </div>
+                <div class="sndsm" >
+                    <p class="r-bt" id="r_btl_th1">
+                        <span >温控开关</span>
+                        <input name="sexa2" type="radio"  class="che_guad r_btl_th kudx"  value="1" checked/>开
+                        <input name="sexa2" type="radio" class="che_guad r_btl_th kudxe" value="0"/>关
+                    </p>
+                    <div class=" sndsam">
+                        <div>
+                            <span class="nqq">充电温度范围(°C)</span>
+                            <div class="container" style="float:left;width: 14%">
+                                <div class="input-group spinner sp_a">
+                                    <input type="text" class="form-control"  value="2"  onBlur=" " id="r_teml_thglte" style="height: 34px;">
+                                    <!--oninput="num(this)"-->
+                                    <div class="input-group-btn-vertical">
+                                        <button class="btn btn-default " type="button" style="padding: 8.3px 7px!important;"><i class="fa fa-caret-up" style="top: 2px!important;left: 3px!important;"></i></button>
+                                        <button class="btn btn-default jianr" type="button" style="padding: 8.3px 7px!important;"><i class="fa fa-caret-down " style="top: 2px!important;left: 3px!important;"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <span style="display: inline-block;width: 10px;">--</span>
+                            <div class="container r-container" style="float:left;width: 14%">
+                                <div class="input-group spinner sp_a">
+                                    <input type="text" class="form-control r_feizifu"  value="2"  onBlur=" " id="r_teml_thete"  style="height: 34px;">
+                                    <div class="input-group-btn-vertical">
+                                        <button class="btn btn-default jiar" type="button" style="padding: 8.3px 7px!important;"><i class="fa fa-caret-up" style="top: 2px!important;left: 3px!important;"></i></button>
+                                        <button class="btn btn-default jianr" type="button" style="padding: 8.3px 7px!important;"><i class="fa fa-caret-down" style="top: 2px!important;left: 3px!important;"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="line-height: 34px;">
+                            <span class="nqq">放电温度范围(°C)</span>
+                            <div class="container" style="float:left;width: 14%;margin: 0px 3% 0px 0%; ">
+                                <div class="input-group spinner sp_a">
+                                    <input type=""  class="form-control" value="2" id="r_teml_thglt"  style="height: 34px;">
+                                    <!--oninput="num(this)"-->
+                                    <div class="input-group-btn-vertical">
+                                        <button class="btn btn-default" type="button" style="padding: 8.3px 7px!important;"><i class="fa fa-caret-up" style="top: 2px!important;left: 3px!important;"></i></button>
+                                        <button class="btn btn-default jianr" type="button" style="padding: 8.3px 7px!important;"><i class="fa fa-caret-down " style="top: 2px!important;left: 3px!important;"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                           <span style="display: inline-block;width: 10px;">--</span>
+                            <div class="container r-container" style="float:left;width: 14%">
+                                <div class="input-group spinner sp_a">
+                                    <input type=""  min="1" max="99" class="form-control r_feizifu" value="2" id="r_teml_thet"  style="height: 34px;" >
+                                    <div class="input-group-btn-vertical">
+                                        <button class="btn btn-default jiar" type="button" style="padding: 8.3px 7px!important;"><i class="fa fa-caret-up" style="top: 2px!important;left: 3px!important;"></i></button>
+                                        <button class="btn btn-default jianr" type="button" style="padding: 8.3px 7px!important;"><i class="fa fa-caret-down" style="top: 2px!important;left: 3px!important;"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="r-Battery">
+            <div class="r-heade"><img src="${request.contextPath}/statics/image/jiengnshep.png" alt="" style="margin-top: -3px;width: 14px;display: inline-block;height: 21px;margin-right: 6px;">节能设置</div>
+            <div class="r-content" style="height: 232px;padding: 0 3%;">
+                <div class="form-group col-sm-2 " style="width:50%;padding:0;margin:0;margin-top: 20px;">
+                    <span style="width:24%;height:100%;float: left;line-height:34px;font-size:12px;color:#333">节能智能开关</span>
+                    <select class="form-control"  id="custom" style="width:50%;" >
+                        <option class="0">关</option>
+                        <option class="1">自定义</option>
+                        <option class="2">智能1级</option>
+                        <option class="3">智能2级</option>
+                        <option class="4">智能3级</option>
+                    </select>
+                </div>
+                <div class=" sndsa" style="padding: 0;margin-top: 20px;">
+                    <div>
+                        <span>一阶电压(V)</span>
+                        <input type="text" onblur="numa(this)" class="Jei"  value="1" id="slideTest_a">
+                    </div>
+                    <div>
+                        <span>二阶电压(V)</span>
+                        <input type="text" oninput="numc(this)"  class="Jei" value="1" id="slideTest_c">
+                    </div>
+                    <div>
+                        <span>三阶电压(V)</span>
+                        <input type="text" oninput="num_e(this)" class="Jei" value="1" id="slideTest_e" >
+                    </div>
+                </div>
+                <div class=" sndsa"  style="padding: 0;">
+                   <div>
+                       <span style="float: left;">一阶功率(V)</span>
+                       <div class="progres htn">
+                           <div id="slideTest_b" class="demo-slider " style="height:10px;"></div>
+                       </div>
+                   </div>
+                   <div>
+                       <span>二阶功率(V)</span>
+                       <div class="progres htn" >
+                           <div id="slideTest_d" class="demo-slider " style="height:10px;"></div>
+                       </div>
+                   </div>
+                    <div>
+                        <span>三阶功率(A)</span>
+                        <div class="progres htn" >
+                        <div id="slideTest_f" class="demo-slider " style="height:10px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="r-Battery tnslo" style="">
+            <div class="r-heade" style="border: none;"><img src="${request.contextPath}/statics/image/qitashep.png" alt="" style="width: 20px;margin-right: 8px;margin-top: -3px;height: 15px;">其他设置</div>
+            <div class=" sndsa"  style="padding-left: 3%;margin-top: 12px;">
+                <div style="width: 49.33%;">
+                    <span style="float: left;width: 37%!important;">负载手动控制生效时长</span>
+                    <input type="text" id="chong3" class="in_dent mms" placeholder="2.5~40" value="2.5" onkeyup="value=value.replace(/[^\d.]/g,'')" style="width: 48%;">
+                </div>
+                <div style="width: 49.33%;">
+                    <span>自动休眠时间</span>
+                    <input type="text"  value="2.5" placeholder="2.5~40"  class="m_in in_dent"  id="r_inpl_one2" onkeyup="value=value.replace(/[^\d.]/g,'')">
+                </div>
+            </div>
+            <div class=" sndsa"   style="padding-left: 3%;">
+                <div>
                     <div style="line-height: 34px;clear: both;">
                         <span>巡检时间</span>
                         <div class="form-group col-sm-2 " style="width:49%;padding:0;margin:0;margin-top: 2%;">
@@ -488,33 +610,10 @@
                             </select>
                         </div>
                     </div>
-                    <div style="line-height: 34px;clear: both;">
-                        <span>放电温度范围</span>
-                        <div class="container" style="float:left;width: 14%;margin: 0px 3% 0px 0%; ">
-                            <div class="input-group spinner sp_a">
-                                <input type=""  class="form-control " value="2" id="r_teml_thglt">
-                                <!--oninput="num(this)"-->
-                                <div class="input-group-btn-vertical">
-                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
-                                    <button class="btn btn-default jianr" type="button"><i class="fa fa-caret-down "></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        <p style="float:left;margin:3% 2% 0px 3.5%;font-size:12px;">°C</p><span style="display: inline-block;width: 10px;">--</span>
-                        <div class="container r-container" style="float:left;width: 14%">
-                            <div class="input-group spinner sp_a">
-                                <input type=""  min="1" max="99" class="form-control r_feizifu" value="2" id="r_teml_thet" oninput="value=value.replace(/[^\d]/g,'')">
-                                <div class="input-group-btn-vertical">
-                                    <button class="btn btn-default jiar" type="button"><i class="fa fa-caret-up"></i></button>
-                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        <p style="float:left;margin:3% 0px 0px 2.5%;font-size:12px;">°C</p>
-                    </div>
                 </div>
             </div>
         </div>
+
         <!--4444444-->
         <div class="r-bom-btn r_shx">
             <div>
@@ -524,61 +623,180 @@
         </div>
         <!--设置结束-->
     </div>
+<!--硬件升级-->
     <div class="option" id="hardware_a">
         <button class="hardware">升级硬件</button>
     </div>
-    <!--彻底结束-->
-</div>
-</div>
-<div class="shade_project">
-    <div class="shade_a shade_add_project"></div>
-    <div class="shade_b_project">
-        <div class="Bian_j">新增项目<span class="glyphicon glyphicon-remove shade_add_project" style="position: absolute;right:3%;top:5%;cursor: pointer"></span></div>
-        <div class="jei" style="margin-top:8%;">
-            <span>一阶：</span>
-            <input type="text" onblur="numa(this)" class="Jei"  value="1" id="slideTest_a">
-            <p class="pro_p">V</p>
-            <div class="progres" style="margin:0px 0px 0px 15% ;width:38% !important;">
-                <div id="slideTest_b" class="demo-slider " style="height:10px;"></div>
+<!--实时数据-->
+    <div class="option" id="shuju_a">
+        <div class="content">
+            <div class="shul">
+                <p>
+                    <span>运行天数：</span>
+                    <h id="rtia">8</h><i>天</i>
+                </p>
+                <p>
+                    <span>通讯方式：</span>
+                    <h id="rxun"></h>
+                </p>
+                <p>
+                    <span>硬件版本：</span>
+                    <h id="rben">1.0</h><i></i>
+                </p>
+                <p>
+                    <span>软件版本：</span>
+                    <h id="ruan">102</h><i></i>
+                </p>
             </div>
-            <p class="pro_p">%</p>
-        </div>
-        <div class="jei">
-            <span>二阶：</span>
-            <input type="text" oninput="numc(this)"  class="Jei" value="1" id="slideTest_c">
-            <p class="pro_p">V</p>
-            <div class="progres" style="margin:0px 0px 0px 15% ;width:38% !important;">
-                <div id="slideTest_d" class="demo-slider " style="height:10px;"></div>
-            </div>
-            <p class="pro_p">%</p>
-        </div>
-        <div class="jei">
-            <span>三阶：</span>
-            <input type="text" oninput="num_e(this)" class="Jei" value="1" id="slideTest_e" >
-            <p class="pro_p">V</p>
-            <div class="progres" style="margin:0px 0px 0px 15% ;width:38% !important;">
-                <div id="slideTest_f" class="demo-slider " style="height:10px;"></div>
-            </div>
-            <p class="pro_p">%</p>
-        </div>
+            <div class="dianchi">
+                <div class="kuang" style="margin-left: 0;">
+                    <p>蓄电池</p>
+                    <div style="margin: 41px auto;">
+                        <div>
+                            <span>电池状态：</span>
+                            <p style="background:#4BBFBB;">
+                                <span  id="rzhuan">正常</span>
+                            </p>
+                        </div>
+                        <div>
+                            <span>余量：</span>
+                            <p>
+                                <span id="yula">106</span>
+                            </p>
+                        </div>
+                        <div>
+                            <span>电池电压：</span>
+                            <p>
+                                <span id="rdiay">12.2</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="sha_buttom ">
-            <div id="project_confirm"  class="rquebei"  style="margin:0.5% 0px 0px  22% !important;line-height: 48px" >确定</div>
-            <div class="shade_add_project rqubtn" style="line-height: 48px;margin-top:0.5% !important;" >取消</div>
+                <div class="kuang">
+                    <p>光电池</p>
+                    <div>
+                        <div>
+                            <span>光电池状态：</span>
+                            <p style="background:#4BBFBB;">
+                                <span id="rguang" style="width: 100%;text-align: center;">正常</span>
+                            </p>
+                        </div>
+                        <div>
+                            <span>光电池电压(v)：</span>
+                            <p>
+                                <span id="rya">12.2</span>
+                            </p>
+                        </div>
+                        <div>
+                            <span>充电电流(A)：</span>
+                            <p>
+                                <span id="rliu">12.2</span>
+                            </p>
+                        </div>
+                        <div>
+                            <span>充电功率(W)：</span>
+                            <p>
+                                <span id="rdianl">12.2</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="kuang clbos">
+                    <p  style="padding: 35px 19px;">负载</p>
+                    <div>
+                        <div>
+                            <span>负载状态：</span>
+                            <p style="background:#4BBFBB;">
+                                <span id="rzhun"  style="width: 100%;text-align: center;">正常</span>
+                            </p>
+                        </div>
+                        <div>
+                            <span>负载电压(v)：</span>
+                            <p>
+                                <span id="rfu">12.2</span>
+                            </p>
+                        </div>
+                        <div>
+                            <span>负载电流(A)：</span>
+                            <p>
+                                <span id="rful">12.2</span>
+                            </p>
+                        </div>
+                        <div>
+                            <span>负载功率(W)：</span>
+                            <p>
+                                <span id="rfugon">12.2</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="dkuang">
+                    <p  style="padding: 16px 19px;">常规设置</p>
+                    <div>
+                        <div  class="slds">
+                            <div style="float: left;width: 50%;">
+                                <span class="con_an_span">开/关/自动：</span>
+                                <div class="form-group form_con_an" id="in_p">
+                                    <input type="radio" class="control-label in_put" id="richang" style="margin-left:5%" value="1" name="category" checked/>开
+                                    <input type="radio" class="control-label in_put" id="dae" value="0" name="category" />关
+                                    <input type="radio" class="control-label in_put" id="dae_a" value="2" name="category" />自动
+                                </div>
+                            </div>
+                            <div style="width: 50%;float: left">
+                                <span style="float: left;width: 47%;">亮度：</span>
+                                <!--<span >光控延时时间</span>-->
+                                <div class="progres kai_b" style="margin: 3% 0px 0px 3% !important;">
+                                    <div id="slideTest_r" class="demo-slider" style="height:10px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="clear: both">
+                                <div  style="width: 50%;float: left">
+                                    <span style="float:left;width: 49%;">晨亮时长：</span>
+                                    <input type="text" placeholder="晨亮时长" id="rac" class="bs" oninput="value=value.replace(/[^\d]/g,'')" >
+                                </div>
+                                <div  style="width: 50%;float: left">
+                                    <span style="float:left;width: 47%;">亮灯时长</span>
+                                    <input type="text" placeholder="亮灯时间" id="rzyb" class="bs" oninput="value=value.replace(/[^\d]/g,'')">
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="sha_buttom" style="width: 429px;border: none;">
+                <div id="confirm_Z" class="rquebei" style="margin:0;line-height: 36px;line-height: 48px;">确定</div>
+                <div  class="sha_cancel_new rqubtn"style="margin:0;margin-left: 120px;line-height: 48px;" >取消</div>
+            </div>
         </div>
     </div>
+    <!--彻底结束-->
 </div>
-
 </body>
 <script src="${request.contextPath}/statics/js/modules/control/My97DatePicker/WdatePickera.js"></script>
-<style>
-    .WdateDiv #dpTime .tE:last-child{display: none!important;}
-    .WdateDiv #dpTime .tm:last-child{display: none!important;}
-</style>
 <script>
     function goback(){
         sessionStorage.setItem('l','1');
         window.history.back()
+    }
+    function numa(obj,val){
+        obj.value = obj.value.replace(/[^\d.]/g,""); //清除"数字"和"."以外的字符
+        obj.value = obj.value.replace(/^\./g,""); //验证第一个字符是数字
+        obj.value = obj.value.replace(/\.{2,}/g,""); //只保留第一个, 清除多余的
+        obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+        obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3'); //只能输入两个小数
+        var a=document.getElementById("chong").value;
+        var b=document.getElementById("r_inpl_one").value;//最小值
+        var c=document.getElementById("slideTest_c").value;
+        var e=document.getElementById("slideTest_e").value;
+        console.log(parseFloat(b)+'+++++'+parseFloat(a)+'+++++'+parseFloat(obj.value));
+        if( parseFloat(obj.value)>parseFloat(a)){
+            obj.value=a
+        }
+        //在这儿加判断吗对，最小值是多少
+        if(parseFloat(obj.value) < parseFloat(b)){
+            obj.value=b
+        }
     }
     layui.use('slider', function(){
         var $ = layui.$
@@ -586,107 +804,78 @@
         slider.render({
             elem: '#slideTest4'
             ,theme: '#1E9FFF' //主题色
-            ,input: true //输入框
-            ,type: 'vertical' //垂直滑块
             ,value: 0//初始值
         });
         slider.render({
             elem: '#slideTest5'
             ,theme: '#1E9FFF' //主题色
-            ,input: true //输入框
-            ,type: 'vertical' //垂直滑块
-            ,value: 0 //初始值
-        });
-        slider.render({
-            elem: '#slideTest1'
-            ,theme: '#1E9FFF' //主题色
-            ,input: true //输入框
-            ,min:0
-            ,max:120
             ,value: 0 //初始值
         });
         slider.render({
             elem: '#slideTest6'
+            ,theme: '#1E9FFF' //主题色
             ,value: 80
-            ,input: true //输入框
-            ,type: 'vertical' //垂直滑块
             ,value: 0 //初始值
         });
         slider.render({
             elem: '#slideTest7'
             ,theme: '#1E9FFF' //主题色
-            ,input: true //输入框
-            ,type: 'vertical' //垂直滑块
             ,value: 0 //初始值
+
         });
         slider.render({
             elem: '#slideTest8'
             ,theme: '#1E9FFF' //主题色
-            ,input: true //输入框
-            ,type: 'vertical' //垂直滑块
             ,value:0
         });
         slider.render({
             elem: '#slideTest9'
             ,theme: '#1E9FFF' //主题色
-            ,input: true //输入框
-            ,type: 'vertical' //垂直滑块
             ,value:0
+
         });
         slider.render({
             elem: '#slideTest10'
             ,theme: '#1E9FFF' //主题色
-            ,input: true //输入框
-            ,type: 'vertical' //垂直滑块
+            // ,input: true //输入框
+            // ,type: 'vertical' //垂直滑块
             ,value:0
         });
         slider.render({
             elem: '#slideTest11'
             ,theme: '#1E9FFF' //主题色
-            ,input: true //输入框
-            ,type: 'vertical' //垂直滑块
+            ,value:0
+
+        });
+        slider.render({
+            elem: '#slideTest_r'
+            ,theme: '#1E9FFF' //主题色
             ,value:0
         });
         slider.render({
             elem: '#slideTest12'
             ,theme: '#1E9FFF' //主题色
-            ,input: true //输入框
-            ,type: 'vertical' //垂直滑块
             ,value:0
         });
         slider.render({
             elem: '#slideTest13'
             ,theme: '#1E9FFF' //主题色
-            ,input: true //输入框
-            ,type: 'vertical' //垂直滑块
             ,value:0
         });
         slider.render({
             elem: '#slideTest14'
             ,theme: '#1E9FFF' //主题色
-            ,input: true //输入框
-            ,type: 'vertical' //垂直滑块
             ,value:0
-        });
-        slider.render({
-            elem: '#slideTest15'
-            ,theme: '#1E9FFF' //主题色
-            ,input: true //输入框
-            ,value:0
-            ,min:0
-            ,max:120
+
         });
         slider.render({
             elem: '#slideTest16'
             ,theme: '#1E9FFF' //主题色
-            ,input: true //输入框
-            ,type: 'vertical' //垂直滑块
             ,value:0
         });
         slider.render({
             elem: '#slideTest_b'
             ,theme: '#1E9FFF' //主题色
-            ,input: true //输入框
             ,value:0
             ,min:2
             ,max:100
@@ -694,7 +883,6 @@
                 slider.render({
                     elem: '#slideTest_d'
                     ,theme: '#1E9FFF' //主题色
-                    ,input: true //输入框
                     ,value:0
                     ,min:1
                     ,max:value
@@ -702,7 +890,6 @@
                         slider.render({
                             elem: '#slideTest_f'
                             ,theme: '#1E9FFF' //主题色
-                            ,input: true //输入框
                             ,value:0
                             ,min:0
                             ,max:value_f
@@ -720,7 +907,6 @@
         slider.render({
             elem: '#slideTest_d'
             ,theme: '#1E9FFF' //主题色
-            ,input: true //输入框
             ,value:0
             ,min:0
             ,disabled:true
@@ -735,7 +921,6 @@
         slider.render({
             elem: '#slideTest_f'
             ,theme: '#1E9FFF' //主题色
-            ,input: true //输入框
             ,value:0
             ,min:0
             ,disabled:true
@@ -743,8 +928,7 @@
         slider.render({
             elem: '#slideTest_m'
             ,theme: '#1E9FFF' //主题色
-            ,input: true //输入框
-            ,value:[0]
+            ,value:[5]
             ,min: 5
             ,max:120
         });

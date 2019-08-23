@@ -12,7 +12,7 @@ import java.util.List;
  * @Version 1.0
  **/
 @Data
-public class DeviceQuery extends DeviceEntity{
+public class DeviceQuery extends DeviceEntityApi{
 
     private Integer pageSize;
 

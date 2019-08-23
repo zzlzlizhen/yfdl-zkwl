@@ -222,8 +222,18 @@ public class ProjectServiceImpl implements ProjectService {
         }
         return 0;
     }
+
+    @Override
+    public List<Long> queryExclusiveIds(List<String> projectIds) {
+        return projectMapper.queryExclusiveIds(projectIds);
+    }
+
     @Override
     public ProjectEntity queryProjectMap(String projectId) {
         return projectMapper.queryProjectMap(projectId);
+    }
+    @Override
+    public Long queryExclusiveId(String projectId) {
+        return this.projectMapper.queryExclusiveId(projectId);
     }
 }

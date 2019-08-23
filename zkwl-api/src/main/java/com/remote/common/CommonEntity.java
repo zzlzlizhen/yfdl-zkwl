@@ -1,6 +1,5 @@
 package com.remote.common;
 
-import com.remote.device.entity.DeviceEntity;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
@@ -176,4 +175,6 @@ public class CommonEntity{
 
     //软件版本
     private Integer deviceVersion;
+
+    private Integer gprsVersion;
 }

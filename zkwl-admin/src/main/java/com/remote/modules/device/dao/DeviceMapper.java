@@ -158,5 +158,9 @@ public interface DeviceMapper extends BaseMapper<DeviceEntity> {
      * @return int
      **/
     int updateDeviceRunStatus(@Param("deviceCodes") List<String> deviceCodes);
+    /**
+     * 通过设备ids获取所属用户ids
+     * */
+    List<Long> queryExclUserId(@Param("deviceIds")List<String> deviceIds);
 }
 

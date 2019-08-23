@@ -55,7 +55,7 @@ public interface GroupService {
      * @Param projectId groupName
      * @return List<GroupEntity>
      **/
-    List<GroupEntity> queryGroupIdNoPage(String projectId,String groupName);
+    List<GroupEntity> queryGroupIdNoPage(String projectId,Integer groupName);
     /*
      * @Author zhangwenping
      * @Description 修改分组信息

@@ -18,12 +18,15 @@ import com.remote.modules.oss.service.SysOssService;
 import com.remote.modules.sys.service.SysConfigService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
@@ -33,7 +36,7 @@ import java.util.Map;
  *
  * @author Mark sunlightcs@gmail.com
  */
-@RestController
+@Controller
 @RequestMapping("sys/oss")
 public class SysOssController {
 	@Autowired
@@ -126,6 +129,36 @@ public class SysOssController {
 		sysOssService.removeByIds(Arrays.asList(ids));
 
 		return R.ok();
+	}
+
+
+	@RequestMapping("/downLoad")
+	public HttpServletResponse downLoad(String path, HttpServletResponse response){
+		try{
+			File file = new File(path);
+			// 取得文件名。
+			String filename = file.getName();
+			// 取得文件的后缀名。
+			String ext = filename.substring(filename.lastIndexOf(".") + 1).toUpperCase();
+			// 以流的形式下载文件。
+			InputStream fis = new BufferedInputStream(new FileInputStream(path));
+			byte[] buffer = new byte[fis.available()];
+			fis.read(buffer);
+			fis.close();
+			// 清空response
+			response.reset();
+			// 设置response的Header
+			response.addHeader("Content-Disposition", "attachment;filename=" + new String(filename.getBytes()));
+			response.addHeader("Content-Length", "" + file.length());
+			OutputStream toClient = new BufferedOutputStream(response.getOutputStream());
+			response.setContentType("application/octet-stream");
+			toClient.write(buffer);
+			toClient.flush();
+			toClient.close();
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		return response;
 	}
 
 }

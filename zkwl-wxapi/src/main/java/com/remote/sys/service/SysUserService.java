@@ -54,15 +54,13 @@ public interface SysUserService extends IService<SysUserEntity> {
      **/
     List<SysUserEntity> queryUserByUserIds(List<Long> userIds);
     /**
-     * 通过当前用户id修改设备数量
-     * */
-    boolean updateDevCount(SysUserEntity curUser);
-
-    /**
      * 通过当前用户id修改项目数量
      * */
-    boolean updateProCount(Long curUid);
+    boolean updateProCount(Long userId,int count);
+
+    /**
+     * 通过当前用户id修改设备数量
+     * */
+    boolean updateDevCount(Long exclUserId,int count);
     String queryByUid(Long curUid);
-
-
 }

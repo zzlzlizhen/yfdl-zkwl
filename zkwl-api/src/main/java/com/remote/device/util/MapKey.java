@@ -25,6 +25,7 @@ public class MapKey {
         mapKey.put(91,"loadState");//负载状态
         mapKey.put(92,"loadVoltage");//负载电压
         mapKey.put(93,"loadPower");//负载功率
+        mapKey.put(106,"gprsVersion");//GPRS版本
 
         mapKey.put(97,"communicationType");//通讯模式
         mapKey.put(98,"signalState");//信号状态

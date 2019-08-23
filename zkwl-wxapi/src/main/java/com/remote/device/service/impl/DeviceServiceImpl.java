@@ -3,6 +3,8 @@ package com.remote.device.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.remote.advancedsetting.entity.AdvancedSettingEntity;
+import com.remote.advancedsetting.service.AdvancedSettingService;
 import com.remote.common.es.utils.ESUtil;
 import com.remote.common.utils.CoodinateCovertor;
 import com.remote.common.utils.LngLat;
@@ -32,6 +34,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.remote.utils.DeviceTypeMap.DEVICE_TYPE;
 
@@ -57,6 +60,8 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Autowired
     private GroupService groupService;
+    @Autowired
+    AdvancedSettingService advancedSettingService;
 
     @Autowired
     private ESUtil esUtil;
@@ -95,38 +100,28 @@ public class DeviceServiceImpl implements DeviceService {
             DistrictEntity districtEntity = districtService.queryDistrictById(projectEntity.getCityId());
             deviceEntity.setCityName(districtEntity.getDistrictName());
         }
+        deviceEntity.setUsrUser(deviceEntity.getCreateUser());
+        deviceEntity.setCreateUser(projectEntity.getExclusiveUser());
         int insert = deviceMapper.insert(deviceEntity);
         if(insert > 0){
             //添加es start
-            Map<String, Object> stringObjectMap = convertAddES(deviceEntity);
-            RestStatus restStatus = esUtil.addES(stringObjectMap);
+            Map<String, Object> stringObjectMap = esUtil.convertAddES(deviceEntity);
+            RestStatus restStatus = esUtil.addES(stringObjectMap,"device_index",deviceEntity.getDeviceId());
             //添加es end
         }
-
+        AdvancedSettingEntity advancedSettingEntity = new AdvancedSettingEntity();
+        if(StringUtils.isNotBlank(groupId)||!("undefined").equals(groupId)){
+            advancedSettingEntity.setCreateTime(new Date());
+            advancedSettingEntity.setGroupId(groupId);
+            advancedSettingEntity.setDeviceCode(deviceEntity.getDeviceCode());
+            advancedSettingEntity.setUid(deviceEntity.getCreateUser());
+            advancedSettingEntity.setUpdateUser(deviceEntity.getUpdateUserName());
+            initAdvSet(advancedSettingEntity);
+            advancedSettingService.saveAdvSetDev(advancedSettingEntity);
+        }
         return insert > 0 ? true : false;
     }
 
-    private Map<String, Object> convertAddES(DeviceEntity deviceEntity) {
-        Field[] declaredFields = deviceEntity.getClass().getDeclaredFields();
-        Map<String,Object> temp = new HashMap<String,Object>();
-        for (Field field : declaredFields){
-            field.setAccessible(true);
-            try {
-                if (field.getGenericType().toString().equals("class java.lang.String")) {
-                    temp.put(field.getName(),field.get(deviceEntity) == null ? "" : field.get(deviceEntity));
-                }else if (field.getGenericType().toString().equals("class java.lang.Integer")) {
-                    temp.put(field.getName(),field.get(deviceEntity) == null ? 0 : field.get(deviceEntity));
-                }else if (field.getGenericType().toString().equals("class java.lang.Double")) {
-                    temp.put(field.getName(),field.get(deviceEntity) == null ? 0.0 :field.get(deviceEntity));
-                }else if(field.getGenericType().toString().equals("class java.util.Date")){
-                    temp.put(field.getName(),field.get(deviceEntity) == null ? new Date() :field.get(deviceEntity));
-                }
-            } catch (IllegalAccessException e1) {
-                e1.printStackTrace();
-            }
-        }
-        return temp;
-    }
 
     @Override
     public PageInfo<DeviceEntity> queryDevice(DeviceQuery deviceQuery) {
@@ -144,12 +139,23 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public boolean deleteDevice(DeviceQuery deviceQuery) {
+        List<DeviceEntity> deviceEntityList = deviceMapper.queryDeviceByDeviceIds(deviceQuery.getDeviceList());
+        List<String> deviceCodes = deviceEntityList.parallelStream().map(deviceEntity -> deviceEntity.getDeviceCode()).collect(Collectors.toCollection(ArrayList::new));
+        if(CollectionUtils.isNotEmpty(deviceCodes) || deviceCodes.size()>0){
+            advancedSettingService.deleteAdvSet(deviceCodes);
+        }
         return deviceMapper.deleteDevice(deviceQuery) > 0 ? true : false;
     }
 
     @Override
     public boolean updateById(DeviceEntity deviceEntity) {
         logger.info("修改设备信息："+JSONObject.toJSONString(deviceEntity));
+        if(StringUtils.isNotBlank(deviceEntity.getDeviceCode())|| deviceEntity.getDeviceCode() != ""){
+            String oldGroupId = queryByDevCode(deviceEntity.getDeviceCode());
+            if(!oldGroupId.equals(deviceEntity.getGroupId())){
+                advancedSettingService.updateAdvancedByDeviceCode(deviceEntity.getDeviceCode(),deviceEntity.getGroupId(),oldGroupId);
+            }
+        }
         return deviceMapper.updateById(deviceEntity) > 0 ? true : false;
     }
 
@@ -213,5 +219,64 @@ public class DeviceServiceImpl implements DeviceService {
     public Integer getDeviceCount(List<Long> curUids) {
 
         return this.deviceMapper.getDeviceCount(curUids);
+    }
+
+    @Override
+    public String queryByDevCode(String deviceCode) {
+        return deviceMapper.queryByDevCode(deviceCode);
+    }
+    @Override
+    public List<Long> queryExclUserId(List<String> deviceIds) {
+        return deviceMapper.queryExclUserId(deviceIds);
+    }
+    /**
+     * 功能描述：初始化设备高级设置参数
+     * @param advancedSettingEntity
+     */
+    public void initAdvSet(AdvancedSettingEntity advancedSettingEntity){
+        advancedSettingEntity.setLoadWorkMode(5);
+        advancedSettingEntity.setPowerLoad(500);
+        advancedSettingEntity.setTimeTurnOn(1080);
+        advancedSettingEntity.setTimeTurnOff(0);
+        advancedSettingEntity.setTime1(10);
+        advancedSettingEntity.setTime2(0);
+        advancedSettingEntity.setTime3(0);
+        advancedSettingEntity.setTime4(0);
+        advancedSettingEntity.setTime5(0);
+        advancedSettingEntity.setTimeDown(0);
+        advancedSettingEntity.setPowerPeople1(100);
+        advancedSettingEntity.setPowerPeople2(100);
+        advancedSettingEntity.setPowerPeople3(100);
+        advancedSettingEntity.setPowerPeople4(100);
+        advancedSettingEntity.setPowerPeople5(100);
+        advancedSettingEntity.setPowerDawnPeople(100);
+        advancedSettingEntity.setPowerSensor1(0);
+        advancedSettingEntity.setPowerSensor2(0);
+        advancedSettingEntity.setPowerSensor3(0);
+        advancedSettingEntity.setPowerSensor4(0);
+        advancedSettingEntity.setPowerSensor5(0);
+        advancedSettingEntity.setPowerSensorDown(0);
+        advancedSettingEntity.setSavingSwitch(2);
+        advancedSettingEntity.setAutoSleepTime(0);
+        advancedSettingEntity.setVpv(500);
+        advancedSettingEntity.setLigntOnDuration(5);
+        advancedSettingEntity.setPvSwitch(1);
+        advancedSettingEntity.setBatType(4);
+        advancedSettingEntity.setBatStringNum(3);
+        advancedSettingEntity.setVolOverDisCharge(900);
+        advancedSettingEntity.setVolCharge(1260);
+        advancedSettingEntity.setICharge(20);
+        advancedSettingEntity.setTempCharge(55395);
+        advancedSettingEntity.setTempDisCharge(55395);
+        advancedSettingEntity.setInspectionTime(5);
+        advancedSettingEntity.setInductionSwitch(0);
+        advancedSettingEntity.setInductionLightOnDelay(30);
+        advancedSettingEntity.setFirDownPower(1100);
+        advancedSettingEntity.setTwoDownPower(1050);
+        advancedSettingEntity.setThreeDownPower(1000);
+        advancedSettingEntity.setFirReducAmplitude(60);
+        advancedSettingEntity.setTwoReducAmplitude(40);
+        advancedSettingEntity.setThreeReducAmplitude(20);
+        advancedSettingEntity.setSwitchDelayTime(15);
     }
 }

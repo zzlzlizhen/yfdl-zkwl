@@ -1,4 +1,7 @@
 $(function () {
+    $("#in_p input").on("click",function(){
+        $(this).css("background","red");
+    });
     //获取上一个页面参数
     function showWindowHref(){
         var sHref = decodeURI(window.parent.document.getElementById("test").contentWindow.location.href);
@@ -14,7 +17,6 @@ $(function () {
         }
         return obj;
     }
-
     var href = showWindowHref();
     var longitude=href['longitude'];
     var Name=href['name'];
@@ -23,26 +25,26 @@ $(function () {
         var partition=longitude.split(",");
         ass=[{y:partition[0],x:partition[1],branch: Name}];
     }
-
-//    抽屉
-    $("#drawer_img,#qu_a").click(function(){
-        if($("#drawer").attr("class") == "drawer"){
-            $("#drawer").addClass("drawer_hid");
-        }else{
-            $("#drawer").removeClass("drawer_hid");
-        }
-    })
 //总览
     $("#pandect").click(function () {
         window.open("../pandect/pandect.html");
     })
-
+//抽屉
+    $("#drawer_img").click(function(){
+        if($("#drawer").attr("class") == "drawer"){
+            $("#drawer").addClass("drawer_hid");
+            $("#drawer_img").css("left","25px")
+        }else{
+            $("#drawer").removeClass("drawer_hid");
+            $("#drawer_img").css("left","0")
+        }
+    })
     var type;
     var deviceCode;
     var groId;
     var na_me;
     var deviceStatus = 0;
-
+    var devStaus=0;
 //搜索
     $("#seek").click(function(){
         console.log($("#seek_a").val());
@@ -54,6 +56,21 @@ $(function () {
             window.location.reload()
         }
     })
+   // 右侧边开关
+   $("#toog").click(function(){
+        var ele = $(this).children(".move");
+        if(ele.attr("data-state") == "on"){
+            ele.animate({left: "0"}, 300, function(){
+                ele.attr("data-state", "off");
+            });
+            $(this).removeClass("on").addClass("off");
+        }else if(ele.attr("data-state") == "off"){
+            ele.animate({left: '35'}, 300, function(){
+                $(this).attr("data-state", "on");
+            });
+            $(this).removeClass("off").addClass("on");
+        }
+   })
     //搜索功能
     function unit(deviceStatus,SN){
         var pro_je=$(this).parents(".pro_li").attr("id");
@@ -128,7 +145,9 @@ $(function () {
                             var locon = {
                                 y: res.data[i].children[k].children[v].longitude,
                                 x: res.data[i].children[k].children[v].latitude,
-                                branch:res.data[i].children[k].children[v].name
+                                branch:res.data[i].children[k].children[v].name,
+                                con: res.data[i].createTime,
+                                id:"",
                             };
                             arra.push(locon);
                         }
@@ -142,20 +161,116 @@ $(function () {
             }
         })
     }
+    $(".D_xuan_a").unbind('click');
+    $(".D_xuan_a").click(function () {
+        var devStaus = $(this).attr('id');
+        var arr=[];
+        if (devStaus == "0") {
+            $(".ra_state_d").css("transform", "rotate(0deg)");
+            $(".ra_state_d").css("left", "40px");
+            $(".ra_state_d").css("top", "40px");
+        } else if (devStaus == "1") {
+            $(".ra_state_d").css("transform", "rotate(-70deg)");
+            $(".ra_state_d").css("top", "39px");
+        } else if (devStaus == "2") {
+            $(".ra_state_d").css("transform", "rotate(70deg)");
+            $(".ra_state_d").css("left", "38px");
+            $(".ra_state_d").css("top", "39px");
+        } else if (devStaus == "3") {
+            $(".ra_state_d").css("transform", "rotate(-145deg)");
+            $(".ra_state_d").css("left", "40px");
+            $(".ra_state_d").css("top", "38px");
+        } else if (devStaus == "4") {
+            $(".ra_state_d").css("transform", "rotate(145deg)");
+            $(".ra_state_d").css("left", "39px");
+            $(".ra_state_d").css("top", "38px");
+        }
+        $.ajax({
+            url: baseURL + 'fun/project/queryProjectNoPage?deviceStatus=' + devStaus,
+            contentType: "application/json;charset=UTF-8",
+            type: "get",
+            data: {},
+            success: function (res) {
+                for (var i = 0; i < res.data.length; i++) {
+                    var locon = {
+                        y: res.data[i].longitude,
+                        x: res.data[i].latitude,
+                        title: "L",
+                        con: res.data[i].sumCount,
+                        branch: res.data[i].projectName,
+                        id: "",
+                        cliId: res.data[i].projectId,
+                        state: 1
+                    };
+                    arr.push(locon); //push经纬度
+                }
+                m_p(devStaus,arr);
+            }
+        })
+    })
 
+    function aas(pro_je) {
+        $(".D_xuan_a").unbind('click');
+        $(".D_xuan_a").click(function () {
+            var devStaus = $(this).attr('id');
+            var arr=[];
+            if (devStaus == "0") {
+                $(".ra_state_d").css("transform", "rotate(0deg)");
+                $(".ra_state_d").css("left", "40px");
+                $(".ra_state_d").css("top", "40px");
+            } else if (devStaus == "1") {
+                $(".ra_state_d").css("transform", "rotate(-70deg)");
+                $(".ra_state_d").css("top", "39px");
+            } else if (devStaus == "2") {
+                $(".ra_state_d").css("transform", "rotate(70deg)");
+                $(".ra_state_d").css("left", "38px");
+                $(".ra_state_d").css("top", "39px");
+            } else if (devStaus == "3") {
+                $(".ra_state_d").css("transform", "rotate(-145deg)");
+                $(".ra_state_d").css("left", "40px");
+                $(".ra_state_d").css("top", "38px");
+            } else if (devStaus == "4") {
+                $(".ra_state_d").css("transform", "rotate(145deg)");
+                $(".ra_state_d").css("left", "39px");
+                $(".ra_state_d").css("top", "38px");
+            }
+            $.ajax({
+                url: baseURL + 'fun/group/queryGroupIdNoPage?deviceStatus=' + devStaus+ "&projectId=" + pro_je,
+                contentType: "application/json;charset=UTF-8",
+                type: "get",
+                data: {},
+                success: function (res) {
+                    console.log("切换分组");
+                    console.log(res)
+                    for (var i = 0; i < res.data.length; i++) {
+                        var locon={y:res.data[i].longitude,x:res.data[i].latitude,title:"L",con:res.data[i].deviceCount,branch:res.data[i].groupName,id:"",cliId:res.data[i].groupId,state:2};
+                        arr.push(locon); //push经纬度
+                    }
+                    m_p(devStaus,arr);
+                }
+            })
+        })
+    }
 
     map(ass);
     function map(ass) {
         var ass; //跳转
         //全部/经纬度
+        var arrb;
+        var arrc;
         var arra;
         var arr=[];
+        var arb=[];
+        var arc=[];
+        //项目数据
         $.ajax({
-            url:baseURL + 'fun/project/queryProjectNoPage',
+            url:baseURL + 'fun/project/queryProjectNoPage?deviceStatus=' + 0,
             contentType: "application/json;charset=UTF-8",
             type:"get",
             data:{},
             success: function(res){
+                console.log("项目信息")
+                console.log(res)
                 var html="";
                 for(var i=0; i< res.data.length; i++){
                     var projectStatus=res.data[i].projectStatus;
@@ -175,32 +290,44 @@ $(function () {
                         "<ul class=\"nav_gro\" id="+res.data[i].projectId+"1"+">\n" +
                         "</ul>"
                     "</li>\n"
-
-                    var locon={y:res.data[i].longitude,x:res.data[i].latitude,title:"L",con:res.data[i].sumCount+"台设备",branch:res.data[i].projectName};
-                    arr.push(locon); //push经纬度
+                    var locon={y:res.data[i].longitude,x:res.data[i].latitude,title:"L",
+                        con:res.data[i].sumCount,branch:res.data[i].projectName, id:"",cliId:res.data[i].projectId,state:1};
+                    arb.push(locon); //push经纬度
                 }
-
                 $("#nav_a").append(html);
                 if(ass != undefined){
-                    arra = ass ; //单个项目
+                    arrb = ass ; //单个项目
                     ass = undefined;
                 }else{
-                    arra=arr; //总项目经纬度获取全局变量
+                    arrb=arb; //总项目经纬度获取全局变量
                 }
                 //地图
-                m_p(0,arra);
+                m_p(0,arrb);
+                //鼠标滑过项目
+                $('.nav_pro_v').mouseenter(function(event) {
+                    var arrhove=[];
+                    for(var i=0;i<arrb.length;i++){
+                        if(arrb[i].cliId == $(this).parents(".pro_li").attr("id")){
+                            arrhove.unshift({y:arrb[i].y,x:arrb[i].x,title:"L",
+                                con:arrb[i].con,branch:arrb[i].branch, id:"",cliId:arrb[i].cliId,state:1,hover:1})
+                        }else if(arrb[i].cliId != $(this).parents(".pro_li").attr("id")){
+                            arrhove.push({y:arrb[i].y,x:arrb[i].x,title:"L",
+                                con:arrb[i].con,branch:arrb[i].branch, id:"",cliId:arrb[i].cliId,state:1,})//剩下的
+                        }
+                    }
+                    m_p(0,arrhove);
+                })
+                $('.nav_pro_v').mouseleave(function(event) {
+                    m_p(0,arrb);
+                });
                 //左侧边栏
                 $(".She,.She_a").slideUp();
                 $(".grouping").slideDown();
                 $(".nav_pro_v").attr("t","0");
-                // $(".nav_pro_v").click(function () {
-                    //$(".nav_gro").slideToggle("slow");
-                    // $(".bs").css("transform","rotate(0deg)")
-               // })
-
                 $(".nav_pro_v").click(function(){
-                    $(".D_xuan").hide();
+                    $(".ssde").css("display","none");
                     var pro_je=$(this).parents(".pro_li").attr("id");
+                    aas(pro_je)
                     if( $(this).attr("t")=="0"){
                         $(this).parents(".pro_li").siblings().find(".nav_pro_v").attr("t","0");
                         $(this).parents(".pro_li").siblings().find(".nav_gro").slideUp().empty();
@@ -210,13 +337,13 @@ $(function () {
                             type: "get",
                             data: {},
                             success: function (res) {
-                                arr=[];
+                                arc=[];
                                 var htmla="";
                                 for (var i = 0; i < res.data.length; i++) {
                                     var deviceCount=res.data[i].deviceCount;
                                     if (deviceCount == null ) {
                                         deviceCount = "";
-                                    } else  {
+                                    } else {
                                         deviceCount = res.data[i].deviceCount;
                                     }
                                     htmla += "<li class='pro_li_a' id="+res.data[i].groupId+">\n" +
@@ -228,20 +355,37 @@ $(function () {
                                         "<ul class=\"nav_gro_b\" id="+res.data[i].groupId+"2"+">\n" +
                                         "</ul>"
                                     "</li>\n"
-                                    var locon={y:res.data[i].longitude,x:res.data[i].latitude,title:"L",con:res.data[i].deviceCount+"台设备",branch:res.data[i].groupName};
-                                    arr.push(locon); //push经纬度
+                                    var locon={y:res.data[i].longitude,x:res.data[i].latitude,title:"L",con:res.data[i].deviceCount,branch:res.data[i].groupName,id:"",cliId:res.data[i].groupId,state:2};
+                                    arc.push(locon); //push经纬度
                                 }
-                                $("#" + pro_je + "1").show().append(htmla);
-                                arra=arr ;//分组经纬度获取全局变量
-                                m_p(0,arra);//地图
-                                //右侧边栏数据
+                                $("#" + pro_je + "1").append(htmla).hide().slideDown();
+                                arrc=arc ;//分组经纬度获取全局变量
+                                m_p(0,arrc);//地图
+                                //鼠标滑过分组改变地图上分组图标状态（hover）
+                                $('.nav_pro_v_b').mouseenter(function(event) {
+                                    var arrhove=[];
+                                    for(var i=0;i<arrc.length;i++){
+                                        if(arrc[i].cliId == $(this).parents(".pro_li_a").attr("id")){
+                                            arrhove.unshift({y:arrc[i].y,x:arrc[i].x,title:"L",con:arrc[i].con,branch:arrc[i].branch,id:"",cliId:arrc[i].cliId,state:2,hover:2})
+                                        }else if(arrc[i].cliId != $(this).parents(".pro_li_a").attr("id")){
+                                            arrhove.push({y:arrc[i].y,x:arrc[i].x,title:"L",con:arrc[i].con,branch:arrc[i].branch,id:"",cliId:arrc[i].cliId,state:2,})//剩下的
+                                        }
+                                    }
+                                    m_p(0,arrhove);
+                                })
+                                $('.nav_pro_v_b').mouseleave(function(event) {
+                                    m_p(0,arrc);
+                                });
+                                //右侧边栏数据.
                                 Bing(pro_je,"");//控制项目
                                 // 分组下设备
                                 if(sessionStorage.getItem('l')=='1'){
-                                    console.log(   $(".nav_a").find(".pro_li").eq(lindex).find(".pro_li_a").length);
+                                    console.log($(".nav_a").find(".pro_li").eq(lindex).find(".pro_li_a").length);
                                     $(".nav_a").find(".pro_li").eq(lindex).find(".pro_li_a").eq(lindexs).find('.nav_pro_v_b').click();
                                 }
-                                //    分组下设备结束
+                                //  分组下设备结束
+                                //禁止项目鼠标移入事件
+                                $('.nav_pro_v').unbind('mouseenter').unbind('mouseleave');
                             }
                         });
                         $(this).attr("t","1");
@@ -251,7 +395,26 @@ $(function () {
                         //右侧边栏
                         $(".She,.She_a").hide();
                         $(".grouping").show();
-                    }
+                        //项目绑定鼠标移出事件
+                        $('.nav_pro_v').mouseenter(function(event) {
+                            var arrhove=[];
+                            for(var i=0;i<arrb.length;i++){
+                                if(arrb[i].cliId == $(this).parents(".pro_li").attr("id")){
+                                    arrhove.unshift({y:arrb[i].y,x:arrb[i].x,title:"L",
+                                        con:arrb[i].con,branch:arrb[i].branch, id:"",cliId:arrb[i].cliId,state:1,hover:1})
+                                }else if(arrb[i].cliId != $(this).parents(".pro_li").attr("id")){
+                                    arrhove.push({y:arrb[i].y,x:arrb[i].x,title:"L",
+                                        con:arrb[i].con,branch:arrb[i].branch, id:"",cliId:arrb[i].cliId,state:1,})//剩下的
+                                }
+                            }
+                            m_p(0,arrhove);
+                        })
+                        $('.nav_pro_v').mouseleave(function(event) {
+                            m_p(0,arrb);
+                        });
+                        //关闭项目列表
+                        m_p(0,arrb);
+                }
                     var pro_je=$(this).parent().attr('id');
                     if($("#"+pro_je+"1").html() == ""){
                         $("#"+pro_je+"1").html("");
@@ -261,16 +424,36 @@ $(function () {
 
                $(".nav_pro_v_b").attr('t','0')
                $(document).delegate(".nav_pro_v_b","click",function () {
+                   $(".ssde").css("display","none")
                 //    单选
-                if( $(this).find("img").attr("active")=="true"){
-                    $(this).find("img").removeClass("active").addClass("rllimg");
-                    $(this).find("img").attr("active","false")
-                }else{
-                    $(this).find(".rllimg").removeClass("rllimg").addClass("active");
-                    $(this).find("img").attr("active","true")
-                }
+                    if( $(this).find("img").attr("active")=="true"){
+                        $(this).find("img").removeClass("active").addClass("rllimg");
+                        $(this).find("img").attr("active","false");
+                        //关闭分组定位
+                        m_p(0,arrc);
+                        //分组绑定hover事件
+                        $('.nav_pro_v_b').mouseenter(function(event) {
+                            var arrhove=[];
+                            for(var i=0;i<arrc.length;i++){
+                                if(arrc[i].cliId == $(this).parents(".pro_li_a").attr("id")){
+                                    arrhove.unshift({y:arrc[i].y,x:arrc[i].x,title:"L",con:arrc[i].con,branch:arrc[i].branch,id:"",cliId:arrc[i].cliId,state:2,hover:2})
+                                }else if(arrc[i].cliId != $(this).parents(".pro_li_a").attr("id")){
+                                    arrhove.push({y:arrc[i].y,x:arrc[i].x,title:"L",con:arrc[i].con,branch:arrc[i].branch,id:"",cliId:arrc[i].cliId,state:2,})//剩下的
+                                }
+                            }
+                            m_p(0,arrhove);
+                        })
+                        $('.nav_pro_v_b').mouseleave(function(event) {
+                            m_p(0,arrc);
+                        });
+                    }else{
+                        $(this).find(".rllimg").removeClass("rllimg").addClass("active");
+                        $(this).find("img").attr("active","true");
+                        // 分组移除hover
+                        $('.nav_pro_v_b').unbind('mouseenter').unbind('mouseleave');
+                    }
                   // $(this).find("img").addClass("active");
-                    console.log($(this).attr('t'))
+                    console.log($(this).attr('t'));
                     var pro_je=$(this).parents(".pro_li").attr("id");
                     var groupId = $(this).parent().attr('id');
                     var gr_d = groupId;
@@ -278,7 +461,7 @@ $(function () {
                     groId = gr_d;
                     na_me = $(this).attr("id");
                     if($(this).siblings("nav_gro_b").html() !=""){
-                        $(".D_xuan").slideDown();
+                        $(".D_xuan").show();
                     }
                     if ($(this).attr('t')=='0') {
                         $(this).attr('t','1')
@@ -310,6 +493,7 @@ $(function () {
                             zu(deviceStatus);
                         });
                         zu(deviceStatus);
+                       $(this).siblings(".nav_gro_b").slideDown()
                         function zu(deviceStatus) {
                             $.ajax({
                                 url: baseURL + 'fun/device/getDeviceByGroupIdNoPage?groupId=' + groupId + "&projectId=" + pro_je + "&status=" + deviceStatus ,
@@ -322,13 +506,7 @@ $(function () {
                                     arr = [];
                                     arra = [];
                                     var htmlb = "";
-                                    var offClass = "";
                                     for (var i = 0; i < res.data.length; i++) {
-                                        if (res.data[i].onOff == 1) {
-                                            offClass = "btn_fath btn_fatha clearfix  toogle on";
-                                        } else {
-                                            offClass = "btn_fath btn_fatha clearfix  toogle off";
-                                        }
                                         var runState = res.data[i].runState
                                         if (runState == null) {
                                             runState = "";
@@ -348,20 +526,15 @@ $(function () {
                                             "<div class=\"nav_project nav_pro_she\"  id=" + res.data[i].groupId + ">设备名称：" + res.data[i].deviceName + "</div>\n" +
                                             "<p class=\"nav_pro_p\" id=" + res.data[i].latitude + ">运行状态：" + runState + "</p>\n" +
                                             "</li>\n"
-                                        var locon = {
-                                            y: res.data[i].longitude,
-                                            x: res.data[i].latitude,
-                                            title: "L",
-                                            con: res.data[i].createTime,
-                                            branch: res.data[i].deviceName
-                                        }
+                                        var locon = {y: res.data[i].longitude, x: res.data[i].latitude, title: "L", con:"", branch: res.data[i].deviceName,fenId:res.data[i].groupId, id:res.data[i].deviceId, cliId:res.data[i].deviceId, state:3}
                                         arr.push(locon); //push经纬度
                                     }
-                                    $("#" + groupId + "2").append(htmlb);
+                                    $("#" + groupId + "2").append(htmlb).hide().slideDown();
+                                    // $("#" + groupId + "2").slideUp();
                                     arra = arr //经纬度获取全局变量
                                     m_p(deviceStatus, arra); //地图
                                     f_en(pro_je, groupId);   //控制分组
-                                    fu("", "", groupId);//日志信息
+                                    fu("", groupId);//日志信息
                                     if(sessionStorage.getItem('l')=='1'){
                                         console.log( $(".nav_a").find(".pro_li").eq(lindex).find(".pro_li_a").length);
                                         $(".nav_a").find(".pro_li").eq(lindex).find(".pro_li_a").eq(lindexs).find('li').eq(xindex).find(".nav_bb").click();
@@ -370,7 +543,7 @@ $(function () {
                             });
                         }
                     } else {
-                        $("#" + groupId + "2").html("");
+                        $("#" + groupId + "2").slideUp().html("");
                         $(this).attr('t','0')
                         f_en(pro_je, groupId);
                         return
@@ -383,13 +556,12 @@ $(function () {
                 var event=event||window.event
                 $(document).delegate(".nav_bb","click",function () {
                     //event.stopPropagation()
-                    $(".D_xuan").hide();
-                    var pro_je=$(this).parents(".pro_li").attr("id");
-                    var groupId = $(this).parent().attr('id');
-                    $(this).addClass("nav_bb_color");
-                    $(this).parents().siblings().children(".nav_bb").removeClass("nav_bb_color");
-                    arr = [];
-                    arra = [];
+                    $(".ssde").css("display","block")
+                    var pro_je=$(this).parents(".pro_li").attr("id");//项目id
+                    var groupId = $(this).parent().attr('id');//设备id
+                    var fenId= $(this).children(".nav_pro_she").attr('id');
+                    $(this).addClass("nav_bb_color").css({'color':"#fff"});
+                    $(this).parents().siblings().children(".nav_bb").removeClass("nav_bb_color").css({'background':'','color':"#333"});
                     console.log(deviceStatus + "单台设备");
                     console.log(arra);
                     par_id = $(this).parent(".pro_li_a").attr('id');
@@ -397,21 +569,22 @@ $(function () {
                     deviceCode = $(this).parents().attr('deviceCode');
                     na_me = $(this).parents().attr('name');
                     groId = $(this).children(".nav_pro_she").attr('id');
-                    var locon = {
-                        y: $(this).attr("id"),
-                        x: $(this).children(".nav_pro_p").attr("id"),
-                        branch: $(this).children(".nav_pro_she").html()
-                    };
-                    arr.push(locon);
-                    arra = arr;
-                    //单台设备详情右侧
-                    zhuang(pro_je, groupId, par_id);
-                    //调用地图
-                    m_p(deviceStatus, arra);
-                    //日志信息
-                    fu(par_id, "", "");
-                    //历史数据、高级设置
+                    var arrhove=[];
+                    for(var i=0;i<arra.length;i++){
+                        if(arra[i].cliId == $(this).parents(".pro_li_a").attr("id")){
+                            arrhove.unshift({y: arra[i].y, x: arra[i].x, title: "L", con:"", branch: arra[i].branch,fenId:arra[i].fenId, id:arra[i].id, cliId:arra[i].cliId, state:3,hover:3})
+                        }else if(arra[i].cliId != $(this).parents(".pro_li_a").attr("id")){
+                            arrhove.push({y: arra[i].y, x: arra[i].x, title: "L", con:"", branch: arra[i].branch,fenId:arra[i].fenId, id:arra[i].id, cliId:arra[i].cliId, state:3})//剩下的
+                        }
+                    }
 
+                    //单台设备详情右侧
+                    zhuang(pro_je, groupId, par_id,deviceCode);
+                    //调用地图
+                    m_p(deviceStatus,arrhove);
+                    //日志信息
+                    fu(par_id, "");
+                    //历史数据、高级设置
                 })
                 var lindex=localStorage.getItem('key')
                 var lindexs=localStorage.getItem('keys')
@@ -419,9 +592,8 @@ $(function () {
                 if(sessionStorage.getItem('l')=='1'){
                     $("#drawer_img").click();
                     $(".nav_a").find("li").eq(lindex).find(".nav_pro_v").click();
-                    console.log(   $(".nav_a").find(".pro_li").eq(lindex).find(".pro_li_a").length);
+                    console.log($(".nav_a").find(".pro_li").eq(lindex).find(".pro_li_a").length);
                     $(".nav_a").find(".pro_li").eq(lindex).find(".pro_li_a").eq(lindexs).find('.nav_pro_v_b').click();
-
                 }
                 //    项目下分组
             }
@@ -450,62 +622,298 @@ $(function () {
             top:'10px'
         }
     }))
-    //实时路况图层
-    var trafficLayer = new AMap.TileLayer.Traffic({
-        zIndex: 10
-    });
-    map.add(trafficLayer);//添加图层到地图
     var infoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(0, -30)});
-
     var removeList = [];	//移除标记点
+    var markers=[];
+    var preIcon         //图标定义
+    var imags           //图标状态
     function m_p(deviceStatus,arra) {
-        var marker
         if(removeList.length != 0){
             map.remove(removeList);
             removeList = [];
         }
-        console.log(arra)
-        for(var i = 0, marker; i < arra.length; i ++){
-             marker = new AMap.Marker({
+        console.log("地图里面的定位信息")
+        console.log(arra);
+        var marker
+        for(var i = 0; i < arra.length; i ++){
+             var draggable
+             if( arra[i].id ==""){
+                 draggable=false
+             }else{
+                 draggable=true
+             }
+            preIcon = new AMap.Icon({
+                image: imags,
+                size: new AMap.Size(64, 64),  //图标大小
+                imageSize: new AMap.Size(36,36),
+            });
+            // 项目，分组，设备图标类型
+            if(arra[i].state == 1){
+                if(deviceStatus ==0){
+                    imags= "/statics/image/a.svg",
+                        hov_x()
+                }else if(deviceStatus ==1){
+                    imags= "/statics/image/b.svg",
+                        hov_x()
+                }else if(deviceStatus ==2){
+                    imags= "/statics/image/c.svg",
+                        hov_x()
+                }else if(deviceStatus ==3){
+                    imags= "/statics/image/d.svg",
+                        hov_x()
+                }else if(deviceStatus ==4){
+                    imags= "/statics/image/e.svg",
+                        hov_x()
+                }
+            }else if(arra[i].state == 2){
+                if(deviceStatus ==0){
+                    imags= "/statics/image/bbh.png",
+                        hov_z()
+                }else if(deviceStatus ==1){
+                    imags= "/statics/image/bch.png",
+                        hov_z()
+                }else if(deviceStatus ==2){
+                    imags= "/statics/image/bah.png",
+                        hov_z()
+                }else if(deviceStatus ==3){
+                    imags= "/statics/image/bdh.png",
+                        hov_z()
+                }else if(deviceStatus ==4){
+                    imags= "/statics/image/beh.png",
+                        hov_z()
+                }
+            }else if(arra[i].state == 3){
+                if(deviceStatus ==0){
+                    imags= "/statics/image/abh.png"
+                     hov_s()
+                }else if(deviceStatus ==1){
+                    imags= "/statics/image/ach.png",
+                    hov_s()
+                }else if(deviceStatus ==2){
+                    imags= "/statics/image/aah.png",
+                    hov_s()
+                }else if(deviceStatus ==3){
+                    imags= "/statics/image/adh.png",
+                    hov_s()
+                }else if(deviceStatus ==4){
+                    imags= "/statics/image/aeh.png",
+                     hov_s()
+                }
+            }
+            marker = new AMap.Marker({
                 map: map,
                 position:[arra[i].y, arra[i].x],
                 offset: new AMap.Pixel(-10, -10),
-                icon: new AMap.Icon({
-                    image: "/statics/image/a.svg",
-                    size: new AMap.Size(64, 64),  //图标大小
-                    imageSize: new AMap.Size(36,36)
-                }),
+                icon: preIcon,
                 title: '北京',
                 zoom: 20, // 设置是否可以拖拽
-                draggable: true,
+                draggable: draggable,
                 cursor: 'move', // 设置拖拽效果
                 raiseOnDrag: true,
+                resizeEnable: true//拖拽地图结束绑定监听
             });
             //提示框
-            marker.content =arra[i].branch+"("+arra[i].con+")";
+            marker.content =arra[i].branch;
             marker.emit('click',{target: marker});
-            marker.on('dblclick',showInfoDbClick)//双击
+            marker.on('dblclick',showInfoDbClick);//双击
+            markers.push(marker);
             marker.on('click',showInfoClick);//单击
+            marker.on('dragend',showInfoDragend);//拖拽结束
+            marker.on('mouseover',infoOpen);//鼠标移入
+            marker.on('mouseout',infoClose);//鼠标移出
+            marker.setLabel({
+                offset: new AMap.Pixel(9,7),
+                content: arra[i].con
+            });
+            marker.id=arra[i].id;
+            marker.fenId=arra[i].fenId;
+
+            marker.branch=arra[i].branch;
+            marker.cliId=arra[i].cliId;
+            marker.state=arra[i].state;
+            marker.deviceStatus=deviceStatus;
             removeList.push(marker);
+            //鼠标滑过左侧菜单栏设备地图改变当前鼠标滑过的图标
+            function hov_s() {
+                var img
+                if(arra[i].hover == 3){
+                    if(deviceStatus ==0) {
+                        img= "/statics/image/abax.png"
+                    }else if(deviceStatus ==1){
+                        img= "/statics/image/acax.png"
+                    }else if(deviceStatus ==2){
+                        img= "/statics/image/aaax.png"
+                    }else if(deviceStatus ==3){
+                        img= "/statics/image/adax.png"
+                    }else if(deviceStatus ==4) {
+                        img = "/statics/image/aeax.png"
+                    }
+                    preIcon = new AMap.Icon({
+                        image: img,
+                        size: new AMap.Size(70, 70),  //图标大小
+                        imageSize: new AMap.Size(41, 41)
+                    });
+                }
+            }
+            //鼠标滑过左侧菜单栏分组地图改变当前鼠标滑过的图标
+            function hov_z() {
+                var img
+                if(arra[i].hover == 2){
+                    if(deviceStatus ==0) {
+                        img= "/statics/image/bbbx.png"
+                    }else if(deviceStatus ==1){
+                        img= "/statics/image/bcbx.png"
+                    }else if(deviceStatus ==2){
+                        img= "/statics/image/babx.png"
+                    }else if(deviceStatus ==3){
+                        img= "/statics/image/bdbx.png"
+                    }else if(deviceStatus ==4) {
+                        img = "/statics/image/bebx.png"
+                    }
+                    preIcon = new AMap.Icon({
+                        image: img,
+                        size: new AMap.Size(70, 70),  //图标大小
+                        imageSize: new AMap.Size(41,41)
+                    });
+                }
+            }
+            //鼠标滑过左侧菜单栏项目地图改变当前鼠标滑过的图标
+            function hov_x() {
+                if(arra[i].hover == 1){
+                    preIcon = new AMap.Icon({
+                        image: "/statics/image/d.svg",
+                        size: new AMap.Size(70, 70),  //图标大小
+                        imageSize: new AMap.Size(41,41)
+                    });
+                }
+            }
         }
     }
 
+
+    function infoClose(e) {
+        infoWindow.close(map, e.target.getPosition());
+    }
+    function infoOpen(e) {
+        infoWindow.setContent(e.target.content);
+        infoWindow.open(map, e.target.getPosition());
+    }
+    //拖拽地图结束
+    function showInfoDragend(e){
+        console.log(this)
+        var groupId=this.fenId
+        var deviceId=this.id
+        var dev_name=this.branch
+        layer.confirm('是否改动当前位置？', {
+            btn: ['确定','取消'] ,//按钮
+            yes: function(index){
+                $.ajax({
+                    url:baseURL + 'fun/device/updateDevice',
+                    contentType: "application/json;charset=UTF-8",
+                    type:"POST",
+                    data: JSON.stringify({
+                        "deviceName":dev_name,
+                        "groupId":groupId,
+                        "deviceId":deviceId,
+                        "longitude":e.lnglat.lng,
+                        "latitude":e.lnglat.lat,
+                    }),
+                    success: function(res) {
+                        if(res.code== "203"){
+                            layer.open({
+                                title: '信息',
+                                content:res.msg,
+                                skin: 'demo-class'
+                            });
+                        }
+                    }
+                })
+                 layer.close(layer.index)
+             },
+        })
+    }
     //单击（项目数据）
+    //点击鼠标选中状态图标
+    var imgs
     function showInfoClick(e){
-        var text = '您在 [ '+e.lnglat.getLng()+','+e.lnglat.getLat()+' ] 的位置单击了地图！'
+        var cliId=this.cliId;
+        //地图图表转换
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setIcon(preIcon);
+        }
+        //左侧菜单栏切换状态
+        if(this.state === 1){
+            var clickIcon = new AMap.Icon({
+                image: "/statics/image/d.svg",
+                size: new AMap.Size(64, 64),  //图标大小
+                imageSize: new AMap.Size(41,41)
+            });
+            $("#"+cliId).css('color','#333').siblings().css('color','#fff');
+            e.target.setIcon(clickIcon);
+        }else if(this.state === 2){
+            $("#"+cliId).css('color','#000').siblings().css('color','#333');
+            if(this.deviceStatus== 0){
+                imgs= "/statics/image/bbbx.png"
+            }else if(this.deviceStatus== 1){
+                imgs= "/statics/image/bcbx.png"
+            }else if(this.deviceStatus== 2){
+                imgs= "/statics/image/babx.png"
+            }else if(this.deviceStatus== 3){
+                imgs= "/statics/image/bdbx.png"
+            }else if(this.deviceStatus== 4){
+                imgs= "/statics/image/bebx.png"
+            }
+            var clickIcons = new AMap.Icon({
+                image: imgs,
+                size: new AMap.Size(64, 64),  //图标大小
+                imageSize: new AMap.Size(41,41)
+            });
+            e.target.setIcon(clickIcons);
+        }else if(this.state === 3){
+            $("#"+cliId).children(".nav_bb").css({'background':'rgba(0,165,160,0.7)','color':'#fff'});
+            $("#"+cliId).siblings(".pro_li_a").children(".nav_bb").removeClass("nav_bb_color").css({'background':'','color':"#333"})
+            if(deviceStatus ==0) {
+                imgs= "/statics/image/abax.png"
+            }else if(deviceStatus ==1){
+                imgs= "/statics/image/acax.png"
+            }else if(deviceStatus ==2){
+                imgs= "/statics/image/aaax.png"
+            }else if(deviceStatus ==3){
+                imgs= "/statics/image/adax.png"
+            }else if(deviceStatus ==4) {
+                imgs = "/statics/image/aeax.png"
+            }
+            var clickIconc = new AMap.Icon({
+                image: imgs,
+                size: new AMap.Size(64, 64),  //图标大小
+                imageSize: new AMap.Size(41,41)
+            });
+            e.target.setIcon(clickIconc);
+        }
+
     }
     //双击
     function showInfoDbClick(e){
-        console.log(this)
+        map.remove(removeList);
+        var cliId=this.cliId;
+        //地图项目定位列表*****
+        $("#"+cliId).children().trigger('click');
         var text = '您在 [ '+e.lnglat.getLng()+','+e.lnglat.getLat()+' ] 的位置双击了地图！'
         infoWindow.setContent(e.target.content);
         infoWindow.open(map, e.target.getPosition());
-        var zoom = Math.floor(Math.random() * 7) + 10;
+        var zoom
+        if(this.state==1){
+            zoom = 7;
+        }else if(this.state==2){
+            zoom = 11;
+        }else if(this.state==3){
+            zoom = 26;
+        }
         var lng = this.Nh.position.lng;
-        var lat =  this.Nh.position.lat;
+        var lat = this.Nh.position.lat;
         map.setZoomAndCenter(zoom, [lng, lat]); //同时设置地图层级与中心点
-
     }
+    map.setFitView();
     //监听热点点击
     var hotSpotMarker;
     map.on("hotspotclick",function(e){
@@ -521,25 +929,18 @@ $(function () {
     //地图结束
 
     //日志方法
-    function fu(par_id,log,groupId){
-        //日志
-        $("#malfunction").unbind('click');
-        $("#malfunction").click(function(){
-            $(".shade_project,.shade_b_project").css("display","block");
-            $(".Bian_P").html("故障日志")
-            r(par_id,1,groupId)
-        })
+    function fu(par_id,groupId){
         $("#operation").unbind('click');
         $("#operation").click(function(){
             $(".shade_project,.shade_b_project").css("display","block");
             $(".Bian_P").html("操作日志")
-            r(par_id,2,groupId)
+            r(par_id,groupId)
         })
-        function r(par_id,log,groupId){
+        function r(par_id,groupId){
             $("#pro_list").html("");
             $("#pro_list").append("");
             $.ajax({
-                url:baseURL + 'fun/faultlog/queryFaultlog?deviceId='+par_id+"&status="+log+"&groupId="+groupId,
+                url:baseURL + 'fun/faultlog/queryFaultlog?deviceId='+par_id+"&groupId="+groupId,
                 contentType: "application/json;charset=UTF-8",
                 type:"get",
                 data:{},
@@ -590,6 +991,5 @@ $(function () {
             elem: '#slideTest3'
             ,theme: '#1E9FFF' //主题色
         });
-
     });
 });

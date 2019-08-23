@@ -46,6 +46,10 @@ public class DeviceEntity {
      */
     private String deviceType;
     /**
+     * 运输模式   0退出休眠  1进入休眠
+     */
+    private Integer transport;
+    /**
      * 光电池状态
      */
     private Integer photocellState;
@@ -138,5 +142,7 @@ public class DeviceEntity {
     private String cityName;
     //操作版本号
     private Integer deviceVersion;
+    // 使用人  使用人和创建人存反
+    private Long usrUser;
 
 }

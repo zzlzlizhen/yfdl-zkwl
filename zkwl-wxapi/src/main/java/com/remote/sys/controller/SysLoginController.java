@@ -11,10 +11,7 @@ import com.remote.sys.entity.SysUserEntity;
 import com.remote.sys.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 /**
@@ -29,7 +26,7 @@ public class SysLoginController {
 	 * 登录
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public R login(String username, String password) {
+	public R login(@RequestParam(value = "username") String username, @RequestParam(value = "password")String password) {
 		//判断用户名密码不能为空
 		if(StringUtils.isBlank(username) || StringUtils.isBlank(password)){
 			return R.error("用户名或密码不能为空");

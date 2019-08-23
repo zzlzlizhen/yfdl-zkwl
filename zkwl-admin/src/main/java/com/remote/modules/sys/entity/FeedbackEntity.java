@@ -81,4 +81,14 @@ public class FeedbackEntity implements Serializable {
 	@TableField(exist=false)
 	private Integer isRead;
 
+	/**
+	 * 回复用户头像
+	 * */
+	@TableField(exist=false)
+	private String answerHeadUrl;
+	/**
+	 * 回复用户名字
+	 * */
+	@TableField(exist=false)
+	private String answerUserName;
 }

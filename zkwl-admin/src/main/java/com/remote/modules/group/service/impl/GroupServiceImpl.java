@@ -154,7 +154,7 @@ public class GroupServiceImpl implements GroupService {
             return groupMapper.queryGroupByName(groupQuery);
         }
         //如果没有分组，新建一个默认分组 返回
-        GroupEntity groupEntity = new GroupEntity(UUID.randomUUID().toString(),"默认分组");
+        GroupEntity groupEntity = new GroupEntity(UUID.randomUUID().toString(),"默认");
         groupEntity.setProjectId(projectId);
         groupEntity.setCreateUser(userId);
         groupEntity.setCreateName(userName);
@@ -168,28 +168,21 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public List<GroupEntity> queryGroupIdNoPage(String projectId,String groupName) {
-        Map<String,Integer> all = new HashMap<>();
+    public List<GroupEntity> queryGroupIdNoPage(String projectId,Integer deviceStatus) {
         GroupQuery groupQuery = new GroupQuery();
         groupQuery.setProjectId(projectId);
-        groupQuery.setGroupName(groupName);
         List<GroupEntity> list = groupMapper.queryGroupByName(groupQuery);
         if(CollectionUtils.isNotEmpty(list)){
-            List<String> groupIds = list.parallelStream().map(groupEntity -> groupEntity.getGroupId()).collect(Collectors.toCollection(ArrayList::new));
-            List<DeviceEntity> deviceEntities = deviceService.queryDeviceByGroupCount(groupIds,projectId,DeviceEnum.ALL.getCode());//正常
-            if(CollectionUtils.isNotEmpty(deviceEntities)){
-                for(DeviceEntity deviceEntity : deviceEntities){
-                    all.put(deviceEntity.getGroupId(),deviceEntity.getCounts());
-                }
-            }
             for (GroupEntity groupEntity : list){
-                if(all.get(groupEntity.getGroupId()) != null){
-                    groupEntity.setDeviceCount(all.get(groupEntity.getGroupId()));
-                }
+                groupEntity.setDeviceCount(0);
                 DeviceQuery deviceQuery = new DeviceQuery();
                 deviceQuery.setGroupId(groupEntity.getGroupId());
-                //查询出项目下所有设备
+                deviceQuery.setRunState(deviceStatus);
+                //查询出项目下分组中所有设备
                 List<DeviceEntity> deviceList = deviceService.queryDeviceNoPage(deviceQuery);
+                if(CollectionUtils.isNotEmpty(deviceList)){
+                    groupEntity.setDeviceCount(deviceList.size());
+                }
                 //定义经度总和
                 BigDecimal longitudeSum = new BigDecimal(0);
                 //定义纬度总和
@@ -220,7 +213,7 @@ public class GroupServiceImpl implements GroupService {
                     }
 
                 }else{
-                    groupEntity.setLongitude(latitudeSum.toString());
+                    groupEntity.setLongitude(longitudeSum.toString());
                     groupEntity.setLatitude(latitudeSum.toString());
                 }
 

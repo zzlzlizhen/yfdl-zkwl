@@ -39,7 +39,8 @@ function lay(){
     //
     // }
     //用户名
-    var patrn4= /^[a-zA-Z0-9_-]{4,16}$/;
+   // var patrn4= /^[a-zA-Z0-9_-]{4,16}$/;
+var patrn4= /^[A-Za-z0-9\u4e00-\u9fa5]+$/;
     // if (!patrn4.exec(r_user_mod)) {
     //     $(".rrbol").html("用户名错误");
     //     console.log("用户名错误")

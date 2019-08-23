@@ -115,4 +115,23 @@
 			and user_id=#{curUid}
 		</if>
 	</select>
+	<update id="updateProjdectCount">
+		update sys_user set project_count=project_count + #{count} where flag = 1
+		<if test="userIds != null">
+			and user_id in
+			<foreach collection="userIds" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+	</update>
+
+	<update id="updateDeviceCount">
+		update sys_user set device_count=device_count + #{count} where flag = 1
+		<if test="userIds != null">
+			and user_id in
+			<foreach collection="userIds" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+	</update>
 </mapper>

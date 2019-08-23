@@ -174,41 +174,49 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
     public SysUserEntity getByMobile(String mobile) {
         return this.baseMapper.selectOne(new QueryWrapper<SysUserEntity>().eq("flag",1).eq("mobile",mobile));
     }
+    /**
+     * 更新所属用户的所有父用户以及自身的项目数量根据项目所属用户id
+     * */
     @Override
-    public boolean updateDevCount(SysUserEntity curUser) {
-        SysUserEntity userEntity = new SysUserEntity();
-        List<SysUserEntity> userEntityList =  queryAllChild(curUser);
-        List<Long> userIds = new ArrayList<Long>();
-        if(CollectionUtils.isNotEmpty(userEntityList)&&userEntityList.size()>0){
-            for(SysUserEntity sysUserEntity: userEntityList){
-                userIds.add(sysUserEntity.getUserId());
+    public boolean updateProCount(Long exclUserId,int count) {
+        if(exclUserId != null){
+            /**
+             * 通过所属用户id查询所有父id
+             * */
+            List<Long> allParents = getUserId(exclUserId);
+            if(CollectionUtils.isNotEmpty(allParents)||allParents.size()>0){
+                return this.sysUserDao.updateProjdectCount(allParents,count);
             }
-            Integer devCount = null;
-            if(CollectionUtils.isNotEmpty(userIds)&&userIds.size()>0){
-                devCount = deviceService.getDeviceCount(userIds);
-                if(devCount == null){
-                    devCount =0;
-                }else{
-                    devCount = devCount;
-                }
-            }
-            userEntity.setDeviceCount(devCount);
         }
-        return this.update(userEntity,
-                new QueryWrapper<SysUserEntity>().eq("user_id", curUser.getUserId()));
+        return false;
     }
+
     @Override
-    public boolean updateProCount(Long curUid) {
-        SysUserEntity userEntity = new SysUserEntity();
-        Integer proCount = projectService.queryProjectByUserCount(curUid);
-        if(proCount == null){
-            proCount = 0;
-        }else{
-            proCount = proCount;
+    public boolean updateDevCount(Long exclUserId,int count) {
+        if(exclUserId != null){
+            /**
+             * 通过所属用户id查询所有父id
+             * */
+            List<Long> allParents = getUserId(exclUserId);
+            if(CollectionUtils.isNotEmpty(allParents)||allParents.size()>0){
+                return this.sysUserDao.updateDeviceCount(allParents,count);
+            }
         }
-        userEntity.setProjectCount(proCount);
-        return this.update(userEntity,
-                new QueryWrapper<SysUserEntity>().eq("user_id", curUid));
+        return false;
+    }
+    public List<Long> getUserId(Long exclUserId){
+        String allParentId  = sysUserDao.queryByUid(exclUserId);
+        List<String>  allParentIdList = Arrays.asList( allParentId.split(","));
+        List<Long> allParents = new ArrayList<Long>();
+        if(CollectionUtils.isNotEmpty(allParentIdList)||allParentIdList.size()>0){
+            for(String userId:allParentIdList){
+                allParents.add(Long.parseLong(userId));
+            }
+            if(CollectionUtils.isNotEmpty(allParents)||allParents.size()>0){
+                return allParents;
+            }
+        }
+        return allParents;
     }
     @Override
     public String queryByUid(Long curUid){

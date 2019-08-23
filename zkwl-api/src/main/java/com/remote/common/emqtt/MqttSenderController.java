@@ -5,15 +5,12 @@ import com.remote.common.emqtt.service.MqttGateway;
 import com.remote.common.netty.NettyServer;
 import com.remote.common.utils.DataUtils;
 import com.remote.common.utils.MapUtils;
-import com.remote.device.entity.DeviceEntity;
+import com.remote.device.entity.DeviceEntityApi;
 import com.remote.device.entity.DeviceQuery;
 import com.remote.device.service.DeviceService;
 import com.remote.device.util.DeviceInfo;
 import com.remote.device.util.HexConvert;
 import com.remote.device.util.Utils;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.Channel;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.mvc.AbstractController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,13 +47,13 @@ public class MqttSenderController {
         DeviceQuery deviceQuery = new DeviceQuery();
         if(data.getGroupId() != null && data.getGroupId() != ""){
             deviceQuery.setGroupId(data.getGroupId());
-            List<DeviceEntity> deviceEntities = deviceService.queryDeviceNoPage(deviceQuery);
+            List<DeviceEntityApi> deviceEntities = deviceService.queryDeviceNoPage(deviceQuery);
             deviceCodes = deviceEntities.parallelStream().map(deviceEntity -> deviceEntity.getDeviceCode()).collect(Collectors.toCollection(ArrayList::new));
             data.setDeviceCodes(deviceCodes);
         }
         if(data.getProjectId() != null && data.getProjectId() != ""){
             deviceQuery.setGroupId(data.getGroupId());
-            List<DeviceEntity> deviceEntities = deviceService.queryDeviceNoPage(deviceQuery);
+            List<DeviceEntityApi> deviceEntities = deviceService.queryDeviceNoPage(deviceQuery);
             deviceCodes = deviceEntities.parallelStream().map(deviceEntity -> deviceEntity.getDeviceCode()).collect(Collectors.toCollection(ArrayList::new));
             data.setDeviceCodes(deviceCodes);
         }
@@ -72,7 +68,7 @@ public class MqttSenderController {
         logger.info("操作设备:"+s);
         if(deviceCodes != null && deviceCodes.size() > 0){
             for(String deviceSN : deviceCodes){
-                DeviceEntity deviceEntity = deviceService.queryDeviceByCode(deviceSN);
+                DeviceEntityApi deviceEntity = deviceService.queryDeviceByCode(deviceSN);
                 //缓存中取出数据
                 String encrypt = Utils.encrypt(deviceSN);
                 DeviceInfo result = null;

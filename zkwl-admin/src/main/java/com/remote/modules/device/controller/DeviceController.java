@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.remote.common.enums.AllEnum;
 import com.remote.common.enums.DeviceEnum;
 import com.remote.common.enums.RunStatusEnum;
+import com.remote.common.enums.TransportEnum;
 import com.remote.common.redis.CacheUtils;
 import com.remote.common.utils.*;
 import com.remote.modules.device.entity.DeviceEntity;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import sun.rmi.transport.Transport;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -124,7 +126,7 @@ public class DeviceController extends AbstractController {
             return R.error(201,"设备编号不能为空");
         }
         SysUserEntity user = getUser();
-        deviceEntity.setCreateUser(user.getUserId());
+        deviceEntity.setUsrUser(user.getUserId()); // 创建人 和 使用人 存反
         deviceEntity.setIsDel(AllEnum.NO.getCode());
         deviceEntity.setCreateName(user.getRealName());
         deviceEntity.setCreateTime(new Date());
@@ -132,6 +134,7 @@ public class DeviceController extends AbstractController {
         deviceEntity.setOnOff(AllEnum.NO.getCode());
         deviceEntity.setRunState(RunStatusEnum.OFFLINE.getCode());
         deviceEntity.setSignalState(0);
+        deviceEntity.setTransport(TransportEnum.NO.getCode());
         int i = deviceService.getDeviceByDeviceCode(deviceEntity.getDeviceCode());
         if(i > 0){
             return R.error(400,"设备编号重复");
@@ -140,7 +143,7 @@ public class DeviceController extends AbstractController {
         if(!flag){
             return R.error(400,"添加设备失败");
         }else{
-            sysUserService.updateDevCount(user);
+            sysUserService.updateDevCount(deviceEntity.getCreateUser(),1);
         }
         return R.ok();
     }
@@ -160,11 +163,17 @@ public class DeviceController extends AbstractController {
         deviceQuery.setIsDel(AllEnum.YES.getCode());//删除标记  0未删除  1已删除
         deviceQuery.setUpdateUser(user.getUserId());
         deviceQuery.setUpdateTime(new Date());
+        List<Long> exclUserIds = deviceService.queryExclUserId(deviceList);
         boolean flag = deviceService.deleteDevice(deviceQuery);
         if(!flag){
             return R.error(400,"删除设备失败");
         }else{
-            sysUserService.updateDevCount(getUser());
+            if(CollectionUtils.isNotEmpty(exclUserIds)||exclUserIds.size()>0){
+                for(Long exclUserId:exclUserIds){
+                    sysUserService.updateDevCount(exclUserId,-1);
+                }
+            }
+
         }
         return R.ok();
     }
@@ -187,22 +196,11 @@ public class DeviceController extends AbstractController {
 
     @RequestMapping(value = "/updateDevice", method= RequestMethod.POST)
     public R updateDevice(@RequestBody DeviceEntity deviceEntity) throws Exception {
-        if(StringUtils.isEmpty(deviceEntity.getGroupId())){
-            return R.error(201,"设备分组不能为空");
-        }
-        if(StringUtils.isEmpty(deviceEntity.getDeviceName())){
-            return R.error(201,"设备名称不能为空");
-        }
         SysUserEntity user = getUser();
         deviceEntity.setUpdateUser(user.getUserId());
         deviceEntity.setUpdateTime(new Date());
         deviceEntity.setUpdateUserName(user.getUsername());
         R r = deviceService.updateById(deviceEntity);
-        if(!r.isOK()){
-            return R.error(400,"修改设备失败");
-        }else{
-            sysUserService.updateDevCount(getUser());
-        }
         return r;
     }
 
@@ -277,7 +275,15 @@ public class DeviceController extends AbstractController {
 
     @RequestMapping(value = "/updateEsFlag", method= RequestMethod.GET)
     public R updateEsFlag(String esFlag){
+        //esFlag  1 代表 查询es
         cacheUtils.set("ES_FLAG",esFlag);
+        return R.ok();
+    }
+
+    @RequestMapping(value = "/updateLive", method= RequestMethod.GET)
+    public R updateLive(String live){
+        //live 秒
+        cacheUtils.set("LIVE",live);
         return R.ok();
     }
 

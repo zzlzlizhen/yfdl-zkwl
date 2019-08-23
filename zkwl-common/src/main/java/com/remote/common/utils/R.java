@@ -60,11 +60,7 @@ public class R extends HashMap<String, Object> {
 		super.put(key, value);
 		return this;
 	}
-	public static R error(Object obj) {
-		R r = new R();
-		r.put("data",obj);
-		return r;
-	}
+
 	public boolean isOK(){
 		try {
 			Integer code = (Integer)this.get("code");

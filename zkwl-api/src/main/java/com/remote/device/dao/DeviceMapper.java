@@ -1,7 +1,7 @@
 package com.remote.device.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.remote.device.entity.DeviceEntity;
+import com.remote.device.entity.DeviceEntityApi;
 import com.remote.device.entity.DeviceQuery;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 @Mapper
-public interface DeviceMapper extends BaseMapper<DeviceEntity> {
+public interface DeviceMapper extends BaseMapper<DeviceEntityApi> {
 
     /*
      * @Author zhangwenping
@@ -18,7 +18,7 @@ public interface DeviceMapper extends BaseMapper<DeviceEntity> {
      * @Param deviceId
      * @return DeviceEntity
      **/
-    DeviceEntity queryDeviceByCode(String deviceCode);
+    DeviceEntityApi queryDeviceByCode(String deviceCode);
     /*
      * @Author zhangwenping
      * @Description 根据设备编号修改设备信息
@@ -26,7 +26,7 @@ public interface DeviceMapper extends BaseMapper<DeviceEntity> {
      * @Param deviceEntity
      * @return int
      **/
-    int updateDeviceByCode(DeviceEntity deviceEntity);
+    int updateDeviceByCode(DeviceEntityApi deviceEntity);
     /*
      * @Author zhangwenping
      * @Description 超时修改状态 离线
@@ -42,7 +42,7 @@ public interface DeviceMapper extends BaseMapper<DeviceEntity> {
      * @Param devicequery
      * @return List<DeviceEntity>
      **/
-    List<DeviceEntity> queryDevice(DeviceQuery deviceQuery);
+    List<DeviceEntityApi> queryDevice(DeviceQuery deviceQuery);
     /*
      * @Author zhangwenping
      * @Description 操作成功修改版本号
@@ -51,4 +51,12 @@ public interface DeviceMapper extends BaseMapper<DeviceEntity> {
      * @return int
      **/
     int updateDeviceVersionByCode(String deviceCode);
+    /*
+     * @Author zhangwenping
+     * @Description 修改升级GPRS标识
+     * @Date 16:13 2019/8/22
+     * @Param deviceCode
+     * @return int
+     **/
+    int updateDeviceGprsFlag(@Param("deviceCode") String deviceCode,@Param("gprsFlag")Integer gprsFlag);
 }

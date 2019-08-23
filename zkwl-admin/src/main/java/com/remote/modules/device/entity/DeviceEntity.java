@@ -13,6 +13,7 @@ import java.util.Date;
 @Data
 @TableName("fun_device")
 public class DeviceEntity {
+    //**使用人和创建人 存反了。切记
     /**
      * 设备id
      */
@@ -45,6 +46,10 @@ public class DeviceEntity {
      * 设备类型名称
      */
     private String deviceTypeName;
+    /**
+     * 运输模式   0退出休眠  1进入休眠
+     */
+    private Integer transport;
     /**
      * 光电池状态
      */
@@ -110,6 +115,15 @@ public class DeviceEntity {
      */
     private Date updateTime;
 
+    /**
+     * gprs版本号
+     */
+    private Integer gprsVersion;
+    /**
+     * gprs 升级标志
+     */
+    private Integer gprsFlag;
+
     private Integer counts;//统计数量
     //蓄电池余量
     private String batteryMargin;
@@ -140,4 +154,7 @@ public class DeviceEntity {
     private Integer version;
     //设备版本号
     private Integer deviceVersion;
+    //使用人   **使用人和创建人 存反了。切记
+    private Long usrUser;
+
 }

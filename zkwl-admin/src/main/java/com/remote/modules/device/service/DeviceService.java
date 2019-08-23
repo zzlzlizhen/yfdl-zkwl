@@ -118,7 +118,7 @@ public interface DeviceService {
     /**
      * 通过设备code查询组id
      * */
-    String queryByDevCode(String deviceCode);
+    String queryByDevCode(@Param("deviceCode")String deviceCode);
     /**
      * 通过组id查询所有的设备code
      * */
@@ -195,5 +195,9 @@ public interface DeviceService {
      **/
     List<DeviceTree> getDeviceByGroupIdNoPageLike(DeviceQuery deviceQuery);
 
+    /**
+     * 通过设备ids查询设备所属ids
+     * */
+    List<Long> queryExclUserId(List<String> deviceIds);
 
 }

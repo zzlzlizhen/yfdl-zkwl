@@ -4,13 +4,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.remote.common.CommonEntity;
 import com.remote.common.emqtt.service.MqttGateway;
 import com.remote.common.netty.NettyServer;
-import com.remote.device.entity.DeviceEntity;
+import com.remote.device.entity.DeviceEntityApi;
 import com.remote.device.service.DeviceService;
 import com.remote.device.util.*;
+import com.remote.devicetype.entity.DeviceTypeEntity;
+import com.remote.devicetype.service.DeviceTypeService;
 import com.remote.history.entity.HistoryMouth;
 import com.remote.history.service.HistoryService;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -118,8 +118,10 @@ public class MqttHandel {
         if(nextCmdID != count){
             count = nextCmdID;
             if(nextCmdID.equals(new Integer(1))){
+                DeviceTypeService deviceTypeService = (DeviceTypeService)SpringUtils.getBean("deviceTypeServiceImpl");
+                DeviceTypeEntity deviceType = deviceTypeService.getDeviceTypeByCode(deviceInfo.getDevType());
                 //获取更新文件信息
-                updateVersion = Utils.version();
+                updateVersion = Utils.version(deviceType.getDeviceTypePath());
                 List<Byte> list = Arrays.asList(updateVersion.getBytes());
                 //切割成多少分，每份1024
                 lists = Utils.averageAssign(list, 1024);
@@ -162,7 +164,7 @@ public class MqttHandel {
         }
         //根据devSN查询设备信息
         DeviceService deviceService = (DeviceService)SpringUtils.getBean("deviceServiceImpl");
-        DeviceEntity deviceEntity = deviceService.queryDeviceByCode(deviceInfo.getDevSN());
+        DeviceEntityApi deviceEntity = deviceService.queryDeviceByCode(deviceInfo.getDevSN());
         //提供一个公共的类，类中存放设备全部信息  否则反射时会找不到属性。start
         CommonEntity common = new CommonEntity();
         BeanUtils.copyProperties(deviceEntity, common);

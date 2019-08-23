@@ -1,7 +1,29 @@
 
-function  zhuang(pro_je,groupId,par_id) {
-    $(".She,.She_a").show()
-    $(".grouping").hide()
+function  zhuang(pro_je,groupId,par_id,deviceCode) {
+    console.log("++++++++++")
+    $(".She,.She_a").show();
+    $(".grouping").hide();
+    var volOverDisCharge
+    var volCharge
+
+//电池电压最大值最小值
+    $.ajax({
+        url: baseURL + 'advancedsetting/queryVol?deviceCode='+deviceCode,
+        contentType: "application/json;charset=UTF-8",
+        type: "get",
+        data: {},
+        success: function (res) {
+            var result=res.result;
+            if(result == null){
+                volOverDisCharge=250
+                volCharge=40000.
+            }else{
+                volOverDisCharge =res.result.volOverDisCharge;
+                volCharge = res.result.volCharge;
+            }
+        }
+    })
+
     $.ajax({
         url: baseURL + 'fun/device/getDeviceById?deviceId='+par_id,
         contentType: "application/json;charset=UTF-8",
@@ -21,8 +43,8 @@ function  zhuang(pro_je,groupId,par_id) {
             }else if(communicationType == 3) {
                 communicationType = "NBlot";
             }
-            $("#Yx_b").html(communicationType)
-            $("#Yx_c").html("1.0")
+            $("#Yx_b").html(communicationType);
+            $("#Yx_c").html("1.0");
             $("#Yx_d").html(res.data.version)
             var batteryState=res.data.batteryState;
             if (batteryState == null ) {
@@ -43,10 +65,7 @@ function  zhuang(pro_je,groupId,par_id) {
                 batteryState = "过放";
             }
 
-            $(".battery_a").html(batteryState);
-
-            $(".battery_b").html(res.data.batteryMargin+"%");
-            $(".battery_c").html(res.data.batteryVoltage);//充电电压
+            var dians = res.data.batteryVoltage;
             var photocellState=res.data.photocellState;
             if (photocellState == null ) {
                 photocellState = "";
@@ -57,11 +76,67 @@ function  zhuang(pro_je,groupId,par_id) {
             }else if(photocellState == 0) {
                 photocellState = "光弱";
             }
-            $(".battery_d").html(photocellState);//光电池状态
 
-            $(".battery_e").html(res.data.photovoltaicCellVoltage);
-            $(".battery_f").html(res.data.chargingCurrent);//充电电流
-            $(".battery_g").html(res.data.chargingPower);//充电功率
+            var slo = res.data.photovoltaicCellVoltage;
+            var slo1 = res.data.chargingCurrent;
+            var slo2 = res.data.chargingPower;
+            var slo3 = res.data.loadVoltage;
+            var slo5 = res.data.loadPower;
+            var slo4 = res.data.loadCurrent;
+
+            if(res.data.batteryMargin==null){
+                res.data.batteryMargin=""
+            }
+            if(dians==null){
+                dians=""
+            }
+            if(slo==null){
+                slo=""
+            }
+            if(slo1==null){
+                slo1=""
+            }
+            if(slo2==null){
+                slo2=""
+            }
+            if(slo3==null){
+                slo3=""
+            }
+            if(slo5==null){
+                slo5=""
+            }
+            if(slo4==null){
+                slo4=""
+            }
+            $(".battery_a").html(batteryState);
+
+            $("#sser").html(res.data.batteryMargin+"%"); //电池余量
+            $("#sser").width(res.data.batteryMargin+"%");
+            $("#battery_cr").html(dians+"V");//电池电压
+            $("#battery_cr").width(parseInt(dians/((volCharge-volOverDisCharge)/100)+"%"));
+            $(".battery_h").html(loadState);//负载状态
+            $("#battery_ir").html(slo3+"V");//负载电压
+            $("#battery_ir").width(parseInt(slo3/(60/100))+"%");
+            $("#battery_lr").html(slo5+"W");
+            $("#battery_lr").width(parseInt(slo5/(40/100))+"%");
+            $("#battery_or").html(slo4+"A");
+            $("#battery_or").width(parseInt(slo4/(2/100))+"%");
+            $(".battery_d").html(photocellState);//光电池状态
+            $("#battery_er").html(slo+"V"); //光电池电压
+            $("#battery_er").width(parseInt(slo/(dians/100))+"%");
+            $("#battery_fr").html(slo1+"A");//充电电流
+            $("#battery_fr").width(parseInt(slo1/(10/100))+"%");
+            $("#battery_gr").html(slo2+"W");//充电功率
+            $("#battery_gr").width(parseInt(slo2/(220/100))+"%");
+            $(".battery_a").html(batteryState);
+            // $("#sser").html(res.data.batteryMargin+"%"); //电池余量
+            // $("#sser").width(res.data.batteryMargin+"%");
+            // console.log("2222222222222222")
+            // console.log($("#sser").width())
+            // $("#battery_cr").html(dians+"%");//电池电压
+            // $("#battery_cr").width(dians+"%");
+
+
             var loadState=res.data.loadState;
             if (loadState == null ) {
                 loadState = "";
@@ -80,15 +155,12 @@ function  zhuang(pro_je,groupId,par_id) {
             }else if(loadState == 0) {
                 loadState = "关";
             }
-            $(".battery_h").html(loadState);//负载状态
-            $(".battery_i").html(res.data.loadVoltage);
-            $(".battery_l").html(res.data.loadPower);
-            $(".battery_o").html(res.data.loadCurrent);
+
             var luminance=res.data.light;
             var lian_g=res.data.lightingDuration;
             var chen_g=res.data.morningHours;
             var deviceCode=res.data.deviceCode;
-            var on0f=res.data.onOff
+            var on0f=res.data.onOff;
             $('#in_p>input[name="category"]' == on0f).each(function(){
                 $(this).prop("checked",true);
             });
@@ -101,8 +173,8 @@ function  zhuang(pro_je,groupId,par_id) {
             $("#slideTest1").children().children(".layui-slider-tips").html(luminance)
             $("#slideTest1 .layui-slider-wrap").css('left', luminance/$(".progres").width()*$(".progres").width() + '%');
 
-            $("#slideTest2").val(lian_g)
-            $("#slideTest3").val(chen_g)
+            $("#slideTest2").val(lian_g);
+            $("#slideTest3").val(chen_g);
 
             var youVal = res.data.onOff; // 1,2 把拿到的开关灯值赋给单选按钮
 
@@ -111,107 +183,55 @@ function  zhuang(pro_je,groupId,par_id) {
                     $("input[name='category']").get(index).checked = true;
                 }
             });
-            console.log("===="+groupId)
             $("#confirm").unbind('click');
             $("#confirm").click(function(){
                 var category = parseInt($('input:radio[name="category"]:checked').val());
+                var r_wen_a = $("#slideTest1").children().children(".layui-slider-tips").html();
 
-                var r_wen1 = $("#slideTest1").children().children(".layui-slider-bar").width();
-                var r_wena =  r_wen1/$(".progres").width()*100
-                var r_wen_a = Math.ceil(r_wena);
-
-                var r_wenb = $('#slideTest2').val()
-                var r_wen_b = Math.ceil(r_wenb);
-                var r_wenc =  $('#slideTest3').val()
-                var r_wen_c = Math.ceil(r_wenc);
-
-                equipment_b(pro_je,groupId,par_id,category,r_wen_a,r_wen_b,r_wen_c,deviceCode,1)
+                var r_wen_b = $('#slideTest2').val();
+                var r_wen_c = $('#slideTest3').val();
+                var s_witch
+                s_witch=$(".move").attr("data-state");
+                if(s_witch == "on"){
+                    s_witch=1
+                }else if(s_witch == "off"){
+                    s_witch=0
+                }
+                console.log(r_wen_b)
+                console.log(r_wen_c)
+                equipment_b(pro_je,groupId,par_id,s_witch,category,r_wen_a,r_wen_b,r_wen_c,deviceCode,1)
             })
-
-            //点击开关
-            // $(".control-label").unbind('click');
-            // $(".control-label").click(function(){
-            //     var category = parseInt($('input:radio[name="category"]:checked').val());
-            //     equipment_b(pro_je,"",par_id,category,"","","",deviceCode)
-            // })
-            // //滑动单台亮度
-            // $("#slideTest1").unbind('blur');
-            // $('#slideTest1').blur(function(){
-            //     var r_wen1 = $("#slideTest1").children().children(".layui-slider-bar").width();
-            //     var r_wena =  r_wen1/$(".progres").width()*100
-            //     var r_wen_a = Math.ceil(r_wena);
-            //     equipment_b(pro_je,"",par_id,3,r_wen_a,"","",deviceCode)
-            // })
-            // // 亮灯时长
-            // $("#slideTest2").unbind('blur');
-            // $('#slideTest2').blur(function(){
-            //     var r_wenb = $('#slideTest2').val()
-            //     var r_wen_b = Math.ceil(r_wenb);
-            //     equipment_b(pro_je,"",par_id,3,"",r_wen_b,"",deviceCode)
-            // })
-            // //晨亮时长
-            // $("#slideTest3").unbind('blur');
-            // $('#slideTest3').blur(function(){
-            //     var r_wenc =  $('#slideTest3').val()
-            //     var r_wen_c = Math.ceil(r_wenc);
-            //     equipment_b(pro_je,"",par_id,3,"","",r_wen_c,deviceCode)
-            // })
         }
-
     })
 //    单台设备结束
 }
-
 //控制分组
 function  f_en(pro_je,groupId) {
-    $(".She").hide()
-    $(".grouping,.She_a").show()
+    $(".She").hide();
+    $(".grouping,.She_a").show();
     //分组饼图
     Bing(pro_je,groupId)
 //点击开关
     $("#confirm").unbind('click');
     $("#confirm").click(function(){
         var category = parseInt($('input:radio[name="category"]:checked').val());
-        var r_wen1 = $("#slideTest1").children().children(".layui-slider-bar").width();
-        var r_wena =  r_wen1/$(".progres").width()*100
-        var r_wen_a = Math.ceil(r_wena);
-        var r_wenb = $('#slideTest2').val()
-        var r_wen_b = Math.ceil(r_wenb);
-        var r_wenc =  $('#slideTest3').val()
-        var r_wen_c = Math.ceil(r_wenc);
-        equipment_b(pro_je,groupId,"",category,r_wen_a,r_wen_b,r_wen_c,0,0)
+        var r_wen_a =  $("#slideTest1").children().children(".layui-slider-tips").html();
+        var r_wen_b =$('#slideTest2').val();
+        var r_wen_c = $('#slideTest3').val();
+        var s_witch
+            s_witch=$(".move").attr("data-state");
+        if(s_witch == "on"){
+            s_witch=1
+        }else if(s_witch == "off"){
+            s_witch=0
+        }
+        equipment_b(pro_je,groupId,"",s_witch,category,r_wen_a,r_wen_b,r_wen_c,0,0)
     })
-
-    // $(".control-label").unbind('click');
-    // $(".control-label").click(function(){
-    //     var category = parseInt($('input:radio[name="category"]:checked').val());
-    //     equipment_b(pro_je,groupId,"",category,"","","",0)
-    //
-    // })
-    // //    滑动单台亮度
-    // $("#slideTest1").unbind('blur');
-    // $('#slideTest1').blur(function(){
-    //     var r_wen1 = $("#slideTest1").children().children(".layui-slider-bar").width();
-    //     var r_wena =  r_wen1/$(".progres").width()*100
-    //     var r_wen_a = Math.ceil(r_wena);
-    //     equipment_b(pro_je,groupId,"",3,r_wen_a,"","",0)
-    // })
-    // // 亮灯时长
-    // $("#slideTest2").unbind('blur');
-    // $('#slideTest2').blur(function(){
-    //     var r_wenb =  $('#slideTest2').val()
-    //     var r_wen_b = Math.ceil(r_wenb);
-    //     equipment_b(pro_je,groupId,"",3,"",r_wen_b,"",0)
-    // })
-    // // 晨亮时长
-    // $("#slideTest3").unbind('blur');
-    // $('#slideTest3').blur(function(){
-    //     var r_wenc =  $('#slideTest3').val()
-    //     var r_wen_c = Math.ceil(r_wenc);
-    //     equipment_b(pro_je,groupId,"",3,"","",r_wen_c,0)
-    // })
 }
-function equipment_b(pro_je,groupId,par_id,category,r_wen_a,r_wen_b,r_wen_c,deviceCode,par) {
+function equipment_b(pro_je,groupId,par_id,s_witch,category,r_wen_a,r_wen_b,r_wen_c,deviceCode,par) {
+    console.log("1212")
+    console.log(r_wen_b)
+    console.log(r_wen_c)
     var Code
     if(deviceCode == ""){
         Code=[]
@@ -220,20 +240,22 @@ function equipment_b(pro_je,groupId,par_id,category,r_wen_a,r_wen_b,r_wen_c,devi
     }
     var data = {};
     var data1 = {};
-    data1["deviceCodes"] = Code
-    data1["deviceType"] = 1
-    data1["status"] = 2
-    data1["groupId"] = groupId
     data["projectId"] = pro_je;
     data["groupId"] = groupId;
     data["deviceId"] = par_id;
     data["deviceCode"] = deviceCode;
-    data["onOff"] = category;
-    data["lightingDuration"] = r_wen_b;
-    data["morningHours"] = r_wen_c;
-    data["light"] = r_wen_a;
-    data1["qaKey"] = ["onOff","lightingDuration","morningHours","light"]
-    data1["value"] = [category,r_wen_b,r_wen_c,r_wen_a]
+    data["onOff"] = category;   //开关
+    data["light"] = r_wen_a;  //亮度
+    data["lightingDuration"] = r_wen_b;   //亮灯时长
+    data["morningHours"] = r_wen_c;  //晨亮时长
+    data["transport"] = s_witch;
+
+    data1["deviceCodes"] = Code
+    data1["deviceType"] = 1
+    data1["status"] = 2
+    data1["groupId"] = groupId;
+    data1["qaKey"] = ["onOff","lightingDuration","morningHours","light","transport"]
+    data1["value"] = [category,r_wen_b,r_wen_c,r_wen_a,s_witch]
     if(par == 1){
         data1["groupId"] = ""
     }else{
@@ -258,7 +280,11 @@ function equipment_b(pro_je,groupId,par_id,category,r_wen_a,r_wen_b,r_wen_c,devi
         success: function (res) {
             console.log(res)
             if(res.code == "200"){
-
+                layer.open({
+                    title: '信息',
+                    content:"操作成功",
+                    skin: 'demo-class'
+                });
             }
         }
     })
@@ -272,17 +298,14 @@ function equipment_b(pro_je,groupId,par_id,category,r_wen_a,r_wen_b,r_wen_c,devi
         data: JSON.stringify(data1),
         success: function(res) {
             console.log(res)
-            if(res.code == "200"){
-               alert("修改成功");
-            }
         }
     })
 }
 
+
 function Bing(pro_je,groupId) {
     console.log("分组切换1")
     console.log(pro_je+groupId)
-
     $.ajax({
         url: baseURL + 'fun/project/queryProjectById?projectId='+ pro_je+"&groupId="+groupId,
         contentType: "application/json;charset=UTF-8",
@@ -291,8 +314,8 @@ function Bing(pro_je,groupId) {
         success: function (res) {
             console.log("图表")
             console.log(res)
-            $(".lu_m_a").html(res.data.sumCount)
-            $(".lu_m_c").html(res.data.deviceCount)
+            $(".lu_m_a").html(res.data.sumCount);
+            $(".lu_m_c").html(res.data.deviceCount);
             if(res.code == "200"){
                 var dom=document.getElementById("Bing");
                 var myChart = echarts.init(dom);

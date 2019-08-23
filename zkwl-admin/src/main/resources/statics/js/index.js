@@ -68,8 +68,6 @@ var vm = new Vue({
 		},
 		getUser: function(){
 			$.getJSON("sys/user/info?_"+$.now(), function(r){
-			    console.log("登录");
-			    console.log(r);
 			    if(r.user.headUrl !="") {
                     vm.url = "https://guangxun-wulian.com" + r.user.headUrl;
                 }else{
@@ -96,10 +94,6 @@ var vm = new Vue({
 					    dataType: "json",
 					    success: function(result){
 							if(result.code == 200){
-								// layer.close(index);
-								// layer.alert('修改成功', function(index){
-								// 	location.reload();
-								// });
                                 layer.open({
                                     title: '信息',
                                     content: '修改成功',
@@ -119,14 +113,7 @@ var vm = new Vue({
 			});
 		},
         donate: function () {
-            // layer.open({
-            //     type: 2,
-            //     title: false,
-            //     area: ['806px', '467px'],
-            //     closeBtn: 1,
-            //     shadeClose: false,
-            //     content: ['http://cdn.shebei.io/donate.jpg', 'no']
-            // });
+
         }
 	},
 	created: function(){
@@ -163,7 +150,6 @@ function routerList(router, menuList){
 		}
 	}
 	router.add('#modules/informa/informa.html', function() {
-	    console.log("页面跳转3")
 		var url = window.location.hash;
 		vm.main = url.replace('#', '');
 	});
@@ -173,7 +159,6 @@ $.ajax({
     url:  'sys/user/baseInfo',
     type: "POST",
     success: function (res) {
-        console.log(res);
         localStorage.mycolor= res.user.roleId;
     }
 })
@@ -196,7 +181,6 @@ $("#r_bte").click(function(){
     }else{
         // 邮箱
         if (!patrn2.exec(r_rlm)) {
-            console.log("邮箱错误")
             return false;
         }
         $.ajax({
@@ -205,15 +189,12 @@ $("#r_bte").click(function(){
             data: "&email=" + r_rlm +
             "&securityCode=" + r_el_upd ,
             success: function (res) {
-                console.log(JSON.stringify(res));
                 if (res.code == "200") {
-                    console.log("/////////邮箱")
                     $(".r_lay,.r_beise,.r_be").hide()
                     $("#r_el_upd").val();
                     countdown=60
                     return
                 } else {
-                    console.log(res.msg);
                     $("#r_el_upd").val();
                     countdown=60
                 }
@@ -227,8 +208,6 @@ $("#r_bte").click(function(){
 $("#r_btee").click(function(){
     var r_rlmn=$("#r_rlp").val()
     var r_el_updn = $("#r_el_upde").val()
-    console.log(r_rlmn)
-    console.log(r_el_updn)
     if(r_rlmn == "" || r_el_updn == ""){
        // alert("输入不能为空")
         layer.open({
@@ -239,7 +218,6 @@ $("#r_btee").click(function(){
     }else{
         //手机号错误
         if (!patrn1.exec(r_rlmn)){
-            console.log("手机号错误")
             return false;
         }
         $.ajax({
@@ -248,9 +226,7 @@ $("#r_btee").click(function(){
             data: "&mobile=" + r_rlmn +
             "&securityCode=" + r_el_updn ,
             success: function (res) {
-                console.log(JSON.stringify(res));
                 if (res.code == "200") {
-                    console.log("/////////手机号")
                     $("#r_el_upde").val()
                     $(".r_lay_a,.r_beise_a,.r_be_a").hide()
                 } else {
@@ -284,7 +260,6 @@ $("#r_tijiao").click(function(){
 	}else{
         //    账号
         if (!patrn3.exec(r_rlma)) {
-            //console.log("账号错误")
             layer.open({
                 title: '信息',
                 content: '账号错误',
@@ -294,7 +269,6 @@ $("#r_tijiao").click(function(){
         }
         //    用户名
         if (!patrn4.exec(r_rlmb)) {
-            //console.log("用户名错误")
             layer.open({
                 title: '信息',
                 content: '用户名错误',
@@ -304,7 +278,6 @@ $("#r_tijiao").click(function(){
         }
         // 邮箱
         if (!patrn2.exec(r_rlmc)) {
-           // console.log("邮箱错误")
             layer.open({
                 title: '信息',
                 content: '邮箱错误',
@@ -314,7 +287,6 @@ $("#r_tijiao").click(function(){
         }
         //手机号错误
         if (!patrn1.exec(r_rlmd)){
-           // console.log("手机号错误")
             layer.open({
                 title: '信息',
                 content: '手机号错误',
@@ -334,7 +306,6 @@ $("#r_tijiao").click(function(){
             "&headUrl=" + uRl +
             "&roleId=" + select ,
             success: function (res) {
-                console.log(JSON.stringify(res));
                 if (res.code == "200") {
                     // alert(res)
                     $(".JI_b").hide()
@@ -365,16 +336,15 @@ var countdown=60;
 function sendemail(){
     var obje = $("#btn");
     var r_val_eml = $("#r_rlm").val()
+    countdown=60
+    settime(obje);
     $.ajax({
         url:  'contact/sendBindEmail',
         type: "GET",
         data: "&email=" + r_val_eml ,
         success: function (res) {
-            console.log(JSON.stringify(res));
             if (res.code == "200") {
-                console.log("///////////////////////")
-                countdown=60
-                settime(obje);
+
             } else {
                // alert(res.msg);
                 layer.open({
@@ -385,22 +355,21 @@ function sendemail(){
             }
         }
     })
-
 }
+
 
 function sendemail_a() {
     var obj = $("#btne");
     var r_el_upde = $("#r_rlp").val()
+    countdown=60
+    settime(obj);
     $.ajax({
         url:  'contact/sendBindMobile',
         type: "GET",
         data: "&mobile=" + r_el_upde ,
         success: function (res) {
-            console.log(JSON.stringify(res));
             if (res.code == "200") {
-                console.log("///////////////////////");
-                countdown=60
-                settime(obj);
+
             } else {
                 //alert(res.msg);
                 layer.open({
@@ -411,7 +380,6 @@ function sendemail_a() {
             }
         }
     })
-
 }
 function settime(obja) { //发送验证码倒计时
     if (countdown == 0) {

@@ -141,7 +141,7 @@ public class AdvancedSettingEntity implements Serializable {
 	/**
 	 * 自动休眠时间长度
 	 */
-	@NotNull(message="负载功率", groups = AddGroup.class)
+	@NotNull(message="自动休眠时间长度不能为空", groups = AddGroup.class)
 	private Integer autoSleepTime;
 	/**
 	 * 光控电压

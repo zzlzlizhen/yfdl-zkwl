@@ -100,10 +100,10 @@ public class Utils {
         return multiply.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 
-    public static UpdateVersion version(){
+    public static UpdateVersion version(String path){
         UpdateVersion version = new UpdateVersion();
         try {
-            file = new File("/home/test.bin");
+            file = new File(path);
             //file = new File("D:\\test1.bin");
             fileInputStream = new FileInputStream(file);
             dataInputStream = new DataInputStream(fileInputStream);

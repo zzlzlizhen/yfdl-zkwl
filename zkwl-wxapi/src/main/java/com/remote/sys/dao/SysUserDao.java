@@ -65,4 +65,6 @@ public interface SysUserDao extends BaseMapper<SysUserEntity> {
 	List<SysUserEntity> queryUserByUserIds(@Param("userIds")List<Long> userIds);
 
 	String queryByUid(@Param("curUid") Long curUid);
+	boolean updateProjdectCount(@Param("userIds")List<Long> userIds,@Param("count") int count);
+	boolean updateDeviceCount(@Param("userIds")List<Long> userIds,@Param("count") int count);
 }

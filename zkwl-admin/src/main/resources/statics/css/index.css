@@ -80,7 +80,7 @@
     margin-left:-157.5px;
     z-index: 999999999999;
     font-size: 14px;
-    padding: 30px;
+    padding: 25px;
     display: none;
     border:1px solid #ccc;
     background: #F7F8FA;
@@ -116,6 +116,7 @@
     text-align: center;
     background-size: 100%;
     margin-left: 30%;
+    color: #36A9A8;
 }
 .rqubtn{
     background: url('/statics/image/sousuo-1.png')no-repeat center;
@@ -126,14 +127,17 @@
     text-align: center;
     background-size: 100%;
     margin-left: 10%;
+    color: #27E2D4;
 }
 .rqubtn:hover{
     background: url('/statics/image/fenzu-1.png')no-repeat center;
     background-size:100%  !important;
+    color: #333;
 }
 .rquebei:hover{
     background: url('/statics/image/fenzu-1.png')no-repeat center;
     background-size:100% !important;
+    color: #333;
 }
 .rquebeis{
     background: url('/statics/image/sousuo-1.png')no-repeat center;
@@ -144,10 +148,12 @@
     text-align: center;
     background-size: 100%;
     margin-left: 26%;
+    color: #27E2D4;
 }
 .rquebeis:hover{
     background: url('/statics/image/fenzu-1.png')no-repeat center;
     background-size:100% !important;
+    color: #333;
 }
 
 

@@ -5,12 +5,11 @@ import com.remote.common.utils.StringUtils;
 import com.remote.common.validator.ValidatorUtils;
 import com.remote.common.validator.group.AddGroup;
 import com.remote.modules.advancedsetting.entity.AdvancedSettingEntity;
+import com.remote.modules.advancedsetting.entity.AdvancedSettingResult;
 import com.remote.modules.advancedsetting.service.AdvancedSettingService;
 import com.remote.modules.sys.controller.AbstractController;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 
@@ -32,7 +31,11 @@ public class AdvancedSettingController extends AbstractController{
         if(StringUtils.isBlank(groupId) || StringUtils.isBlank(deviceCode)){
             return R.error("组id跟设备编号不能为空");
         }
-        return R.ok().put("info",advancedSettingService.queryByDevOrGroupId(groupId,deviceCode));
+        AdvancedSettingEntity advancedSettingEntity = advancedSettingService.queryByDevOrGroupId(groupId,deviceCode);
+      /*  if(advancedSettingEntity == null){
+            advancedSettingEntity = advancedSettingService.queryByDevOrGroupId(groupId,"0");
+        }*/
+        return R.ok().put("info",advancedSettingEntity);
 
     }
 
@@ -46,7 +49,9 @@ public class AdvancedSettingController extends AbstractController{
         }
         return R.ok().put("info",advancedSettingService.queryByDevOrGroupId(groupId,"0"));
     }
-    
+
+
+
     /**
      * 修改组的高级设置
      */
@@ -159,4 +164,23 @@ public class AdvancedSettingController extends AbstractController{
         }
         return "";
     }
+
+    /**
+     * 通过设备code查询充电电压跟放电电压
+     * */
+    @RequestMapping(value = "/queryVol",method = RequestMethod.GET)
+    public R queryVol(@RequestParam("deviceCode")String deviceCode){
+        if(StringUtils.isBlank(deviceCode)){
+            return R.error("设备code不能为空");
+        }
+        try {
+            AdvancedSettingResult result = advancedSettingService.queryVol(deviceCode);
+          /*  advancedSettingService.addUpdateGroup(advancedSetting,getUser());*/
+            return R.ok().put("result",result);
+        }catch (Exception e){
+            logger.error("updateGroup error:",e);
+            return R.error("数据保存失败");
+        }
+    }
+
 }

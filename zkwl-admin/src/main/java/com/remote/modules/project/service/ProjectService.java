@@ -81,4 +81,18 @@ public interface ProjectService {
      * @return ProjectResult
      **/
     ProjectResult queryProjectById(String projectId,String groupId);
+    /**
+     *通过项目id查询所属用户id
+     * */
+    Long queryExclusiveId(String projectId);
+    /**
+     * 根据所属用户的父ids查询每个用户的项目数量
+     * */
+    List<Integer> queryProjectCountByAllParentIds(List<Long> userIds);
+
+    /**
+     * 通过项目ids查询所属人ids
+     * */
+    List<Long> queryExclusiveIds(List<String> proOrDevIds);
+
 }

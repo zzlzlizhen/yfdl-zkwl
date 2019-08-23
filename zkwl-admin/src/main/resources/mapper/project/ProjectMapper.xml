@@ -45,7 +45,7 @@
         <where>
             is_del = 0
             <if test="projectQuery.userIds !=null and projectQuery.userIds.size()!= 0">
-                AND create_user in
+                AND exclusive_user in
                 <foreach collection="projectQuery.userIds" index="index" item="item" open="(" separator="," close=")">
                     #{item}
                 </foreach>
@@ -129,5 +129,20 @@
                 </foreach>
             </if>
         </where>
+    </select>
+    <select id="queryExclusiveId" resultType="java.lang.Long">
+      SELECT  create_user from fun_project where is_del=0
+      <if test="projectId != null and projectId != ''">
+         and  project_id = #{projectId}
+      </if>
+    </select>
+    <select id="queryExclusiveIds" resultType="java.lang.Long">
+        SELECT  exclusive_user from fun_project where is_del=0
+        <if test="projectIds != null">
+            and project_id in
+            <foreach collection="projectIds" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
     </select>
 </mapper>

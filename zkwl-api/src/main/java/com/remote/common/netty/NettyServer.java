@@ -37,18 +37,21 @@ public class NettyServer implements Runnable{
             ServerBootstrap b = new ServerBootstrap();
             b.group(pGroup, cGroup)
                     .channel(NioServerSocketChannel.class) //注册服务端channel
-                    .option(ChannelOption.SO_BACKLOG, 1024)
+                    .option(ChannelOption.SO_BACKLOG, 3072)         //serverSocketchannel的设置，链接缓冲池的大小
+                    .childOption(ChannelOption.TCP_NODELAY, true)  //socketchannel的设置,关闭延迟发送
+                    .childOption(ChannelOption.SO_KEEPALIVE, true) //socketchannel的设置,维持链接的活跃，清除死链接
                     .handler(new LoggingHandler(LogLevel.INFO))
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         protected void initChannel(SocketChannel sc) throws Exception {
                             // 超时处理
-                            sc.pipeline().addLast(new IdleStateHandler(200,0,0,TimeUnit.SECONDS));
+                            sc.pipeline().addLast(new IdleStateHandler(500,0,0,TimeUnit.SECONDS));
                             /**
                              * 自定义ChannelInboundHandlerAdapter
                              */
                             sc.pipeline().addLast(new ServerHandler());
                         }
                     });
+
             ChannelFuture cf = null;
             cf = b.bind(2001).sync();
             if(cf.isSuccess()){

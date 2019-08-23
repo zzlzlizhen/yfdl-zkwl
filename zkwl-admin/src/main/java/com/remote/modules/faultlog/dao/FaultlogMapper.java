@@ -17,5 +17,5 @@ public interface FaultlogMapper extends BaseMapper<FaultlogEntity> {
      * @Param deviceId
      * @return List<FaultlogEntity>
      **/
-    List<FaultlogEntity> queryFaultlogByDeviceId(@Param("deviceId") String deviceId,@Param("logStatus") Integer logStatus,@Param("groupId") String groupId);
+    List<FaultlogEntity> queryFaultlogByDeviceId(@Param("deviceId") String deviceId,@Param("groupId") String groupId);
 }

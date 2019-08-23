@@ -63,4 +63,12 @@ public interface ProjectService {
      * @return int
      **/
     int queryProjectByUserCount(Long userId);
+    /**
+     * 通过项目ids查询所属人ids
+     * */
+    List<Long> queryExclusiveIds(List<String> projectIds);
+    /**
+     *通过项目id查询所属用户id
+     * */
+    Long queryExclusiveId(String projectId);
 }

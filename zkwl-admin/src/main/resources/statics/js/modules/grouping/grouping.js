@@ -254,7 +254,7 @@ $(function(){
                         "<td>"+ runState+"</td>\n" +
                         "<td>"+light+"</td>\n" +
                         "<td>"+communicationType+"</td>\n" +
-                        "<td id="+res.data.list[i].deviceId+" >" +
+                        "<td id="+res.data.list[i].deviceId+" projectId="+res.data.list[i].projectId+">" +
                         "<a href=\"#\" class='particulars_a' ><img src='/statics/image/r_kongzhi.svg' alt='' class='r_erkongzhi'></a>\n" +
                         "<a href=\"#\" class='particulars' id="+res.data.list[i].deviceId+"><img src='/statics/image/bianji.png' alt=''></a>\n" +
                         "<a href=\"#\" class='ma_p' id="+res.data.list[i].longitude+","+res.data.list[i].latitude+"><img src='/statics/image/ditu.svg' alt=''style='width: 25px;height:25px;'></a>\n" +
@@ -281,8 +281,11 @@ $(function(){
                     var deviceCode=$(this).parent().siblings(".r_nm").children(".r_d").html();
                     var grod=$(this).parent().siblings(".grod").attr('id');
                     var type=$(this).parent().siblings(".type").children(".r_d").attr("id");
-                    var name=$(this).parent().siblings(".r_name").html()
-                    var searchUrl=encodeURI('../control/control.html?deviceCode='+deviceCode+"&grod="+grod+"&type="+type+"&name="+name)
+                    var name=$(this).parent().siblings(".r_name").html();
+                    var deviceId=$(this).parent().attr("id");
+                    var projectId=$(this).parent().attr("projectId");
+
+                    var searchUrl=encodeURI('../control/control.html?deviceCode='+deviceCode+"&grod="+grod+"&type="+type+"&name="+name+"&deviceId="+deviceId+"&projectId="+projectId)
                     location.href =searchUrl;
                 })
 
@@ -468,6 +471,7 @@ $(function(){
 
                 //编辑
                 var proid
+                var diCode
                 $(".particulars").unbind('click');
                 $(".particulars").click(function(){
                     $(".shade_modifier,.shade_b_modifier").css("display","block");
@@ -475,6 +479,7 @@ $(function(){
                     var  r_namem = $(this).parent().siblings("#r_namem").html();
                     $(".pro_s_b").val(r_namem);
                     var r_rrena = $(this).parent().siblings(".grod").html();
+                    diCode=$(this).parent().siblings(".r_nm").attr("title")
                     $("#select1_b").val(r_rrena);
                     // fen()
                 })
@@ -494,7 +499,8 @@ $(function(){
                                 "projectId":Id,
                                 "groupId":select_b,
                                 "deviceName":pro_s_b,
-                                "deviceId":proid
+                                "deviceId":proid,
+                                "deviceCode":diCode
                             }),
                             success: function(res){
                                 if(res.code == "200"){
@@ -560,8 +566,6 @@ $(function(){
             success: function(res) {
                 var html=""
                 for (var i = 0; i < res.data.length; i++) {
-                    // console.log(res.data[i].groupName);
-                    // console.log("lllllllllllllllll");
                     html += "<option class='option opti_a' id="+res.data[i].groupId+">"+res.data[i].groupName+"</option>\n"
                 }
                 $("#select1").append(html);
@@ -601,7 +605,7 @@ $(function(){
         var pro_name= $(".pro_name").val();
         var pro_s= $(".pro_s").val();
         var select_op=$("#select1 option:selected").attr("id");
-        if(pro_s =="" || pro_name==""){
+        if(pro_s =="" || pro_name==""||select_op==""){
             $(".mistake").css("display","block");
         }else{
             $.ajax({

@@ -24,8 +24,8 @@ public class FaultlogServiceImpl implements FaultlogService {
     private FaultlogMapper faultlogMapper;
 
     @Override
-    public List<FaultlogEntity> queryFaultlogByDeviceId(String deviceId,Integer status,String groupId) {
-        return faultlogMapper.queryFaultlogByDeviceId(deviceId,status,groupId);
+    public List<FaultlogEntity> queryFaultlogByDeviceId(String deviceId,String groupId) {
+        return faultlogMapper.queryFaultlogByDeviceId(deviceId,groupId);
     }
 
     @Override

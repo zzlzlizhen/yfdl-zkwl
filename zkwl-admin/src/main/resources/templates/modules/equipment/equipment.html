@@ -29,25 +29,20 @@
     <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
     <style>
         html,body{overflow: hidden;}
-        .nav_bb_color {background: rgba(0,165,160,0.7);color: #fff;float: left;width: 100%;}
         .app{width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑"}
         #allmap {width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";}
-        .fa{font-size: xx-large}
-        .BMapLabel{background: 0 !important;left:30px !important;top:6px !important;border:0 !important;}
-        .move{z-index: 100;width: 33%;border-radius: 20px;height: 63%;position: absolute;cursor: pointer;background-color: #27E2D4;top: 16%;left: 14%;}
-        .on .move{left: 50%;top: 18%;}
-        .btn_fath{width: 71%;height: 20px;}
-        .swa {width: 16%;height: 50%;float: left;margin: 1% 0px 0px 6%;}
-        .switcha {width: 100%;margin: 7px 0px 0 0%;}
         .BMap_Marker>div>img{width:100%;height:100%;}
         .r_di_top{margin-top: 1%!important;}
-        #qu_a,#confirm{width:70px;height:33px;border:0;margin:3% 0px 0px 20%;}
+        .r_ba_tu_t {background: url('/statics/image/sousuo-1.png')no-repeat center;background-size: auto;color: #0ECCC2;background-size: 100% 30px !important;}
+        #qu_a{width:70px;height:33px;border:0;margin:3% 0px 0px 20%;}
         @media screen and (min-width:800px) and (max-width:1400px) {
+            .ssde{    padding: 15px 2px 19px 22px!important;;}
             .g_b{height:176px !important;}
-            .g_b canvas{width: 372px !important;height: 135px !important;}
+            .g_b canvas{width:100% !important;height:99% !important;margin-left: 3% !important;}
             .cake_B{height:147px;}
             .g_a{height:95px !important;}
-            .g_c{height:80px !important;}
+            .g_c{height:16% !important;}
+            .nhus {margin-top: 0%!important;}
             .cake{height:146px !important;}
             .r_D_a{width:55% !important;}
             .drawer_img{margin-top:928%;}
@@ -56,24 +51,37 @@
             .form_con_an{line-height:34px; }
             .pro_res{margin-top:13px !important;}
             .slid{margin-top:4%;height:21px;}
-            .con_an_a{height:50px;}
-            .con_an_a input{height:27px;margin-top:8px;}
-            .convention{height:130px;}
-            .ri_a{margin-left:0px !important; }
+            .con_an_a{height:25%;}
+            .con_an_a input{height:27px;margin-top:2%;margin-left:10%;}
+            .convention{height:113px;}
+            .ri_a{margin-left:0px !important;}
             .con_an_a input,.r_ba_tu_t{background-size: 100% 27px !important;font-size: 12px;}
             .dra_spa,.dra_p{height:27px;line-height: 27px;font-size:12px !important;}
             .dra_spa{margin-left:6% !important;}
             .con_Gu ul img{width: 17px;height:17px;}
-            .con_Gu ul span{width:72%;text-align: left}
+            .con_Gu ul span{width:60%;text-align: center}
             .con_Xu ul span{width:45%;}
             .lu_m_a,.lu_m_b,.lu_m_c{width:30% !important;height:25px !important;font-size:19px !important;color:rgba(0,165,160,0.7) !important;}
         }
+        /*定义图标上的文字*/
+        .amap-marker-label{background: 0;width:20px;text-align:center;height:auto;font-size:10px;border:0;}
+        .switch{width:80px;height:30px;float: left;margin: 0% 0px 0px 4px;}
+        .btn_fath{margin-top:0px;position: relative;border-radius: 20px;}
+        .btn1{float: left;}
+        .btn2{float: right;}
+        .btnSwitch{height:25px;width:35px;border:none;color: #fff;line-height: 25px;font-size: 13px;text-align: center;z-index: 1;}
+        .move{z-index:100;width:25px;border-radius: 20px;top:0;left:1%;height:25px;position: absolute;cursor: pointer;border: 1px solid #828282;background-color: #f1eff0;box-shadow: 1px 2px 2px 1px #fff inset,0 0 5px 1px #999;}
+        .on .move{left:35px;top:0}
+        .on.btn_fath{background-color: #5281cd;}
+        .off.btn_fath{background-color: #828282;}
+        .btn_fath{width: 79%;}
+        .btnSwitch {height: 25px;width: 27px;}
     </style>
 </head>
 <body>
 <!--地图-->
 <div class="app" style="position: fixed !important;">
-    <div id="allmap" style="position: fixed !important;"> </div>
+    <div id="allmap" tabindex="0" style="position: fixed !important;"> </div>
 </div>
 <div class="ra_state">
      <div class="ra_state_a D_xuan" ></div>
@@ -110,91 +118,114 @@
         <img src="${request.contextPath}/statics/image/r_shuangzuojiantou-01.svg" class="drawer_img" id="drawer_img"/>
     </div>
     <div class="drawer_left">
-        <div class="r_con_div She">
-            <span class="dra_spa r_rgb">运行天数：</span>
-            <p class="dra_p r_di_top r_col_shu" id="Yx_a">0</p>
-            <span class="dra_spa r_rgb">通讯方式：</span>
-            <p class="dra_p r_di_top r_col_shu" id="Yx_b">0</p>
-        </div>
-        <div class="r_con_div She">
-            <span class="dra_spa">硬件版本：</span>
-            <p class="dra_p r_di_top" id="Yx_c">0</p>
-            <span class="dra_spa" style="margin-left: 15px;">软件版本：</span>
-            <p class="dra_p r_di_top" id="Yx_d">0</p>
-        </div>
+      <div class="ssde">
+          <div class="r_con_div She">
+             <div>
+                 <span class="dra_spa r_rgb">运行天数：</span>
+                 <p class="dra_p r_di_top r_col_shu" id="Yx_a">0</p>
+             </div>
+             <div>
+                 <span class="dra_spa r_rgb">通讯方式：</span>
+                 <p class="dra_p r_di_top r_col_shu" id="Yx_b">0</p>
+             </div>
+              <div>
+                  <span class="dra_spa">硬件版本：</span>
+                  <p class="dra_p r_di_top" id="Yx_c">0</p>
+              </div>
+              <div style="height: 14px;line-height: 14px">
+                 <span class="dra_spa"style="height: 14px;line-height: 14px">软件版本：</span>
+                 <p class="dra_p r_di_top" id="Yx_d" style="height: 14px;line-height: 14px">0</p>
+              </div>
+          </div>
+      </div>
         <div class="convention con_Xu She g_c">
-            <span class="con_span">蓄电池</span>
+            <span class="con_span"><p class="con_ys"></p>蓄电池</span>
             <ul>
                 <li>
-                    <img src="${request.contextPath}/statics/image/dianchi.png"/>
-                    <span class="r_duan">电池状态</span>
-                    <p class="battery_a">正常</p>
-                </li>
-                <li>
-                    <img src="${request.contextPath}/statics/image/dianliang.png"/>
-                    <span class="r_duan">电池余量</span>
-                    <p class="battery_b">30%</p>
+                    <img src="${request.contextPath}/statics/image/xudianchi1.png" style="width: 14px;height: 18px;"/>
+                    <span class="r_duan">状态</span>
+                    <p class="battery_a" style="color:#1A6CDE;font-size: 14px; ">正常</p>
                 </li>
                 <li style="border:0;">
-                    <img src="${request.contextPath}/statics/image/dianya.png"/>
-                    <span class="r_duan r_D_a">电池电压(v)</span>
-                    <p  class="battery_c">100.5</p>
+                    <img src="${request.contextPath}/statics/image/xudianchi3.png" />
+                    <span class="r_duan r_D_a">电压</span>
+                    <div class="progress">
+                        <div class="progress-bar"  role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100" id="battery_cr"></div>
+                    </div>
+                </li>
+                <li>
+                    <img src="${request.contextPath}/statics/image/xudianchi2.png" style="width: 12px;height: 18px;"/>
+                    <span class="r_duan">余量</span>
+                    <div class="progress">
+                        <div class="progress-bar"  role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100" id="sser"></div>
+                    </div>
                 </li>
             </ul>
         </div>
         <div class="convention con_Gu She g_c">
-            <span class="con_span">光电池</span>
+            <span class="con_span"><p class="con_ys"></p>光电池</span>
             <ul>
                 <li>
-                    <img src="${request.contextPath}/statics/image/dianchi.png"/>
-                    <span>光电池状态</span>
-                    <p class="battery_d">正常</p>
+                    <img src="${request.contextPath}/statics/image/xudianchi1.png"style="width: 14px;height: 18px;"/>
+                    <span>状态</span>
+                    <p class="battery_d" style="color: #1A6CDE;font-size: 14px;text-indent:21%;">正常</p>
                 </li>
                 <li>
-                    <img src="${request.contextPath}/statics/image/dianliang.png"/>
-                    <span>光电池电压(v)</span>
-                    <p class="battery_e">正常</p>
+                    <img src="${request.contextPath}/statics/image/xudianchi3.png" />
+                    <span>电压</span>
+                    <div class="progress jins">
+                        <div class="progress-bar"  role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100" id="battery_er"></div>
+                    </div>
                 </li>
                 <li>
-                    <img src="${request.contextPath}/statics/image/chongdian.png"/>
-                    <span>充电电流(A)</span>
-                    <p class="battery_f">正常</p>
+                    <img src="${request.contextPath}/statics/image/xudianchi4.png"/>
+                    <span>电流</span>
+                    <div class="progress jins">
+                        <div class="progress-bar" style="color:#666;"  role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100"  id="battery_fr" ></div>
+                    </div>
                 </li>
                 <li style="border:0;">
-                    <img src="${request.contextPath}/statics/image/gonglv.png"/>
-                    <span>充电功率(w)</span>
-                    <p class="battery_g">正常</p>
+                    <img src="${request.contextPath}/statics/image/xudianchi5.png"/>
+                    <span>功率</span>
+                    <div class="progress jins">
+                        <div class="progress-bar"  role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100" id="battery_gr"></div>
+                    </div>
                 </li>
             </ul>
         </div>
         <div class="convention con_Gu She g_c">
-            <span class="con_span">负载</span>
+            <span class="con_span"><p class="con_ys"></p>负载</span>
             <ul>
                 <li>
-                    <img src="${request.contextPath}/statics/image/fuzai.png"/>
-                    <span>负载状态</span>
-                    <p class="battery_h">正常</p>
+                    <img src="${request.contextPath}/statics/image/xudianchi6.png" />
+                    <span>状态</span>
+                    <p class="battery_h" style="color: #1A6CDE;font-size: 14px;text-indent: 38%;">正常</p>
                 </li>
                 <li>
-                    <img src="${request.contextPath}/statics/image/dianya.png"/>
-                    <span>负载电压(v)</span>
-                    <p class="battery_i">正常</p>
+                    <img src="${request.contextPath}/statics/image/xudianchi3.png" />
+                    <span>电压</span>
+                    <div class="progress jins">
+                        <div class="progress-bar"  role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100" id="battery_ir" ></div>
+                    </div>
                 </li>
                 <li>
-                    <img src="${request.contextPath}/statics/image/gonglv.png"/>
-                    <span>负载电流(a)</span>
-                    <p class="battery_o">正常</p>
+                    <img src="${request.contextPath}/statics/image/xudianchi4.png"/>
+                    <span>电流</span>
+                    <div class="progress jins">
+                        <div class="progress-bar"  role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100" id="battery_or"></div>
+                    </div>
                 </li>
                 <li  style="border:0;">
-                    <img src="${request.contextPath}/statics/image/fuzaigonglv.png"/>
-                    <span>负载功率(w)</span>
-                    <p class="battery_l">正常</p>
+                    <img src="${request.contextPath}/statics/image/xudianchi5.png"/>
+                    <span>功率</span>
+                    <div class="progress jins">
+                        <div class="progress-bar"  role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100" id="battery_lr"></div>
+                    </div>
                 </li>
-
             </ul>
         </div>
         <div class="convention con_Xu grouping g_a">
-            <span class="con_span">项目数据</span>
+            <span class="con_span"><p class="con_ys"></p>项目数据</span>
             <ul>
                 <li>
                     <img src="${request.contextPath}/statics/image/zhu_J.svg" style="margin-top:4%;"/>
@@ -214,14 +245,14 @@
             </ul>
         </div>
         <div class="convention con_Xu grouping g_b" style="height:250px;">
-            <span class="con_span">设备状态</span>
+            <span class="con_span"><p class="con_ys"></p>设备状态</span>
             <div class="cake">
                 <div class="cake_B" id="Bing"></div>
             </div>
         </div>
 
         <div class="convention She_a">
-            <span class="con_span">常规设置</span>
+            <span class="con_span nnb"><p class="con_ys"></p>常规设置</span>
             <div class="con_an">
                 <span class="con_an_span">开/关/自动：</span>
                 <div class="form-group form_con_an" id="in_p">
@@ -232,7 +263,7 @@
             </div>
             <div class="con_an">
                 <span class="con_an_span">亮度：</span>
-                <div class="progres pro_res" style="margin-top: 21px;width: 42%;">
+                <div class="progres pro_res" style="margin-top: 4%;width: 42%;">
                     <div id="slideTest1" class="demo-slider" contenteditable="true"  lay-percent="70%"></div>
                 </div>
                 <p id="pa" class="pa"></p>
@@ -240,7 +271,7 @@
             <div class="con_an">
                 <span class="con_an_span">亮灯时长：</span>
                 <div class="progres" style="width: 42%;height:100%;margin:0;">
-                    <input type="text" placeholder="亮灯时间" id="slideTest2" class="slid">
+                    <input type="text" placeholder="亮灯时间" id="slideTest2" value="0" class="slid">
                 </div>
             </div>
             <div class="con_an">
@@ -249,13 +280,24 @@
                     <input type="text" placeholder="晨亮时间" id="slideTest3" class="slid">
                 </div>
             </div>
-            <button id="qu_a" class="r_ba_tu_t" style="margin-left:24%;">取消</button>
-            <button id="confirm" class="r_ba_tu_t">确定</button>
-        </div>
-        <div class="con_an_a She_a">
-            <input type="button" value="操作日志" id="operation" class="r_ba_tu ri_a">
-            <input type="button" value="故障日志" id="malfunction" class="r_ba_tu">
-            <input type="button" value="控制面板" id="hear_control" class="r_ba_tu_t">
+            <div class="con_an nhus">
+                <span class="con_an_span">运输：</span>
+                <div class="switch">
+                    <div class="btn_fath clearfix off" id="toog">
+                        <div class="move" data-state="off"></div>
+                        <div class="btnSwitch btn1">进</div>
+                        <div class="btnSwitch btn2 ">退</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="con_an_a ">
+                <input id="confirm" class="r_ba_tu_t sdsb r_ba_tu" type="button" value="确定">
+<!--                <button id="confirm" class="r_ba_tu_t sdsb" ></button>-->
+                <input type="button" value="操作日志" id="operation" class="r_ba_tu">
+                <input type="button" value="控制面板" id="hear_control" class="r_ba_tu_t">
+
+            </div>
         </div>
     </div>
 
@@ -281,6 +323,5 @@
     document.write('<script src="${request.contextPath}/statics/js/modules/equipment/equipment.js?v='+Math.random()+'"><\/script>');
     document.write('<script src="${request.contextPath}/statics/js/modules/equipment/schedule.js?v='+Math.random()+'"><\/script>');
 </script>
-<!--<script src="${request.contextPath}/statics/js/mapa.js"></script>-->
-<!--<script src="${request.contextPath}/statics/js/textb.js"></script>-->
+
 </html>

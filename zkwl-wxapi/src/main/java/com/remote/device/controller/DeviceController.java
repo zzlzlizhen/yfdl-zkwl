@@ -4,6 +4,7 @@ package com.remote.device.controller;
 import com.github.pagehelper.PageInfo;
 import com.remote.common.enums.AllEnum;
 import com.remote.common.enums.RunStatusEnum;
+import com.remote.common.enums.TransportEnum;
 import com.remote.common.utils.R;
 import com.remote.common.utils.StringUtils;
 import com.remote.device.entity.DeviceEntity;
@@ -13,6 +14,7 @@ import com.remote.sys.controller.AbstractController;
 
 import com.remote.sys.entity.SysUserEntity;
 import com.remote.sys.service.SysUserService;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,7 +52,7 @@ public class DeviceController extends AbstractController {
         deviceEntity.setOnOff(AllEnum.NO.getCode());
         deviceEntity.setSignalState(0);
         deviceEntity.setRunState(RunStatusEnum.OFFLINE.getCode());
-
+        deviceEntity.setTransport(TransportEnum.NO.getCode());
         int i = deviceService.getDeviceByDeviceCode(deviceEntity.getDeviceCode());
         if(i > 0){
             return R.error(400,"设备编号重复");
@@ -59,7 +61,8 @@ public class DeviceController extends AbstractController {
         if(!flag){
             return R.error(400,"添加设备失败");
         }else{
-            updateDevCount(deviceEntity.getCreateUser());
+            sysUserService.updateDevCount(deviceEntity.getCreateUser(),1);
+
         }
         return R.ok();
     }
@@ -82,11 +85,16 @@ public class DeviceController extends AbstractController {
         deviceQuery.setIsDel(1);//删除标记  0未删除  1已删除
         deviceQuery.setUpdateUser(userId);
         deviceQuery.setUpdateTime(new Date());
+        List<Long> exclUserIds = deviceService.queryExclUserId(deviceList);
         boolean flag = deviceService.deleteDevice(deviceQuery);
         if(!flag){
             return R.error(400,"删除设备失败");
         }else{
-            updateDevCount(userId);
+            if(CollectionUtils.isNotEmpty(exclUserIds)||exclUserIds.size()>0){
+                for(Long exclUserId:exclUserIds){
+                    sysUserService.updateDevCount(exclUserId,-1);
+                }
+            }
         }
         return R.ok();
     }
@@ -98,12 +106,6 @@ public class DeviceController extends AbstractController {
         boolean flag = deviceService.updateById(deviceEntity);
         if(!flag){
             return R.error(400,"修改设备失败");
-        }else{
-            /**
-             * 获取当前用户的设备数量
-             * */
-            updateDevCount(deviceEntity.getCreateUser());
-
         }
         return R.ok();
     }
@@ -115,19 +117,4 @@ public class DeviceController extends AbstractController {
         return R.ok(deviceService.updateOnOffByIds(deviceQuery));
     }
 
-    /**
-     * 修改当前用户的设备数量
-     * */
-    private void updateDevCount(Long curUserId){
-        SysUserEntity sysUserEntity = new SysUserEntity();
-        sysUserEntity.setUserId(curUserId);
-        String curAllParentId = null;
-        if(curUserId != null){
-            curAllParentId = sysUserService.queryByUid(curUserId);
-        }
-        if(curAllParentId != null){
-            sysUserEntity.setAllParentId(curAllParentId);
-        }
-        sysUserService.updateDevCount(sysUserEntity);
-    }
 }

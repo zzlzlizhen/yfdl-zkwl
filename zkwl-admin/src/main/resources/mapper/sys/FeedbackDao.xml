@@ -61,10 +61,11 @@
     </select>
     <select id="queryPageList" resultType="com.remote.modules.sys.entity.FeedbackEntity">
         SELECT
-            <include refid="columns"/>,b.head_url as headUrl,b.username as username,
+            <include refid="columns"/>,b.head_url as headUrl,b.username as username,c.head_url as answerHeadUrl,c.username as answerUserName,
             case when mbr.uid is null then 0 else 1 end as isRead
         FROM feedback a
             LEFT JOIN sys_user b ON a.uid=b.user_id
+            LEFT JOIN  sys_user c ON  a.answer_user = c.user_id
             LEFT JOIN msg_back_readed mbr on (mbr.uid=#{curUid} and a.back_id = mbr.msg_back_id and mbr.type=1)
         WHERE 1=1
         <if test="userIds != null and userIds.size()>0">

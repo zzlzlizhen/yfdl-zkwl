@@ -88,5 +88,29 @@
     <delete id="deleteAdvancedByDeviceCode">
         delete from advanced_setting where  group_id = #{groupId} and device_code = #{deviceCode}
     </delete>
+    <select id="queryVol" resultType="com.remote.modules.advancedsetting.entity.AdvancedSettingResult">
+        select vol_over_dis_charge as volOverDisCharge,vol_charge as volCharge from advanced_setting where 1=1
+        <if test="deviceCode != null and deviceCode != ''">
+            and device_code = #{deviceCode}
+        </if>
+    </select>
+    <update id="updateAdvancedByDeviceCode">
+        update advanced_setting set group_id = #{groupId}
+        <where>
+            group_id = #{oldGroupId}
+            <if test="deviceCode !=null and deviceCode != ''">
+                and device_code = #{deviceCode}
 
+            </if>
+        </where>
+    </update>
+    <delete id="deleteAdvSet">
+        delete from advanced_setting where 1=1
+        <if test="deviceCodes != null and deviceCodes.size()>0">
+            and device_code in
+            <foreach collection="deviceCodes" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </delete>
 </mapper>

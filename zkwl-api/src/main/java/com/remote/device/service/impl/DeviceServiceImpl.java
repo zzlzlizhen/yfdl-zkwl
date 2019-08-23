@@ -6,14 +6,13 @@ import com.remote.common.enums.LoadStatusEnum;
 import com.remote.common.enums.PhotovoltaicCellStatusEnum;
 import com.remote.common.enums.RunStatusEnum;
 import com.remote.common.es.utils.ESUtil;
-import com.remote.common.netty.ServerHandler;
-import com.remote.common.utils.CoodinateCovertor;
-import com.remote.common.utils.LngLat;
+import com.remote.common.utils.XYmatch;
 import com.remote.device.dao.DeviceMapper;
-import com.remote.device.entity.DeviceEntity;
+import com.remote.device.entity.DeviceEntityApi;
 import com.remote.device.entity.DeviceQuery;
 import com.remote.device.service.DeviceService;
-import com.remote.device.util.XYmatch;
+import com.remote.devicetype.entity.DeviceTypeEntity;
+import com.remote.devicetype.service.DeviceTypeService;
 import com.remote.faultlog.entity.FaultlogEntity;
 import com.remote.faultlog.service.FaultlogService;
 import org.slf4j.Logger;
@@ -21,7 +20,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Field;
 import java.util.*;
 
 /**
@@ -41,15 +39,18 @@ public class DeviceServiceImpl implements DeviceService {
     @Autowired
     private ESUtil esUtil;
 
+    @Autowired
+    private DeviceTypeService deviceTypeService;
+
     @Override
-    public DeviceEntity queryDeviceByCode(String deviceCode) {
+    public DeviceEntityApi queryDeviceByCode(String deviceCode) {
         return deviceMapper.queryDeviceByCode(deviceCode);
     }
 
     @Override
-    public int updateDeviceByCode(CommonEntity commonEntity, DeviceEntity deviceEntity) {
+    public int updateDeviceByCode(CommonEntity commonEntity, DeviceEntityApi deviceEntity) {
 
-        DeviceEntity entity = deviceMapper.queryDeviceByCode(deviceEntity.getDeviceCode());
+        DeviceEntityApi entity = deviceMapper.queryDeviceByCode(deviceEntity.getDeviceCode());
 
 
         //解析经纬度
@@ -65,14 +66,18 @@ public class DeviceServiceImpl implements DeviceService {
         int h = Integer.valueOf(longitudeH) << 16;
         String longitudeL = commonEntity.getLongitudeL();
         double longitudeUp = Double.valueOf(longitudeInt+"."+(h+Integer.valueOf(longitudeL)));
+        //判断基站定位和当前定位是否相差1公里
+        if(entity.getLatitude() != null && entity.getLongitude() != null){
+            double distance = XYmatch.getDistance(Double.valueOf(entity.getLatitude()), Double.valueOf(entity.getLongitude()),latitudeUp ,longitudeUp);
+            if((distance / 1000) > 5){
+                deviceEntity.setLatitude(String.valueOf(latitudeUp));
+                deviceEntity.setLongitude(String.valueOf(longitudeUp));
+            }
+        }else{
+            deviceEntity.setLatitude(String.valueOf(latitudeUp));
+            deviceEntity.setLongitude(String.valueOf(longitudeUp));
+        }
 
-        //经纬度转换成百度地图经纬度
-//        LngLat lngLat_bd = new LngLat(longitudeUp,latitudeUp);
-//        LngLat lngLat = CoodinateCovertor.bd_encrypt(lngLat_bd);
-//        deviceEntity.setLatitude(String.valueOf(lngLat.getLantitude()));
-//        deviceEntity.setLongitude(String.valueOf(lngLat.getLongitude()));
-        deviceEntity.setLatitude(String.valueOf(latitudeUp));
-        deviceEntity.setLongitude(String.valueOf(longitudeUp));
 
         //负载状态 loadState  蓄电池状态 batteryState 光电池状态  photocellState
         Integer loadState = deviceEntity.getLoadState();
@@ -129,73 +134,67 @@ public class DeviceServiceImpl implements DeviceService {
             }
             faultlogService.addFaultlog(faultlogEntity);
         }
+        String deviceCode = deviceEntity.getDeviceCode();
+        DeviceTypeEntity deviceTypeByCode = deviceTypeService.getDeviceTypeByCode(deviceCode);
+        if(deviceTypeByCode != null){
+            deviceEntity.setDeviceTypeName(deviceTypeByCode.getDeviceTypeName());
+        }
         int k = deviceMapper.updateDeviceByCode(deviceEntity);
         if(k > 0){
             log.info("设备编号："+deviceEntity.getDeviceCode()+"，修改es实时数据");
             //修改 ES start
-            Map<String, Object> stringObjectMap = convertUpdateES(deviceEntity);
-            esUtil.updateES(stringObjectMap,deviceEntity.getDeviceId());
+            Map<String, Object> stringObjectMap = esUtil.convertUpdateES(deviceEntity);
+            esUtil.updateES(stringObjectMap,deviceEntity.getDeviceId(),"device_index");
             //修改 ES end
         }
         return k;
     }
 
-    public Map<String,Object> convertUpdateES(DeviceEntity deviceEntity){
-        Field[] declaredFields = deviceEntity.getClass().getDeclaredFields();
-        Map<String,Object> temp = new HashMap<String,Object>();
-        for (Field field : declaredFields){
-            field.setAccessible(true);
-            try {
-                if(field.get(deviceEntity) != null){
-                    temp.put(field.getName(),field.get(deviceEntity));
-                }
-            } catch (IllegalAccessException e1) {
-                e1.printStackTrace();
-            }
-        }
-        return temp;
-    }
 
     @Override
     public int updateDeviceTimeOutByCode(String deviceCode,Integer runState) {
-        DeviceEntity deviceEntity = deviceMapper.queryDeviceByCode(deviceCode);
+        DeviceEntityApi deviceEntity = deviceMapper.queryDeviceByCode(deviceCode);
         int i = deviceMapper.updateDeviceTimeOutByCode(deviceCode, runState);
         if(i > 0){
             log.info("设备编号："+deviceEntity.getDeviceCode()+"，修改es超时数据");
             //修改 ES start
-            DeviceEntity deviceEsEntity = new DeviceEntity();
+            DeviceEntityApi deviceEsEntity = new DeviceEntityApi();
             deviceEsEntity.setRunState(runState);
             deviceEsEntity.setDeviceId(deviceEntity.getDeviceId());
 
-            Map<String, Object> stringObjectMap = convertUpdateES(deviceEsEntity);
-            esUtil.updateES(stringObjectMap,deviceEsEntity.getDeviceId());
+            Map<String, Object> stringObjectMap = esUtil.convertUpdateES(deviceEsEntity);
+            esUtil.updateES(stringObjectMap,deviceEsEntity.getDeviceId(),"device_index");
             //修改 ES end
         }
         return i;
     }
 
     @Override
-    public List<DeviceEntity> queryDeviceNoPage(DeviceQuery deviceQuery) {
+    public List<DeviceEntityApi> queryDeviceNoPage(DeviceQuery deviceQuery) {
         return deviceMapper.queryDevice(deviceQuery);
     }
 
     @Override
     public int updateDeviceVersionByCode(String deviceCode) {
-        DeviceEntity deviceEntity = deviceMapper.queryDeviceByCode(deviceCode);
+        DeviceEntityApi deviceEntity = deviceMapper.queryDeviceByCode(deviceCode);
 
         int i = deviceMapper.updateDeviceVersionByCode(deviceCode);
         if(i > 0){
             log.info("设备编号："+deviceEntity.getDeviceCode()+"，修改es版本更新数据");
             //修改 ES start
-            DeviceEntity deviceEsEntity = new DeviceEntity();
+            DeviceEntityApi deviceEsEntity = new DeviceEntityApi();
             deviceEsEntity.setDeviceId(deviceEntity.getDeviceId());
             deviceEsEntity.setDeviceVersion(deviceEntity.getDeviceVersion() + 1);
-
-            Map<String, Object> stringObjectMap = convertUpdateES(deviceEntity);
-            esUtil.updateES(stringObjectMap,deviceEntity.getDeviceId());
+            Map<String, Object> stringObjectMap = esUtil.convertUpdateES(deviceEntity);
+            esUtil.updateES(stringObjectMap,deviceEntity.getDeviceId(),"device_index");
             //修改 ES end
         }
         return i;
+    }
+
+    @Override
+    public int updateDeviceGprsFlag(String deviceCode, Integer gprsFlag) {
+        return deviceMapper.updateDeviceGprsFlag(deviceCode,gprsFlag);
     }
 
 
