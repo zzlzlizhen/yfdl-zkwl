@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.remote.advancedsetting.dao.AdvancedSettingDao">
+    <sql id="colums">
+        id as id,
+        load_work_mode as loadWorkMode,
+        power_load as powerLoad,
+        time_turn_on as timeTurnOn,
+        time_turn_off as timeTurnOff,
+        time1 as time1,
+        time2 as time2,
+        time3 as time3,
+        time4 as time4,
+        time5 as time5,
+        time_down as timeDown,
+        power_people1 as powerPeople1,
+        power_people2 as powerPeople2,
+        power_people3 as powerPeople3,
+        power_people4 as powerPeople4,
+        power_people5 as powerPeople5,
+        power_dawn_people as powerDawnPeople,
+        power_sensor1 as powerSensor1,
+        power_sensor2 as powerSensor2,
+        power_sensor3 as powerSensor3,
+        power_sensor4 as powerSensor4,
+        power_sensor5 as powerSensor5,
+        power_sensor_down as powerSensorDown,
+        saving_switch as savingSwitch,
+        auto_sleep_time as autoSleepTime,
+        VPV as vpv,
+        lignt_on_duration as ligntOnDuration,
+        pv_switch as pvSwitch,
+        bat_type as batType,
+        bat_string_num as batStringNum,
+        vol_over_dis_charge as volOverDisCharge,
+        vol_charge as volCharge,
+        i_charge as iCharge,
+        temp_charge as tempCharge,
+        temp_dis_charge as tempDisCharge,
+        inspection_time as inspectionTime,
+        induction_switch as inductionSwitch,
+        Induction_light_on_delay as inductionLightOnDelay,
+        device_code as deviceCode,
+        group_id as groupId,
+        uid as uid,
+        create_time as createTime,
+        update_time as updateTime,
+        update_user as updateUser,
+        fir_down_power as firDownPower,
+        two_down_power as twoDownPower,
+        three_down_power as threeDownPower,
+        fir_reduc_amplitude as firReducAmplitude,
+        two_reduc_amplitude as twoReducAmplitude,
+        three_reduc_amplitude as threeDownPower,
+        switch_delay_time as switchDelayTime
+    </sql>
+    <select id="queryByGroupId" resultType="com.remote.advancedsetting.entity.AdvancedSettingEntity">
+          select <include refid="colums"/> from advanced_setting where 1=1
+          <if test="groupId!= '' and groupId!=null">
+              and group_id=#{groupId}
+          </if>
+    </select>
+    <select id="queryByDeviceCode" resultType="com.remote.advancedsetting.entity.AdvancedSettingEntity">
+        select <include refid="colums"/> from advanced_setting where 1=1
+        <if test="deviceCodes!= null and deviceCodes.size!= 0">
+            and device_code in
+            <foreach collection="deviceCodes" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+
+    <update id="updateAdvancedByDeviceCodes">
+        update advanced_setting set group_id = #{groupId}
+        <where>
+            group_id = #{oldGroupId}
+            <if test="deviceCodes !=null and deviceCodes.size()!= 0">
+                and device_code in
+                <foreach collection="deviceCodes" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </update>
+
+    <delete id="deleteAdvancedByDeviceCode">
+        delete from advanced_setting where  group_id = #{groupId} and device_code = #{deviceCode}
+    </delete>
+    <select id="queryVol" resultType="com.remote.advancedsetting.entity.AdvancedSettingResult">
+        select vol_over_dis_charge as volOverDisCharge,vol_charge as volCharge from advanced_setting where 1=1
+        <if test="deviceCode != null and deviceCode != ''">
+            and device_code = #{deviceCode}
+        </if>
+    </select>
+    <update id="updateAdvancedByDeviceCode">
+        update advanced_setting set group_id = #{groupId}
+        <where>
+            group_id = #{oldGroupId}
+            <if test="deviceCode !=null and deviceCode != ''">
+                and device_code = #{deviceCode}
+
+            </if>
+        </where>
+    </update>
+    <delete id="deleteAdvSet">
+        delete from advanced_setting where 1=1
+        <if test="deviceCodes != null and deviceCodes.size()>0">
+            and device_code in
+            <foreach collection="deviceCodes" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </delete>
+</mapper>

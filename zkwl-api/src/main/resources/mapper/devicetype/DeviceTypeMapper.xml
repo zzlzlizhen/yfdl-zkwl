@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.remote.devicetype.dao.DeviceTypeMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.remote.devicetype.entity.DeviceTypeEntity" id="BaseResultMap">
+        <result property="deviceTypeId" column="device_type_id"/>
+        <result property="deviceTypeCode" column="device_type_code"/>
+        <result property="deviceTypeName" column="device_type_name"/>
+        <result property="deviceTypePath" column="device_type_path"/>
+        <result property="createUser" column="create_user"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="updateTime" column="update_time"/>
+
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+    device_type_id, device_type_code,device_type_name, device_type_path, create_user, update_user, update_time
+    </sql>
+
+    <select id="getDeviceTypeByCode"  resultMap="BaseResultMap" >
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        fun_device_type
+        <where>
+            device_type_code = #{deviceTypeCode}
+        </where>
+    </select>
+
+</mapper>
