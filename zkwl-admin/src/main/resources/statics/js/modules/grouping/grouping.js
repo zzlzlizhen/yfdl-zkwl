@@ -398,7 +398,7 @@ $(function(){
                             }else{
                                 layer.open({
                                     title: '信息',
-                                    content: '删除失败',
+                                    content: res.msg,
                                     skin: 'demo-class'
                                 });
                             }

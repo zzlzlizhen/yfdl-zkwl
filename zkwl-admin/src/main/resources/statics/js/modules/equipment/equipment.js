@@ -102,6 +102,8 @@ $(function () {
                 console.log(res);
                 var arra=[];
                 var html="";
+                var htmla="";
+                var htmll="";
                 for (var i = 0; i < res.data.length; i++) {
                     var projectStatus=res.data[i].projectStatus;
                     if (projectStatus == null ) {
@@ -119,7 +121,7 @@ $(function () {
                         "<ul class=\"nav_gro\"  id="+res.data[i].id+"1"+"   >\n" +
                         "</ul>"
                     "</li>\n"
-                    var htmll="";
+
                     for(var k = 0; k < res.data[i].children.length; k++){
                         var deviceCount=res.data[i].children[k].deviceNumber;
                         if (deviceCount == null ) {
@@ -148,8 +150,8 @@ $(function () {
                         arc.push(locon);
                         pro_je=res.data[i].children[k].parentId;
                         groupId=res.data[i].children[k].id;
-                        var htmla="";
-                        for(var v = 0; v < res.data[i].children[k].children.length;  v++) {
+
+                        for(var v = 0; v < res.data[i].children[k].children.length; v++) {
                             var runState = res.data[i].children[k].children[v].runState
                             if (runState == null) {
                                 runState = "";
@@ -180,12 +182,19 @@ $(function () {
                                 state:3,
                             };
                             arra.push(locon);
+
                         }
+
+
                     }
+
                 }
+                console.log(html)
+                console.log(htmll)
+                console.log(htmla)
                 $("#nav_a").append(html);//项目
-                $(".nav_gro").append(htmll);
-                $(".nav_gro_b_L").append(htmla);
+                $(".nav_gro_b_L").append(htmla);//分组
+                $(".nav_gro").append(htmll);//设备
 
                 //调用地图
                 m_p(0, arra);
@@ -400,7 +409,8 @@ $(function () {
                 $(".grouping").slideDown();
                 $(".nav_pro_v").attr("t","0");
                 $(".nav_pro_v").click(function(){
-                    $(".ssde").css("display","none");
+                    $(".ssde,.con_Gu,.She_a").css("display","none");
+                    $(".con_Xu ").css("display","block");
                     var pro_je=$(this).parents(".pro_li").attr("id");
                     aas(pro_je)
                     if( $(this).attr("t")=="0"){

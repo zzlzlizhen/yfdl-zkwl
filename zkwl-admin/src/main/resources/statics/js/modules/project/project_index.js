@@ -134,15 +134,15 @@ $(function () {
                 })
                 //删除彈窗/////////////////////
                 $(".shade_a_delete,.sha_cancel_delete,.guan_sha").click(function () {
-                    $(".shade_delete,.shade_b_delete").css("display", "none")
+                    $(".shade_delete,.shade_b_delete").css("display", "none");
                 })
                 $(".wrong").click(function(){
-                    $(".mistake").css("display","none")
+                    $(".mistake").css("display","none");
                 })
             // 地图定位
                 $(".ma_p").unbind('click');
                 $(".ma_p").click(function(){
-                    var longitude=$(this).attr("id")
+                    var longitude=$(this).attr("id");
                     var name=$(this).parent().siblings(".Na_me").html();
                     var con=$(this).parent().siblings(".sumCount").html();
                     var searchUrl=encodeURI('../equipment/equipment.html?longitude='+longitude+"&name="+name+"&state="+1+"&con="+con)
@@ -182,8 +182,8 @@ $(function () {
                             }),
                             success: function(res){
                                 if(res.code == 200){
-                                    $(".shade_modifier").hide()
-                                    $(".mistake").hide()
+                                    $(".shade_modifier").hide();
+                                    $(".mistake").hide();
                                     layer.open({
                                         title: '信息',
                                         content: '修改成功',
@@ -231,7 +231,7 @@ $(function () {
                         //当前页数current
                      var  pagesb = current
                         $("#div").html("");
-                        form(pageSize, pagesb,serial,pro_name,select)
+                        form(pageSize, pagesb,serial,pro_name,select);
                     }
                 });
 
@@ -245,17 +245,17 @@ $(function () {
    $("#proje_add").click(function(){
        $(".shade_project,.shade_b_project").css("display","block");
        $(".pro_name").val("");
-       $(".pro_s_b_add").val("")
+       $(".pro_s_b_add").val("");
        $("#select1 option:selected").val("");
        $("#selectb option:selected").val("");
    })
     $(".shade_add_project").click(function(){
-        $(".shade_project,.shade_b_project,.mistake").css("display","none")
+        $(".shade_project,.shade_b_project,.mistake").css("display","none");
     })
 
     $("#project_confirm").click(function(){
-       var pro_name= $(".pro_name").val()
-       var pro_s_b= $(".pro_s_b_add").val()
+       var pro_name= $(".pro_name").val();
+       var pro_s_b= $(".pro_s_b_add").val();
        var select=$("#select1 option:selected").attr("id");
         var selecte=Number($("#selectb option:selected").attr("id"));
         if(isNaN(selecte)){
@@ -273,21 +273,21 @@ $(function () {
                     "projectName":pro_name,
                     "projectDesc":pro_s_b,
                     "exclusiveUser":select,
-                    "cityId ":selecte,
+                    "cityId":selecte,
                 }),
                 success: function(res){
                     if(res.code == 200){
-                        $(".pro_name").val("")
-                        $("#select1").val("")
-                        $("#selectb").val("")
-                        $(".pro_s_b").val("")
-                        $(".shade_project").hide()
+                        $(".pro_name").val("");
+                        $("#select1").val("");
+                        $("#selectb").val("");
+                        $(".pro_s_b").val("");
+                        $(".shade_project").hide();
                         layer.open({
                             title: '信息',
                             content: '添加成功',
                             skin: 'demo-class'
                         });
-                        form(10, 1, "", "", "", "")
+                        form(10, 1, "", "", "", "");
                     }else{
                         layer.open({
                             title: '信息',
@@ -304,11 +304,11 @@ $(function () {
     })
     //编辑去弹窗/////////////////////////////////
      $(".shade_modifier_project").click(function(){
-         $(".shade_modifier,.shade_b_modifier.mistake").css("display","none")
-         $(".mistake").css("display","none")
+         $(".shade_modifier,.shade_b_modifier.mistake").css("display","none");
+         $(".mistake").css("display","none");
      })
     $(".rqubtn,.shade_a_delete").click(function () {
-        $(".shade_delete,.shade_b_delete.mistake").css("display", "none")
+        $(".shade_delete,.shade_b_delete.mistake").css("display", "none");
     })
 })
 
