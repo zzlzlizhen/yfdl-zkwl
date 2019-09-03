@@ -25,6 +25,7 @@
     	su.type as type,
     	su.is_bind_mtype as isBindMtype,
     	su.real_name as realName,
+    	su.operation as operation,
     	su.deadline as deadline
     </sql>
 

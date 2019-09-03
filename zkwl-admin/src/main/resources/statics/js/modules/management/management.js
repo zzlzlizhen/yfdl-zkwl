@@ -24,11 +24,12 @@ $(function () {
     var pages
     var pageSize
     var pageNum
+    var select //组名
     var $color = localStorage.getItem("mycolor");
     //搜索
     $("#proje_search").unbind('click');
     $("#proje_search").click(function(){
-        var select=$("#form-control").val()
+         select=$("#form-control").val()
         $("#div").html("")
         form(pageSize,pageNum,select)
     })
@@ -78,7 +79,7 @@ $(function () {
                         "<td id=" + res.data.list[i].groupId + " style=\"width:4%;\"> <input type= \"checkbox\"  name='clk' class=\"checkbox_in checkbox_i\"> </td>\n" +
                         "<td class='groupName'>" + res.data.list[i].groupName + "</td>\n" +
                         "<td>" + res.data.list[i].deviceTypeName + "</td>\n" +
-                        "<td>" + deviceCount + "</td>\n" +
+                        "<td class='count'>" + deviceCount + "</td>\n" +
                         "<td title=" + res.data.list[i].createTime + ">" + res.data.list[i].createTime + "</td>\n" +
                         "<td>" + callPoliceCount + "</td>\n" +
                         "<td>" + faultCount + "</td>\n" +
@@ -99,8 +100,9 @@ $(function () {
                 $(".ma_p").unbind('click');
                 $(".ma_p").click(function(){
                     var longitude=$(this).attr("id");
-                    var name=$(this).parent().siblings(".groupName").html()
-                    var searchUrl=encodeURI('../equipment/equipment.html?longitude='+longitude+"&name="+name)
+                    var name=$(this).parent().siblings(".groupName").html();
+                    var con=$(this).parent().siblings(".count").html();
+                    var searchUrl=encodeURI('../equipment/equipment.html?longitude='+longitude+"&name="+name+"&state="+2+"&con="+con)
                     location.href =searchUrl;
                 })
                 //高级设置
@@ -283,7 +285,7 @@ $(function () {
                         //当前页数current
                         var pagesb = current
                         $("#div").html("");
-                        form(pageSize, pagesb);
+                        form(pageSize, pagesb,select);
                     }
                 });
 
@@ -343,10 +345,12 @@ $(function () {
 
 
 //编辑去弹窗/////////////////////////////////
-    $(".shade_modifier_project,.glyphicon").click(function(){
+    $(".shade_modifier_project").click(function(){
         $(".shade_modifier,.shade_b_modifier").css("display","none");
         $(".mistake").css("display","none");
     })
-
+$(".glyphicon").click(function(){
+    $(".mistake").css("display","none");
+})
 
 })

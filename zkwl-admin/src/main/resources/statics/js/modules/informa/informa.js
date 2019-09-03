@@ -31,6 +31,12 @@ $(function() {
                 pageNumb = res.page.totalPage;  //总页数
                 var inhtml=""
                 for (var i = 0; i < res.page.list.length; i++) {
+                    if(res.page.list[i].content==null){
+                        res.page.list[i].content=""
+                    }
+                    if(res.page.list[i].createDate==null){
+                        res.page.list[i].createDate=""
+                    }
                     inhtml +=
                         "<li>"+
                         "<div class='D_img'>"+
@@ -81,6 +87,7 @@ $(function() {
               "limit": pageSizea,
               "page": pagesa
           },
+
           success: function (res) {
               pages = res.page.currPage;  //第几页
               pageSize = res.page.pageSize;//每页条数
@@ -89,6 +96,30 @@ $(function() {
               console.log(res)
               console.log(";;;;;;;;;;;;;;;;;;;;;;")
               for (var i = 0; i < res.page.list.length; i++) {
+                  if( res.page.list[i].uid==null){
+                      res.page.list[i].uid=""
+                  }
+                  if(res.page.list[i].username==null){
+                      res.page.list[i].username=""
+                  }
+                  if(res.page.list[i].backContent==null){
+                      res.page.list[i].backContent=""
+                  }
+                  if(res.page.list[i].backCreateTime==null){
+                      res.page.list[i].backCreateTime=""
+                  }
+                  if(res.page.list[i].answerUserName==null){
+                      res.page.list[i].answerUserName=""
+                  }
+                  if(res.page.list[i].answerContent==null){
+                      res.page.list[i].answerContent=""
+                  }
+                  if(res.page.list[i].answerCreateTime==null){
+                      res.page.list[i].answerCreateTime=""
+                  }
+                  if( res.page.list[i].backId==null){
+                      res.page.list[i].backId=""
+                  }
                   var head="https://guangxun-wulian.com"+res.page.list[i].headUrl
                   var heade="https://guangxun-wulian.com"+res.page.list[i].answerHeadUrl
                   html +=
@@ -139,13 +170,14 @@ $(function() {
                   })
               }
 
+
               // 详情
               var backId
               var uid
               $(".r_details").click(function(){
                   $(".shade_project,.shade_b_project_r").css("display","block");
                   backId=$(this).attr("id")
-                  uid=$(this).parent().parent().attr("id")
+                  uid=$(this).parent().parent().parent().attr("id")
                   rdele(backId);
               })
 

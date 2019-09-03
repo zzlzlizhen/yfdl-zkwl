@@ -115,14 +115,7 @@ public class DeviceEntity {
      */
     private Date updateTime;
 
-    /**
-     * gprs版本号
-     */
-    private Integer gprsVersion;
-    /**
-     * gprs 升级标志
-     */
-    private Integer gprsFlag;
+
 
     private Integer counts;//统计数量
     //蓄电池余量
@@ -151,10 +144,30 @@ public class DeviceEntity {
 
     private String cityName;
 
-    private Integer version;
+
     //设备版本号
     private Integer deviceVersion;
     //使用人   **使用人和创建人 存反了。切记
     private Long usrUser;
+    //当前版本号
+    private Integer version;
+    //将要升级的版本号
+    private Integer futureVersion;
+    //升级标识  0不升级 1升级
+    private Integer futureFlag;
+    //gprs 将要升级的版本
+    private Integer gprsFutureVersion;
+    /**
+     * gprs版本号
+     */
+    private Integer gprsVersion;
+    /**
+     * gprs 升级标志
+     */
+    private Integer gprsFlag;
+    //厂家标识 0否1是
+    private Integer cjFlag;
+    //连接  0长连接  1短链接
+    private Integer link;
 
 }

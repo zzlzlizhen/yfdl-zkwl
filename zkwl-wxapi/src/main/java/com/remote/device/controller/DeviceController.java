@@ -51,6 +51,7 @@ public class DeviceController extends AbstractController {
         deviceEntity.setDeviceId(UUID.randomUUID().toString());
         deviceEntity.setOnOff(AllEnum.NO.getCode());
         deviceEntity.setSignalState(0);
+        deviceEntity.setLight("100");
         deviceEntity.setRunState(RunStatusEnum.OFFLINE.getCode());
         deviceEntity.setTransport(TransportEnum.NO.getCode());
         int i = deviceService.getDeviceByDeviceCode(deviceEntity.getDeviceCode());

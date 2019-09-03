@@ -20,5 +20,7 @@ public class DeviceQuery extends DeviceEntity{
 
     private Integer noRunState;
 
+    private List<String> projectList = new ArrayList<>();
+
     private List<String> deviceList = new ArrayList<>();
 }

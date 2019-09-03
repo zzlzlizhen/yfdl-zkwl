@@ -181,10 +181,10 @@ public interface DeviceService {
      * @Author zhangwenping
      * @Description 批量修改设备状态
      * @Date 11:15 2019/7/25
-     * @Param deviceCodes
+     * @Param deviceCodes ,version
      * @return int
      **/
-    boolean updateDeviceRunStatus(List<String> deviceCodes);
+    boolean updateDeviceRunStatus(List<String> deviceCodes,Integer version);
 
     /*
      * @Author  zhangwenping
@@ -199,5 +199,22 @@ public interface DeviceService {
      * 通过设备ids查询设备所属ids
      * */
     List<Long> queryExclUserId(List<String> deviceIds);
+
+    /*
+     * @Author zhangwenping
+     * @Description 升级gprs
+     * @Date 16:16 2019/8/27
+     * @Param  version
+     * @return boolean
+     **/
+    boolean updateDeviceGprsVersion(List<String> list,Integer version);
+    /*
+     * @Author zhangwenping
+     * @Description 厂家删除设备
+     * @Date 17:33 2019/8/31
+     * @Param list
+     * @return boolean
+     **/
+    boolean deleteDeviceCj(List<String> list);
 
 }

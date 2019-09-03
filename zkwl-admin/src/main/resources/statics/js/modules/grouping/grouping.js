@@ -87,15 +87,19 @@ $(function(){
         var searchUrl=encodeURI('../equipment/equipment.html')
         location.href =searchUrl;
     })
+    var Se_id
+    var Se_name
+    var select
+    var selecta
+    var selectr
     //搜索
     $("#proje_search").unbind('click');
     $("#proje_search").click(function(){
-       var Se_id=$("#Se_id").val();
-       var Se_name=$("#Se_name").val();
-       // var select=$("#se_for option:selected").attr("id")
-        var select=$("#se_for").val();
-       var selecta=$("#se_fora option:selected").attr("id")
-        var selectr="";
+        Se_id=$("#Se_id").val();
+        Se_name=$("#Se_name").val();
+        select=$("#se_for").val();
+        selecta=$("#se_fora option:selected").attr("id")
+        selectr="";
         $("#div").html("");
         form(pageSize,pageNum,Se_id,Se_name,select,selecta,selectr);
         refresh();
@@ -160,7 +164,7 @@ $(function(){
                     }else if(batteryState == 2) {
                         batteryState = "正常";
                     }else if(batteryState == 3) {
-                        batteryState = "限压值";
+                        batteryState = "限压";
                     }else if(batteryState == 4) {
                         batteryState = "超压";
                     }else if(batteryState == 5) {
@@ -271,7 +275,7 @@ $(function(){
                 $(".ma_p").click(function(){
                     var longitude=$(this).attr("id");
                     var name=$(this).parent().siblings(".r_name").html()
-                    var searchUrl=encodeURI('../equipment/equipment.html?longitude='+longitude+"&name="+name)
+                    var searchUrl=encodeURI('../equipment/equipment.html?longitude='+longitude+"&name="+name+"&state="+3+"&con="+"")
                     location.href =searchUrl;
                 })
 
@@ -418,7 +422,7 @@ $(function(){
                 pro_gro("")
                 function pro_gro(groupName){
                     $.ajax({
-                        url:baseURL + 'fun/group/queryGroupIdNoPage?projectId='+Id+"&groupName="+groupName,
+                        url:baseURL + 'fun/group/queryGroup?projectId='+Id+"&groupName="+groupName,
                         contentType:"application/json;charset=UTF-8",
                         type:"get",
                         data:{},
@@ -430,14 +434,13 @@ $(function(){
                                     "<p>"+res.data[i].groupName+"</p>\n" +
                                     "</span>"
                             }
-                            $("#Dan_x").append(html);
+                            $("#Dan_x").empty().append(html);
                             $(".che_i").click(function(){
                                 var che_c=$(this).prop('checked');
                                 if(che_c == true){
                                     $(this).parent().siblings().children(".che_i[name=alla]:checkbox").prop('checked', false);
                                     gr_Id=$(this).parent().attr('id');
                                 }
-
                             })
                         }
                     })
@@ -540,7 +543,7 @@ $(function(){
                         //当前页数current
                         var pagesb = current
                         $("#div").html("");
-                        form(pageSize, pagesb);
+                        form(pageSize, pagesb,Se_id,Se_name,select,selecta,selectr);
                     }
                 });
 
@@ -634,7 +637,7 @@ $(function(){
                     }else{
                         layer.open({
                             title: '信息',
-                            content: '添加失败',
+                            content: res.msg,
                             skin: 'demo-class'
                         });
                     }

@@ -81,4 +81,13 @@ public interface GroupService {
      * @return GroupEntity
      **/
     List<GroupEntity> queryGroupByIds(List<String> groupIds);
+
+    /*
+     * @Author zhangwenping
+     * @Description 通过项目id和分组名称查询
+     * @Date 13:50 2019/8/30
+     * @Param groupName
+     * @return List<GroupEntity>
+     **/
+    List<GroupEntity> queryGroup(String projectId, String groupName);
 }

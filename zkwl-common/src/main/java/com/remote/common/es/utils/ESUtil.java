@@ -109,6 +109,7 @@ public class ESUtil {
                 String deviceId = map.get(indexId).toString();
                 request.add(new UpdateRequest (indexName,deviceId).doc(map));
             }
+            request.setRefreshPolicy(WriteRequest.RefreshPolicy.WAIT_UNTIL);
             BulkResponse bulk = restHighLevelClient.bulk(request,RequestOptions.DEFAULT);
             return bulk.status();
         }catch (Exception e){

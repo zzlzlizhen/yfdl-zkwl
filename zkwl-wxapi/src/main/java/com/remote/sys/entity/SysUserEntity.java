@@ -143,4 +143,8 @@ public class SysUserEntity implements Serializable {
 	 * */
 	@TableField(exist=false)
 	private String curAllParentId;
+	/**
+	 *是否是厂家0否 1是
+	 */
+	private int operation;
 }

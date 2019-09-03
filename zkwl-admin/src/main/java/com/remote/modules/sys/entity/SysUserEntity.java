@@ -134,4 +134,8 @@ public class SysUserEntity implements Serializable {
 	 * 账号有效期截止日期
 	 * */
 	private Date deadline;
+	/**
+	 *是否是厂家0否 1是
+	 */
+	private int operation;
 }

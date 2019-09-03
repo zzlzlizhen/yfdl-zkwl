@@ -75,6 +75,7 @@
                 #{uid}
             </foreach>
         </if>
+        order by back_create_time desc
         LIMIT #{offset},#{limit}
     </select>
 </mapper>

@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public interface SysUserService extends IService<SysUserEntity> {
 
-	PageUtils queryPage(Map<String, Object> params,SysUserEntity currUser);
+	PageUtils queryPage(Map<String, Object> params,SysUserEntity currUser) throws Exception;
 
 	/**
 	 * 查询用户的所有菜单ID
@@ -26,13 +26,13 @@ public interface SysUserService extends IService<SysUserEntity> {
 	/**
 	 * 保存用户
 	 */
-	void saveUser(SysUserEntity user,SysUserEntity currentUser);
+	void saveUser(SysUserEntity user,SysUserEntity currentUser) throws Exception;
 
 
 	/**
 	 * 修改用户
 	 */
-	void update(SysUserEntity user);
+	void update(SysUserEntity user) throws Exception;
 
 	/**
 	 * 修改密码
@@ -40,7 +40,7 @@ public interface SysUserService extends IService<SysUserEntity> {
 	 * @param password     原密码
 	 * @param newPassword  新密码
 	 */
-	boolean updatePassword(Long userId, String password, String newPassword);
+	boolean updatePassword(Long userId, String password, String newPassword) throws Exception;
 	/*
 	 * @Author zhangwenping
 	 * @Description 根据id 查询所有下级用户
@@ -53,25 +53,25 @@ public interface SysUserService extends IService<SysUserEntity> {
 	/**
 	 * 通过当前用户邮箱跟用户id查询用户
 	 * */
-	SysUserEntity queryByEmailAndUid(String email,Long userId);
+	SysUserEntity queryByEmailAndUid(String email,Long userId) throws Exception;
 
 	List<SysUserEntity> queryChild(SysUserEntity sysUserEntity);
 
 	List<SysUserEntity> queryAllChild(SysUserEntity sysUserEntity);
 
-	List<SysUserEntity> queryUserList(Map<String, Object> params,SysUserEntity currentUser);
+	List<SysUserEntity> queryUserList(Map<String, Object> params,SysUserEntity currentUser) throws Exception;
 	/**
 	 * 通过用户id查询用户
 	 * */
-	SysUserEntity queryById(Long userId);
+	SysUserEntity queryById(Long userId) throws Exception;
 	/**
 	 *通过当前用户手机号跟用户id查询用户是否存在
 	 */
-	SysUserEntity queryBySmsAndUid(String mobile,Long userId);
+	SysUserEntity queryBySmsAndUid(String mobile,Long userId) throws Exception;
 	/**
 	 * 更新用户状态
 	 * */
-	boolean updateStatus(Long userId,Integer status);
+	boolean updateStatus(Long userId,Integer status) throws Exception;
 
 	/**
 	 * 通过用户id更新邮箱
@@ -81,17 +81,17 @@ public interface SysUserService extends IService<SysUserEntity> {
 	 * 通过用户id更新手机号
 	 * */
 	boolean updateMobile(String mobile,Long userId);
-	int removeUser(Long id);
-	void updatebaseInfo(SysUserEntity user,Long userId);
-	SysUserEntity queryByIdEAndM(Long userId);
+	int removeUser(Long id) throws Exception;
+	void updatebaseInfo(SysUserEntity user,Long userId) throws Exception;
+	SysUserEntity queryByIdEAndM(Long userId) throws Exception;
 	/**
 	 * 通过用户名修改密码
 	 * */
-	boolean updateUserName(String userName,String password);
+	boolean updateUserName(String userName,String password) throws Exception;
 	/**
      * 通过用户名查询盐值
      * */
-	String selectSlat(String username);
+	String selectSlat(String username) throws Exception;
 	/**
 	 * 通过联系方式查询用户id
 	 * */
@@ -116,22 +116,22 @@ public interface SysUserService extends IService<SysUserEntity> {
 	/**
 	 * 通过邮箱查询用户信息是否存在
 	 * */
-	SysUserEntity getByEmail(String email);
+	SysUserEntity getByEmail(String email) throws Exception;
 	/**
 	 * 通过手机号检查该手机号是否已存在
 	 * */
-	SysUserEntity getByMobile(String mobile);
+	SysUserEntity getByMobile(String mobile) throws Exception;
 	/**
 	 * 通过邮箱跟当前用户id查询用户信息是否存在
 	 * */
-	List<SysUserEntity> getByEmailAndUid(String email,Long userId);
+	List<SysUserEntity> getByEmailAndUid(String email,Long userId) throws Exception;
 	/**
 	 * 通过手机号当前用户id检查该手机号是否已存在
 	 * */
-	List<SysUserEntity> getByMobileAndUid(String mobile,Long userId);
+	List<SysUserEntity> getByMobileAndUid(String mobile,Long userId) throws Exception;
 	/**
 	 * 通过用户名查询该用户是否存在
 	 * */
-	SysUserEntity getByUsername(String username);
+	SysUserEntity getByUsername(String username) throws Exception;
 
 }

@@ -16,6 +16,7 @@ public class SetUp {
     private Integer onOff;//开关
     private String lightingDuration;//亮灯时长
     private String morningHours;//晨亮时长
+    private Integer link;
 
 
     /**

@@ -19,7 +19,7 @@ public class DeviceTypeServiceImpl implements DeviceTypeService {
     private DeviceTypeMapper deviceTypeMapper;
 
     @Override
-    public DeviceTypeEntity getDeviceTypeByCode(String deviceTypeCode) {
-        return deviceTypeMapper.getDeviceTypeByCode(deviceTypeCode);
+    public DeviceTypeEntity getDeviceTypeByCode(String deviceTypeCode,Integer type) {
+        return deviceTypeMapper.getDeviceTypeByCode(deviceTypeCode,type);
     }
 }

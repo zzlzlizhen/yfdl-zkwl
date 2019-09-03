@@ -119,12 +119,17 @@ public class MqttHandel {
             count = nextCmdID;
             if(nextCmdID.equals(new Integer(1))){
                 DeviceTypeService deviceTypeService = (DeviceTypeService)SpringUtils.getBean("deviceTypeServiceImpl");
-                DeviceTypeEntity deviceType = deviceTypeService.getDeviceTypeByCode(deviceInfo.getDevType());
-                //获取更新文件信息
-                updateVersion = Utils.version(deviceType.getDeviceTypePath());
-                List<Byte> list = Arrays.asList(updateVersion.getBytes());
-                //切割成多少分，每份1024
-                lists = Utils.averageAssign(list, 1024);
+                DeviceTypeEntity deviceType = deviceTypeService.getDeviceTypeByCode(deviceInfo.getDevType(),2);
+                if(deviceType != null){
+                    DeviceService deviceService = (DeviceService)SpringUtils.getBean("deviceServiceImpl");
+                    DeviceEntityApi deviceEntityApi = deviceService.queryDeviceByCode(deviceInfo.getDevSN());
+                    String path = deviceType.getDeviceTypePath()+deviceEntityApi.getFutureVersion()+".bin";
+                    //获取更新文件信息
+                    updateVersion = Utils.version(path);
+                    List<Byte> list = Arrays.asList(updateVersion.getBytes());
+                    //切割成多少分，每份1024
+                    lists = Utils.averageAssign(list, 1024);
+                }
             }
             if(nextCmdID <= lists.size()){
                 //拿到客户端需要的第几份

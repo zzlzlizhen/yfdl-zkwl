@@ -2,6 +2,7 @@
 package com.remote.modules.sys.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.remote.common.errorcode.ErrorCode;
 import com.remote.common.msg.SendMqttService;
 import com.remote.common.utils.R;
 import com.remote.modules.advancedsetting.entity.AdvancedSettingEntity;
@@ -49,14 +50,22 @@ public class MqttController extends AbstractController{
 	@RequestMapping("/pub")
 	public R list(@RequestParam Map<String, Object> params){
 		String groupId = "1cbc10c8-1e06-4507-b1c5-8db72c344f3b";
-		AdvancedSettingEntity advancedSettingEntity = advancedSettingService.queryByDevOrGroupId(groupId,"0");
-		String json = JSON.toJSONString(advancedSettingEntity,true);
-		System.out.print(json);
-		params.put("message",json);
-		if(params.get("message")!=null){
-			return sendMqttService.publish(mqttSubTopic,(String)params.get("message"));
-		}else{
-			return sendMqttService.publish(mqttSubTopic,"不知道该发布什么内容");
+		AdvancedSettingEntity advancedSettingEntity = null;
+		try {
+			advancedSettingEntity = advancedSettingService.queryByDevOrGroupId(groupId,"0");
+			String json = JSON.toJSONString(advancedSettingEntity,true);
+			System.out.print(json);
+			params.put("message",json);
+			if(params.get("message")!=null){
+				return sendMqttService.publish(mqttSubTopic,(String)params.get("message"));
+			}else{
+				return sendMqttService.publish(mqttSubTopic,"不知道该发布什么内容");
+			}
+		}catch (Exception e){
+			String msg = "查询高级设置组信息异常";
+			logger.error(ErrorCode.ABNORMAL + msg);
+			e.printStackTrace();
+			return R.error(msg);
 		}
 	}
 

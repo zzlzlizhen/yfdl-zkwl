@@ -145,4 +145,7 @@ public class DeviceEntity {
     // 使用人  使用人和创建人存反
     private Long usrUser;
 
+    private Integer gprsVersion;
+
+    private Integer cjFlag;
 }

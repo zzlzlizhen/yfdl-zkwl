@@ -3,10 +3,8 @@ package com.remote.modules.device.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.remote.common.enums.AllEnum;
-import com.remote.common.enums.CommunicationEnum;
-import com.remote.common.enums.FaultlogEnum;
-import com.remote.common.enums.LoadStatusEnum;
+import com.remote.common.enums.*;
+import com.remote.common.errorcode.ErrorCode;
 import com.remote.common.es.utils.ESUtil;
 import com.remote.common.utils.*;
 import com.remote.modules.advancedsetting.entity.AdvancedSettingEntity;
@@ -27,6 +25,7 @@ import com.remote.modules.group.entity.GroupQuery;
 import com.remote.modules.group.service.GroupService;
 import com.remote.modules.project.dao.ProjectMapper;
 import com.remote.modules.project.entity.ProjectEntity;
+import com.remote.modules.project.entity.ProjectQuery;
 import com.remote.modules.sys.entity.SysUserEntity;
 import com.remote.modules.sys.service.SysUserService;
 import org.apache.commons.collections.CollectionUtils;
@@ -164,17 +163,19 @@ public class DeviceServiceImpl implements DeviceService {
                 map.put(groupEntity.getGroupId(),groupEntity.getGroupName());
             }
         }
+        SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+
         if(CollectionUtils.isNotEmpty(page)){
             for(Map<String, Object> map1 : page){
-                if(map1.get("loadState") != null){
-                    Integer loadState = Integer.valueOf(map1.get("loadState").toString());
-                    if(loadState != LoadStatusEnum.OVERLOADWARNING.getCode() && loadState != LoadStatusEnum.OPEN.getCode()){
-                        map1.put("light",0);
-                    }
-                }
                 map1.put("groupName",map.get(map1.get("groupId")));
                 if(DeviceTypeMap.DEVICE_TYPE.get(map1.get("deviceType")) != null){
                     map1.put("deviceTypeName",DeviceTypeMap.DEVICE_TYPE.get(map1.get("deviceType")));
+                }
+                if(map1.get("updateTime") != null){
+                    String updateTime = map1.get("updateTime").toString();
+                    Date parse = sdf1.parse(updateTime);
+                    map1.put("updateTime",formatter.format(parse));
                 }
             }
         }
@@ -209,11 +210,13 @@ public class DeviceServiceImpl implements DeviceService {
         deviceEntity.setGroupName(groupEntity.getGroupName());
 
         int insert = deviceMapper.insert(deviceEntity);
-        if(insert > 0){
-            //添加es start
-            Map<String, Object> stringObjectMap = esUtil.convertAddES(deviceEntity);
-            RestStatus restStatus = esUtil.addES(stringObjectMap,"device_index",deviceEntity.getDeviceId());
-            //添加es end
+        if(deviceEntity.getCjFlag().equals(new Integer(0))){
+            if(insert > 0){
+                //添加es start
+                Map<String, Object> stringObjectMap = esUtil.convertAddES(deviceEntity);
+                RestStatus restStatus = esUtil.addES(stringObjectMap,"device_index",deviceEntity.getDeviceId());
+                //添加es end
+            }
         }
         if(StringUtils.isNotBlank(groupId)||!("undefined").equals(groupId)){
             advancedSettingEntity.setCreateTime(new Date());
@@ -231,6 +234,7 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public boolean deleteDevice(DeviceQuery deviceQuery) {
+        logger.info("删除设备入参："+JSONObject.toJSONString(deviceQuery));
         List<Map<String, Object>> temp = new ArrayList<>();
         List<DeviceEntity> deviceEntityList = deviceMapper.queryDeviceByDeviceIds(deviceQuery.getDeviceList());
         List<String> deviceCodes = deviceEntityList.parallelStream().map(deviceEntity -> deviceEntity.getDeviceCode()).collect(Collectors.toCollection(ArrayList::new));
@@ -292,7 +296,11 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public R updateById(DeviceEntity deviceEntity) throws Exception {
         logger.info("修改设备信息："+JSONObject.toJSONString(deviceEntity));
+        DeviceEntity deviceTemp = deviceMapper.queryDeviceByDeviceId(deviceEntity.getDeviceId());
         String groupId = deviceEntity.getGroupId();
+        GroupEntity groupEntity = groupService.queryGroupById(groupId);
+        deviceEntity.setDeviceCode(deviceTemp.getDeviceCode());
+        deviceEntity.setGroupName(groupEntity.getGroupName());
         DeviceEntity device = deviceMapper.queryDeviceByDeviceId(deviceEntity.getDeviceId());
         if(deviceEntity.getLatitude() != null && deviceEntity.getLongitude() != null){
             double distance = XYmatch.getDistance(Double.valueOf(device.getLatitude()), Double.valueOf(device.getLongitude()),Double.valueOf(deviceEntity.getLatitude()) ,Double.valueOf(deviceEntity.getLongitude()));
@@ -347,10 +355,17 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public DeviceResult queryDeviceByDeviceId(String deviceId) {
+        logger.info("查询详情入参deviceId:"+deviceId);
         DeviceResult resut = new DeviceResult();
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             DeviceEntity deviceEntity = deviceMapper.queryDeviceByDeviceId(deviceId);
+            if(StringUtils.isNotEmpty(deviceEntity.getLightingDuration())){
+                deviceEntity.setLightingDuration(Integer.valueOf(deviceEntity.getLightingDuration()).toString());
+            }
+            if(StringUtils.isNotEmpty(deviceEntity.getMorningHours())){
+                deviceEntity.setMorningHours(Integer.valueOf(deviceEntity.getMorningHours()).toString());
+            }
             String startTime = sdf.format(deviceEntity.getCreateTime());
             String endTime = sdf.format(new Date());
             long day = (sdf.parse(endTime).getTime() - sdf.parse(startTime).getTime()) /(24*60*60*1000);
@@ -379,7 +394,7 @@ public class DeviceServiceImpl implements DeviceService {
         DeviceEntity oldDeviceEntity = deviceMapper.queryDeviceByDeviceId(deviceQuery.getDeviceId());
         Integer sum = 0;
         AdvancedSettingEntity advancedSettingEntity = null;
-        if(StringUtils.isNotEmpty(deviceQuery.getGroupId())&&StringUtils.isNotEmpty(deviceQuery.getDeviceCode())|| !"0".equals(deviceQuery.getDeviceCode())){
+        try {
             advancedSettingEntity = advancedSettingService.queryByDevOrGroupId(deviceQuery.getGroupId(), deviceQuery.getDeviceCode());
             if(advancedSettingEntity != null){
                 if(advancedSettingEntity.getTime1() != null){
@@ -398,7 +413,12 @@ public class DeviceServiceImpl implements DeviceService {
                     sum+=advancedSettingEntity.getTime5();
                 }
             }
+        }catch (Exception e){
+            String msg = "修改设备添加日志";
+            logger.error(ErrorCode.ABNORMAL+msg);
+            e.printStackTrace();
         }
+
 
         List<DeviceEntity> deviceEntityList = new ArrayList<>();
         //代表操作单个设备开关
@@ -408,10 +428,18 @@ public class DeviceServiceImpl implements DeviceService {
             deviceEntity.setUpdateUser(deviceQuery.getCreateUser());
             deviceEntity.setOnOff(deviceQuery.getOnOff());
             deviceEntity.setLight(deviceQuery.getLight());
+            if(deviceQuery.getTransport() != null){
+                deviceEntity.setTransport(deviceQuery.getTransport());
+            }
             deviceEntity.setLightingDuration(deviceQuery.getLightingDuration());
             deviceEntity.setMorningHours(deviceQuery.getMorningHours());
             deviceEntityList.add(deviceEntity);
         }else{
+            if(StringUtils.isNotEmpty(deviceQuery.getDeviceCode())){
+                if(deviceQuery.getDeviceCode().equals("0")){
+                    deviceQuery.setDeviceCode(null);
+                }
+            }
             //代表组设置
             deviceEntityList = deviceMapper.queryDevice(deviceQuery);
             for(DeviceEntity deviceEntity : deviceEntityList){
@@ -419,39 +447,47 @@ public class DeviceServiceImpl implements DeviceService {
                 deviceEntity.setUpdateUser(deviceQuery.getCreateUser());
                 deviceEntity.setOnOff(deviceQuery.getOnOff());
                 deviceEntity.setLight(deviceQuery.getLight());
+                if(deviceQuery.getTransport() != null){
+                    deviceEntity.setTransport(deviceQuery.getTransport());
+                }
                 deviceEntity.setLightingDuration(deviceQuery.getLightingDuration());
                 deviceEntity.setMorningHours(deviceQuery.getMorningHours());
             }
         }
         StringBuffer sb = new StringBuffer();
-        if(oldDeviceEntity.getLightingDuration() == null || (deviceQuery.getLightingDuration() != null && !oldDeviceEntity.getLightingDuration().equals(deviceQuery.getLightingDuration()))){
-            sb.append("亮灯时长,");
-            if(Integer.valueOf(deviceQuery.getLightingDuration()) > sum){
-                deviceQuery.setLightingDuration(sum.toString());
-            }
-        }
-        if(oldDeviceEntity.getMorningHours() == null || (deviceQuery.getMorningHours() != null && !oldDeviceEntity.getMorningHours().equals(deviceQuery.getMorningHours()))){
-            sb.append("晨亮时长,");
-            if(advancedSettingEntity != null && advancedSettingEntity.getTimeDown() != null){
-                if(Integer.valueOf(deviceQuery.getMorningHours()) > advancedSettingEntity.getTimeDown()){
-                    deviceQuery.setMorningHours(advancedSettingEntity.getTimeDown().toString());
+        if(StringUtils.isNotEmpty(deviceQuery.getDeviceId())){
+            if(oldDeviceEntity.getLightingDuration() == null || (deviceQuery.getLightingDuration() != null && !oldDeviceEntity.getLightingDuration().equals(deviceQuery.getLightingDuration()))){
+                sb.append("亮灯时长,");
+                if(Integer.valueOf(deviceQuery.getLightingDuration()) > sum){
+                    deviceQuery.setLightingDuration(sum.toString());
                 }
             }
-        }
-        if(oldDeviceEntity.getLight() == null || (deviceQuery.getLight() != null && !oldDeviceEntity.getLight().equals(deviceQuery.getLight()))){
-            sb.append("亮度,");
-        }
-        if(oldDeviceEntity.getOnOff() == null || (deviceQuery.getOnOff() != null && !oldDeviceEntity.getOnOff().equals(deviceQuery.getOnOff()))){
-            sb.append("开关,");
+            if(oldDeviceEntity.getTransport() == null || (deviceQuery.getTransport() != null && !oldDeviceEntity.getTransport().equals(deviceQuery.getTransport()))){
+                sb.append("运输模式,");
+            }
+            if(oldDeviceEntity.getMorningHours() == null || (deviceQuery.getMorningHours() != null && !oldDeviceEntity.getMorningHours().equals(deviceQuery.getMorningHours()))){
+                sb.append("晨亮时长,");
+                if(advancedSettingEntity != null && advancedSettingEntity.getTimeDown() != null){
+                    if(Integer.valueOf(deviceQuery.getMorningHours()) > advancedSettingEntity.getTimeDown()){
+                        deviceQuery.setMorningHours(advancedSettingEntity.getTimeDown().toString());
+                    }
+                }
+            }
+            if(oldDeviceEntity.getLight() == null || (deviceQuery.getLight() != null && !oldDeviceEntity.getLight().equals(deviceQuery.getLight()))){
+                sb.append("亮度,");
+            }
+            if(oldDeviceEntity.getOnOff() == null || (deviceQuery.getOnOff() != null && !oldDeviceEntity.getOnOff().equals(deviceQuery.getOnOff()))){
+                sb.append("开关,");
+            }
         }
         List<String> deviceList = new ArrayList<>();
         List<Map<String,Object>> temp = new ArrayList<>();
         String userName = deviceQuery.getUpdateUserName();
         if(CollectionUtils.isNotEmpty(deviceEntityList)){
             for (DeviceEntity device : deviceEntityList){
+                deviceList.add(device.getDeviceId());
                 if(!"".equals(sb.toString())){
                     String str = sb.substring(0, sb.length() - 1);
-                    deviceList.add(device.getDeviceId());
                     FaultlogEntity faultlogEntity = new FaultlogEntity();
                     faultlogEntity.setProjectId(device.getProjectId());
                     if(StringUtils.isNotEmpty(device.getGroupId())){
@@ -472,6 +508,7 @@ public class DeviceServiceImpl implements DeviceService {
                     deviceEntity.setUpdateUser(device.getCreateUser());
                     deviceEntity.setOnOff(device.getOnOff());
                     deviceEntity.setLight(device.getLight());
+                    //deviceEntity.setTransport(device.getTransport());  es 没有这个字段 待添加
                     deviceEntity.setLightingDuration(device.getLightingDuration());
                     deviceEntity.setMorningHours(device.getMorningHours());
                     Map<String, Object> stringObjectMap = esUtil.convertUpdateES(deviceEntity);
@@ -563,13 +600,42 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public boolean updateDeviceRunStatus(List<String> deviceCodes) {
-        return deviceMapper.updateDeviceRunStatus(deviceCodes) > 0 ? true :false;
+    public boolean updateDeviceRunStatus(List<String> deviceCodes,Integer version) {
+        List<DeviceEntity> list = deviceMapper.queryDeviceByCodes(deviceCodes);
+        List<String> deviceIds =list.parallelStream().map(deviceEntity -> deviceEntity.getDeviceId()).collect(Collectors.toCollection(ArrayList::new));
+        List<Map<String,Object>> temp = new ArrayList<>();
+        //修改ES start
+        for (String str : deviceIds){
+            DeviceEntity deviceEntity = new DeviceEntity();
+            deviceEntity.setDeviceId(str);
+            deviceEntity.setRunState(RunStatusEnum.UPGRADE.getCode());
+            deviceEntity.setFutureFlag(1);
+            deviceEntity.setFutureVersion(version);
+            Map<String, Object> stringObjectMap = esUtil.convertUpdateES(deviceEntity);
+            temp.add(stringObjectMap);
+        }
+        esUtil.updateListES(temp,"device_index","deviceId");
+        //修改ES end
+        return deviceMapper.updateDeviceRunStatus(deviceCodes,version) > 0 ? true :false;
     }
 
     @Override
     public List<DeviceTree> getDeviceByGroupIdNoPageLike(DeviceQuery deviceQuery) {
+        logger.info("设备管理入参："+JSONObject.toJSONString(deviceQuery));
+        List<String> projectIdList = new ArrayList<>();
+        //查询所有下级用户下的项目
+        List<SysUserEntity> userList = sysUserService.queryAllLevel(deviceQuery.getCreateUser());
+        if(CollectionUtils.isNotEmpty(userList)){
+            List<Long> transform = userList.parallelStream().map(sysUserEntity -> sysUserEntity.getUserId()).collect(Collectors.toCollection(ArrayList::new));
+            ProjectQuery projectQuery = new ProjectQuery();
+            projectQuery.setUserIds(transform);
+            List<ProjectEntity> list = projectMapper.queryProjectByUserIds(projectQuery);
+            projectIdList = list.parallelStream().map(projectEntity -> projectEntity.getProjectId()).collect(Collectors.toCollection(ArrayList::new));
+        }
+        deviceQuery.setProjectList(projectIdList);
+
         List<DeviceTree> list = new ArrayList<>();
+        //封装成tree数据
         List<DeviceEntity> deviceList = deviceMapper.queryDevice(deviceQuery);
         for (DeviceEntity deviceEntity : deviceList){
             DeviceTree deviceTree = new DeviceTree();
@@ -577,30 +643,34 @@ public class DeviceServiceImpl implements DeviceService {
             deviceTree.setParentId(deviceEntity.getGroupId());
             deviceTree.setName(deviceEntity.getDeviceName());
             deviceTree.setDeviceCode(deviceEntity.getDeviceCode());
+            deviceTree.setDeviceType(deviceEntity.getDeviceType());
             deviceTree.setRunState(deviceEntity.getRunState());
             deviceTree.setLongitude(deviceEntity.getLongitude() == null ? "" : deviceEntity.getLongitude());
             deviceTree.setLatitude(deviceEntity.getLatitude() == null ? "" : deviceEntity.getLatitude());
             list.add(deviceTree);
         }
-        List<String> groupIds = deviceList.parallelStream().map(deviceEntity -> deviceEntity.getGroupId()).collect(Collectors.toCollection(ArrayList::new));
-        List<GroupEntity> groupList = groupService.queryGroupByIds(groupIds);
-        for (GroupEntity groupEntity : groupList){
-            DeviceTree deviceTree = new DeviceTree();
-            deviceTree.setId(groupEntity.getGroupId());
-            deviceTree.setParentId(groupEntity.getProjectId());
-            deviceTree.setName(groupEntity.getGroupName());
-            list.add(deviceTree);
+        if(CollectionUtils.isNotEmpty(deviceList)){
+            List<String> groupIds = deviceList.parallelStream().map(deviceEntity -> deviceEntity.getGroupId()).collect(Collectors.toCollection(ArrayList::new));
+            List<GroupEntity> groupList = groupService.queryGroupByIds(groupIds);
+            for (GroupEntity groupEntity : groupList){
+                DeviceTree deviceTree = new DeviceTree();
+                deviceTree.setId(groupEntity.getGroupId());
+                deviceTree.setParentId(groupEntity.getProjectId());
+                deviceTree.setName(groupEntity.getGroupName());
+                list.add(deviceTree);
+            }
+            List<String> projectIds = deviceList.parallelStream().map(deviceEntity -> deviceEntity.getProjectId()).collect(Collectors.toCollection(ArrayList::new));
+            List<ProjectEntity> projectList = projectMapper.queryProjectByIds(projectIds);
+            for (ProjectEntity projectEntity : projectList){
+                DeviceTree deviceTree = new DeviceTree();
+                deviceTree.setId(projectEntity.getProjectId());
+                deviceTree.setParentId("");
+                deviceTree.setName(projectEntity.getProjectName());
+                deviceTree.setProjectStatus(projectEntity.getProjectStatus());
+                list.add(deviceTree);
+            }
         }
-        List<String> projectIds = deviceList.parallelStream().map(deviceEntity -> deviceEntity.getProjectId()).collect(Collectors.toCollection(ArrayList::new));
-        List<ProjectEntity> projectList = projectMapper.queryProjectByIds(projectIds);
-        for (ProjectEntity projectEntity : projectList){
-            DeviceTree deviceTree = new DeviceTree();
-            deviceTree.setId(projectEntity.getProjectId());
-            deviceTree.setParentId("");
-            deviceTree.setName(projectEntity.getProjectName());
-            deviceTree.setProjectStatus(projectEntity.getProjectStatus());
-            list.add(deviceTree);
-        }
+
         List<DeviceTree> trees = new ArrayList<DeviceTree>();
         if(CollectionUtils.isNotEmpty(list)){
             if (list.size() == 1) {
@@ -642,6 +712,29 @@ public class DeviceServiceImpl implements DeviceService {
         return deviceMapper.queryExclUserId(deviceIds);
     }
 
+    @Override
+    public boolean updateDeviceGprsVersion(List<String> list, Integer version) {
+        List<Map<String,Object>> temp = new ArrayList<>();
+        //修改ES start
+        for (String str : list){
+            DeviceEntity deviceEntity = new DeviceEntity();
+            deviceEntity.setDeviceId(str);
+            deviceEntity.setGprsFlag(1);
+            deviceEntity.setGprsFutureVersion(version);
+            Map<String, Object> stringObjectMap = esUtil.convertUpdateES(deviceEntity);
+            temp.add(stringObjectMap);
+        }
+        esUtil.updateListES(temp,"device_index","deviceId");
+        //修改ES end
+        return deviceMapper.updateDeviceGprsVersion(list,version) > 0 ? true : false;
+    }
+
+    @Override
+    public boolean deleteDeviceCj(List<String> list) {
+        return deviceMapper.deleteDeviceCj(list) > 0 ? true : false;
+    }
+
+
     /**
      * 功能描述：初始化设备高级设置参数
      * @param advancedSettingEntity
@@ -679,7 +772,7 @@ public class DeviceServiceImpl implements DeviceService {
         advancedSettingEntity.setBatStringNum(3);
         advancedSettingEntity.setVolOverDisCharge(900);
         advancedSettingEntity.setVolCharge(1260);
-        advancedSettingEntity.setICharge(20);
+        advancedSettingEntity.setICharge(2000);
         advancedSettingEntity.setTempCharge(55395);
         advancedSettingEntity.setTempDisCharge(55395);
         advancedSettingEntity.setInspectionTime(5);

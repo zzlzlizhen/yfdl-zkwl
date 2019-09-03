@@ -52,7 +52,15 @@ public class DeviceServiceImpl implements DeviceService {
 
         DeviceEntityApi entity = deviceMapper.queryDeviceByCode(deviceEntity.getDeviceCode());
 
+        if(deviceEntity.getVersion().equals(entity.getFutureVersion())){
+            //代表当前版本为更新成功之后 修改MCU版本标识   0不升级  1升级
+            deviceEntity.setFutureFlag(0);
+        }
 
+        if(deviceEntity.getGprsVersion().equals(entity.getGprsFutureVersion())){
+            //代表当前版本为更新成功之后 修改GPRS版本标识   0不升级  1升级
+            deviceEntity.setGprsFlag(0);
+        }
         //解析经纬度
         String latitudeInt = commonEntity.getLatitudeInt();//纬度整数
         String latitudeH = commonEntity.getLatitudeH();
@@ -135,7 +143,7 @@ public class DeviceServiceImpl implements DeviceService {
             faultlogService.addFaultlog(faultlogEntity);
         }
         String deviceCode = deviceEntity.getDeviceCode();
-        DeviceTypeEntity deviceTypeByCode = deviceTypeService.getDeviceTypeByCode(deviceCode);
+        DeviceTypeEntity deviceTypeByCode = deviceTypeService.getDeviceTypeByCode(deviceCode,2);
         if(deviceTypeByCode != null){
             deviceEntity.setDeviceTypeName(deviceTypeByCode.getDeviceTypeName());
         }

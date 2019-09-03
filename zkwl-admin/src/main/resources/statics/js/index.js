@@ -44,7 +44,6 @@ $(window).on('resize', function() {
 	$content.find('iframe').each(function() {
 		$(this).height($content.height());
 	});
-
 }).resize();
 
 //注册菜单组件
@@ -82,6 +81,10 @@ var vm = new Vue({
 				skin: 'layui-layer-molv',
 				title: "修改密码",
 				area: ['550px', '270px'],
+                cancel: function(index){
+                    $(".form-control").val("")
+                    return true;
+				    },
 				shadeClose: false,
 				content: jQuery("#passwordLayer"),
 				btn: ['修改','取消'],
@@ -97,8 +100,13 @@ var vm = new Vue({
                                 layer.open({
                                     title: '信息',
                                     content: '修改成功',
-                                    skin: 'demo-class'
+                                    skin: 'demo-class',
+                                    yes: function(index, layero){
+                                        $(location).attr('href', 'logout');
+                                    },
+
                                 });
+
 							}else{
 								//layer.alert(result.msg);
                                 layer.open({
@@ -109,7 +117,10 @@ var vm = new Vue({
 							}
 						}
 					});
-	            }
+	            },
+                btn2:function(){
+                    $(".form-control").val("")
+                }
 			});
 		},
         donate: function () {
@@ -128,7 +139,6 @@ var vm = new Vue({
 		router.start();
 	}
 });
-
 
 
 function routerList(router, menuList){
@@ -160,19 +170,22 @@ $.ajax({
     type: "POST",
     success: function (res) {
         localStorage.mycolor= res.user.roleId;
+        if(res.user.roleId ==2){
+            $(".sidebar-menu li:nth-child(3)").hide();
+        }
     }
 })
 //点击弹窗
 $("#r_val_eml").click(function(){
     $(".r_lay,.r_beise,.r_be").css("display","block")
     $(".r_lay_a,.r_beise_a,.r_be_a").css("display","none")
+    $("#r_el_upd").val("");
 })
 //提交  验证码  邮箱
 $("#r_bte").click(function(){
     var r_rlm=$("#r_rlm").val()
     var r_el_upd = $("#r_el_upd").val()
     if(r_rlm == "" || r_el_upd == ""){
-       // alert("输入不能为空")
         layer.open({
             title: '信息',
             content: '输入不能为空',
@@ -190,13 +203,13 @@ $("#r_bte").click(function(){
             "&securityCode=" + r_el_upd ,
             success: function (res) {
                 if (res.code == "200") {
-                    $(".r_lay,.r_beise,.r_be").hide()
-                    $("#r_el_upd").val();
-                    countdown=60
+                    $(".r_lay,.r_beise,.r_be").hide();
+                    $("#r_el_upd").val("");
+                    countdown=0
                     return
                 } else {
-                    $("#r_el_upd").val();
-                    countdown=60
+                    $("#r_el_upd").val("");
+                    countdown=0
                 }
             }
         })
@@ -209,7 +222,6 @@ $("#r_btee").click(function(){
     var r_rlmn=$("#r_rlp").val()
     var r_el_updn = $("#r_el_upde").val()
     if(r_rlmn == "" || r_el_updn == ""){
-       // alert("输入不能为空")
         layer.open({
             title: '信息',
             content: '输入不能为空',
@@ -227,10 +239,10 @@ $("#r_btee").click(function(){
             "&securityCode=" + r_el_updn ,
             success: function (res) {
                 if (res.code == "200") {
-                    $("#r_el_upde").val()
-                    $(".r_lay_a,.r_beise_a,.r_be_a").hide()
+                    $(".r_lay_a,.r_beise_a,.r_be_a").hide();
+                    $("#r_el_upde").val("")
+                    countdown=0
                 } else {
-                    //alert(res.msg);
                     layer.open({
                         title: '信息',
                         content: res.msg,
@@ -248,10 +260,10 @@ $("#r_tijiao").click(function(){
     var r_rlmb = $("#r_name_l").val();
     var r_rlmc=$("#r_rlm").val();
     var r_rlmd = $("#r_rlp").val();
+    var r_rlmr = $("#r_ide").val();
     var select=$("#select1 option:selected").attr("id");
     var uRl=$("#headUrl").val()
 	if(r_rlma == "" || r_rlmb == ""|| r_rlmc == "" || r_rlmd == ""){
-        //alert("输入不能为空")
         layer.open({
             title: '信息',
             content: '输入不能为空',
@@ -302,12 +314,12 @@ $("#r_tijiao").click(function(){
             "&username=" + r_rlma +
             "&realName=" + r_rlmb +
             "&email=" + r_rlmc +
+            "&userId=" + r_rlmr +
             "&mobile=" + r_rlmd +
             "&headUrl=" + uRl +
             "&roleId=" + select ,
             success: function (res) {
                 if (res.code == "200") {
-                    // alert(res)
                     $(".JI_b").hide()
                     layer.open({
                         title: '信息',
@@ -315,7 +327,6 @@ $("#r_tijiao").click(function(){
                         skin: 'demo-class'
                     });
                 } else {
-                   // alert(res.msg);
                     layer.open({
                         title: '信息',
                         content: res.msg,
@@ -329,9 +340,11 @@ $("#r_tijiao").click(function(){
 
 $("#r_val_pho").click(function(){
     $(".r_lay_a,.r_beise_a,.r_be_a").css("display","block")
-    $(".r_lay,.r_beise,.r_be").css("display","none")
+    $(".r_lay,.r_beise,.r_be").css("display","none");
+    $("#r_el_upde").val("");
 })
 //倒计时60秒
+var  timer=null;
 var countdown=60;
 function sendemail(){
     var obje = $("#btn");
@@ -346,7 +359,6 @@ function sendemail(){
             if (res.code == "200") {
 
             } else {
-               // alert(res.msg);
                 layer.open({
                     title: '信息',
                     content: res.msg,
@@ -371,7 +383,6 @@ function sendemail_a() {
             if (res.code == "200") {
 
             } else {
-                //alert(res.msg);
                 layer.open({
                     title: '信息',
                     content: res.msg,
@@ -393,7 +404,7 @@ function settime(obja) { //发送验证码倒计时
         obja.val("重新发送(" + countdown + ")");
         countdown--;
     }
-    setTimeout(function() {
+    timer = setTimeout(function() {
             settime(obja)
      },1000)
 }

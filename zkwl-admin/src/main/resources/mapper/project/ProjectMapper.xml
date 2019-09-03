@@ -59,10 +59,8 @@
             <if test="projectQuery.userName !=null and projectQuery.userName!=''">
                 AND exclusive_user LIKE CONCAT('%', #{projectQuery.userName}, '%')
             </if>
-            <if test="projectQuery.status !=null and projectQuery.status!=''">
-                AND exclusive_user LIKE CONCAT('%', #{projectQuery.userName}, '%')
-            </if>
         </where>
+        order by create_time desc
     </select>
 
 

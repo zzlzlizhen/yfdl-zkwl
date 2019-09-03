@@ -57,7 +57,12 @@ public class TestServiceMethod {
     public void testSendBindEmail(){
         SendEmailSecurityCode sendEmailSecurityCode = new SendEmailSecurityCode();
         //sendEmailSecurityCode需要自己设置相关的属性值
-        R r = sendEmailService.sendEmailSecurityCode(sendEmailSecurityCode);
+        R r = null;
+        try {
+            r = sendEmailService.sendEmailSecurityCode(sendEmailSecurityCode);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         System.out.println(JSON.toJSONString(r));
     }
 
@@ -65,7 +70,12 @@ public class TestServiceMethod {
     public void testSendForgotPasswordEmail(){
         SendEmailSecurityCode sendEmailSecurityCode = new SendEmailSecurityCode();
         //sendEmailSecurityCode需要自己设置相关的属性值
-        R r = sendEmailService.sendEmailSecurityCode(sendEmailSecurityCode);
+        R r = null;
+        try {
+            r = sendEmailService.sendEmailSecurityCode(sendEmailSecurityCode);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         System.out.println(JSON.toJSONString(r));
     }
 

@@ -24,4 +24,6 @@ public class DeviceTypeEntity {
     private Long updateUser;
 
     private Long updateTime;
+
+    private Integer fileType;
 }

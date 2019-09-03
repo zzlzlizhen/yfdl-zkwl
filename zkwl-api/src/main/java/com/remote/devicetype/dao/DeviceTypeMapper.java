@@ -14,5 +14,5 @@ public interface DeviceTypeMapper {
      * @Param deviceTypeCode
      * @return DeviceTypeEntity
      **/
-    DeviceTypeEntity getDeviceTypeByCode(@Param("deviceTypeCode") String deviceTypeCode);
+    DeviceTypeEntity getDeviceTypeByCode(@Param("deviceTypeCode") String deviceTypeCode,@Param("type")Integer type);
 }

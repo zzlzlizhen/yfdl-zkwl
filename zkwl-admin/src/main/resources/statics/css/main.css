@@ -53,21 +53,16 @@ tbody > tr > th {font-weight: normal; }
 #btne,#btn{width:95px;height:30px;float:left;border-radius: 4px;border:1px solid #ccc;margin-left:10px;text-align: center}
 .Que,.Que_a{width:224px;height:35px;border-radius:5px;float:left;margin:10px 0px 0px 100px;text-align: center;line-height: 35px;
     font-size:16px;border:0;background: #3385ff;color:#ccc;}
-.Que:hover,.Que_a:hover{background: #2d78f4;color:#fff}
+/*.Que:hover,.Que_a:hover{background: #2d78f4;color:#fff}*/
 .retr_a{display: none;}
 
-
-
-
 /*登录页面*/
-
-.login-page{
-    background: url('/statics/image/r_background.png')no-repeat center;
-    background-size: 100% 100% !important;width: 100%;height: 100%;}
+.login-page{background: url('/statics/image/r_background.png')no-repeat center;background-size: 100% 100% !important;width: 100%;height: 100%;}
 .login-box{width:408px;height:556px ;position: absolute;right:10%;top:50%;margin-top:-278px;border-radius: 4px;overflow: hidden;}
 .r_content_dv{width:408px;height:499px ;position: absolute;top:0;}
-.login-logo>b{display: inline-block;width: 106px;height:auto;background-size:100% !important;margin-top:12%;}
+.login-logo>b{display: inline-block;width: 106px;height:auto;background-size:100% !important;margin-top:12%;font-size:20px;color:#fff;line-height: 35px;}
 .login-logo{margin-bottom: 20px;}
+.login-logo img{width:17px;float: left;}
 .r_yonghuming,.r_yonghuming_b{width:330px;height:46px;border:1px solid #ccc!important;border-radius:24px!important;margin: 15px auto;}
 .r_yonghuming>input,.r_yanzhengma>input{background: none;border: none;position: relative;top:-44px;left:7%;height:40px;color:#fff;width: 79%}
 .r_yonghuming>span,.r_yanzhengma>span{position: relative;width:330px;height:46px;border-radius:24px!important;overflow: hidden;display: block}
@@ -101,10 +96,10 @@ tbody > tr > th {font-weight: normal; }
     /*    margin: 1.9% 0px 0px 0%!important;*/
     /*    float: left;*/
     /*}*/
-.progress{
-    height: 12px!important;
-    font-size: 12px!important;
-}
+    .progress{
+        height: 12px!important;
+        font-size: 12px!important;
+    }
     .progress-bar{
         line-height: 12px!important;
     }
@@ -115,7 +110,7 @@ tbody > tr > th {font-weight: normal; }
         padding: 1% 2px 19px 9%!important;
     }
     .g_c {
-        height: 16% !important;
+        height: 86px!important;
     }
     .con_an_a input {
         width: 73px;

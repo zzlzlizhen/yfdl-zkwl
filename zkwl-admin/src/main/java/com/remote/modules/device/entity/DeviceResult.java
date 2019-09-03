@@ -6,4 +6,5 @@ import lombok.Data;
 public class DeviceResult extends DeviceEntity {
 
     private long runDay;
+
 }

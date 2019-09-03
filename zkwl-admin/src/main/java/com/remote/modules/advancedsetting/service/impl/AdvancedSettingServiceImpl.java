@@ -37,7 +37,7 @@ public class AdvancedSettingServiceImpl extends ServiceImpl<AdvancedSettingDao, 
      * 通过组id查询高级设置信息
      * */
     @Override
-    public AdvancedSettingEntity queryByGroupId(String groupId) {
+    public AdvancedSettingEntity queryByGroupId(String groupId) throws Exception {
         return this.queryByDevOrGroupId(groupId,"0");
     }
 
@@ -63,7 +63,7 @@ public class AdvancedSettingServiceImpl extends ServiceImpl<AdvancedSettingDao, 
      * @return
      */
     @Override
-    public AdvancedSettingEntity queryByDevOrGroupId(String groupId,String deviceCode) {
+    public AdvancedSettingEntity queryByDevOrGroupId(String groupId,String deviceCode) throws Exception{
         return this.baseMapper.selectOne(new QueryWrapper<AdvancedSettingEntity>().eq("group_id",groupId).eq("device_code",deviceCode));
     }
 
@@ -105,7 +105,6 @@ public class AdvancedSettingServiceImpl extends ServiceImpl<AdvancedSettingDao, 
      * 2、如果已经有设置，则更新其原来的设置信息
      * 3、将该组下所有的设备信息对应的高级设置信息，统一修改成和该次变更后的组高级设置一致
      * @date 2019/8/12 19:49
-     * @param
      * @return boolean
      */
     @Override
@@ -177,27 +176,4 @@ public class AdvancedSettingServiceImpl extends ServiceImpl<AdvancedSettingDao, 
      * @param advancedSettingEntity
      * @return
      */
-    @Override
-    public boolean updateAdvSetDev(AdvancedSettingEntity advancedSettingEntity) {
-        return false;
-    }
-
-    /**
-     * 功能描述：查询设备高级设置信息通过组id跟设备code
-     * @return
-     */
-    @Override
-    public AdvancedSettingEntity queryAdvSetDev(String groupId,String deviceCode) {
-        return null;
-    }
-
-    /**
-     * 功能描述：通过设备code查询高级设置信息
-     * @param deviceCode
-     * @return
-     */
-    @Override
-    public AdvancedSettingEntity queryAdvSetDevCode(String deviceCode) {
-        return null;
-    }
 }

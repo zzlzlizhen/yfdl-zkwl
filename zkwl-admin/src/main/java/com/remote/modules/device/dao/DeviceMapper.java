@@ -157,10 +157,35 @@ public interface DeviceMapper extends BaseMapper<DeviceEntity> {
      * @Param deviceCodes
      * @return int
      **/
-    int updateDeviceRunStatus(@Param("deviceCodes") List<String> deviceCodes);
+    int updateDeviceRunStatus(@Param("deviceCodes") List<String> deviceCodes,@Param("version")Integer version);
     /**
      * 通过设备ids获取所属用户ids
      * */
     List<Long> queryExclUserId(@Param("deviceIds")List<String> deviceIds);
+    /*
+     * @Author zhangwenping
+     * @Description 通过code获取设备
+     * @Date 10:18 2019/8/27
+     * @Param deviceCodes
+     * @return  List<DeviceEntity>
+     **/
+    List<DeviceEntity> queryDeviceByCodes(@Param("deviceCodes") List<String> deviceCodes);
+    /*
+     * @Author zhangwenping
+     * @Description 升级gprs
+     * @Date 16:18 2019/8/27
+     * @Param  list version
+     * @return  int
+     **/
+    int updateDeviceGprsVersion(@Param("list")List<String> list, @Param("version")Integer version);
+    /*
+     * @Author zhangwenpiung
+     * @Description 厂家删除设备
+     * @Date 17:34 2019/8/31
+     * @Param deviceList
+     * @return int
+     **/
+    int deleteDeviceCj(@Param("deviceList")List<String> deviceList);
+
 }
 

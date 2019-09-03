@@ -18,7 +18,7 @@ public class SendEmailService {
     @Autowired
     private MailSender mailSender;
 
-    public R sendEmailSecurityCode(SendEmailSecurityCode sendEmailSecurityCode){
+    public R sendEmailSecurityCode(SendEmailSecurityCode sendEmailSecurityCode) throws Exception{
         R r = null;
         try {
             SimpleMailMessage message = new SimpleMailMessage();

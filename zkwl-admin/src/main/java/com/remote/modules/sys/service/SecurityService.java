@@ -7,7 +7,7 @@ import com.remote.modules.sys.entity.SecurityEntity;
 import java.util.Map;
 
 /**
- * 
+ *
  *
  * @author zsm
  * @date 2019-06-06 10:32:51
@@ -15,7 +15,7 @@ import java.util.Map;
 public interface SecurityService extends IService<SecurityEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
-    SecurityEntity querySecurity(String email,String checkCode,Long userId);
+    SecurityEntity queryEmailSecurity(String contact ,String securityCode,Long userId );
     /**
      * 通过手机号验证码用户id查询用户信息
      * */

@@ -32,4 +32,6 @@ public class DeviceTree {
     private String latitude;
 
     private String deviceCode;
+
+    private String deviceType;
 }

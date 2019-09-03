@@ -25,6 +25,7 @@
     	salt as salt,
     	real_name as realName,
     	deadline as deadline,
+        operation as operation,
     	role_id as roleId
     </sql>
 

@@ -1,5 +1,7 @@
 package com.remote.modules.advancedsetting.controller;
 
+import com.remote.common.errorcode.ErrorCode;
+import com.remote.common.errorcode.ErrorMsg;
 import com.remote.common.utils.R;
 import com.remote.common.utils.StringUtils;
 import com.remote.common.validator.ValidatorUtils;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 
 /**
+ * 功能描述：
  * @author zsm
  * @email 1648925727@qq.com
  * @date 2019-06-20 09:22:19
@@ -23,18 +26,26 @@ import java.util.Date;
 public class AdvancedSettingController extends AbstractController{
     @Autowired
     private AdvancedSettingService advancedSettingService;
+
+    private Class asc = AdvancedSettingController.class;
     /**
      * 查询设备的信息时，必须传组id跟设备code
      */
     @RequestMapping(value = "/queryDevAdvInfo",method = RequestMethod.GET)
     public R queryDevAdvInfo(String groupId,String deviceCode){
-        if(StringUtils.isBlank(groupId) || StringUtils.isBlank(deviceCode)){
-            return R.error("组id跟设备编号不能为空");
+
+        if(StringUtils.isBlank(groupId) || StringUtils.isBlank(deviceCode) || "undefined".equals(groupId)||"undefined".equals(deviceCode)){
+            return ErrorMsg.errorMsg(asc,ErrorCode.NOT_EMPTY,"组id跟设备编号不能为空");
         }
-        AdvancedSettingEntity advancedSettingEntity = advancedSettingService.queryByDevOrGroupId(groupId,deviceCode);
-      /*  if(advancedSettingEntity == null){
-            advancedSettingEntity = advancedSettingService.queryByDevOrGroupId(groupId,"0");
-        }*/
+        AdvancedSettingEntity advancedSettingEntity = null;
+        try {
+            advancedSettingEntity = advancedSettingService.queryByDevOrGroupId(groupId.trim(),deviceCode.trim());
+            if(advancedSettingEntity == null){
+                ErrorMsg.errorMsg(asc,ErrorCode.DATA_QUERY_CHECKING,"查询设备高级设置信息为空");
+            }
+        }catch (Exception e){
+            return ErrorMsg.errorMsg(asc,ErrorCode.ABNORMAL,"查询设备高级设置信息异常");
+        }
         return R.ok().put("info",advancedSettingEntity);
 
     }
@@ -44,10 +55,18 @@ public class AdvancedSettingController extends AbstractController{
      */
     @RequestMapping(value = "/settingInfo",method = RequestMethod.GET)
     public R info(String groupId){
-        if (StringUtils.isBlank(groupId)){
-            return R.error("组id不能为空");
+
+        if (StringUtils.isBlank(groupId)||"undefined".equals(groupId)){
+            return ErrorMsg.errorMsg(asc,ErrorCode.NOT_EMPTY,"组id不能为空");
         }
-        return R.ok().put("info",advancedSettingService.queryByDevOrGroupId(groupId,"0"));
+        AdvancedSettingEntity advancedSettingEntity = null;
+        try {
+            advancedSettingEntity = advancedSettingService.queryByDevOrGroupId(groupId,"0");
+        }catch (Exception e){
+            e.printStackTrace();
+            return ErrorMsg.errorMsg(asc,ErrorCode.ABNORMAL,"查询组的高级设置信息异常");
+        }
+        return R.ok().put("info",advancedSettingEntity);
     }
 
 
@@ -59,8 +78,9 @@ public class AdvancedSettingController extends AbstractController{
     public R update(AdvancedSettingEntity advancedSetting){
         ValidatorUtils.validateEntity(advancedSetting, AddGroup.class);
         String groupId = advancedSetting.getGroupId();
-        if(StringUtils.isBlank(groupId)){
-            return R.error("组id不能为空");
+
+        if(StringUtils.isBlank(groupId)||"undefined".equals(groupId)){
+            return ErrorMsg.errorMsg(asc,ErrorCode.NOT_EMPTY,"组id不能为空2");
         }
         String msg = volatileData(advancedSetting);
         if(!"".equals(msg)){
@@ -70,8 +90,9 @@ public class AdvancedSettingController extends AbstractController{
             advancedSettingService.addUpdateGroup(advancedSetting,getUser());
             return R.ok();
         }catch (Exception e){
-            logger.error("updateGroup error:",e);
-            return R.error("数据保存失败");
+            e.printStackTrace();
+            return  ErrorMsg.errorMsg(asc,ErrorCode.ABNORMAL,"数据保存失败");
+
         }
     }
 
@@ -82,19 +103,20 @@ public class AdvancedSettingController extends AbstractController{
     public R updateDevice(AdvancedSettingEntity advancedSetting){
         ValidatorUtils.validateEntity(advancedSetting, AddGroup.class);
         String deviceCode = advancedSetting.getDeviceCode();
-        if((StringUtils.isBlank(deviceCode) && "0".equals(deviceCode)) || StringUtils.isBlank(advancedSetting.getGroupId())){
-            return R.error("设备编号或组不能为空");
+
+        if((StringUtils.isBlank(deviceCode) && "0".equals(deviceCode))||"undefined".equals(advancedSetting.getDeviceCode())||"undefined".equals(advancedSetting.getGroupId()) || StringUtils.isBlank(advancedSetting.getGroupId())){
+            return  ErrorMsg.errorMsg(asc,ErrorCode.NOT_EMPTY,"设备编号或组不能为空");
         }
         String msg = volatileData(advancedSetting);
         if(!"".equals(msg)){
-            return R.error(msg);
+            return  ErrorMsg.errorMsg(asc,ErrorCode.NOT_EMPTY,msg);
         }
         try {
             advancedSettingService.addUpdateDevice(advancedSetting,getUser());
             return R.ok();
         }catch (Exception e){
-            logger.error("updateDevice error:",e);
-            return R.error("数据保存失败");
+            e.printStackTrace();
+            return  ErrorMsg.errorMsg(asc,ErrorCode.ABNORMAL,"数据保存失败");
         }
     }
 
@@ -157,28 +179,32 @@ public class AdvancedSettingController extends AbstractController{
             return "充电电压的范围应该在2.5V到40V之间";
         }else if(advancedSetting.getICharge() < 0 || advancedSetting.getICharge() > 4000){
             return "充电电流的范围应该在0到40A之间";
-        }else if(temDisChageMin < -40 || temDisChageMax > 99){
+        }else if(temDisChageMin < -40|| temDisChageMin >99 || temDisChageMax < -40 ||temDisChageMax > 99 ){
+            if(temDisChageMin > temDisChageMax){
+                return "放电温度的最小值不能比放电温度最大值大";
+            }
             return "放电温度范围应该在-40到99度之间";
-        }else if(temChageMin < -40 || temChageMax > 99){
+        }else if(temChageMin < -40 || temChageMin >99 || temChageMax < -40 || temChageMax > 99){
+            if(temChageMin > temChageMax){
+                return "充电电温度的最小值不能比充电电温度最大值大";
+            }
             return "充电电温度范围应该在-40到99度之间";
         }
         return "";
     }
-
     /**
      * 通过设备code查询充电电压跟放电电压
      * */
     @RequestMapping(value = "/queryVol",method = RequestMethod.GET)
     public R queryVol(@RequestParam("deviceCode")String deviceCode){
-        if(StringUtils.isBlank(deviceCode)){
-            return R.error("设备code不能为空");
+        if(StringUtils.isBlank(deviceCode)||"undefined".equals(deviceCode)){
+            return  ErrorMsg.errorMsg(asc,ErrorCode.NOT_EMPTY,"设备code不能为空");
         }
         try {
             AdvancedSettingResult result = advancedSettingService.queryVol(deviceCode);
-          /*  advancedSettingService.addUpdateGroup(advancedSetting,getUser());*/
             return R.ok().put("result",result);
         }catch (Exception e){
-            logger.error("updateGroup error:",e);
+            logger.error(ErrorCode.ABNORMAL+"updateGroup error:",e);
             return R.error("数据保存失败");
         }
     }

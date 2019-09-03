@@ -270,8 +270,7 @@ thead>th{text-align: center !important;}
     display: none;
 }
 .nav_a{width:100%;height:auto;float:left;list-style:none;margin:0;padding:0;;}
-.nav_a>li{width:90%;height:auto;float:left;margin-left:5%;list-style:none;margin-top: 10px ;color: #ffffff;
-   ;-background:rgba(0,165,160,0.7) ;-border-radius: 8px;}
+.nav_a>li{width:90%;height:auto;float:left;margin-left:5%;list-style:none;margin-top: 10px ;color: #ffffff;}
 .nav_pro_v,.nav_pro_v_b,.nav_pro_v_ba{width:100%;height:40px;;cursor: pointer;float:left;}
 .nav_pro_v_b{border-bottom:1px dashed #ccc;position:relative}
 .nav_bb_color{background: rgba(0,165,160,0.7); color:#fff;}
@@ -286,17 +285,16 @@ thead>th{text-align: center !important;}
 /*.r_col_shu{font-size:16px !important;color: #fff; }*/
 
 .pro_li_a{width: 100%;margin: 0;list-style:none;}
-.nav_pro_fen,.nav_pro_she{width:46%;margin-right:3%;font-size:12px;text-indent:8px; overflow: hidden;
-    white-space: nowrap;text-overflow: ellipsis;}
+.nav_pro_fen,.nav_pro_she{width:46%;margin-right:3%;font-size:12px;text-indent:8px; overflow: hidden;text-overflow: ellipsis;}
+.nav_pro_fen,.nav_pro_she{white-space: nowrap;}
 .nav_pro_she{font-weight: 500;font-size: 12px;text-indent:33px;}
 /*地图侧边抽屉*/
 .drawer{width:500px;height:82%;position: absolute;right:-475px;bottom:0%; transition: all 1.5s ease-in;z-index: 9;}
 .dra_zhao{width:95%;height:100%;background: #fff;opacity: 0.8;float:right;}
 .drawer_hid{transition: all 1.5s ease-in;right: 0;}
-
-.drawer_right{width:5%;float:left;position: absolute;top: 25%}
+.drawer_right{width:5%;float:left;height:45px;position: absolute;top:50%;background: #fff;border-radius:8px 0px 0px 8px;overflow: hidden;}
 .slba{width:5%;float:left;position: absolute;top: 26.6%;}
-.drawer_img,.drawer_img_a{width:25px;height:45px;margin-top:836%;float:right;cursor: pointer;margin-right:10%;position: absolute;}
+.drawer_img,.drawer_img_a{width:25px;height:45px;cursor: pointer;;position: absolute;}
 .drawer_img{z-index: 999;}
 .drawer_img_a{margin: 5px 0px 0px 0px;height:30px;}
 .drawer_left{width:95%;height:100%;right:0;position:absolute;top:0;overflow-y: auto;}
@@ -308,7 +306,7 @@ thead>th{text-align: center !important;}
 .drawe_S ul li img{width:35%;height:30%;float:left;margin:4% 0px 0px 5%;}
 .drawe_S ul li span{width:50%;float:left;height:50%;line-height: 40px;text-align: center}
 
-.convention{width:92%;height:18%;float:left;border-bottom: 1px solid #ccc;margin: 0 20px;padding-top: 2%;}
+.convention{width:92%;height:90px;float:left;border-bottom: 1px solid #ccc;margin: 0 20px;padding-top: 2%;}
 .con_span{width:100%;text-indent:10px;height:20px;display: block;color: #333;}
 .con_ys{width:6px;height:100%;float:left; background-image:linear-gradient(180deg,#47DAD5,#51B4D3,#5C8BCF);}
 .con_an{width:50%;float:left;height:15%;}
@@ -327,15 +325,15 @@ thead>th{text-align: center !important;}
 .r_duan{width:46%!important;}
 .con_Xu ul p,.con_Gu ul p{width:100%;height:auto;float:left;font-size: 12px;color:#999;text-indent:40%;overflow: hidden;}
 .con_Gu ul p,.con_Xu ul p{margin-top:-4%; }
-
+.con_Gu ul p{text-indent: 0;text-align: center}
 .dra_spa,.dra_p{width:auto;height:42px;float:left;margin:1% 0px 0px 4%;font-size: 14px;line-height: 42px;}
 .dra_p{margin:0% 0px 0px 0px;font-size:16px;}
 .r_ba_tu{background: url('/statics/image/r_huangbeijing.png')no-repeat center ;color: #8a6d3b;background-size: 100% 34px !important }
 .r_ba_tu_t{background: url('/statics/image/sousuo-1.png')no-repeat center ;color: #0ECCC2;background-size: 100% 34px !important }
 .demo-slider{border:0;box-shadow: 0 0 0 #fff;height:auto;}
 .grouping{display: none}
-.cake{width:100%;height:220px;float:left;}
-.cake_B{width:100%;height:220px;}
+.cake{width:100%;height:85%;float:left;}
+.cake_B{width:100%;height:100%;}
 .Jan_r{width:84px !important;text-align: left !important;}
 .search{width:90%;height:37px;position: relative;top:8%;left:5%;}
 .search input{left:0;position: absolute;height:37px; border:1px solid #ccc;border-radius: 5px 0px 0px 5px;text-indent: 5px;font-size:14px;width: 75%;}
@@ -477,16 +475,16 @@ thead>th{text-align: center !important;}
     .drawer{width:500px}
     #confirm{margin: 0% 0px 0px 13%;height: 31px;}
     .con_an_a input{margin: 0% 0px 0px 13%;}
-    .drawer_right{width:5%;float:left;position: absolute;top: 15%}
+    .drawer_right{width:5%;float:left;position: absolute;}
     .slba{width:5%;float:left;position: absolute;top: 16.6%;display: none}
     /*.She_a{height: 225px!important;}*/
-    .convention{height: 15%!important;}
-    .g_b{height: 25%!important;}
-    .g_b canvas{width: 75% !important;height:70% !important;margin-left:8% !important;}
+    /*.convention{height: 15%!important;}*/
+    .g_b{height: 171px!important;}
+    .g_b canvas{width:100% !important;height:100% !important;margin-left:7% !important;}
     .slid{margin: -5% 0px 0px 5.5%!important;}
     /*.con_an{height: 37%;}*/
     .con_an_span{line-height:26px; }
-    .She_a{height: 27%!important;}
+    .She_a{height: 181px!important;}
     .con_an {height: 20%;}
     .nnb{margin-bottom: 1%;}
 }
@@ -505,7 +503,7 @@ thead>th{text-align: center !important;}
         margin-left: 3%;
     }
 .She_a{
-    height: 30%!important;
+    height: 162px!important;
 }
     .hear{height:40px;line-height: 40px ;}
     .hear_fan{height:52px !important;line-height: 46px !important;}
@@ -623,7 +621,7 @@ body .demo-class .layui-layer-btn0{background:#27E2D4; color:#fff;border: none;}
 /*控制面板*/
 
 .ssde{
-    height: 16%;
+    height: 90px;
     background-image:linear-gradient(90deg,#47DAD5,#51B4D3,#5C8BCF);
     color: #fff;
     padding: 13px 2px 19px 41px;

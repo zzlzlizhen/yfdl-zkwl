@@ -18,33 +18,33 @@ public interface SysUserService extends IService<SysUserEntity> {
      * @return List<SysUserEntity>
      **/
     List<SysUserEntity> queryAllLevel(Long userId);
-    SysUserEntity queryByUsername(String username);
-    SysUserEntity queryByUnameAndPwd(String username, String password);
+    SysUserEntity queryByUsername(String username) throws Exception;
+    SysUserEntity queryByUnameAndPwd(String username, String password) throws Exception;
 
-    PageUtils queryPage(Map<String, Object> params);
+    PageUtils queryPage(Map<String, Object> params) throws Exception;
 
     List<SysUserEntity> queryChild(SysUserEntity sysUserEntity);
 
     List<SysUserEntity> queryAllChild(SysUserEntity sysUserEntity);
 
-    List<SysUserEntity> queryUserList(Map<String, Object> params);
+    List<SysUserEntity> queryUserList(Map<String, Object> params) throws Exception;
     /**
      * 保存用户
      */
-    void saveUser(SysUserEntity user);
-    int removeUser(Long uid);
+    void saveUser(SysUserEntity user) throws Exception;
+    int removeUser(Long uid) throws Exception;
     /**
      * 通过邮箱跟当前用户id查询用户信息是否存在
      * */
-    SysUserEntity getByEmail(String email);
+    SysUserEntity getByEmail(String email) throws Exception;
     /**
      * 通过手机号当前用户id检查该手机号是否已存在
      * */
-    SysUserEntity getByMobile(String mobile);
+    SysUserEntity getByMobile(String mobile) throws Exception;
     /**
      * 通过用户名查询该用户是否存在
      * */
-    SysUserEntity getByUsername(String username);
+    SysUserEntity getByUsername(String username) throws Exception;
     /*
      * @Author zhangwenping
      * @Description 根据ids查询详情

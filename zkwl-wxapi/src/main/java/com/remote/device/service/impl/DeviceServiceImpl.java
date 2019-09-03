@@ -103,11 +103,13 @@ public class DeviceServiceImpl implements DeviceService {
         deviceEntity.setUsrUser(deviceEntity.getCreateUser());
         deviceEntity.setCreateUser(projectEntity.getExclusiveUser());
         int insert = deviceMapper.insert(deviceEntity);
-        if(insert > 0){
-            //添加es start
-            Map<String, Object> stringObjectMap = esUtil.convertAddES(deviceEntity);
-            RestStatus restStatus = esUtil.addES(stringObjectMap,"device_index",deviceEntity.getDeviceId());
-            //添加es end
+        if(deviceEntity.getCjFlag().equals(new Integer(0))){
+            if(insert > 0){
+                //添加es start
+                Map<String, Object> stringObjectMap = esUtil.convertAddES(deviceEntity);
+                RestStatus restStatus = esUtil.addES(stringObjectMap,"device_index",deviceEntity.getDeviceId());
+                //添加es end
+            }
         }
         AdvancedSettingEntity advancedSettingEntity = new AdvancedSettingEntity();
         if(StringUtils.isNotBlank(groupId)||!("undefined").equals(groupId)){
@@ -265,7 +267,7 @@ public class DeviceServiceImpl implements DeviceService {
         advancedSettingEntity.setBatStringNum(3);
         advancedSettingEntity.setVolOverDisCharge(900);
         advancedSettingEntity.setVolCharge(1260);
-        advancedSettingEntity.setICharge(20);
+        advancedSettingEntity.setICharge(2000);
         advancedSettingEntity.setTempCharge(55395);
         advancedSettingEntity.setTempDisCharge(55395);
         advancedSettingEntity.setInspectionTime(5);

@@ -18,7 +18,6 @@ $(function () {
         form(pageSize, pageNum, acc_id, acc_hao, acc_name, select)
     })
     //渲染表格
-
     form(10, 1, "", "", "", "")
 
     function form(pageSizea, pagesa, userId, username, realName, status) {
@@ -39,7 +38,6 @@ $(function () {
                 pages = res.page.currPage;  //第几页
                 pageSize = res.page.pageSize;//每页条数
                 pageNum = res.page.totalPage;  //总页数
-                console.log(pages + "===" + pageSize + "===" + pageNum)
                 var html=""
                 var offClass = "";
                 //当前时间
@@ -92,7 +90,6 @@ $(function () {
                         " <a href='javascript:void(0)'  class='Delete r_bu_sou2'><img src='/statics/image/shanchu.png' alt=''></a>\n" +
                         "</td>\n" +
                         "</tr>"
-
                 }
 
                 $("#div").empty().append(html);
@@ -274,7 +271,6 @@ $(function () {
                     }
                 })
 
-
                 //刪除
                 $(".Delete").click(function () {
                     $(".shade_delete,.shade_b_delete").css("display", "block");
@@ -376,8 +372,10 @@ $(function () {
         var acc_call = $("#acc_call").val();
         var roleId = $("#role").val();
         var headUrl = $("#headUrl").val();
-
-        if (acc_number == "" || acc_user == "" || acc_password == "" || acc_mailbox == "" || acc_call == "") {
+            if(roleId==null){
+                roleId=""
+            }
+        if (acc_number == "" || acc_user == "" || acc_password == "" || acc_mailbox == "" || acc_call == ""||roleId == "") {
           $(".rrbol").html("输入不能为空");
             lay()
         } else {
@@ -453,7 +451,9 @@ $(function () {
             })
         }
     });
-
+$(".wrong").click(function(){
+    $(".mistake").css("display","none")
+})
 //上传头像   添加
     new AjaxUpload('#upload', {
         action: baseURL + "sys/upload",

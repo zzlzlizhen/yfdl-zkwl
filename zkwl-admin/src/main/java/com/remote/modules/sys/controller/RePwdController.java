@@ -4,6 +4,8 @@ import com.remote.common.config.SendEmailConfig;
 import com.remote.common.config.SendEmailSecurityCode;
 import com.remote.common.config.SendPhoneConfig;
 import com.remote.common.config.SendPhoneSecurityCode;
+import com.remote.common.errorcode.ErrorCode;
+import com.remote.common.errorcode.ErrorMsg;
 import com.remote.common.msg.SendEmailService;
 import com.remote.common.msg.SendSmsService;
 import com.remote.common.utils.R;
@@ -14,7 +16,6 @@ import com.remote.modules.sys.entity.SysUserEntity;
 import com.remote.modules.sys.service.SecurityService;
 import com.remote.modules.sys.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,6 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 
+/**
+ * 找回密码绑定邮箱
+ */
 @RestController
 @RequestMapping(value = "/repwd")
 public class RePwdController {
@@ -38,6 +42,7 @@ public class RePwdController {
 
     @Autowired
     private SendPhoneConfig sendPhoneConfig;
+    private Class rpc = RePwdController.class;
     /**
      * 找回密码
      * */
@@ -45,13 +50,12 @@ public class RePwdController {
     @ResponseBody
     public R checkRePwdMobile(String mobile, String securityCode){
         if(StringUtils.isBlank(mobile)){
-            return R.error("手机号不能为空");
+            return ErrorMsg.errorMsg(rpc,ErrorCode.NOT_EMPTY,"手机号不能为空");
         }
         if(StringUtils.isBlank(securityCode)){
-            return R.error("验证码不能为空");
+            return ErrorMsg.errorMsg(rpc,ErrorCode.NOT_EMPTY,"验证码不能为空");
         }
-        checkEmailAndMob(mobile,securityCode,"isMobile","rePwdMobile");
-        return R.ok();
+        return checkEmailAndMob(mobile,securityCode,"isMobile","rePwdMobile");
     }
     /**
      * 找回密码
@@ -60,13 +64,12 @@ public class RePwdController {
     @ResponseBody
     public R checkRePwdEmail(String email,String securityCode){
         if(StringUtils.isBlank(email)){
-            return R.error("邮箱不能为空");
+            return ErrorMsg.errorMsg(rpc,ErrorCode.NOT_EMPTY,"邮箱不能为空");
         }
         if(StringUtils.isBlank(securityCode)){
-            return R.error("验证码不能为空");
+            return ErrorMsg.errorMsg(rpc,ErrorCode.NOT_EMPTY,"验证码不能为空");
         }
-        checkEmailAndMob(email,securityCode,"isEmail","rePwdEmail");
-        return R.ok();
+        return checkEmailAndMob(email,securityCode,"isEmail","rePwdEmail");
     }
     /**
      * 通过邮箱加类型发送验证码 并保存到数据库中
@@ -74,10 +77,10 @@ public class RePwdController {
     @RequestMapping(value = "/sendForPwd",method = RequestMethod.GET)
     public R sendRePwd(String contact,String fPwdType){
         if(StringUtils.isBlank(contact)){
-            return R.error("联系方式不能为空");
+            return ErrorMsg.errorMsg(rpc,ErrorCode.NOT_EMPTY,"联系方式不能为空");
         }
         if(StringUtils.isBlank(fPwdType)){
-            return R.error("联系方式类型不能为空");
+            return ErrorMsg.errorMsg(rpc,ErrorCode.NOT_EMPTY,"联系方式类型不能为空");
         }
         /**
          * 邮箱发送验证码 找回密码
@@ -85,14 +88,18 @@ public class RePwdController {
         if("isEmail".equals(fPwdType)){//1邮箱忘记密码
             boolean flag = checkBindEmail(contact,"isEmail");
             if(!flag){
-                return R.error("该邮箱不存在");
+                return ErrorMsg.errorMsg(rpc,ErrorCode.DATA_QUERY_CHECKING,"该邮箱不存在");
             }
             String securityCode = StringUtils.getSecurityCode(6);
 
             SendEmailSecurityCode sendEmailSecurityCode = SendSecurityCodeUtils.buildSendEmailSecurityCode(sendEmailConfig,contact,securityCode,"2");
-            R r = sendEmailService.sendEmailSecurityCode(sendEmailSecurityCode);
-            if(!r.isOK()){
-                return R.error("邮件发送失败");
+            try {
+                R r = sendEmailService.sendEmailSecurityCode(sendEmailSecurityCode);
+                if(!r.isOK()){
+                    return ErrorMsg.errorMsg(rpc,ErrorCode.FAIL,"邮件发送失败");
+                }
+            }catch (Exception e){
+                return ErrorMsg.errorMsg(rpc,ErrorCode.ABNORMAL,"邮件发送异常");
             }
             saveSecurity(contact,"rePwdEmail",securityCode);
             return R.ok();
@@ -100,13 +107,13 @@ public class RePwdController {
             //如果忘记密码类型为手机忘记密码
             boolean flag = checkBindEmail(contact,"isMobile");
             if(!flag){
-                return R.error("手机号不存在");
+                return ErrorMsg.errorMsg(rpc,ErrorCode.DATA_QUERY_CHECKING,"手机号不存在");
             }
             String securityCode = StringUtils.getSecurityCode(6);
             SendPhoneSecurityCode sendPhoneSecurityCode = SendSecurityCodeUtils.bulidSendPhoneSecurityCode(sendPhoneConfig,contact,securityCode,"2");
             R r = sendSmsService.sendSmsSecurityCode(sendPhoneSecurityCode);
             if(!r.isOK()){
-                return R.error("手机发送失败");
+                return ErrorMsg.errorMsg(rpc,ErrorCode.FAIL,"手机发送失败");
             }
             saveSecurity(contact,"rePwdMobile",securityCode);
             return R.ok();
@@ -145,15 +152,25 @@ public class RePwdController {
 
         SysUserEntity userEntity = null;
         if("isEmail".equals(isEmailAndMob)){//0是邮箱
-            userEntity = sysUserService.queryByEmailAndUid(contact,userId);
-            if(null != userEntity){
-                isExist = true;
+            try {
+                userEntity = sysUserService.queryByEmailAndUid(contact,userId);
+                if(null != userEntity){
+                    isExist = true;
+                }
+            }catch (Exception e){
+                ErrorMsg.errorMsg(rpc,ErrorCode.ABNORMAL,"邮箱用户信息查询异常");
             }
+
         }else if("isMobile".equals(isEmailAndMob)){//1是手机号
-            userEntity = sysUserService.queryBySmsAndUid(contact,userId);
-            if(userEntity != null){
-                isExist = true;
+            try {
+                userEntity = sysUserService.queryBySmsAndUid(contact,userId);
+                if(userEntity != null){
+                    isExist = true;
+                }
+            }catch (Exception e){
+                ErrorMsg.errorMsg(rpc,ErrorCode.ABNORMAL,"手机用户信息查询异常");
             }
+
         }
         return isExist;
     }
@@ -161,16 +178,16 @@ public class RePwdController {
      * 检查手机号，邮箱，验证码输入是否正确 是绑定，保存数据库，如果是发送验证码，不做处理
      * */
     public R checkEmailAndMob(String contact,String securityCode,String isEmailAndMobile,String isType){
-        SecurityEntity security =null;
+
         Long userId = sysUserService.getUidByContact(contact);
         if(userId == null){
-            return R.error("用户名不能为空");
+            return ErrorMsg.errorMsg(rpc,ErrorCode.DATA_QUERY_CHECKING,"用户名不能为空");
         }
         if("isEmail".equals(isEmailAndMobile)){//0代表邮箱
             //查询邮箱验证码是否正确
-            security = securityService.querySecurity(contact,securityCode,userId);
+            SecurityEntity security = securityService.queryEmailSecurity(contact.trim(),securityCode.trim(),userId);
             if (security == null){
-                return R.error("验证码错误");
+                return ErrorMsg.errorMsg(rpc,ErrorCode.DATA_QUERY_CHECKING,"邮箱验证码错误");
             }
             if("bindEmail".equals(isType)){ //绑定邮箱
                 /**
@@ -178,19 +195,20 @@ public class RePwdController {
                  * */
                 boolean flag = sysUserService.updateEmail(contact,userId);
                 if(!flag){
-                    return R.error("邮箱信息保存失败");
+                    return ErrorMsg.errorMsg(rpc,ErrorCode.DATA_QUERY_CHECKING,"邮箱信息保存失败");
                 }
             }
         }else if ("isMobile".equals(isEmailAndMobile)){ //1代表手机号
             //查询手机号验证码是否正确
-            security = securityService.querySmsSecurity(contact,securityCode,userId);
+            SecurityEntity security = securityService.querySmsSecurity(contact.trim(),securityCode.trim(),userId);
             if (security == null){
-                return R.error("验证码错误");
+                return ErrorMsg.errorMsg(rpc,ErrorCode.DATA_QUERY_CHECKING,"验证码错误");
+
             }
             if("bindMobile".equals(isType)){
                 boolean isBind = sysUserService.updateMobile(contact,userId);
                 if(!isBind){
-                    return R.error("手机号保存失败");
+                    return ErrorMsg.errorMsg(rpc,ErrorCode.DATA_QUERY_CHECKING,"手机号保存失败");
                 }
             }
         }

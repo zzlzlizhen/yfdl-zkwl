@@ -4,6 +4,8 @@ package com.remote.modules.sys.controller;
 
 import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.Producer;
+import com.remote.common.errorcode.ErrorCode;
+import com.remote.common.errorcode.ErrorMsg;
 import com.remote.common.utils.R;
 import com.remote.modules.sys.shiro.ShiroUtils;
 import org.apache.shiro.authc.*;
@@ -27,7 +29,7 @@ import java.io.IOException;
 public class SysLoginController {
 	@Autowired
 	private Producer producer;
-	
+	private Class slc = SysLoginController.class;
 	@RequestMapping("captcha.jpg")
 	public void captcha(HttpServletResponse response)throws IOException {
         response.setHeader("Cache-Control", "no-store, no-cache");
@@ -50,25 +52,24 @@ public class SysLoginController {
 	@ResponseBody
 	@RequestMapping(value = "/sys/login", method = RequestMethod.POST)
 	public R login(String username, String password, String captcha) {
-		String kaptcha = ShiroUtils.getKaptcha(Constants.KAPTCHA_SESSION_KEY);
-		if(!captcha.equalsIgnoreCase(kaptcha)){
-			return R.error("验证码不正确");
-		}
-		
+
 		try{
 			Subject subject = ShiroUtils.getSubject();
 			UsernamePasswordToken token = new UsernamePasswordToken(username, password);
 			subject.login(token);
+			String kaptcha = ShiroUtils.getKaptcha(Constants.KAPTCHA_SESSION_KEY);
+			if(!captcha.equalsIgnoreCase(kaptcha)){
+				return ErrorMsg.errorMsg(slc,ErrorCode.NOT_EMPTY,"验证码不正确");
+			}
 		}catch (UnknownAccountException e) {
-			return R.error(e.getMessage());
+			return ErrorMsg.errorMsg(slc,ErrorCode.ABNORMAL, e.getMessage());
 		}catch (IncorrectCredentialsException e) {
-			return R.error("账号或密码不正确");
+			return ErrorMsg.errorMsg(slc,ErrorCode.ABNORMAL, "账号或密码不正确");
 		}catch (LockedAccountException e) {
-			return R.error("账号已被锁定,请联系管理员");
+			return ErrorMsg.errorMsg(slc,ErrorCode.ABNORMAL, "账号已被锁定,请联系管理员");
 		}catch (AuthenticationException e) {
 			return R.error("账户验证失败");
 		}
-	    
 		return R.ok();
 	}
 	//忘记密码

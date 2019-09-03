@@ -31,6 +31,7 @@
                 AND group_name LIKE CONCAT('%', #{groupQuery.groupName}, '%')
             </if>
         </where>
+        order by create_time desc
     </select>
     
     <select id="queryByName" resultType="java.lang.Integer">

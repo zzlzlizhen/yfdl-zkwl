@@ -112,22 +112,29 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                     String encrypt = Utils.encrypt(deviceSN);
                     DeviceInfo result = null;
                     if(deviceEntity.getStatus().equals(new Integer(2))){
+                        DeviceService deviceTemp = (DeviceService)SpringUtils.getBean("deviceServiceImpl");
 
+                        DeviceEntityApi deviceEntityApi = deviceTemp.queryDeviceByCode(deviceSN);
                         //需要客户端的设备信息
                         result = new DeviceInfo(4,0,encrypt,deviceEntity.getDeviceType(),deviceSN);
                         list.addAll(deviceEntity.getKey());
                         value.addAll(deviceEntity.getValue());
                         list.add(7);
+                        list.add(8);//添加长短连接标识
+
                         if(cacheUtils.get("LIVE") == null){
                             value.add(60);
                         }else{
                             log.info("LIVE存活时间："+cacheUtils.get("LIVE").toString()+"秒");
                             value.add(Integer.valueOf(cacheUtils.get("LIVE").toString()));
                         }
+                        if(deviceEntityApi != null){
+                            value.add(deviceEntityApi.getLink());
+                        }
                         result.setKey(list);
                         result.setValue(value);
                         result.setDataLen(list.size());
-                        DeviceService deviceTemp = (DeviceService)SpringUtils.getBean("deviceServiceImpl");
+
                         int i = deviceTemp.updateDeviceVersionByCode(deviceSN);
                         DeviceEntityApi temp = deviceTemp.queryDeviceByCode(deviceSN);
                         list.add(6);
@@ -149,7 +156,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
 
                 }else{
-                    log.info("设备未连接");
+                    log.info(deviceSN+"设备未连接");
                 }
 
             }
@@ -227,7 +234,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         for (int i = 0 ; i < bytes.length;i++){
             sb.append(bytes[i]).append(",");
         }
-        log.info("未解析的数据:"+sb.toString());
         buf.resetReaderIndex();
         //判断数据长度
         int newBytes[] = new int[bytes.length];
@@ -345,21 +351,30 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
     private void updateVersion(DeviceInfo deviceInfo,ChannelId channelId)throws Exception {
         ChannelHandlerContext ctx = CHANNEL_MAP.get(channelId.asShortText());
-
         Integer nextCmdID = deviceInfo.getNextCmdID();
         //判断是否为重复数据
         if(nextCmdID != count){
             count = nextCmdID;
             if(nextCmdID.equals(new Integer(1))){
                 DeviceTypeService deviceTypeService = (DeviceTypeService)SpringUtils.getBean("deviceTypeServiceImpl");
-                DeviceTypeEntity deviceType = deviceTypeService.getDeviceTypeByCode(deviceInfo.getDevType());
+                DeviceTypeEntity deviceType = deviceTypeService.getDeviceTypeByCode(deviceInfo.getDevType(),2);
                 if(deviceType != null){
-                    String path = deviceType.getDeviceTypePath();
-                    //获取更新文件信息
-                    updateVersion = Utils.version(path);
-                    List<Byte> list = Arrays.asList(updateVersion.getBytes());
-                    //切割成多少分，每份1024
-                    lists = Utils.averageAssign(list, 1024);
+                    DeviceService deviceService = (DeviceService)SpringUtils.getBean("deviceServiceImpl");
+                    DeviceEntityApi deviceEntityApi = deviceService.queryDeviceByCode(deviceInfo.getDevSN());
+                    if(deviceEntityApi != null){
+                        //类型编码就是文件夹名称
+                        String type = deviceInfo.getDevType();
+                        //拼装全路径
+                        String path = deviceType.getDeviceTypePath()+"type-"+type+"/"+deviceEntityApi.getFutureVersion()+".bin";
+                        log.info("升级文件路径:"+path);
+                        //获取更新文件信息
+                        updateVersion = Utils.version(path);
+                        List<Byte> list = Arrays.asList(updateVersion.getBytes());
+                        //切割成多少分，每份1024
+                        lists = Utils.averageAssign(list, 1024);
+                    }else{
+                        log.info(deviceInfo.getDevSN()+"设备未添加");
+                    }
                 }
             }
             if(nextCmdID <= lists.size()){
@@ -430,8 +445,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
         log.info("实时JSON数据："+JSONObject.toJSONString(common));
 
-        //GPRS升级
-        refreshGPRS(deviceEntity,ctx);
+
+
 
         //代表有些设备没有操作成功
         refreshDevice(common,deviceEntity,ctx);
@@ -444,23 +459,61 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         deviceService.updateDeviceByCode(common,deviceEntity);
         //所有设备属性都映射到公共的类中，需要哪些信息，自行转换 end
 
+
+
         //历史数据
         HistoryMouth historyMouth = new HistoryMouth();
         BeanUtils.copyProperties(common, historyMouth);
         //放电电流
         historyMouth.setDischargeCurrent(deviceEntity.getLoadCurrent());
 
+        if(historyMouth.getAmbientTemperature() != null && historyMouth.getAmbientTemperature() > 30000){
+            int ambientTemperature = historyMouth.getAmbientTemperature().intValue();
+            historyMouth.setAmbientTemperature(new Double(ambientTemperature | 0xffff0000));
+        }
+
+        if(historyMouth.getInternalTemperature() != null && historyMouth.getInternalTemperature() > 30000){
+            int internalTemperature = historyMouth.getInternalTemperature().intValue();
+            historyMouth.setInternalTemperature(new Double(internalTemperature | 0xffff0000));
+        }
+
         HistoryService historyService = (HistoryService)SpringUtils.getBean("historyServiceImpl");
         historyService.insertHistoryData(historyMouth);
+
         log.info(deviceInfo.getDevSN()+"设备上传的信息完毕："+JSONObject.toJSONString(deviceEntity));
+
+        //判断硬件升级
+        refreshMCU(deviceEntity,ctx);
+
+        //GPRS升级
+        refreshGPRS(deviceEntity,ctx);
+    }
+
+    private void refreshMCU(DeviceEntityApi deviceEntity, ChannelHandlerContext ctx) {
+        //1代表升级  0 不升级
+        if(deviceEntity.getFutureFlag().equals(new Integer(1))){
+            String encrypt = Utils.encrypt(deviceEntity.getDeviceCode());
+            DeviceInfo result = new DeviceInfo(2,deviceEntity.getFutureVersion(),encrypt,deviceEntity.getDeviceType(),deviceEntity.getDeviceCode());
+            result.setKey(new ArrayList<>());
+            result.setValue(new ArrayList<>());
+            result.setDataLen(0);
+            log.info(deviceEntity.getDeviceCode() + "：MCU升级："+JSONObject.toJSONString(result));
+            //转换成字节
+            byte[] bytes = HexConvert.hexStringToBytes(result);
+            ByteBuf byteBuf = Unpooled.copiedBuffer(bytes);
+            Channel channel = ctx.channel();
+            channel.writeAndFlush(byteBuf);
+        }
     }
 
     private void refreshGPRS(DeviceEntityApi deviceEntity,ChannelHandlerContext ctx) {
-        if(deviceEntity.getGprsFlag().equals(new Integer(1))){
+        if(deviceEntity.getGprsFlag().equals(new Integer(1)) && deviceEntity.getGprsVersion() != deviceEntity.getGprsFutureVersion()){
             String encrypt = Utils.encrypt(deviceEntity.getDeviceCode());
-            DeviceInfo result = new DeviceInfo(11,0,encrypt,deviceEntity.getDeviceType(),deviceEntity.getDeviceCode());
+            DeviceInfo result = new DeviceInfo(11,deviceEntity.getGprsFutureVersion(),encrypt,deviceEntity.getDeviceType(),deviceEntity.getDeviceCode());
+            result.setKey(new ArrayList<>());
+            result.setValue(new ArrayList<>());
             result.setDataLen(0);
-            log.info(deviceEntity.getDeviceCode() + "GPRS升级："+JSONObject.toJSONString(result));
+            log.info(deviceEntity.getDeviceCode() + "：GPRS升级："+JSONObject.toJSONString(result));
             //转换成字节
             byte[] bytes = HexConvert.hexStringToBytes(result);
             ByteBuf byteBuf = Unpooled.copiedBuffer(bytes);
@@ -492,10 +545,10 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                     field.setAccessible(true);
                     if (field.getGenericType().toString().equals("class java.lang.String")) {
                         String str = (String)field.get(setUp);
-                        if(str == null){
-                            value.add(0);
-                        }else{
+                        if(StringUtils.isNotEmpty(str)){
                             value.add(Integer.valueOf(str));
+                        }else{
+                            value.add(0);
                         }
 
                     }else if (field.getGenericType().toString().equals("class java.lang.Integer")) {

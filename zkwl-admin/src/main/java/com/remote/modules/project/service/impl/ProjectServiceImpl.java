@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -102,27 +103,66 @@ public class ProjectServiceImpl implements ProjectService {
                 BigDecimal longitudeSum = new BigDecimal(0);
                 //定义纬度总和
                 BigDecimal latitudeSum = new BigDecimal(0);
+
                 if(CollectionUtils.isNotEmpty(deviceList)){
+                    //经度list
+                    List<Double> longitudeList = new ArrayList<>();
+                    //纬度list
+                    List<Double> latitudeList = new ArrayList<>();
                     //如果设备太多，只取前100条
                     int size = deviceList.size() > 99 ? 99 : deviceList.size();
+                    //经度临时list
+                    List<Double> longitudeTempList = new ArrayList<>();
+                    //纬度临时list
+                    List<Double> latitudeTempList = new ArrayList<>();
                     for(int i = 0; i < size;i++ ){
                         if(StringUtils.isNotEmpty(deviceList.get(i).getLongitude())){
-                            BigDecimal decimal = new BigDecimal(deviceList.get(i).getLongitude()).setScale(4,BigDecimal.ROUND_HALF_DOWN);
-                            longitudeSum = longitudeSum.add(decimal);
+                            double v = Double.parseDouble(deviceList.get(i).getLongitude());
+                            if(v != 0.0){
+                                longitudeTempList.add(v);
+                            }
                         }
                         if(StringUtils.isNotEmpty(deviceList.get(i).getLatitude())){
-                            BigDecimal decimal = new BigDecimal(deviceList.get(i).getLatitude()).setScale(4,BigDecimal.ROUND_HALF_DOWN);
-                            latitudeSum = latitudeSum.add(decimal);
+                            double v = Double.parseDouble(deviceList.get(i).getLatitude());
+                            if(v != 0.0){
+                                latitudeTempList.add(v);
+                            }
                         }
                     }
+                    if(size > 5){
+                       Collections.sort(longitudeTempList);
+                       Collections.sort(latitudeTempList);
+
+                        for (int i = 1;i<longitudeTempList.size() - 1;i++){
+                            longitudeList.add(longitudeTempList.get(i));
+                        }
+                        for (int i = 1;i<latitudeTempList.size() - 1;i++){
+                            latitudeList.add(latitudeTempList.get(i));
+                        }
+                    }else{
+                        longitudeList.addAll(longitudeTempList);
+                        latitudeList.addAll(latitudeTempList);
+                    }
+
+
+                    for (Double temp : longitudeList){
+                        BigDecimal decimal = new BigDecimal(temp).setScale(4,BigDecimal.ROUND_HALF_DOWN);
+                        longitudeSum = longitudeSum.add(decimal);
+                    }
+
+                    for (Double temp : latitudeList){
+                        BigDecimal decimal = new BigDecimal(temp).setScale(4,BigDecimal.ROUND_HALF_DOWN);
+                        latitudeSum = latitudeSum.add(decimal);
+                    }
+
                     //保存项目经度和纬度
                     if(longitudeSum.compareTo(new BigDecimal(0)) == 1){ //判断是否大于0
-                        projectEntity.setLongitude(longitudeSum.divide(BigDecimal.valueOf(size),4,BigDecimal.ROUND_HALF_UP).toString());
+                        projectEntity.setLongitude(longitudeSum.divide(BigDecimal.valueOf(longitudeList.size()),4,BigDecimal.ROUND_HALF_UP).toString());
                     }else{
                         projectEntity.setLongitude(latitudeSum.toString());
                     }
                     if(latitudeSum.compareTo(new BigDecimal(0)) == 1){
-                        projectEntity.setLatitude(latitudeSum.divide(BigDecimal.valueOf(size),4,BigDecimal.ROUND_HALF_UP).toString());
+                        projectEntity.setLatitude(latitudeSum.divide(BigDecimal.valueOf(longitudeList.size()),4,BigDecimal.ROUND_HALF_UP).toString());
                     }else{
                         projectEntity.setLatitude(latitudeSum.toString());
                     }

@@ -21,10 +21,10 @@ import java.util.Map;
  */
 public interface AdvancedSettingService extends IService<AdvancedSettingEntity> {
 
-    AdvancedSettingEntity queryByGroupId(String groupId);
+    AdvancedSettingEntity queryByGroupId(String groupId) throws Exception;
     List<AdvancedSettingEntity> queryByDeviceCode(List<String> deviceCode);
     boolean updateAdvance(Long advSetId,AdvancedSettingEntity advancedSettingEntity);
-    AdvancedSettingEntity queryByDevOrGroupId(String groupId,String deviceCode);
+    AdvancedSettingEntity queryByDevOrGroupId(String groupId,String deviceCode) throws Exception;
     /*
      * @Author zhangwenoping
      * @Description 通过设备codes修改高级设置信息
@@ -46,8 +46,6 @@ public interface AdvancedSettingService extends IService<AdvancedSettingEntity> 
      *
      * @param advancedSettingEntity
      * @param
-     *
-     *
      * @throws Exception
      */
 
@@ -56,9 +54,6 @@ public interface AdvancedSettingService extends IService<AdvancedSettingEntity> 
     void addUpdateDevice(AdvancedSettingEntity advancedSettingEntity,SysUserEntity curUser) throws Exception;
     AdvancedSettingResult queryVol(String deviceCode);
     boolean saveAdvSetDev(AdvancedSettingEntity advancedSettingEntity);
-    boolean updateAdvSetDev(AdvancedSettingEntity advancedSettingEntity);
-    AdvancedSettingEntity queryAdvSetDev(String groupId,String deviceCode);
-    AdvancedSettingEntity queryAdvSetDevCode(String deviceCode);
 
     /**
      *功能描述：通过设备code修改组id

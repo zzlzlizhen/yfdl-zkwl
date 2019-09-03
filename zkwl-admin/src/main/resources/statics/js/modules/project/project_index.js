@@ -39,13 +39,15 @@ $(function () {
             $("#selectb").append(html);
         }
     })
-
+    var serial
+    var pro_name
+    var select
     //搜索
     $("#proje_search").unbind('click');
     $("#proje_search").click(function(){
-       var serial=$("#serial").val();
-       var pro_name=$("#pro_name").val();
-       var select=$("#realName option:selected").attr("id");
+        serial=$("#serial").val();
+        pro_name=$("#pro_name").val();
+        select=$("#realName option:selected").attr("id");
         $("#div").html("")
        form(pageSize,pageNum,serial,pro_name,select)
     })
@@ -118,6 +120,7 @@ $(function () {
                                     content: '删除成功',
                                     skin: 'demo-class'
                                 });
+                                $(".shade_b_delete,.shade_delete").css("display","none")
                                 form(10,1,"","","");
                             }else{
                                 layer.open({
@@ -133,16 +136,19 @@ $(function () {
                 $(".shade_a_delete,.sha_cancel_delete,.guan_sha").click(function () {
                     $(".shade_delete,.shade_b_delete").css("display", "none")
                 })
+                $(".wrong").click(function(){
+                    $(".mistake").css("display","none")
+                })
             // 地图定位
                 $(".ma_p").unbind('click');
                 $(".ma_p").click(function(){
                     var longitude=$(this).attr("id")
-                    var name=$(this).parent().siblings(".Na_me").html()
-                    var searchUrl=encodeURI('../equipment/equipment.html?longitude='+longitude+"&name="+name)
+                    var name=$(this).parent().siblings(".Na_me").html();
+                    var con=$(this).parent().siblings(".sumCount").html();
+                    var searchUrl=encodeURI('../equipment/equipment.html?longitude='+longitude+"&name="+name+"&state="+1+"&con="+con)
                     location.href =searchUrl;
                 })
             // 编辑
-
                 $(".modifier").unbind('click');
                 $(".modifier").click(function(){
                     $(".shade_modifier,.shade_b_modifier").css("display","block");
@@ -224,8 +230,8 @@ $(function () {
                     callback: function (current) {
                         //当前页数current
                      var  pagesb = current
-                        $("#div").html("")
-                        form(pageSize, pagesb)
+                        $("#div").html("");
+                        form(pageSize, pagesb,serial,pro_name,select)
                     }
                 });
 
@@ -240,8 +246,8 @@ $(function () {
        $(".shade_project,.shade_b_project").css("display","block");
        $(".pro_name").val("");
        $(".pro_s_b_add").val("")
-       $("#select1 option:selected").text("");
-       $("#selectb option:selected").text("");
+       $("#select1 option:selected").val("");
+       $("#selectb option:selected").val("");
    })
     $(".shade_add_project").click(function(){
         $(".shade_project,.shade_b_project,.mistake").css("display","none")
@@ -252,8 +258,11 @@ $(function () {
        var pro_s_b= $(".pro_s_b_add").val()
        var select=$("#select1 option:selected").attr("id");
         var selecte=Number($("#selectb option:selected").attr("id"));
+        if(isNaN(selecte)){
+            selecte=""
+        }
         //正则  丸子
-        if(pro_name ==""||pro_s_b==""||select==""||selecte=="" ) {
+        if(pro_name ==""||select==""||selecte=="" ) {
             $(".mistake").css("display","block")
         }else{
             $.ajax({

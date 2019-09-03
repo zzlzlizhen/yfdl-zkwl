@@ -22,7 +22,7 @@ public class MsgBackReadedServiceImpl extends ServiceImpl<MsgBackReadedDao, MsgB
     @Autowired
     MsgBackReadedDao msgBackReadedDao;
     @Override
-    public PageUtils queryPage(Map<String, Object> params, SysUserEntity curUser) {
+    public PageUtils queryPage(Map<String, Object> params, SysUserEntity curUser) throws Exception{
         String parentId = curUser.getUserId().toString();
         IPage<MsgBackReadedEntity> page = this.page(
                 new Query<MsgBackReadedEntity>().getPage(params),

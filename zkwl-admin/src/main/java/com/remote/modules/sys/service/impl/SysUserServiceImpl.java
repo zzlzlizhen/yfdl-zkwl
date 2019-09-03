@@ -24,6 +24,8 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
@@ -43,10 +45,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	private SysDeptService sysDeptService;
 	@Autowired
 	private SysUserDao sysUserDao;
-	@Autowired
-	private ProjectService projectService;
-	@Autowired
-	private DeviceService deviceService;
 
 	@Override
 	public List<Long> queryAllMenuId(Long userId) {
@@ -55,7 +53,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 
 	@Override
 	@DataFilter(subDept = true, user = false)
-	public PageUtils queryPage(Map<String, Object> params,SysUserEntity currentUser) {
+	public PageUtils queryPage(Map<String, Object> params,SysUserEntity currentUser) throws Exception{
 
 		String username = (String)params.get("username");
 		String realName = (String) params.get("realName");
@@ -72,15 +70,17 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 						.and(new Function<QueryWrapper<SysUserEntity>, QueryWrapper<SysUserEntity>>() {
 							@Override
 							public QueryWrapper<SysUserEntity> apply(QueryWrapper<SysUserEntity> sysUserEntityQueryWrapper) {
-								return sysUserEntityQueryWrapper.likeRight(StringUtils.isNotBlank(allParentId),"all_parent_id",allParentId+",").or().eq("user_id",userId);
+//								return sysUserEntityQueryWrapper.likeRight(StringUtils.isNotBlank(allParentId),"all_parent_id",allParentId+",").or().eq("user_id",userId);
+								return sysUserEntityQueryWrapper.likeRight(StringUtils.isNotBlank(allParentId),"all_parent_id",allParentId+",");
 							}
-						})
+						}).orderByDesc("create_time")
 		);
 		return new PageUtils(page);
 	}
 
 	@Override
-	public void saveUser(SysUserEntity user,SysUserEntity currentUser) {
+	@Transactional(readOnly = false, isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+	public void saveUser(SysUserEntity user,SysUserEntity currentUser) throws Exception{
 		user.setCreateTime(new Date());
 		user.setDeviceCount(0);
 		user.setProjectCount(0);
@@ -108,8 +108,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	}
 
 	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public void update(SysUserEntity user) {
+	@Transactional(readOnly = false, isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+	public void update(SysUserEntity user) throws Exception{
 		if(StringUtils.isBlank(user.getPassword())){
 			user.setPassword(null);
 		}else{
@@ -130,8 +130,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	 * 更新用户基本信息
 	 * */
 	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public void updatebaseInfo(SysUserEntity user,Long userId) {
+	public void updatebaseInfo(SysUserEntity user,Long userId) throws Exception{
 		this.baseMapper.update(user,
 				new QueryWrapper<SysUserEntity>().eq("user_id", userId));
 		//保存用户与角色关系
@@ -141,7 +140,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
      * 更新用户状态 通过用户id更用户状态
      * */
 	@Override
-	public boolean updateStatus(Long userId,Integer status){
+	public boolean updateStatus(Long userId,Integer status) throws Exception{
 		SysUserEntity userEntity = new SysUserEntity();
 		userEntity.setStatus(status);
 		return this.update(userEntity,
@@ -175,7 +174,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
      * 通过用户id 删除用户
      * */
 	@Override
-	public int removeUser(Long uid) {
+	public int removeUser(Long uid) throws Exception{
 		SysUserEntity userEntity = new SysUserEntity();
 		userEntity.setFlag(0);
 		return this.baseMapper.update(userEntity,
@@ -183,7 +182,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	}
 
 	@Override
-	public boolean updatePassword(Long userId, String password, String newPassword) {
+	public boolean updatePassword(Long userId, String password, String newPassword) throws Exception{
         SysUserEntity userEntity = new SysUserEntity();
         userEntity.setPassword(newPassword);
         return this.update(userEntity,
@@ -193,9 +192,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	@Override
 	public List<SysUserEntity> queryAllLevel(Long userId) {
 	    SysUserEntity sysUserEntity = this.baseMapper.selectOne(new QueryWrapper<SysUserEntity>().eq("flag",1).eq("user_id",userId));
-
-		//String where = "parent_id='"+userId+"' or parent_id like '%,"+userId+"' or parent_id like '%,"+userId+",%' or parent_id like '"+userId+",%'";
-		//return sysUserDao.queryAllLevel(where);
         return sysUserDao.queryAllChild(sysUserEntity);
 	}
 
@@ -203,35 +199,35 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	 *根据邮箱验证用户
 	 * */
 	@Override
-	public SysUserEntity queryByEmailAndUid(String email,Long userId){
+	public SysUserEntity queryByEmailAndUid(String email,Long userId) throws Exception{
 		return sysUserDao.queryByEmailAndUid(email,userId);
 	}
 	/**
 	 * 通过邮箱查询该用户是否存在
 	 * */
 	@Override
-	public SysUserEntity getByUsername(String username) {
+	public SysUserEntity getByUsername(String username) throws Exception{
 		return this.baseMapper.selectOne(new QueryWrapper<SysUserEntity>().eq("flag",1).eq("username",username));
 	}
 	/**
 	 * 通过邮箱查询该用户是否存在
 	 * */
 	@Override
-	public SysUserEntity getByEmail(String email) {
+	public SysUserEntity getByEmail(String email) throws Exception{
 		return this.baseMapper.selectOne(new QueryWrapper<SysUserEntity>().eq("flag",1).eq("email",email));
 	}
 	/**
 	 * 通过邮箱查询该用户是否存在
 	 * */
 	@Override
-	public SysUserEntity getByMobile(String mobile) {
+	public SysUserEntity getByMobile(String mobile) throws Exception{
 		return this.baseMapper.selectOne(new QueryWrapper<SysUserEntity>().eq("flag",1).eq("mobile",mobile));
 	}
 	/**
 	 * 通过邮箱查询该用户是否存在
 	 * */
 	@Override
-	public List<SysUserEntity> getByEmailAndUid(String email,Long userId) {
+	public List<SysUserEntity> getByEmailAndUid(String email,Long userId) throws Exception{
 		return this.sysUserDao.getByEmailAndUid(email,userId);
 		//return this.baseMapper.selectOne(new QueryWrapper<SysUserEntity>().eq("email",email).notIn("user_id",curUid));
 	}
@@ -239,15 +235,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	 * 通过邮箱查询该用户是否存在
 	 * */
 	@Override
-	public List<SysUserEntity> getByMobileAndUid(String mobile,Long userId) {
+	public List<SysUserEntity> getByMobileAndUid(String mobile,Long userId) throws Exception{
 		return this.sysUserDao.getByMobileAndUid(mobile,userId);
-		//return this.baseMapper.selectOne(new QueryWrapper<SysUserEntity>().eq("mobile",mobile).notIn("user_id",curUid));
 	}
 	/**
 	 *根据手机号验证用户
 	 * */
 	@Override
-	public SysUserEntity queryBySmsAndUid(String mobile,Long userId){
+	public SysUserEntity queryBySmsAndUid(String mobile,Long userId) throws Exception{
 		return sysUserDao.queryBySmsAndUid(mobile,userId);
 	}
    /*
@@ -272,7 +267,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
      * 查询用户名列表
      * */
 	@Override
-	public List<SysUserEntity> queryUserList(Map<String, Object> params,SysUserEntity currentUser) {
+	public List<SysUserEntity> queryUserList(Map<String, Object> params,SysUserEntity currentUser) throws Exception{
 		String allParentId = currentUser.getAllParentId();
 		long userId = currentUser.getUserId();
 		String realName = (String)params.get("realName");
@@ -287,17 +282,17 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	}
 
 	@Override
-	public SysUserEntity queryById(Long userId) {
+	public SysUserEntity queryById(Long userId) throws Exception{
 		return this.baseMapper.selectOne(new QueryWrapper<SysUserEntity>().eq("flag",1).eq("user_id",userId));
 	}
 	@Override
-	public SysUserEntity queryByIdEAndM(Long userId) {
+	public SysUserEntity queryByIdEAndM(Long userId) throws Exception{
 	//	return this.baseMapper.selectOne(new QueryWrapper<SysUserEntity>().eq("flag",1).eq("user_id",userId).eq("type",1).or().eq("is_bind_mtype",1));
 		return this.sysUserDao.queryByIdEAndM(userId);
 	}
 
 	@Override
-	public boolean updateUserName(String username, String password) {
+	public boolean updateUserName(String username, String password) throws Exception{
 
 		SysUserEntity userEntity = new SysUserEntity();
 		userEntity.setPassword(password);
@@ -308,7 +303,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	 * 查询用户盐值用于加密通过用户名
 	 * */
 	@Override
-	public String selectSlat(String username) {
+	public String selectSlat(String username) throws Exception {
 		return this.sysUserDao.selectSlat(username);
 	}
 	/**

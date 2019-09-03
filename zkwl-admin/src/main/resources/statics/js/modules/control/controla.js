@@ -1,25 +1,78 @@
 $(function(){
     //    数值增殖期
     (function ($) {
+        $("#r_inpl_one").keyup(function(){
+            var $this = $(this);
+            var dian =Number ($("#chong").val());
+            if(dian<=$this.val()){
+                $this.val(dian)
+            }
+        })
+        $("#r_Load_power").keyup(function(){
+            var $this = $(this);
+            if($this.val()>40){
+                $this.val(40)
+            }
+        })
+
+        $("#r_inpl_tw").keyup(function(){
+            var $this = $(this);
+            if($this.val()>40){
+                $this.val(20)
+            }
+        })
+        $("#r_inpl_one2").keyup(function(){
+            var $this = $(this);
+            if($this.val()>120){
+                $this.val(120)
+            }
+        })
+        $("#r_teml_ma").keyup(function(){
+            var $this = $(this);
+            if($this.val()>600){
+                $this.val(30)
+            }
+        })
+
+        $(".rrjia").click(function () {
+            if($(this).parent().siblings(".form-control").val()<=38){
+                $(this).parent().siblings(".form-control").val($(this).parent().siblings(".form-control").val(), 0 + 1);
+            }else{
+                $(this).parent().siblings(".form-control").val("39")
+            }
+        })
+
         $("#r_teml_thglte,#r_teml_thglt,#r_teml_thete,#r_teml_thet").keyup(function(){
             var $this = $(this);
             $this.val($this.val().replace(/[^\-?\d.]/g,'')); //输入负数或正数
+            // var hshu = Number( $("#r_teml_thete").val()); || $this.val()>hshu
             if($this.val()<-40){
-                alert("输入的值不允许小于-40")
-                $this.val("")
+                $this.val(-40)
             }
         });
 
-        $("#r_teml_thet,#r_teml_thete").keyup(function(){
+        $("#r_teml_thglte").keyup(function(){
             var $this = $(this);
             if($this.val()>99){
-                alert("输入的值不允许大于99")
-                $this.val("")
+                $this.val(99)
+            }
+        })
+        $(".nqiu").on('click', function () {
+            if($(this).parent().siblings(".form-control").val()<=97  ){
+                $(this).parent().siblings(".form-control").val($(this).parent().siblings(".form-control").val(), 0 + 1);
+            }else{
+                $(this).parent().siblings(".form-control").val("98")
+            }
+        })
+        $("#r_teml_thet,#r_teml_thete").keyup(function(){
+            var $this = $(this);
+            // var qianshu =Number( $("#r_teml_thglte").val())
+        // ||$this.val()<qianshu
+            if($this.val()>99 ){
+                $this.val(99)
             }
         });
-
         $('.spinner .btn:first-of-type').on('click', function () {
-            // console.log( $(this).parent().siblings(".form-control").val() )
             $(this).parent().siblings(".form-control").val(parseInt($(this).parent().siblings(".form-control").val(), 0) + 1);
         });
         $('.spinner .btn:last-of-type').on('click', function () {
@@ -34,7 +87,7 @@ $(function(){
         });
         $(".jiar").click(function () {
             if($(this).parent().siblings(".form-control").val()<=98){
-                $(this).parent().siblings(".form-control").val(parseInt($(this).parent().siblings(".form-control").val(), 0) + 1);
+                $(this).parent().siblings(".form-control").val($(this).parent().siblings(".form-control").val(), 0 + 1);
             }else{
                 $(this).parent().siblings(".form-control").val("99")
             }
@@ -69,6 +122,7 @@ $(function(){
     //设备名称
     var name=href['name'];
     var disabled  //人体感应开关
+    var t; //定时刷新
     var sffd=""
     console.log("设备deviceCode")
     console.log(deviceCode)
@@ -129,7 +183,6 @@ $(function(){
         })
 
         $("#d421").click(function(){
-            console.log(data);
             WdatePicker(data);
         });
 
@@ -173,8 +226,6 @@ $(function(){
             type: "get",
             data: {},
             success: function (res) {
-                console.log("日");
-                console.log(res);
                 dischargeCapacityList=res.data.loadPowerList;//放电量/负载功率
                 chargingCapacityList=res.data.chargingPowerList;  //充电量/充电功率
                 chargingCurrentList=res.data.chargingCurrentList;    //充电电流
@@ -242,7 +293,6 @@ $(function(){
         })
     }
 
-
     //实时数据
     function shuju(deviceId,deviceCode){
         var volCharge;
@@ -289,12 +339,10 @@ $(function(){
                 var sslo3 = res.data.chargingCurrent;
                 var sslo4 = res.data.chargingPower;
                 var sslo5 = res.data.loadVoltage;
+                var sslo9 = res.data.batteryMargin;
                 var sslo6 = res.data.loadCurrent;
                 var sslo7 = res.data.loadPower;
-                var sslo9=res.data.batteryMargin
-                if(sslo9 == null){
-                    sslo9 = ""
-                }
+
                 if(sslo2==null){
                     sslo2=""
                 }
@@ -313,13 +361,19 @@ $(function(){
                 if(sslo7==null){
                     sslo7=""
                 }
+                if(sslo1==null){
+                    sslo1=""
+                }
+                if(sslo9 == null){
+                    sslo9 = ""
+                }
 
-                $("#rxun").html(communicationType)
-                $("#rben").html("1.0")
-                $("#ruan").html(res.data.version)
+                $("#rxun").html(communicationType);
+                $("#rben").html("1.0");
+                $("#ruan").html(res.data.version);
                 var batteryState=res.data.batteryState;
                 if (batteryState == null ) {
-                    batteryState = "";
+                    batteryState = "--";
                 } else if(batteryState == 1) {
                     batteryState = "欠压";
                 }else if(batteryState == 2) {
@@ -335,10 +389,9 @@ $(function(){
                 }else if(batteryState == 0) {
                     batteryState = "过放";
                 }
-
                 var photocellState=res.data.photocellState;
                 if (photocellState == null ) {
-                    photocellState = "";
+                    photocellState = "--";
                 } else if(photocellState == 1) {
                     photocellState = "光强";
                 }else if(photocellState == 2) {
@@ -346,31 +399,9 @@ $(function(){
                 }else if(photocellState == 0) {
                     photocellState = "光弱";
                 }
-
-                $("#rzhuan").html(batteryState);
-                $("#yula").css("width",sslo9+"%");
-                $("#yula").html(sslo9)
-                $("#rdiay").css("width",parseInt(sslo1/((volCharge-volOverDisCharge)/100))+"%");
-                $("#rdiay").html(sslo1)
-                $("#rguang").html(photocellState);//光电池状态
-                $("#rya").css("width",parseInt(sslo2/(sslo1/100))+"%")
-                $("#rya").html(sslo2+"V")
-                $("#rliu").css("width",parseInt(sslo3/(10/100))+"%")
-                $("#rliu").html(sslo3+"A")
-                $("#rdianl").css("width",parseInt(sslo4/(220/100))+"%")
-                $("#rdianl").html(sslo4+"W")
-                $("#rzhun").html(res.data.loadState);//负载状态
-                $("#rfu").css("width",parseInt(sslo5/(60/100))+"%")
-                $("#rfu").html(sslo5+"V")
-                $("#rful").css("width",parseInt(sslo6/(2/100))+"%")
-                $("#rful").html(sslo6+"A")
-                $("#rfugon").css("width",parseInt(sslo7/(40/100))+"%")
-                $("#rfugon").html(sslo7+"W")
-
                 var loadState=res.data.loadState;
-
                 if (loadState == null ) {
-                    loadState = "";
+                    loadState = "--";
                 } else if(loadState == 1) {
                     loadState = "开";
                 }else if(loadState == 2) {
@@ -385,6 +416,40 @@ $(function(){
                     loadState = "过载警告";
                 }else if(loadState == 0) {
                     loadState = "关";
+                }
+
+                $("#rzhuan").html(batteryState);
+                $("#yula").css("width",parseInt(sslo9)+"%");
+                $("#yula").html(sslo9+"%");
+                $("#rdiay").css("width",parseInt(sslo1/((volCharge-volOverDisCharge)/100))+"%");
+                $("#rdiay").html(sslo1+"V");
+                $("#rguang").html(photocellState);//光电池状态
+                var asa = sslo1/100;
+                $("#rya").css("width",parseInt(sslo2/asa)+"%");
+                $("#rya").html(sslo2+"V");
+                $("#rliu").css("width",parseInt(sslo3/(10/100))+"%");
+                $("#rliu").html(sslo3+"A");
+                $("#rdianl").css("width",parseInt(sslo4/(220/100))+"%");
+                $("#rdianl").html(sslo4+"W");
+                $("#rzhun").html(loadState);//负载状态
+                $("#rfu").css("width",parseInt(sslo5/(60/100))+"%");
+                $("#rfu").html(sslo5+"V");
+                $("#rful").css("width",parseInt(sslo6/(2/100))+"%");
+                $("#rful").html(sslo6+"A");
+                $("#rfugon").css("width",parseInt(sslo7/(40/100))+"%");
+                $("#rfugon").html(sslo7+"W");
+                var ele_a = $("#toog").children(".move");
+                var apply = res.data.transport;
+                if(apply== 0){
+                    ele_a.animate({left: "0"}, 300, function(){
+                        ele_a.attr("data-state", "off");
+                    });
+                    $("#toog").removeClass("on").addClass("off");
+                }else if(apply == 1){
+                    ele_a.animate({left: '35'}, 300, function(){
+                        $("#toog").attr("data-state", "on");
+                    });
+                    $("#toog").removeClass("off").addClass("on");
                 }
                 var on0f=res.data.onOff
                 var luminance=res.data.light;
@@ -404,26 +469,78 @@ $(function(){
                     }
                 });
                 $("#slideTest_r ").children().children(".layui-slider-bar").width((luminance/$(".progres").width()*$(".progres").width())+"%");
-                $("#slideTest_r").children().children(".layui-slider-tips").html(luminance)
-                $("#slideTest_r .layui-slider-wrap").css('left',luminance/$(".progres").width()*$(".progres").width() + '%');
-                $("#rzyb").html(lian_g);
-                $("#rac").html(chen_g);
+                layui.use('slider', function() {
+                    var $ = layui.$
+                        , slider = layui.slider;
+                    slider.render({
+                        elem: '#slideTest_r'
+                        , theme: '#1E9FFF' //主题色
+                        , value: res.data.light
+                    });
+                })
+                $("#slideTest_r .layui-slider-wrap").css('left',luminance+ '%');
+
+                //亮灯时长
+                var lian1s = Number($("#r_one_teml").val()*60);
+                var lian2s = Number($("#r_teml_sv").val()*60);
+                var lian3s = Number($("#r_teml_th").val()*60);
+                var lian4s = Number($("#r_teml_ng").val()*60);
+                var lian5s = Number($("#r_teml_fif").val()*60);
+
+                var lian1f = Number($("#r_teml_tw").val());
+                var lian2f = Number($("#r_teml_eg").val());
+                var lian3f = Number($("#r_teml_for").val());
+                var lian4f = Number($("#r_teml_te").val());
+                var lian5f = Number($("#r_teml_six").val());
+
+                $("#rzyb").val(lian1s+lian2s+lian3s+lian4s+lian5s+lian1f+lian2f+lian3f+lian4f+lian5f);
+                //晨亮时长
+                var chenshir =Number ($("#r_teml_el").val()*60);
+                var chenfenr = Number($("#r_teml_egl").val());
+                $("#rac").val(chenshir+chenfenr);
+                // 运输
+                $("#toog").click(function(){
+                    clearInterval(t);
+                    var ele = $(this).children(".move");
+                    if(ele.attr("data-state") == "on"){
+                        ele.animate({left: "0"}, 300, function(){
+                            ele.attr("data-state", "off");
+                        });
+                        $(this).removeClass("on").addClass("off");
+                    }else if(ele.attr("data-state") == "off"){
+                        ele.animate({left: '35'}, 300, function(){
+                            $(this).attr("data-state", "on");
+                        });
+                        $(this).removeClass("off").addClass("on");
+                    }
+                })
             }
+
         })
     }
+
     $("#confirm_Z").click(function(){
         var category = parseInt($('input:radio[name="category"]:checked').val());
-        var r_wen1 =parseInt($("#slideTest_r").children().children(".layui-slider-bar").width()/$("#slideTest_r").children(".layui-slider").width()*100);
-        var r_wena =  r_wen1/$(".progres").width()*100
+        var r_wena =parseInt($("#slideTest_r").children().children(".layui-slider-bar").width()/$("#slideTest_r").children(".layui-slider").width()*100);
         var r_wen_a = Math.ceil(r_wena);
         var r_wenb = $('#rzyb').val();
         var r_wen_b = Math.ceil(r_wenb);
         var r_wenc =  $('#rac').val();
         var r_wen_c = Math.ceil(r_wenc);
-        equipment_b(category,r_wen_a,r_wen_b,r_wen_c)
+        var s_witch
+        s_witch=$(".move").attr("data-state");
+        if(s_witch == "on"){
+            s_witch=1
+        }else if(s_witch == "off"){
+            s_witch=0
+        }
+        equipment_b(category,r_wen_a,r_wen_b,r_wen_c,s_witch);
+        t=setInterval(function(){
+            shuju(deviceId,deviceCode)
+        }, 6000);
     })
-
-    function equipment_b(category,r_wen_a,r_wen_b,r_wen_c) {
+    //实时数据简易操作上传数据
+    function equipment_b(category,r_wen_a,r_wen_b,r_wen_c,s_witch) {
         var data = {};
         var data1 = {};
         data1["deviceCodes"] = [deviceCode]
@@ -437,8 +554,10 @@ $(function(){
         data["lightingDuration"] = r_wen_b;
         data["morningHours"] = r_wen_c;
         data["light"] = r_wen_a;
-        data1["qaKey"] = ["onOff","lightingDuration","morningHours","light"]
-        data1["value"] = [category,r_wen_b,r_wen_c,r_wen_a]
+        data["transport"] = s_witch;
+
+        data1["qaKey"] = ["onOff","lightingDuration","morningHours","light","transport"]
+        data1["value"] = [category,r_wen_b,r_wen_c,r_wen_a,s_witch]
 
         $.ajax({
             url: baseURL + 'fun/device/updateOnOffByIds',
@@ -474,13 +593,86 @@ $(function(){
         $(".tab li").eq($(this).index()).addClass("cur").siblings().removeClass('cur');
         $(".option_a>.option").hide().eq($(this).index()).show();
         if($(this).attr("id") == "opt"){
+            clearInterval(t);
             gao();
         }else if($(this).attr("id") == "hardware"){
+            clearInterval(t);
             hardware();
         }else if($(this).attr("id") == "shuju"){
-            shuju(deviceId,deviceCode);
+            shuju(deviceId,deviceCode)
+            t=setInterval(function(){
+                    shuju(deviceId,deviceCode)
+            }, 60000);
         }
     });
+    //点击负载开关按钮停止刷新实时数据页面数据点击确定后继续刷新
+    $("#in_p>input,#slideTest_r,#rzyb,#rac").click(function(){
+        clearInterval(t);
+    })
+    var loadWorkMode//负载工作模式
+    var powerLoad //负载功率
+    var timeTurnOn//开灯时刻
+    var timeTurnON_a
+    var timeTurnON_b
+    var timeTurnOff//关灯时刻
+    var timeTurnOff_a
+    var timeTurnOff_b
+    var time1//1时段时长
+    var time2//2时段时长
+    var time3//3时段时长
+    var time4//4时段时长
+    var time5//5时段时长
+    var timeDown //晨亮时段时长
+
+    var powerPeople1//时段1 有人功率
+    var powerPeople2//时段2 有人功率
+    var powerPeople3//时段3 有人功率
+    var powerPeople4//时段4 有人功率
+    var powerPeople5//时段5 有人功率
+    var powerDawnPeople//晨亮 有人功率
+    var powerSensor1//时段1 无人功率
+    var powerSensor2//时段2 无人功率
+    var powerSensor3//时段3无人功率
+    var powerSensor4//时段4 无人功率
+    var powerSensor5//时段5 无人功率
+    var powerSensorDown //晨亮 无人功率
+
+    var autoSleepTime//自动休眠时间
+    var savingSwitch//智能节能开关
+    var inductionLightOnDelay //感应亮灯时长
+    var switchDelayTime //负载手动控制生效时长
+
+    var vpv//光控电压
+    var pvSwitch //光控关灯开灯
+    var batType// 电池类型
+    var ligntOnDuration//光控延迟时间长度
+    var batStringNum//电池串数
+    var volOverDisCharge//过放电压
+    var volCharge//充电电压
+    var tempCharge//充电温度范围(最大值  做高八位低八位处理)
+    var tempDisCharge//放电温度范围（最大值做高八位低八位处理)）
+    var tempCharge0 //充电温度范围(最小值做高八位低八位处理)
+    var tempDisCharge25 //放电温度范围（最小值做高八位低八位处理)）
+    var newTempCharge
+    var newTempDisCharge
+    var inspectionTime //巡检时间
+    var icharge//充电电流
+    // 第一阶段
+    var firDownPower//一阶降压功率
+    var firReducAmplitude//一阶降功率幅度
+    // 第二阶段
+    var twoDownPower//二阶降压功率
+    var twoReducAmplitude //二阶降功率幅度
+    // 第三阶段
+    var threeDownPower//三阶降压功率
+    var threeReducAmplitude//三阶降功率幅度
+    var se_a
+    var se_b
+    var se_c
+    var se_d
+    var se_e
+    var se_f
+    var inductionSwitch
     function gao(){
         //取消
         $("#r_cl").click(function(){
@@ -494,7 +686,6 @@ $(function(){
             }else{
                 $(".shade_project,.shade_b_project,.Bian_j").hide();
             }
-
         })
     //电池类型
         $("#r_select_b").click(function(){
@@ -549,108 +740,7 @@ $(function(){
                 if(!flag){
                     return
                 }
-                //负载
-                var loadWorkMode = parseInt($("#select1_b option:selected").attr("class"));   //负载工作模式
-                var powerLoad = parseInt($("#r_Load_power").val()*100); //负载功率
-                var timeTurnOn=$("#d414").val(); //开灯时刻
-                var timeTurnON_a=timeTurnOn.split(":");
-                var timeTurnON_b=Number(timeTurnON_a[0]*60)+Number(timeTurnON_a[1]);
-                var timeTurnOff=$("#d4141").val(); //关灯时刻
-                var timeTurnOff_a=timeTurnOff.split(":");
-                var timeTurnOff_b=Number(timeTurnOff_a[0]*60)+Number(timeTurnOff_a[1]);
-                var time1= Number($("#r_one_teml").val())*60+Number($("#r_teml_tw").val());//1时段时长
-                var time2= Number($("#r_teml_sv").val())*60+Number($("#r_teml_eg").val());  //2时段时长
-                var time3= Number($("#r_teml_th").val())*60+Number($("#r_teml_for").val());//3时段时长
-                var time4= Number($("#r_teml_ng").val())*60+Number($("#r_teml_te").val());//4时段时长
-                var time5=Number($("#r_teml_fif").val())*60+Number($("#r_teml_six").val());//5时段时长
-                var timeDown= Number($("#r_teml_el").val())*60+Number($("#r_teml_egl").val());//晨亮时段时长
-                //关灯时段
-                var powerPeople1=parseInt($("#slideTest4").children().children(".layui-slider-bar").width()/$("#slideTest4").children(".layui-slider").width()*100); //时段1 有人功率
-                var powerPeople2=parseInt($("#slideTest12").children().children(".layui-slider-bar").width()/$("#slideTest12").children(".layui-slider").width()*100);//时段2 有人功率
-                var powerPeople3=parseInt($("#slideTest8").children().children(".layui-slider-bar").width()/$("#slideTest8").children(".layui-slider").width()*100); //时段3 有人功率
-                var powerPeople4=parseInt($("#slideTest10").children().children(".layui-slider-bar").width()/$("#slideTest10").children(".layui-slider").width()*100);//时段4 有人功率
-                var powerPeople5=parseInt($("#slideTest13").children().children(".layui-slider-bar").width()/$("#slideTest13").children(".layui-slider").width()*100);//时段5 有人功率
-                var powerDawnPeople=parseInt($("#slideTest6").children().children(".layui-slider-bar").width()/$("#slideTest6").children(".layui-slider").width()*100);//晨亮 有人功率
-                var powerSensor1=parseInt($("#slideTest5").children().children(".layui-slider-bar").width()/$("#slideTest5").children(".layui-slider").width()*100);//时段1 无人功率
-                var powerSensor2=parseInt($("#slideTest16").children().children(".layui-slider-bar").width()/$("#slideTest16").children(".layui-slider").width()*100);//时段2 无人功率
-                var powerSensor3=parseInt($("#slideTest9").children().children(".layui-slider-bar").width()/$("#slideTest9").children(".layui-slider").width()*100);//时段3无人功率
-                var powerSensor4=parseInt($("#slideTest11").children().children(".layui-slider-bar").width()/$("#slideTest11").children(".layui-slider").width()*100); //时段4 无人功率
-                var powerSensor5=parseInt($("#slideTest14").children().children(".layui-slider-bar").width()/$("#slideTest14").children(".layui-slider").width()*100);//时段5 无人功率
-                var powerSensorDown=parseInt($("#slideTest7").children().children(".layui-slider-bar").width()/$("#slideTest7").children(".layui-slider").width()*100); //晨亮 无人功率
-                var autoSleepTime= $("#r_inpl_one2").val();
-                var savingSwitch=parseInt($("#custom option:selected").attr("class"));
-                var inductionLightOnDelay = parseInt($("#r_teml_ma").val());
-                var switchDelayTime = $("#chong3").val();
-
-                //光电池
-                var vpv=parseInt($("#r_teml_tgl").val()*100);//光控电压
-                var pvSwitch=parseInt($("#r_btl_th>.r_btl_th[type='radio']:checked").val()); //光控关灯开灯
-                var batType=parseInt($("#r_select_b option:selected").attr("class"));// 电池类型
-                var ligntOnDuration=parseInt($("#slideTest_m").children().children(".layui-slider-bar").width()/$("#slideTest_m").children(".layui-slider").width()*100)//光控延迟时间长度
-                if(isNaN(ligntOnDuration)){
-                    ligntOnDuration=5
-                }
-                //蓄电池
-                var batStringNum= parseInt($("#r_teml_forl").val());//电池串数
-                var volOverDisCharge=parseInt($("#r_inpl_one").val()*100);//过放电压
-                var volCharge=parseInt($("#chong").val()*100);//充电电压
-                var tempCharge=parseInt($("#r_teml_thglte").val()); //充电温度范围(最大值  做高八位低八位处理)
-                var tempDisCharge=parseInt($("#r_teml_thglt").val()); //放电温度范围（最大值做高八位低八位处理)）
-                var tempCharge0=parseInt($("#r_teml_thete").val()); //充电温度范围(最小值做高八位低八位处理)
-                var tempDisCharge25=parseInt($("#r_teml_thet").val()); //放电温度范围（最小值做高八位低八位处理)）
-                console.info(tempCharge+":"+tempDisCharge+":"+tempCharge0+":"+tempDisCharge25);
-                console.info("充电温度范围最低："+((tempCharge& 0xFF)<<8)+":"+"放电温度范围最低："+((tempDisCharge & 0xFF)<<8)+":"+"充电温度范围最高："+(tempCharge0 & 0xFF)+":"+"放电温度范围最低："+(tempDisCharge25 & 0xFF));
-                var newTempCharge = ((tempCharge& 0xFF)<<8) + (tempCharge0 & 0xFF);
-                var newTempDisCharge = ((tempDisCharge & 0xFF)<<8) + (tempDisCharge25 & 0xFF);
-                var inspectionTime=parseInt($("#r_teml_thgl option:selected").attr("class")); //巡检时间
-                var icharge= parseInt($("#r_inpl_tw").val())*100;//充电电流
-                // 第一阶段
-                var firDownPower = parseInt($("#slideTest_a").val()*100);//一阶降压功率
-                var firReducAmplitude = parseInt($("#slideTest_b").children().children(".layui-slider-bar").width()/$("#slideTest_b").children(".layui-slider").width()*100)//一阶降功率幅度
-                // 第二阶段
-                var twoDownPower = parseInt($("#slideTest_c").val()*100);//二阶降压功率
-                var twoReducAmplitude = parseInt($("#slideTest_d").children().children(".layui-slider-bar").width()/$("#slideTest_d").children(".layui-slider").width()*100)//二阶降功率幅度
-                // 第三阶段
-                var threeDownPower = parseInt($("#slideTest_e").val()*100);//三阶降压功率
-                var threeReducAmplitude = parseInt($("#slideTest_f").children().children(".layui-slider-bar").width()/$("#slideTest_f").children(".layui-slider").width()*100)//三阶降功率幅度
-                var se_a
-                var se_b
-                var se_c
-                var se_d
-                var se_e
-                var se_f
-                if($(".se_a[type='checkbox']").attr('checked') == "checked"){
-                     se_a=1
-                 }else{
-                     se_a=0
-                 }
-                if($(".se_b[type='checkbox']").attr('checked') == "checked"){
-                    se_b=2
-                }else{
-                    se_b=0
-                }
-                if($(".se_c[type='checkbox']").attr('checked') == "checked"){
-                    se_c=4
-                }else{
-                    se_c=0
-                }
-                if($(".se_d[type='checkbox']").attr('checked') == "checked"){
-                    se_d=8
-                }else{
-                    se_d=0
-                }
-                if($(".se_e[type='checkbox']").attr('checked') == "checked"){
-                    se_e=16
-                }else{
-                    se_e=0
-                }
-                if($(".se_f[type='checkbox']").attr('checked') == "checked"){
-                    se_f=32
-                }else{
-                    se_f=0
-                }
-                var inductionSwitch=se_a+se_b+se_c+se_d+se_e+se_f
-
+                uploading()
                 var qaKey=["loadWorkMode","powerLoad","timeTurnOn","timeTurnOff","time1",
                     "time2","time3","time4","time5","timeDown","powerPeople1","powerPeople2","powerPeople3","powerPeople4","powerPeople5",
                     "powerDawnPeople","powerSensor1","powerSensor2","powerSensor3","powerSensor4","powerSensor5","powerSensorDown","autoSleepTime","vpv",
@@ -661,7 +751,6 @@ $(function(){
                     powerDawnPeople,powerSensor1,powerSensor2,powerSensor3,powerSensor4,powerSensor5,powerSensorDown,autoSleepTime,vpv,
                     pvSwitch,batType,batStringNum,volOverDisCharge,volCharge,newTempCharge,newTempDisCharge,inspectionTime,icharge,switchDelayTime,firDownPower,
                     twoDownPower,threeDownPower,firReducAmplitude,twoReducAmplitude,threeReducAmplitude,ligntOnDuration,savingSwitch,inductionLightOnDelay,inductionSwitch];
-
                 $.ajax({
                     url:baseURL + 'advancedsetting/updateDevice',
                     type:"POST",
@@ -739,8 +828,10 @@ $(function(){
                                     console.log(res);
                                 }
                             })
+
                         }
                     }
+
                 });
             })
         }else {
@@ -761,108 +852,7 @@ $(function(){
                 if(!flag){
                     return
                 }
-                //负载
-                var loadWorkMode = parseInt($("#select1_b option:selected").attr("class"));   //负载工作模式
-                var powerLoad = parseInt($("#r_Load_power").val()*100); //负载功率
-                var timeTurnOn=$("#d414").val(); //开灯时刻
-                var timeTurnON_a=timeTurnOn.split(":");
-                var timeTurnON_b=Number(timeTurnON_a[0]*60)+Number(timeTurnON_a[1]);
-                var timeTurnOff=$("#d4141").val(); //关灯时刻
-                var timeTurnOff_a=timeTurnOff.split(":");
-                var timeTurnOff_b=Number(timeTurnOff_a[0]*60)+Number(timeTurnOff_a[1]);
-                var time1= Number($("#r_one_teml").val())*60+Number($("#r_teml_tw").val());//1时段时长
-                var time2= Number($("#r_teml_sv").val())*60+Number($("#r_teml_eg").val());  //2时段时长
-                var time3= Number($("#r_teml_th").val())*60+Number($("#r_teml_for").val());//3时段时长
-                var time4= Number($("#r_teml_ng").val())*60+Number($("#r_teml_te").val());//4时段时长
-                var time5=Number($("#r_teml_fif").val())*60+Number($("#r_teml_six").val());//5时段时长
-                var timeDown= Number($("#r_teml_el").val())*60+Number($("#r_teml_egl").val());//晨亮时段时长
-                //关灯时段
-                var powerPeople1=parseInt($("#slideTest4").children().children(".layui-slider-bar").width()/$("#slideTest4").children(".layui-slider").width()*100); //时段1 有人功率
-                var powerPeople2=parseInt($("#slideTest12").children().children(".layui-slider-bar").width()/$("#slideTest12").children(".layui-slider").width()*100);//时段2 有人功率
-                console.log(powerPeople2)
-                console.log("rrrrrrrrrrr")
-                var powerPeople3=parseInt($("#slideTest8").children().children(".layui-slider-bar").width()/$("#slideTest8").children(".layui-slider").width()*100); //时段3 有人功率
-                var powerPeople4=parseInt($("#slideTest10").children().children(".layui-slider-bar").width()/$("#slideTest10").children(".layui-slider").width()*100);//时段4 有人功率
-                var powerPeople5=parseInt($("#slideTest13").children().children(".layui-slider-bar").width()/$("#slideTest13").children(".layui-slider").width()*100);//时段5 有人功率
-                var powerDawnPeople=parseInt($("#slideTest6").children().children(".layui-slider-bar").width()/$("#slideTest6").children(".layui-slider").width()*100);//晨亮 有人功率
-                var powerSensor1=parseInt($("#slideTest5").children().children(".layui-slider-bar").width()/$("#slideTest5").children(".layui-slider").width()*100);//时段1 无人功率
-                var powerSensor2=parseInt($("#slideTest16").children().children(".layui-slider-bar").width()/$("#slideTest16").children(".layui-slider").width()*100);//时段2 无人功率
-                var powerSensor3=parseInt($("#slideTest9").children().children(".layui-slider-bar").width()/$("#slideTest9").children(".layui-slider").width()*100);//时段3无人功率
-                var powerSensor4=parseInt($("#slideTest11").children().children(".layui-slider-bar").width()/$("#slideTest11").children(".layui-slider").width()*100); //时段4 无人功率
-                var powerSensor5=parseInt($("#slideTest14").children().children(".layui-slider-bar").width()/$("#slideTest14").children(".layui-slider").width()*100);//时段5 无人功率
-                var powerSensorDown=parseInt($("#slideTest7").children().children(".layui-slider-bar").width()/$("#slideTest7").children(".layui-slider").width()*100); //晨亮 无人功率
-                var autoSleepTime = $("#r_inpl_one2").val();
-                var savingSwitch=parseInt($("#custom option:selected").attr("class"));
-                var inductionLightOnDelay = parseInt($("#r_teml_ma").val());
-                //光电池
-                var vpv=parseInt($("#r_teml_tgl").val()*100);//光控电压
-                var pvSwitch=parseInt($("#r_btl_th>.r_btl_th[type='radio']:checked").val()); //光控关灯开灯
-                var batType=parseInt($("#r_select_b option:selected").attr("class"));// 电池类型
-                var switchDelayTime = $("#chong3").val();
-                var ligntOnDuration=parseInt($("#slideTest_m").children().children(".layui-slider-bar").width()/$("#slideTest_m").children(".layui-slider").width()*100)//光控延迟时间长度
-                if(isNaN(ligntOnDuration)){
-                    ligntOnDuration=5
-                }
-                //蓄电池
-                var batStringNum= parseInt($("#r_teml_forl").val());//电池串数
-                var volOverDisCharge=parseInt($("#r_inpl_one").val()*100);//过放电压
-                var volCharge=parseInt($("#chong").val()*100);//充电电压
-                var tempCharge=parseInt($("#r_teml_thglte").val()); //充电温度范围(最大值  做高八位低八位处理)
-                var tempDisCharge=parseInt($("#r_teml_thglt").val()); //放电温度范围（最大值做高八位低八位处理)）
-                var tempCharge0=parseInt($("#r_teml_thete").val()) ;//充电温度范围(最小值做高八位低八位处理)
-                var tempDisCharge25=parseInt($("#r_teml_thet").val()); //放电温度范围（最小值做高八位低八位处理)）
-                var newTempCharge = ((tempCharge & 0xFF)<<8) + (tempCharge0 & 0xFF);
-                var newTempDisCharge = ((tempDisCharge & 0xFF)<<8) + (tempDisCharge25 & 0xFF);
-
-                var inspectionTime=parseInt($("#r_teml_thgl option:selected").attr("class")); //巡检时间
-                var icharge=parseInt($("#r_inpl_tw").val())*100;//充电电流
-                //自定义
-                // 第一阶段
-                var firDownPower = parseInt($("#slideTest_a").val()*100 );//一阶降压功率
-                 var firReducAmplitude = parseInt($("#slideTest_b").children().children(".layui-slider-bar").width()/$("#slideTest_b").children(".layui-slider").width()*100);//一阶降功率幅度
-                // 第二阶段
-                var twoDownPower = parseInt($("#slideTest_c").val()*100);//二阶降压功率
-                var twoReducAmplitude = parseInt($("#slideTest_d").children().children(".layui-slider-bar").width()/$("#slideTest_d").children(".layui-slider").width()*100);//二阶降功率幅度
-                //第三阶段
-                var threeDownPower = parseInt($("#slideTest_e").val()*100);//三阶降压功率
-                var threeReducAmplitude = parseInt($("#slideTest_f").children().children(".layui-slider-bar").width()/$("#slideTest_f").children(".layui-slider").width()*100);//三阶降功率幅度
-                var se_a
-                var se_b
-                var se_c
-                var se_d
-                var se_e
-                var se_f
-                if($(".se_a[type='checkbox']").attr('checked') == "checked"){
-                    se_a=1
-                }else{
-                    se_a=0
-                }
-                if($(".se_b[type='checkbox']").attr('checked') == "checked"){
-                    se_b=2
-                }else{
-                    se_b=0
-                }
-                if($(".se_c[type='checkbox']").attr('checked') == "checked"){
-                    se_c=4
-                }else{
-                    se_c=0
-                }
-                if($(".se_d[type='checkbox']").attr('checked') == "checked"){
-                    se_d=8
-                }else{
-                    se_d=0
-                }
-                if($(".se_e[type='checkbox']").attr('checked') == "checked"){
-                    se_e=16
-                }else{
-                    se_e=0
-                }
-                if($(".se_f[type='checkbox']").attr('checked') == "checked"){
-                    se_f=32
-                }else{
-                    se_f=0
-                }
-                var inductionSwitch=se_a+se_b+se_c+se_d+se_e+se_f
+                uploading()
                 var qaKey=["loadWorkMode","powerLoad","timeTurnOn","timeTurnOff","time1",
                     "time2","time3","time4","time5","timeDown","powerPeople1","powerPeople2","powerPeople3","powerPeople4","powerPeople5",
                     "powerDawnPeople","powerSensor1","powerSensor2","powerSensor3","powerSensor4","powerSensor5","powerSensorDown","autoSleepTime","vpv",
@@ -873,88 +863,194 @@ $(function(){
                     powerDawnPeople,powerSensor1,powerSensor2,powerSensor3,powerSensor4,powerSensor5,powerSensorDown,autoSleepTime,vpv,
                     pvSwitch,batType,batStringNum,volOverDisCharge,volCharge,newTempCharge,newTempDisCharge,inspectionTime,icharge,switchDelayTime,firDownPower,
                     twoDownPower,threeDownPower,firReducAmplitude,twoReducAmplitude,threeReducAmplitude,ligntOnDuration,savingSwitch,inductionLightOnDelay,inductionSwitch];
+                $.ajax({
+                    url:baseURL + 'advancedsetting/updateGroup',
+                    type:"POST",
+                    data:
+                        "&groupId="+ grod + //分组id
+                        "&loadWorkMode="+ loadWorkMode + //负载工作模式
+                        "&powerLoad="+ powerLoad +//负载功率
+                        "&timeTurnOn="+ timeTurnON_b + //开灯时刻
+                        "&timeTurnOff="+ timeTurnOff_b + //关灯时刻
+                        "&time1="+ time1 +//1时段时长
+                        "&time2="+ time2 +//2时段时长
+                        "&time3="+ time3 +//3时段时长
+                        "&time4="+ time4 +//4时段时长
+                        "&time5="+ time5 +//5时段时长
+                        "&timeDown="+ timeDown +//晨亮时段时长
+                        "&powerPeople1="+ powerPeople1 +//时段1 有人功率
+                        "&powerPeople2="+ powerPeople2 +//时段2 有人功率
+                        "&powerPeople3="+ powerPeople3 +//时段3 有人功率
+                        "&powerPeople4="+ powerPeople4 +//时段4 有人功率
+                        "&powerPeople5="+ powerPeople5 +//时段5 有人功率
+                        "&powerDawnPeople="+ powerDawnPeople+//晨亮 有人功率
+                        "&powerSensor1="+ powerSensor1 +//时段1 无人功率
+                        "&powerSensor2="+ powerSensor2 +//时段2 无人功率
+                        "&powerSensor3="+ powerSensor3 +//时段3无人功率
+                        "&powerSensor4="+ powerSensor4 +//时段4 无人功率
+                        "&powerSensor5="+ powerSensor5 +//时段5 无人功率
+                        "&powerSensorDown="+ powerSensorDown +//晨亮 无人功率
+                        "&savingSwitch="+ savingSwitch + //节能开关
+                        "&autoSleepTime="+ autoSleepTime + //自动休眠时间长度
+                        "&vpv="+ vpv + //光控电压
+                        "&pvSwitch="+ pvSwitch +//光控关灯开灯
+                        "&ligntOnDuration="+ ligntOnDuration +//光控延迟时间长度
+                        "&batType="+ batType + // 电池类型 0:未设置；1：胶体电池；2：铅酸电池； 3磷酸铁锂电池；4：三元锂电池
+                        "&batStringNum="+batStringNum +//电池串数
+                        "&volOverDisCharge="+ volOverDisCharge + //过放电压
+                        "&volCharge="+ volCharge +//充电电压
+                        "&tempCharge="+ newTempCharge +//充电温度范围(最大值和最小值做高八位低八位处理)
+                        "&tempDisCharge="+ newTempDisCharge +//放电温度范围（最大值和最小值做高八位低八位处理)）
+                        "&inspectionTime="+ inspectionTime+//巡检时间
+                        "&iCharge="+ icharge + //充电电流
+                        "&inductionSwitch="+ inductionSwitch +//感应开关
+                        "&inductionLightOnDelay="+ inductionLightOnDelay +//感应后的亮灯延时switchDelayTime
+                        "&switchDelayTime="+ switchDelayTime + //开关灯延时
+                        "&firDownPower="+ firDownPower + //一阶降压功率
+                        "&twoDownPower="+ twoDownPower + //二阶降压功率
+                        "&threeDownPower="+ threeDownPower + //三阶降压功率
+                        "&firReducAmplitude="+ firReducAmplitude + //一阶降功率幅度
+                        "&twoReducAmplitude="+ twoReducAmplitude + //二阶降功率幅度
+                        "&threeReducAmplitude="+ threeReducAmplitude //三阶降功率幅度
+                    ,
+                    success: function(res){
+                        console.log("分组高级设置上传成功")
+                        if(res.code == 500){
+                            alert(res.msg)
+                        }else if(res.code == 200) {
+                            alert("分组保存成功");
+                            // 硬件分组
+                            $.ajax({
+                                url:baseURL + 'fun/device/change',
+                                contentType: "application/json;charset=UTF-8",
+                                type:"POST",
+                                data: JSON.stringify({
+                                    "qaKey": qaKey, //需要修改的参数键
+                                    "value": value, //需要修改的参数值
+                                    "deviceType": "1", //设备类型   /1
+                                    "groupId":grod,
+                                    "status":2
+                                }),
+                                success: function(res) {
+                                    console.log("硬件分组返回");
+                                    console.log(res);
+                                }
+                            })
 
-                    $.ajax({
-                        url:baseURL + 'advancedsetting/updateGroup',
-                        type:"POST",
-                        data:
-                            "&groupId="+ grod + //分组id
-                            "&loadWorkMode="+ loadWorkMode + //负载工作模式
-                            "&powerLoad="+ powerLoad +//负载功率
-                            "&timeTurnOn="+ timeTurnON_b + //开灯时刻
-                            "&timeTurnOff="+ timeTurnOff_b + //关灯时刻
-                            "&time1="+ time1 +//1时段时长
-                            "&time2="+ time2 +//2时段时长
-                            "&time3="+ time3 +//3时段时长
-                            "&time4="+ time4 +//4时段时长
-                            "&time5="+ time5 +//5时段时长
-                            "&timeDown="+ timeDown +//晨亮时段时长
-                            "&powerPeople1="+ powerPeople1 +//时段1 有人功率
-                            "&powerPeople2="+ powerPeople2 +//时段2 有人功率
-                            "&powerPeople3="+ powerPeople3 +//时段3 有人功率
-                            "&powerPeople4="+ powerPeople4 +//时段4 有人功率
-                            "&powerPeople5="+ powerPeople5 +//时段5 有人功率
-                            "&powerDawnPeople="+ powerDawnPeople+//晨亮 有人功率
-                            "&powerSensor1="+ powerSensor1 +//时段1 无人功率
-                            "&powerSensor2="+ powerSensor2 +//时段2 无人功率
-                            "&powerSensor3="+ powerSensor3 +//时段3无人功率
-                            "&powerSensor4="+ powerSensor4 +//时段4 无人功率
-                            "&powerSensor5="+ powerSensor5 +//时段5 无人功率
-                            "&powerSensorDown="+ powerSensorDown +//晨亮 无人功率
-                            "&savingSwitch="+ savingSwitch + //节能开关
-                            "&autoSleepTime="+ autoSleepTime + //自动休眠时间长度
-                            "&vpv="+ vpv + //光控电压
-                            "&pvSwitch="+ pvSwitch +//光控关灯开灯
-                            "&ligntOnDuration="+ ligntOnDuration +//光控延迟时间长度
-                            "&batType="+ batType + // 电池类型 0:未设置；1：胶体电池；2：铅酸电池； 3磷酸铁锂电池；4：三元锂电池
-                            "&batStringNum="+batStringNum +//电池串数
-                            "&volOverDisCharge="+ volOverDisCharge + //过放电压
-                            "&volCharge="+ volCharge +//充电电压
-                            "&tempCharge="+ newTempCharge +//充电温度范围(最大值和最小值做高八位低八位处理)
-                            "&tempDisCharge="+ newTempDisCharge +//放电温度范围（最大值和最小值做高八位低八位处理)）
-                            "&inspectionTime="+ inspectionTime+//巡检时间
-                            "&iCharge="+ icharge + //充电电流
-                            "&inductionSwitch="+ inductionSwitch +//感应开关
-                            "&inductionLightOnDelay="+ inductionLightOnDelay +//感应后的亮灯延时switchDelayTime
-                            "&switchDelayTime="+ switchDelayTime + //开关灯延时
-                            "&firDownPower="+ firDownPower + //一阶降压功率
-                            "&twoDownPower="+ twoDownPower + //二阶降压功率
-                            "&threeDownPower="+ threeDownPower + //三阶降压功率
-                            "&firReducAmplitude="+ firReducAmplitude + //一阶降功率幅度
-                            "&twoReducAmplitude="+ twoReducAmplitude + //二阶降功率幅度
-                            "&threeReducAmplitude="+ threeReducAmplitude //三阶降功率幅度
-                        ,
-                        success: function(res){
-                            console.log("分组高级设置上传成功")
-                            if(res.code == 500){
-                                alert(res.msg)
-                            }else if(res.code == 200) {
-                                alert("分组保存成功");
-                                // 硬件分组
-                                $.ajax({
-                                    url:baseURL + 'fun/device/change',
-                                    contentType: "application/json;charset=UTF-8",
-                                    type:"POST",
-                                    data: JSON.stringify({
-                                        "qaKey": qaKey, //需要修改的参数键
-                                        "value": value, //需要修改的参数值
-                                        "deviceType": "1", //设备类型   /1
-                                        "groupId":grod,
-                                        "status":2
-                                    }),
-                                    success: function(res) {
-                                        console.log("硬件分组返回");
-                                        console.log(res);
-                                    }
-                                })
-
-                            }
                         }
-                    });
-
-
+                    }
+                });
             })
         }
+        //上传高级设置数据
+        function uploading() {
+            //负载
+             loadWorkMode = parseInt($("#select1_b option:selected").attr("class"));   //负载工作模式
+             powerLoad = parseInt($("#r_Load_power").val()*100); //负载功率
+             timeTurnOn=$("#d414").val(); //开灯时刻
+             timeTurnON_a=timeTurnOn.split(":");
+             timeTurnON_b=Number(timeTurnON_a[0]*60)+Number(timeTurnON_a[1]);
+             timeTurnOff=$("#d4141").val(); //关灯时刻
+             timeTurnOff_a=timeTurnOff.split(":");
+             timeTurnOff_b=Number(timeTurnOff_a[0]*60)+Number(timeTurnOff_a[1]);
+             time1= Number($("#r_one_teml").val())*60+Number($("#r_teml_tw").val());//1时段时长
+             time2= Number($("#r_teml_sv").val())*60+Number($("#r_teml_eg").val());  //2时段时长
+             time3= Number($("#r_teml_th").val())*60+Number($("#r_teml_for").val());//3时段时长
+             time4= Number($("#r_teml_ng").val())*60+Number($("#r_teml_te").val());//4时段时长
+             time5=Number($("#r_teml_fif").val())*60+Number($("#r_teml_six").val());//5时段时长
+             timeDown= Number($("#r_teml_el").val())*60+Number($("#r_teml_egl").val());//晨亮时段时长
+            //关灯时段
+             powerPeople1=parseInt($("#slideTest4").children().children(".layui-slider-bar").width()/$("#slideTest4").children(".layui-slider").width()*100); //时段1 有人功率
+             powerPeople2=parseInt($("#slideTest12").children().children(".layui-slider-bar").width()/$("#slideTest12").children(".layui-slider").width()*100);//时段2 有人功率
+             powerPeople3=parseInt($("#slideTest8").children().children(".layui-slider-bar").width()/$("#slideTest8").children(".layui-slider").width()*100); //时段3 有人功率
+             powerPeople4=parseInt($("#slideTest10").children().children(".layui-slider-bar").width()/$("#slideTest10").children(".layui-slider").width()*100);//时段4 有人功率
+             powerPeople5=parseInt($("#slideTest13").children().children(".layui-slider-bar").width()/$("#slideTest13").children(".layui-slider").width()*100);//时段5 有人功率
+             powerDawnPeople=parseInt($("#slideTest6").children().children(".layui-slider-bar").width()/$("#slideTest6").children(".layui-slider").width()*100);//晨亮 有人功率
+             powerSensor1=parseInt($("#slideTest5").children().children(".layui-slider-bar").width()/$("#slideTest5").children(".layui-slider").width()*100);//时段1 无人功率
+             powerSensor2=parseInt($("#slideTest16").children().children(".layui-slider-bar").width()/$("#slideTest16").children(".layui-slider").width()*100);//时段2 无人功率
+             powerSensor3=parseInt($("#slideTest9").children().children(".layui-slider-bar").width()/$("#slideTest9").children(".layui-slider").width()*100);//时段3无人功率
+             powerSensor4=parseInt($("#slideTest11").children().children(".layui-slider-bar").width()/$("#slideTest11").children(".layui-slider").width()*100); //时段4 无人功率
+             powerSensor5=parseInt($("#slideTest14").children().children(".layui-slider-bar").width()/$("#slideTest14").children(".layui-slider").width()*100);//时段5 无人功率
+             powerSensorDown=parseInt($("#slideTest7").children().children(".layui-slider-bar").width()/$("#slideTest7").children(".layui-slider").width()*100); //晨亮 无人功率
+             //光电池
+             autoSleepTime =Number($("#r_inpl_one2").val()) ;//自动休眠时间
+             savingSwitch=parseInt($("#custom option:selected").attr("class"));//智能节能开关
+             inductionLightOnDelay = parseInt($("#r_teml_ma").val());//感应亮灯时长
+             switchDelayTime = Number($("#chong3").val());//负载手动控制生效时长
+            //蓄电池
+             vpv=parseInt($("#r_teml_tgl").val()*100);//光控电压
+             pvSwitch=parseInt($("#r_btl_th>.r_btl_th[type='radio']:checked").val()); //光控关灯开灯
+             batType=parseInt($("#r_select_b option:selected").attr("class"));// 电池类型
+             ligntOnDuration=parseInt($("#slideTest_m").children().children(".layui-slider-bar").width()/$("#slideTest_m").children(".layui-slider").width()*100)//光控延迟时间长度
+             if(isNaN(ligntOnDuration)){
+                ligntOnDuration=5
+             }
+             batStringNum= parseInt($("#r_teml_forl").val());//电池串数
+             volOverDisCharge=parseInt($("#r_inpl_one").val()*100);//过放电压
+             volCharge=parseInt($("#chong").val()*100);//充电电压
+             tempCharge=parseInt($("#r_teml_thglte").val()); //充电温度范围(最大值  做高八位低八位处理)
+             tempDisCharge=parseInt($("#r_teml_thglt").val()); //放电温度范围（最大值做高八位低八位处理)）
+             tempCharge0=parseInt($("#r_teml_thete").val()); //充电温度范围(最小值做高八位低八位处理)
+             tempDisCharge25=parseInt($("#r_teml_thet").val()); //放电温度范围（最小值做高八位低八位处理)）
+             newTempCharge = ((tempCharge& 0xFF)<<8) + (tempCharge0 & 0xFF);
+             newTempDisCharge = ((tempDisCharge & 0xFF)<<8) + (tempDisCharge25 & 0xFF);
+             inspectionTime=parseInt($("#r_teml_thgl option:selected").attr("class")); //巡检时间
+             icharge= parseInt($("#r_inpl_tw").val())*100;//充电电流
+            if(isNaN(icharge)){
+                icharge=20
+            }
+            // 第一阶段
+             firDownPower = parseInt($("#slideTest_a").val()*100);//一阶降压功率
+             firReducAmplitude = parseInt($("#slideTest_b").children().children(".layui-slider-bar").width()/$("#slideTest_b").children(".layui-slider").width()*100)//一阶降功率幅度
+            if(isNaN(firReducAmplitude)){
+                firReducAmplitude=60
+            }
+            // 第二阶段
+             twoDownPower = parseInt($("#slideTest_c").val()*100);//二阶降压功率
+             twoReducAmplitude = parseInt($("#slideTest_d").children().children(".layui-slider-bar").width()/$("#slideTest_d").children(".layui-slider").width()*100)//二阶降功率幅度
+            if(isNaN(twoReducAmplitude)){
+                twoReducAmplitude=40
+            }
+            // 第三阶段
+             threeDownPower = parseInt($("#slideTest_e").val()*100);//三阶降压功率
+             threeReducAmplitude = parseInt($("#slideTest_f").children().children(".layui-slider-bar").width()/$("#slideTest_f").children(".layui-slider").width()*100)//三阶降功率幅度
+            if(isNaN(threeReducAmplitude)){
+                threeReducAmplitude=20
+            }
+
+            if($(".se_a[type='checkbox']").attr('checked') == "checked"){
+                se_a=1
+            }else{
+                se_a=0
+            }
+            if($(".se_b[type='checkbox']").attr('checked') == "checked"){
+                se_b=2
+            }else{
+                se_b=0
+            }
+            if($(".se_c[type='checkbox']").attr('checked') == "checked"){
+                se_c=4
+            }else{
+                se_c=0
+            }
+            if($(".se_d[type='checkbox']").attr('checked') == "checked"){
+                se_d=8
+            }else{
+                se_d=0
+            }
+            if($(".se_e[type='checkbox']").attr('checked') == "checked"){
+                se_e=16
+            }else{
+                se_e=0
+            }
+            if($(".se_f[type='checkbox']").attr('checked') == "checked"){
+                se_f=32
+            }else{
+                se_f=0
+            }
+            inductionSwitch=se_a+se_b+se_c+se_d+se_e+se_f
+        }
+        //渲染高级设置数据
         function url(ur){
             $.ajax({
                 url:ur,
@@ -962,7 +1058,8 @@ $(function(){
                 type:"get",
                 data: {},
                 success: function(res){
-                    if(res.info == ""){
+                    if(res.info == "" ||res.info== null){
+                        laiui(0,0,0,0,0,0,0,0,0,0,0,0,0,0)
                         return
                     }else{
                         console.log("设备高级设置参数获取1")
@@ -980,7 +1077,10 @@ $(function(){
                             loadWorkMode="测试";
                         }
                         $("#select1_b").val(loadWorkMode);//负载工作模式
-
+                        if(loadWorkMode =="光控模式"){
+                            $(".dinstn").css("display"," none");
+                            $(".mositn").css("display"," block");
+                        }
                         $("#r_Load_power").val(res.info.powerLoad/100);// 负载功率
                         var turnon=parseInt(res.info.timeTurnOn/60);
                         var turnona=res.info.timeTurnOn-(turnon*60);
@@ -1015,7 +1115,6 @@ $(function(){
                         $("#r_teml_el").val(timeDown);//晨亮时段时长
                         $("#r_teml_egl").val(timeDown_a);
                         $("#r_teml_tgl").val(res.info.vpv/100);//光控电压
-                        $("").val();// 光控关灯开关......
                         $("#r_teml_forl").val(res.info.batStringNum); //电池串数
 
                         var batType=res.info.batType;
@@ -1163,6 +1262,7 @@ $(function(){
                         $("#slideTest_a").val(res.info.firDownPower/100);//一阶前
                         $("#slideTest_b").children().children(".layui-slider-bar").css("width",res.info.firReducAmplitude+"%");//一阶后
                         $("#slideTest_b").children().children(".layui-slider-wrap").css("left",res.info.firReducAmplitude+"%");
+                        // $("#slideTest_b").children().children(".layui-slider-tips").html(res.info.firReducAmplitude)
 
                         $("#slideTest_c").val(res.info.twoDownPower/100);//2阶前
                         $("#slideTest_d").children().children(".layui-slider-bar").css("width",res.info.twoReducAmplitude+"%");//2阶后
@@ -1175,100 +1275,318 @@ $(function(){
                         $("#chong3").val(res.info.switchDelayTime);
                         $("#slideTest_m").children().children(".layui-slider-bar").css("width",res.info.ligntOnDuration+"%");//光控延时时间
                         $("#slideTest_m").children().children(".layui-slider-wrap").css("left",res.info.ligntOnDuration+"%");
-
-
-                        layui.use('slider', function(){
-                            var $ = layui.$
-                                ,slider = layui.slider;
-                            slider.render({
-                                elem: '#slideTest4'
-                                ,theme: '#1E9FFF' //主题色
-                                ,value: res.info.powerPeople1//初始值
-                            });
-                            slider.render({
-                                elem: '#slideTest5'
-                                ,theme: '#1E9FFF' //主题色
-                                ,value: res.info.powerSensor1 //初始值
-                                ,disabled:disabled
-                            });
-                            slider.render({
-                                elem: '#slideTest12'
-                                ,theme: '#1E9FFF' //主题色
-                                ,value: res.info.powerPeople2 //初始值
-                            });
-                            slider.render({
-                                elem: '#slideTest16'
-                                ,theme: '#1E9FFF' //主题色
-                                ,value: res.info.powerSensor2 //初始值
-                                ,disabled:disabled
-                            });
-                            slider.render({
-                                elem: '#slideTest8'
-                                ,theme: '#1E9FFF' //主题色
-                                ,value: res.info.powerPeople3 //初始值
-                            });
-                            slider.render({
-                                elem: '#slideTest9'
-                                ,theme: '#1E9FFF' //主题色
-                                ,value: res.info.powerSensor3 //初始值
-                                ,disabled:disabled
-                            });
-                            slider.render({
-                                elem: '#slideTest10'
-                                ,theme: '#1E9FFF' //主题色
-                                ,value: res.info.powerPeople4 //初始值
-                            });
-                            slider.render({
-                                elem: '#slideTest11'
-                                ,theme: '#1E9FFF' //主题色
-                                ,value: res.info.powerSensor4 //初始值
-                                ,disabled:disabled
-                            });
-                            slider.render({
-                                elem: '#slideTest13'
-                                ,theme: '#1E9FFF' //主题色
-                                ,value: res.info.powerPeople5 //初始值
-                            });
-                            slider.render({
-                                elem: '#slideTest14'
-                                ,theme: '#1E9FFF' //主题色
-                                ,value: res.info.powerSensor5 //初始值
-                                ,disabled:disabled
-                            });
-                            slider.render({
-                                elem: '#slideTest6'
-                                ,theme: '#1E9FFF' //主题色
-                                ,value:res.info.powerDawnPeople //初始值
-                            });
-                            slider.render({
-                                elem: '#slideTest7'
-                                ,theme: '#1E9FFF' //主题色
-                                ,value: res.info.powerSensorDown //初始值
-                                ,disabled:disabled
-                            });
-                            slider.render({
-                                elem: '#slideTest1'
-                                ,theme: '#1E9FFF' //主题色
-                                ,input: true //输入框
-                                ,value: res.info.switchDelayTime //初始值
-                            });
-                            slider.render({
-                                elem: '#slideTest_m'
-                                ,theme: '#1E9FFF' //主题色
-                                // ,input: true //输入框
-                                ,value: res.info.ligntOnDuration //初始值
-                            });
-                        });
+                        // layui.use('slider', function() {
+                        //     var $ = layui.$
+                        //         , slider = layui.slider;
+                        //     slider.render({
+                        //         elem: '#slideTest_b'
+                        //         , theme: '#1E9FFF' //主题色
+                        //         , value: res.info.firReducAmplitude
+                        //     });
+                        //
+                        // })
+                        var powerPeople1=res.info.powerPeople1;
+                        var powerSensor1=res.info.powerSensor1;
+                        var powerPeople2=res.info.powerPeople2;
+                        var powerSensor2=res.info.powerSensor2;
+                        var powerPeople3=res.info.powerPeople3;
+                        var powerSensor3=res.info.powerSensor3;
+                        var powerPeople4=res.info.powerPeople4;
+                        var powerSensor4=res.info.powerSensor4;
+                        var powerPeople5=res.info.powerPeople5;
+                        var powerSensor5=res.info.powerSensor5;
+                        var powerDawnPeople=res.info.powerDawnPeople;
+                        var powerSensorDown=res.info.powerSensorDown;
+                        var switchDelayTime=res.info.switchDelayTime;
+                        var ligntOnDuration=res.info.ligntOnDuration;
+                        laiui(powerPeople1,powerSensor1,powerPeople2,powerSensor2,powerPeople3,powerSensor3,powerPeople4,powerSensor4,powerPeople5,powerSensor5,
+                            powerDawnPeople,powerSensorDown,switchDelayTime,ligntOnDuration)
                     }
                 }
             });
+
+            function laiui(powerPeople1,powerSensor1,powerPeople2,powerSensor2,powerPeople3,powerSensor3,powerPeople4,powerSensor4,powerPeople5,powerSensor5,
+                           powerDawnPeople,powerSensorDown,switchDelayTime,ligntOnDuration) {
+                //人体感应开关
+                $(".sdke").click(function(){
+                    $(".progres,.sdsds,.nbo input").css("color","#ccc");
+                    $(".nbo").css("pointer-events","none");
+                    $(".nbo input").attr("readonly","readonly");
+                    $(".progres input").prop("checked",false);
+                    $(".progres input").attr("disabled","disabled")
+                    $("#r_teml_ma").val("30");
+                    disabled=true
+                    layui.use('slider', function(){
+                        var $ = layui.$
+                            , slider = layui.slider;
+                        slider.render({
+                            elem: '#slideTest4'
+                            , theme: '#1E9FFF' //主题色
+                            , value: powerPeople1//初始值
+                        });
+                        slider.render({
+                            elem: '#slideTest5'
+                            , theme: '#1E9FFF' //主题色
+                            , value: powerSensor1 //初始值
+                            , disabled: disabled
+                        });
+                        slider.render({
+                            elem: '#slideTest12'
+                            , theme: '#1E9FFF' //主题色
+                            , value: powerPeople2 //初始值
+                        });
+                        slider.render({
+                            elem: '#slideTest16'
+                            , theme: '#1E9FFF' //主题色
+                            , value:powerSensor2  //初始值
+                            , disabled: disabled
+                        });
+                        slider.render({
+                            elem: '#slideTest8'
+                            , theme: '#1E9FFF' //主题色
+                            , value:powerPeople3  //初始值
+                        });
+                        slider.render({
+                            elem: '#slideTest9'
+                            , theme: '#1E9FFF' //主题色
+                            , value:powerSensor3  //初始值
+                            , disabled: disabled
+                        });
+                        slider.render({
+                            elem: '#slideTest10'
+                            , theme: '#1E9FFF' //主题色
+                            , value: powerPeople4 //初始值
+                        });
+                        slider.render({
+                            elem: '#slideTest11'
+                            , theme: '#1E9FFF' //主题色
+                            , value: powerSensor4 //初始值
+                            , disabled: disabled
+                        });
+                        slider.render({
+                            elem: '#slideTest13'
+                            , theme: '#1E9FFF' //主题色
+                            , value:powerPeople5 //初始值
+                        });
+                        slider.render({
+                            elem: '#slideTest14'
+                            , theme: '#1E9FFF' //主题色
+                            , value: powerSensor5 //初始值
+                            , disabled: disabled
+                        });
+                        slider.render({
+                            elem: '#slideTest6'
+                            , theme: '#1E9FFF' //主题色
+                            , value: powerDawnPeople //初始值
+                        });
+                        slider.render({
+                            elem: '#slideTest7'
+                            , theme: '#1E9FFF' //主题色
+                            , value: powerSensorDown //初始值
+                            , disabled: disabled
+                        });
+                        slider.render({
+                            elem: '#slideTest1'
+                            , theme: '#1E9FFF' //主题色
+                            , input: true //输入框
+                            , value: switchDelayTime //初始值
+                        });
+                        slider.render({
+                            elem: '#slideTest_m'
+                            , theme: '#1E9FFF' //主题色
+                            , value: ligntOnDuration //初始值
+                        });
+                    })
+                })
+                $(".sdk").click(function(){
+                    $(".progres,.sdsds,.nbo input").css("color","");
+                    $(".nbo").css("pointer-events","");
+                    $(".nbo input").removeAttr("readonly","readonly");
+                    $(".progres input").prop("checked",true);
+                    $(".progres input").removeAttr("disabled","disabled")
+                    disabled=false
+                    layui.use('slider', function(){
+                        var $ = layui.$
+                            , slider = layui.slider;
+                        slider.render({
+                            elem: '#slideTest4'
+                            , theme: '#1E9FFF' //主题色
+                            , value: powerPeople1//初始值
+                        });
+                        slider.render({
+                            elem: '#slideTest5'
+                            , theme: '#1E9FFF' //主题色
+                            , value: powerSensor1 //初始值
+                            , disabled: disabled
+                        });
+                        slider.render({
+                            elem: '#slideTest12'
+                            , theme: '#1E9FFF' //主题色
+                            , value: powerPeople2 //初始值
+                        });
+                        slider.render({
+                            elem: '#slideTest16'
+                            , theme: '#1E9FFF' //主题色
+                            , value:powerSensor2  //初始值
+                            , disabled: disabled
+                        });
+                        slider.render({
+                            elem: '#slideTest8'
+                            , theme: '#1E9FFF' //主题色
+                            , value:powerPeople3  //初始值
+                        });
+                        slider.render({
+                            elem: '#slideTest9'
+                            , theme: '#1E9FFF' //主题色
+                            , value:powerSensor3  //初始值
+                            , disabled: disabled
+                        });
+                        slider.render({
+                            elem: '#slideTest10'
+                            , theme: '#1E9FFF' //主题色
+                            , value: powerPeople4 //初始值
+                        });
+                        slider.render({
+                            elem: '#slideTest11'
+                            , theme: '#1E9FFF' //主题色
+                            , value: powerSensor4 //初始值
+                            , disabled: disabled
+                        });
+                        slider.render({
+                            elem: '#slideTest13'
+                            , theme: '#1E9FFF' //主题色
+                            , value:powerPeople5 //初始值
+                        });
+                        slider.render({
+                            elem: '#slideTest14'
+                            , theme: '#1E9FFF' //主题色
+                            , value: powerSensor5 //初始值
+                            , disabled: disabled
+                        });
+                        slider.render({
+                            elem: '#slideTest6'
+                            , theme: '#1E9FFF' //主题色
+                            , value: powerDawnPeople //初始值
+                        });
+                        slider.render({
+                            elem: '#slideTest7'
+                            , theme: '#1E9FFF' //主题色
+                            , value: powerSensorDown //初始值
+                            , disabled: disabled
+                        });
+                        slider.render({
+                            elem: '#slideTest1'
+                            , theme: '#1E9FFF' //主题色
+                            , input: true //输入框
+                            , value: switchDelayTime //初始值
+                        });
+                        slider.render({
+                            elem: '#slideTest_m'
+                            , theme: '#1E9FFF' //主题色
+                            , value: ligntOnDuration //初始值
+                        });
+                    })
+                })
+                layui.use('slider', function(){
+                    var $ = layui.$
+                        , slider = layui.slider;
+                    slider.render({
+                        elem: '#slideTest4'
+                        , theme: '#1E9FFF' //主题色
+                        , value: powerPeople1//初始值
+                    });
+                    slider.render({
+                        elem: '#slideTest5'
+                        , theme: '#1E9FFF' //主题色
+                        , value: powerSensor1 //初始值
+                        , disabled: disabled
+                    });
+                    slider.render({
+                        elem: '#slideTest12'
+                        , theme: '#1E9FFF' //主题色
+                        , value: powerPeople2 //初始值
+                    });
+                    slider.render({
+                        elem: '#slideTest16'
+                        , theme: '#1E9FFF' //主题色
+                        , value:powerSensor2  //初始值
+                        , disabled: disabled
+                    });
+                    slider.render({
+                        elem: '#slideTest8'
+                        , theme: '#1E9FFF' //主题色
+                        , value:powerPeople3  //初始值
+                    });
+                    slider.render({
+                        elem: '#slideTest9'
+                        , theme: '#1E9FFF' //主题色
+                        , value:powerSensor3  //初始值
+                        , disabled: disabled
+                    });
+                    slider.render({
+                        elem: '#slideTest10'
+                        , theme: '#1E9FFF' //主题色
+                        , value: powerPeople4 //初始值
+                    });
+                    slider.render({
+                        elem: '#slideTest11'
+                        , theme: '#1E9FFF' //主题色
+                        , value: powerSensor4 //初始值
+                        , disabled: disabled
+                    });
+                    slider.render({
+                        elem: '#slideTest13'
+                        , theme: '#1E9FFF' //主题色
+                        , value:powerPeople5 //初始值
+                    });
+                    slider.render({
+                        elem: '#slideTest14'
+                        , theme: '#1E9FFF' //主题色
+                        , value: powerSensor5 //初始值
+                        , disabled: disabled
+                    });
+                    slider.render({
+                        elem: '#slideTest6'
+                        , theme: '#1E9FFF' //主题色
+                        , value: powerDawnPeople //初始值
+                    });
+                    slider.render({
+                        elem: '#slideTest7'
+                        , theme: '#1E9FFF' //主题色
+                        , value: powerSensorDown //初始值
+                        , disabled: disabled
+                    });
+                    slider.render({
+                        elem: '#slideTest1'
+                        , theme: '#1E9FFF' //主题色
+                        , input: true //输入框
+                        , value: switchDelayTime //初始值
+                    });
+                    slider.render({
+                        elem: '#slideTest_m'
+                        , theme: '#1E9FFF' //主题色
+                        , value: ligntOnDuration //初始值
+                    });
+                });
+            }
         }
     }
+
     function hardware() {
+        var url
+        var urlstate
+        var urlGPRS
+        var loadIndex
         //硬件升级
         if(deviceCode != ""){
+            url=baseURL + 'fun/device/version?deviceId='+ deviceId +"&groupId="+"",
+            urlstate=baseURL + 'fun/device/checkMCURunState?deviceId='+ deviceId +"&groupId="+"",
+            urlGPRS=baseURL + 'fun/device/checkGPRSRunState?deviceId='+ deviceId +"&groupId="+"",
+            loadIndex_a(0)
+            gprs(0)
             $(".hardware").unbind('click');
             $(".hardware").click(function(){
+                var sele=Number($("#upgrade option:selected").html());
                 $.ajax({
                     url:baseURL + 'fun/device/updateVersion',
                     contentType: "application/json;charset=UTF-8",
@@ -1276,39 +1594,183 @@ $(function(){
                     data: JSON.stringify({
                         "deviceCodes":[deviceCode] ,
                         "groupId":"",
-                        "version":1,
+                        "version":sele,
                         "deviceType":1,
                         "status":1
                     }),
                     success: function(res) {
+                        loadIndex_a(1)
                         if(res.code == "200"){
-                            alert("升级成功");
+                            layer.open({
+                                title: '信息',
+                                content: "硬件正在升级",
+                                skin: 'demo-class'
+                            });
+                        }
+                    }
+                })
+            })
+            $(".hardware_a").unbind('click');
+            $(".hardware_a").click(function(){
+                var sele=$("#upgrade_a option:selected").html();
+                var sele_s=sele.toString()
+                    sele_s= sele_s.slice(4)
+                $.ajax({
+                    url:baseURL + 'fun/device/updateGprsVersion?deviceId='+deviceId+"&groupId="+""+"&version="+sele_s,
+                    contentType: "application/json;charset=UTF-8",
+                    type:"get",
+                    data:{},
+                    success: function(res) {
+                        gprs(1)
+                        if(res.code == "200"){
+                            layer.open({
+                                title: '信息',
+                                content: "GPRS正在升级",
+                                skin: 'demo-class'
+                            });
                         }
                     }
                 })
             })
         }else{
+            url=baseURL + 'fun/device/version?deviceId='+ "" +"&groupId="+grod,
+            urlstate=baseURL + 'fun/device/checkMCURunState?deviceId='+ "" +"&groupId="+grod,
+            urlGPRS=baseURL + 'fun/device/checkGPRSRunState?deviceId='+ "" +"&groupId="+grod,
+            loadIndex_a(0)
+            gprs(0)
             $(".hardware").unbind('click');
             $(".hardware").click(function(){
+                var sele=Number($("#upgrade option:selected").html());
                 $.ajax({
                     url:baseURL + 'fun/device/updateVersion',
                     contentType: "application/json;charset=UTF-8",
                     type:"POST",
                     data: JSON.stringify({
                         "deviceCodes":[] ,
-                        "version":1,
+                        "version":sele,//数值
                         "groupId":grod,
                         "deviceType":1,
                         "status":1
                     }),
                     success: function(res) {
+                        loadIndex_a(1)
                         if(res.code == "200"){
-                            alert("升级成功");
+                            layer.open({
+                                title: '信息',
+                                content: "硬件正在升级",
+                                skin: 'demo-class'
+                            });
+                        }
+                    }
+                })
+            })
+            $(".hardware_a").unbind('click');
+            $(".hardware_a").click(function(){
+                var sele=$("#upgrade_a option:selected").html();
+                var sele_s=sele.toString();
+                sele_s= sele_s.slice(4)
+                $.ajax({
+                    url:baseURL + 'fun/device/updateGprsVersion?deviceId='+""+"&groupId="+grod+"&version="+sele_s,
+                    contentType: "application/json;charset=UTF-8",
+                    type:"get",
+                    data:{},
+                    success: function(res) {
+                        gprs(1)
+                        if(res.code == "200"){
+                            layer.open({
+                                title: '信息',
+                                content: "GPRS正在升级",
+                                skin: 'demo-class'
+                            });
                         }
                     }
                 })
             })
         }
+        //升级回调
+        $.ajax({
+            url:url,
+            contentType: "application/json;charset=UTF-8",
+            type:"get",
+            data:{},
+            success: function(res) {
+                var html
+                var htmlv
+                for(var i=0;i<res.data.gprsList.length;i++){
+                   html+=" <option>"+res.data.gprsList[i]+"</option>";
+                }
+                for(var i=0;i<res.data.versionList.length;i++){
+                    htmlv+=" <option>"+res.data.versionList[i]+"</option>";
+                }
+                $("#upgrade_a").empty().append(html);
+                $("#upgrade").empty().append(htmlv);
+            }
+        })
+
+        function loadIndex_a(add) {
+            if(add == 1){
+                add_z()
+            }
+            $.ajax({
+                url:urlstate,
+                contentType: "application/json;charset=UTF-8",
+                type:"get",
+                data:{},
+                success: function(res) {
+                    if(res.code == 200){
+
+                    }else{
+                        layer.open({
+                            title: '信息',
+                            content: res.msg,
+                            skin: 'demo-class'
+                        });
+                        $(".hardware").attr("disabled", "disabled");
+                    }
+
+                }
+            })
+        }
+        function gprs(add) {
+            if(add == 1){
+                add_z()
+            }
+            $.ajax({
+                url:urlGPRS,
+                contentType: "application/json;charset=UTF-8",
+                type:"get",
+                data:{},
+                success: function(res) {
+                    if(res.code == 200){
+
+                    }else{
+                        layer.open({
+                            title: '信息',
+                            content: res.msg,
+                            skin: 'demo-class'
+                        });
+                        $(".hardware_a").attr("disabled", "disabled");
+                    }
+
+                }
+            })
+        }
+        function add_z() {
+            loadIndex=layer.load(0, { //icon支持传入0-2
+                shade: [0.3, 'gray'], //0.5透明度的灰色背景
+                content: '传输中...',
+                success: function (layero) {
+                    layero.find('.layui-layer-content').css({
+                        'padding-top': '39px',
+                        'width': '60px'
+                    });
+                }
+            });
+            setTimeout(function () {
+                layer.close(loadIndex);
+            }, 2000);
+        }
+
     }
 
 //input输入框只能输入数字和 小数点后两位
@@ -1348,12 +1810,22 @@ $(function(){
         if(sele == "1"){
             $(".dinstn").css("display"," none");
             $(".mositn").css("display"," block");
+            $("#d414").css("margin-top","2%!important")
         }else{
             $(".dinstn").css("display"," block");
             $(".mositn").css("display"," none");
             $(".kai_b").css("margin","5% 0px 0px 3%!important")
         }
     })
+    $("#custom").click(function(){
+        var selesl=$("#custom option:selected").attr("class");
+        if(selesl=="1"){
+            $(".ndey").css("display"," block");
+        }else {
+            $(".ndey").css("display"," none");
+        }
+    })
+    
 
     $(".nqd").click(function(){
         $(".snds input").attr("readonly","readonly");
@@ -1390,26 +1862,8 @@ $(function(){
         $("#r_teml_thglt").val(fAng_d);
         $("#r_teml_thet").val(fAng_g);
     })
-    //人体感应开关
-    $(".sdke").click(function(){
-        $(".progres,.sdsds,.nbo input").css("color","#ccc");
-        $(".nbo").css("pointer-events","none");
-        $(".nbo input").attr("readonly","readonly");
-         $(".progres input").prop("checked",false);
-        $("#r_teml_ma").val("30");
-        disabled=true
-        gao()
-    })
-    $(".sdk").click(function(){
-        $(".progres,.sdsds,.nbo input").css("color","");
-        $(".nbo").css("pointer-events","");
-        $(".nbo input").removeAttr("readonly","readonly");
-        $(".progres input").prop("checked",true);
-        disabled=false
-        gao()
-    })
-})
 
+})
 
 
 

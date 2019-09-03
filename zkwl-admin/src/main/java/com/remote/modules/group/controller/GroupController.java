@@ -93,6 +93,11 @@ public class GroupController extends AbstractController {
     }
 
 
+    @RequestMapping(value = "/queryGroup", method= RequestMethod.GET)
+    public R queryGroup(String projectId,String groupName){
+        return R.ok(groupService.queryGroup(projectId,groupName));
+    }
+
     @RequestMapping(value = "/updateGroup", method= RequestMethod.POST)
     public R updateGroup(@RequestBody GroupEntity groupEntity){
         if(StringUtils.isEmpty(groupEntity.getGroupName())){

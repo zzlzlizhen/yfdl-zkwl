@@ -10,7 +10,11 @@ import com.remote.common.redis.CacheUtils;
 import com.remote.common.utils.*;
 import com.remote.modules.device.entity.DeviceEntity;
 import com.remote.modules.device.entity.DeviceQuery;
+import com.remote.modules.device.entity.DeviceResult;
+import com.remote.modules.device.entity.VersionResult;
 import com.remote.modules.device.service.DeviceService;
+import com.remote.modules.devicetype.entity.DeviceTypeEntity;
+import com.remote.modules.devicetype.service.DeviceTypeService;
 import com.remote.modules.sys.controller.AbstractController;
 import com.remote.modules.sys.entity.SysUserEntity;
 import com.remote.modules.sys.service.SysUserService;
@@ -23,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import sun.rmi.transport.Transport;
 
+import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -46,20 +51,32 @@ public class DeviceController extends AbstractController {
     @Autowired
     private CacheUtils cacheUtils;
 
+    @Autowired
+    private DeviceTypeService deviceTypeService;
+
     @RequestMapping(value = "/queryDevice", method= RequestMethod.POST)
     public R queryDevice(@RequestBody DeviceQuery deviceQuery) throws Exception {
         String esFlag = cacheUtils.get("ES_FLAG").toString();
-        // 1 代表 查询es
-        if(esFlag.equals(esFlag)){
-            Pager<Map<String, Object>> mapPager = deviceService.queryDevice(deviceQuery);
-            if(mapPager != null){
-                return R.ok(mapPager);
-            }
-            //2 代表 查询 mysql
-        }else if(esFlag.equals(esFlag)){
+        SysUserEntity user = getUser();
+        //代表是厂家
+        if(user.getOperation() == 1){
             PageInfo<DeviceEntity> pageInfo = deviceService.queryDeviceByMysql(deviceQuery);
             if(pageInfo != null){
                 return R.ok(pageInfo);
+            }
+        }else{
+            // 1 代表 查询es
+            if(esFlag.equals(esFlag)){
+                Pager<Map<String, Object>> mapPager = deviceService.queryDevice(deviceQuery);
+                if(mapPager != null){
+                    return R.ok(mapPager);
+                }
+                //2 代表 查询 mysql
+            }else if(esFlag.equals(esFlag)){
+                PageInfo<DeviceEntity> pageInfo = deviceService.queryDeviceByMysql(deviceQuery);
+                if(pageInfo != null){
+                    return R.ok(pageInfo);
+                }
             }
         }
         return R.error(400,"查询设备失败");
@@ -93,6 +110,8 @@ public class DeviceController extends AbstractController {
         template.convertAndSend("topicExchange", "topic.upload", s);
     }
 
+
+
     @RequestMapping(value = "/updateVersion", method= RequestMethod.POST)
     public void updateVersion(@RequestBody DataUtils data){
         List<String> deviceCodes = new ArrayList<>();
@@ -107,7 +126,7 @@ public class DeviceController extends AbstractController {
             deviceCodes = data.getDeviceCodes();
         }
         if(CollectionUtils.isNotEmpty(deviceCodes)){
-            deviceService.updateDeviceRunStatus(deviceCodes);
+            deviceService.updateDeviceRunStatus(deviceCodes,data.getVersion());
         }
         String s = JSONObject.toJSONString(data);
         logger.info("设备升级:"+s);
@@ -131,9 +150,12 @@ public class DeviceController extends AbstractController {
         deviceEntity.setCreateName(user.getRealName());
         deviceEntity.setCreateTime(new Date());
         deviceEntity.setDeviceId(UUID.randomUUID().toString());
+        deviceEntity.setLight("100");
         deviceEntity.setOnOff(AllEnum.NO.getCode());
         deviceEntity.setRunState(RunStatusEnum.OFFLINE.getCode());
         deviceEntity.setSignalState(0);
+        //厂家标识
+        deviceEntity.setCjFlag(user.getOperation());
         deviceEntity.setTransport(TransportEnum.NO.getCode());
         int i = deviceService.getDeviceByDeviceCode(deviceEntity.getDeviceCode());
         if(i > 0){
@@ -146,6 +168,11 @@ public class DeviceController extends AbstractController {
             sysUserService.updateDevCount(deviceEntity.getCreateUser(),1);
         }
         return R.ok();
+    }
+
+    @RequestMapping(value = "/deleteDeviceCj", method= RequestMethod.GET)
+    public R deleteDeviceCj(){
+        return R.ok(deviceService.deleteDeviceCj(new ArrayList<>()));
     }
 
     @RequestMapping(value = "/queryCountGroupByCity", method= RequestMethod.GET)
@@ -164,7 +191,12 @@ public class DeviceController extends AbstractController {
         deviceQuery.setUpdateUser(user.getUserId());
         deviceQuery.setUpdateTime(new Date());
         List<Long> exclUserIds = deviceService.queryExclUserId(deviceList);
-        boolean flag = deviceService.deleteDevice(deviceQuery);
+        boolean flag = false;
+        if(user.getOperation() == 1){
+            flag = deviceService.deleteDeviceCj(deviceList);
+        }else{
+            flag = deviceService.deleteDevice(deviceQuery);
+        }
         if(!flag){
             return R.error(400,"删除设备失败");
         }else{
@@ -233,6 +265,7 @@ public class DeviceController extends AbstractController {
         if(!status.equals(new Integer(0))){
             deviceQuery.setRunState(status);
         }
+        deviceQuery.setCreateUser(getUser().getUserId());
         return R.ok(deviceService.getDeviceByGroupIdNoPageLike(deviceQuery));
     }
 
@@ -287,5 +320,116 @@ public class DeviceController extends AbstractController {
         return R.ok();
     }
 
+
+    @RequestMapping(value = "/setRedisCommon", method= RequestMethod.GET)
+    public R updateLive(String type,String fileName){
+        //ES_FLAG  1 代表 查询es
+        //LIVE 秒
+        cacheUtils.set(type,fileName);
+        return R.ok();
+    }
+
+    @RequestMapping(value = "/version", method= RequestMethod.GET)
+    public R version(String deviceId,String groupId){
+        //type 1 gprs  2mcu
+        logger.info("升级版本入参deviceId:"+deviceId+"分组："+groupId);
+        DeviceResult deviceResult = null;
+        VersionResult result = new VersionResult();
+        if(StringUtils.isNotEmpty(deviceId)){
+            deviceResult = deviceService.queryDeviceByDeviceId(deviceId);
+        }
+        if(StringUtils.isNotEmpty(groupId)){
+            DeviceQuery deviceQuery = new DeviceQuery();
+            deviceQuery.setGroupId(groupId);
+            List<DeviceEntity> list = deviceService.queryDeviceNoPage(deviceQuery);
+            if(CollectionUtils.isNotEmpty(list)){
+                deviceResult = deviceService.queryDeviceByDeviceId(list.get(0).getDeviceId());
+            }
+        }
+
+        if(deviceResult != null){
+            String deviceType = deviceResult.getDeviceType();
+            DeviceTypeEntity deviceTypeEntityTwo = deviceTypeService.getDeviceTypeByCode(deviceType, 2);
+            result.setVersionList(addVersion(deviceTypeEntityTwo,deviceResult.getDeviceType()));
+            DeviceTypeEntity deviceTypeEntityOne = deviceTypeService.getDeviceTypeByCode(deviceType, 1);
+            result.setGprsList(addVersion(deviceTypeEntityOne,deviceResult.getDeviceType()));
+
+        }
+        return R.ok(result);
+    }
+
+    public List<String> addVersion(DeviceTypeEntity entity,String type){
+        List<String> resultList = new ArrayList<>();
+        String path = entity.getDeviceTypePath();
+        logger.info("版本路径："+path+"type-"+type);
+        File file = new File(path+"type-"+type);
+        String[] list = file.list();
+        for (String str : list){
+            resultList.add(str.substring(0,str.lastIndexOf(".")));
+        }
+        return resultList;
+    }
+
+    @RequestMapping(value = "/checkGPRSRunState", method= RequestMethod.GET)
+    public R checkGPRSRunState(String deviceId,String groupId){
+        if(StringUtils.isNotEmpty(deviceId)){
+            DeviceResult deviceResult = deviceService.queryDeviceByDeviceId(deviceId);
+            if(deviceResult.getGprsFlag().equals(new Integer(1))){
+                return R.error(101,"该设备在正在升级中");
+            }
+        }
+        if(StringUtils.isNotEmpty(groupId)){
+            DeviceQuery deviceQuery = new DeviceQuery();
+            deviceQuery.setGroupId(groupId);
+            List<DeviceEntity> list = deviceService.queryDeviceNoPage(deviceQuery);
+            for (DeviceEntity deviceEntity : list){
+                if(deviceEntity.getGprsFlag().equals(new Integer(1))){
+                    return R.error(101,"该组下有正在升级的设备,该设备升级完成后可操作组升级");
+                }
+            }
+        }
+        return R.ok(true);
+    }
+
+    @RequestMapping(value = "/updateGprsVersion", method= RequestMethod.GET)
+    public R updateGprsVersion(String groupId,String deviceId,Integer version){
+        List<String> deviceList = new ArrayList<>();
+        DeviceQuery deviceQuery = new DeviceQuery();
+        if(StringUtils.isNotEmpty(groupId)){
+            deviceQuery.setGroupId(groupId);
+            deviceQuery.setNoRunState(DeviceEnum.OFFLINE.getCode());
+            List<DeviceEntity> deviceEntities = deviceService.queryDeviceNoPage(deviceQuery);
+            deviceList = deviceEntities.parallelStream().map(deviceEntity -> deviceEntity.getDeviceId()).collect(Collectors.toCollection(ArrayList::new));
+        }
+        if(StringUtils.isNotEmpty(deviceId)){
+            deviceList.add(deviceId);
+        }
+        boolean b = deviceService.updateDeviceGprsVersion(deviceList, version);
+        if(!b){
+            return R.error(101,"GPRS升级失败");
+        }
+        return R.ok();
+    }
+
+    @RequestMapping(value = "/checkMCURunState", method= RequestMethod.GET)
+    public R checkMCURunState(String deviceId,String groupId){
+        if(StringUtils.isNotEmpty(deviceId)){
+            DeviceResult deviceResult = deviceService.queryDeviceByDeviceId(deviceId);
+            if(deviceResult.getRunState().equals(RunStatusEnum.UPGRADE.getCode())){
+                return R.error(101,"该设备正在升级中");
+            }
+        }
+        if(StringUtils.isNotEmpty(groupId)){
+            DeviceQuery deviceQuery = new DeviceQuery();
+            deviceQuery.setGroupId(groupId);
+            List<DeviceEntity> list = deviceService.queryDeviceNoPage(deviceQuery);
+            for (DeviceEntity deviceEntity : list){
+                if(deviceEntity.getRunState().equals(RunStatusEnum.UPGRADE.getCode())){
+                    return R.error(101,"该组下有正在升级的设备,该设备升级完成后可操作组升级");
+                }
+            }
+        }
+        return R.ok(true);
+    }
 
 }

@@ -5,6 +5,8 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.remote.common.enums.DeviceEnum;
 import com.remote.common.utils.DeviceTypeMap;
+import com.remote.modules.advancedsetting.entity.AdvancedSettingEntity;
+import com.remote.modules.advancedsetting.service.AdvancedSettingService;
 import com.remote.modules.device.entity.DeviceEntity;
 import com.remote.modules.device.entity.DeviceQuery;
 import com.remote.modules.device.service.DeviceService;
@@ -42,11 +44,27 @@ public class GroupServiceImpl implements GroupService {
 
     @Autowired
     private DeviceService deviceService;
+    @Autowired
+    private AdvancedSettingService advancedSettingService;
 
     @Override
     public boolean addGroup(GroupEntity group) {
         logger.info("添加分组入参："+JSONObject.toJSONString(group));
-        return groupMapper.insert(group) > 0 ? true : false;
+        boolean flag = false;
+        int n = groupMapper.insert(group);
+        if(n > 0){
+            flag = true;
+            AdvancedSettingEntity advancedSettingEntity = new AdvancedSettingEntity();
+            if(StringUtils.isNotBlank(group.getGroupId())||!("undefined").equals(group.getGroupId())){
+                advancedSettingEntity.setCreateTime(new Date());
+                advancedSettingEntity.setGroupId(group.getGroupId());
+                advancedSettingEntity.setDeviceCode("0");
+                advancedSettingEntity.setUid(group.getCreateUser());
+                initAdvSet(advancedSettingEntity);
+                advancedSettingService.saveAdvSetDev(advancedSettingEntity);
+            }
+        }
+        return flag;
     }
 
     @Override
@@ -80,6 +98,11 @@ public class GroupServiceImpl implements GroupService {
                 if(fault.get(groupEntity.getGroupId()) != null){
                     groupEntity.setFaultCount(fault.get(groupEntity.getGroupId()));
                 }
+                DeviceQuery deviceQuery = new DeviceQuery();
+                deviceQuery.setGroupId(groupEntity.getGroupId());
+                //查询出项目下分组中所有设备
+                List<DeviceEntity> deviceList = deviceService.queryDeviceNoPage(deviceQuery);
+                toLongitude(deviceList,groupEntity);
             }
         }
         PageInfo<GroupEntity> pageInfo = new PageInfo<>(list);
@@ -133,7 +156,11 @@ public class GroupServiceImpl implements GroupService {
                 GroupEntity groupEntity = groupMapper.queryGroupById(groupId);
                 sb.append(groupEntity.getGroupName()).append(",");
             }else{
+                if(StringUtils.isNotBlank(groupId)||groupId != null){
+                    advancedSettingService.deleteAdvancedByDeviceCode("0",groupId.trim());
+                }
                 groupMapper.deleteGroupById(groupId);
+
             }
         }
         return sb.toString();
@@ -162,10 +189,21 @@ public class GroupServiceImpl implements GroupService {
         int insert = groupMapper.insert(groupEntity);
         if(insert > 0){
             List<GroupEntity> list1 = groupMapper.queryGroupByName(groupQuery);
+            AdvancedSettingEntity advancedSettingEntity = new AdvancedSettingEntity();
+            if(StringUtils.isNotBlank(groupEntity.getGroupId())||!("undefined").equals(groupEntity.getGroupId())){
+                advancedSettingEntity.setCreateTime(new Date());
+                advancedSettingEntity.setGroupId(groupEntity.getGroupId());
+                advancedSettingEntity.setDeviceCode("0");
+                advancedSettingEntity.setUid(groupEntity.getCreateUser());
+                initAdvSet(advancedSettingEntity);
+                advancedSettingService.saveAdvSetDev(advancedSettingEntity);
+            }
             return groupMapper.queryGroupByName(groupQuery);
         }
         return new ArrayList<GroupEntity>();
     }
+
+
 
     @Override
     public List<GroupEntity> queryGroupIdNoPage(String projectId,Integer deviceStatus) {
@@ -183,45 +221,86 @@ public class GroupServiceImpl implements GroupService {
                 if(CollectionUtils.isNotEmpty(deviceList)){
                     groupEntity.setDeviceCount(deviceList.size());
                 }
-                //定义经度总和
-                BigDecimal longitudeSum = new BigDecimal(0);
-                //定义纬度总和
-                BigDecimal latitudeSum = new BigDecimal(0);
-                if(CollectionUtils.isNotEmpty(deviceList)){
-                    //如果设备太多，只取前100条
-                    int size = deviceList.size() > 99 ? 99 : deviceList.size();
-                    for(int i = 0; i < size;i++ ){
-                        if(StringUtils.isNotEmpty(deviceList.get(i).getLongitude())){
-                            BigDecimal decimal = new BigDecimal(deviceList.get(i).getLongitude()).setScale(4,BigDecimal.ROUND_HALF_DOWN);
-                            longitudeSum = longitudeSum.add(decimal);
-                        }
-                        if(StringUtils.isNotEmpty(deviceList.get(i).getLatitude())){
-                            BigDecimal decimal = new BigDecimal(deviceList.get(i).getLatitude()).setScale(4,BigDecimal.ROUND_HALF_DOWN);
-                            latitudeSum = latitudeSum.add(decimal);
-                        }
-                    }
-                    //保存项目经度和纬度
-                    if(longitudeSum.compareTo(new BigDecimal(0)) == 1){ //判断是否大于0
-                        groupEntity.setLongitude(longitudeSum.divide(BigDecimal.valueOf(size),4,BigDecimal.ROUND_HALF_UP).toString());
-                    }else{
-                        groupEntity.setLongitude(latitudeSum.toString());
-                    }
-                    if(latitudeSum.compareTo(new BigDecimal(0)) == 1){
-                        groupEntity.setLatitude(latitudeSum.divide(BigDecimal.valueOf(size),4,BigDecimal.ROUND_HALF_UP).toString());
-                    }else{
-                        groupEntity.setLatitude(latitudeSum.toString());
-                    }
-
-                }else{
-                    groupEntity.setLongitude(longitudeSum.toString());
-                    groupEntity.setLatitude(latitudeSum.toString());
-                }
-
+                //封装经纬度
+                toLongitude(deviceList,groupEntity);
             }
         }
         return list;
     }
 
+    private void toLongitude(List<DeviceEntity> list,GroupEntity groupEntity) {
+        //定义经度总和
+        BigDecimal longitudeSum = new BigDecimal(0);
+        //定义纬度总和
+        BigDecimal latitudeSum = new BigDecimal(0);
+        if(CollectionUtils.isNotEmpty(list)){
+            //经度list
+            List<Double> longitudeList = new ArrayList<>();
+            //纬度list
+            List<Double> latitudeList = new ArrayList<>();
+            //如果设备太多，只取前100条
+            int size = list.size() > 99 ? 99 : list.size();
+            //经度临时list
+            List<Double> longitudeTempList = new ArrayList<>();
+            //纬度临时list
+            List<Double> latitudeTempList = new ArrayList<>();
+            for(int i = 0; i < size;i++ ){
+                if(StringUtils.isNotEmpty(list.get(i).getLongitude())){
+                    double v = Double.parseDouble(list.get(i).getLongitude());
+                    if(v != 0.0){
+                        longitudeTempList.add(v);
+                    }
+                }
+                if(StringUtils.isNotEmpty(list.get(i).getLatitude())){
+                    double v = Double.parseDouble(list.get(i).getLatitude());
+                    if(v != 0.0){
+                        latitudeTempList.add(v);
+                    }
+                }
+            }
+            if(size > 5){
+                Collections.sort(longitudeTempList);
+                Collections.sort(latitudeTempList);
+
+                for (int i = 1;i<longitudeTempList.size() - 1;i++){
+                    longitudeList.add(longitudeTempList.get(i));
+                }
+                for (int i = 1;i<latitudeTempList.size() - 1;i++){
+                    latitudeList.add(latitudeTempList.get(i));
+                }
+            }else{
+                longitudeList.addAll(longitudeTempList);
+                latitudeList.addAll(latitudeTempList);
+            }
+
+
+            for (Double temp : longitudeList){
+                BigDecimal decimal = new BigDecimal(temp).setScale(4,BigDecimal.ROUND_HALF_DOWN);
+                longitudeSum = longitudeSum.add(decimal);
+            }
+
+            for (Double temp : latitudeList){
+                BigDecimal decimal = new BigDecimal(temp).setScale(4,BigDecimal.ROUND_HALF_DOWN);
+                latitudeSum = latitudeSum.add(decimal);
+            }
+
+            //保存项目经度和纬度
+            if(longitudeSum.compareTo(new BigDecimal(0)) == 1){ //判断是否大于0
+                groupEntity.setLongitude(longitudeSum.divide(BigDecimal.valueOf(longitudeList.size()),4,BigDecimal.ROUND_HALF_UP).toString());
+            }else{
+                groupEntity.setLongitude(latitudeSum.toString());
+            }
+            if(latitudeSum.compareTo(new BigDecimal(0)) == 1){
+                groupEntity.setLatitude(latitudeSum.divide(BigDecimal.valueOf(longitudeList.size()),4,BigDecimal.ROUND_HALF_UP).toString());
+            }else{
+                groupEntity.setLatitude(latitudeSum.toString());
+            }
+
+        }else{
+            groupEntity.setLongitude(longitudeSum.toString());
+            groupEntity.setLatitude(latitudeSum.toString());
+        }
+    }
 
 
     @Override
@@ -240,5 +319,64 @@ public class GroupServiceImpl implements GroupService {
         return groupMapper.queryGroupByIds(groupIds);
     }
 
+    @Override
+    public List<GroupEntity> queryGroup(String projectId, String groupName) {
+        GroupQuery groupQuery = new GroupQuery();
+        groupQuery.setProjectId(projectId);
+        groupQuery.setGroupName(groupName);
+        return groupMapper.queryGroupByName(groupQuery);
+    }
+
+    /**
+     * 功能描述：初始化组高级设置参数
+     * @param advancedSettingEntity
+     */
+    public void initAdvSet(AdvancedSettingEntity advancedSettingEntity){
+
+        advancedSettingEntity.setLoadWorkMode(5);
+        advancedSettingEntity.setPowerLoad(500);
+        advancedSettingEntity.setTimeTurnOn(1080);
+        advancedSettingEntity.setTimeTurnOff(0);
+        advancedSettingEntity.setTime1(10);
+        advancedSettingEntity.setTime2(0);
+        advancedSettingEntity.setTime3(0);
+        advancedSettingEntity.setTime4(0);
+        advancedSettingEntity.setTime5(0);
+        advancedSettingEntity.setTimeDown(0);
+        advancedSettingEntity.setPowerPeople1(100);
+        advancedSettingEntity.setPowerPeople2(100);
+        advancedSettingEntity.setPowerPeople3(100);
+        advancedSettingEntity.setPowerPeople4(100);
+        advancedSettingEntity.setPowerPeople5(100);
+        advancedSettingEntity.setPowerDawnPeople(100);
+        advancedSettingEntity.setPowerSensor1(0);
+        advancedSettingEntity.setPowerSensor2(0);
+        advancedSettingEntity.setPowerSensor3(0);
+        advancedSettingEntity.setPowerSensor4(0);
+        advancedSettingEntity.setPowerSensor5(0);
+        advancedSettingEntity.setPowerSensorDown(0);
+        advancedSettingEntity.setSavingSwitch(2);
+        advancedSettingEntity.setAutoSleepTime(0);
+        advancedSettingEntity.setVpv(500);
+        advancedSettingEntity.setLigntOnDuration(5);
+        advancedSettingEntity.setPvSwitch(1);
+        advancedSettingEntity.setBatType(4);
+        advancedSettingEntity.setBatStringNum(3);
+        advancedSettingEntity.setVolOverDisCharge(900);
+        advancedSettingEntity.setVolCharge(1260);
+        advancedSettingEntity.setICharge(2000);
+        advancedSettingEntity.setTempCharge(55395);
+        advancedSettingEntity.setTempDisCharge(55395);
+        advancedSettingEntity.setInspectionTime(5);
+        advancedSettingEntity.setInductionSwitch(0);
+        advancedSettingEntity.setInductionLightOnDelay(30);
+        advancedSettingEntity.setFirDownPower(1100);
+        advancedSettingEntity.setTwoDownPower(1050);
+        advancedSettingEntity.setThreeDownPower(1000);
+        advancedSettingEntity.setFirReducAmplitude(60);
+        advancedSettingEntity.setTwoReducAmplitude(40);
+        advancedSettingEntity.setThreeReducAmplitude(20);
+        advancedSettingEntity.setSwitchDelayTime(15);
+    }
 
 }

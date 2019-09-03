@@ -16,7 +16,8 @@ public class MapUtils {
         map.put("onOff",2);//开关
         map.put("lightingDuration",3);//亮灯时长
         map.put("morningHours",4);//晨亮时长
-
+        map.put("transport",5);//运输模式
+        //map.put("link",8);//0 长连接  1短链接
 
         /**
          * 高级设置

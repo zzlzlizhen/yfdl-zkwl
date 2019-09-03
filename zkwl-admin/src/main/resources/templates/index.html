@@ -7,7 +7,7 @@
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!--头部logo-->
-  <link rel="shortcut icon" href="http://pic.nipic.com/2007-11-20/20071120204328625_2.jpg">
+  <link rel="shortcut icon" href="${request.contextPath}/statics/image/GXah.png">
   <link rel="stylesheet" href="${request.contextPath}/statics/css/bootstrap.min.css">
   <link rel="stylesheet" href="${request.contextPath}/statics/css/font-awesome.min.css">
   <link rel="stylesheet" href="${request.contextPath}/statics/css/AdminLTE.min.css">
@@ -29,6 +29,7 @@
     .layui-layer-btn a{border: 0!important;}
     .sidebar-menu li:first-child{margin-top:8%;}
     .skin-blue .sidebar a {color: #e8e8e9;}
+    .img_logo{width: 20px;float: left;margin: 5%;}
 </style>
 <!-- ADD THE CLASS layout-boxed TO GET A BOXED LAYOUT -->
 <body class="hold-transition skin-blue sidebar-mini body_m">
@@ -37,7 +38,8 @@
       <header class="main-header " style="box-shadow:0px 2px 10px rgba(0, 0, 0, 0.349019607843137)">
         <a href="javascript:void(0);" class="logo logo_m">
           <!-- logo for regular state and mobile devices -->
-          <span class="logo-lg"><b>光迅物联</b></span>
+          <img src="${request.contextPath}/statics/image/GXba.png" alt="" class="img_logo">
+          <span class="logo-lg" style="width:80%;margin-top: 3%;"><b>光迅物联</b></span>
         </a>
         <!-- 标题导航栏:样式可以在Header .less中找到 -->
         <nav class="navbar navbar-static-top navbar_m" role="navigation">
@@ -57,7 +59,7 @@
                     </div>
                 </li>
 <!--                <li><a  @click="updatePassword"  class="navbar_m"><i class="glyphicon glyphicon-bell"></i></a></li>-->
-                <li><a href="logout"  class="navbar_m" style="    padding-top: 16.5px;"><i class="glyphicon glyphicon-off"></i></a></li>
+                <li><a href="logout"  class="navbar_m" style="padding-top: 16.5px;"><i class="glyphicon glyphicon-off"></i></a></li>
                 <li><a  class="navbar_m" ><i></i><img style="width:15px;height: 15px;border-radius: 50%;"  :src="url" > {{user.realName}}</a></li>
             </ul>
           </div>
@@ -173,7 +175,7 @@
           <div class="r_be"></div>
           <div class="r_lay">
               <div>
-                  <input type="text" id="r_el_upd" style="width:60%;float:left;height: 32px;border-radius: 4px;">
+                  <input type="text" id="r_el_upd" style="width:60%;float:left;height: 32px;border-radius: 4px;" oninput="value=value.replace(/[^\d]/g,'')">
                   <input type="button" id="btn" value="获取验证码" onclick="sendemail()" />
               </div>
               <div id="r_bte" class="rquebei" style="margin:10% 0px 0px 30%;">提交</div>
@@ -184,7 +186,7 @@
          <div class="r_be_a"></div>
          <div class="r_lay_a">
              <div>
-                 <input type="text" id="r_el_upde" style="width:60%;float: left;height: 32px;border-radius: 4px;">
+                 <input type="text" id="r_el_upde" style="width:60%;float: left;height: 32px;border-radius: 4px;" oninput="value=value.replace(/[^\d]/g,'')">
                  <input type="button" id="btne" value="获取验证码" onclick="sendemail_a()" />
              </div>
              <div id="r_btee" class="rquebei" style="margin:10% 0px 0px 30%;">提交</div>

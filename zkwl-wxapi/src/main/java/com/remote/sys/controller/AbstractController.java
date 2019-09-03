@@ -28,4 +28,7 @@ public abstract class AbstractController {
 	protected Integer getType(){
 		return getUser().getType();
 	}
+	protected int getOperation(){
+		return getUser().getOperation();
+	}
 }

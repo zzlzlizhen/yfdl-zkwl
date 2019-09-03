@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public interface MsgBackReadedService extends IService<MsgBackReadedEntity> {
 
-    PageUtils queryPage(Map<String, Object> params,SysUserEntity curUser);
+    PageUtils queryPage(Map<String, Object> params,SysUserEntity curUser) throws Exception;
     void insert(MsgBackReadedEntity msgBackReadedEntity);
     void delete(String backId);
     List<MsgBackReadedEntity> queryBackIds(List<String> backIds, Long uid);

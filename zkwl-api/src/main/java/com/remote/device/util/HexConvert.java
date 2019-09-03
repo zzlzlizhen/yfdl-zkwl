@@ -240,9 +240,9 @@ public class HexConvert {
         return deviceInfo;
     }
 
+
     public static void main(String[] args) throws UnsupportedEncodingException {
-
-
+        System.out.println(65534 & 0xffff0000);
 //        System.out.println("======ASCII码转换为16进制======");
 //        String str = "A";
 //        System.out.println("字符串: " + str);
@@ -257,19 +257,7 @@ public class HexConvert {
 //
 //        System.out.println(HexConvert.BinaryToHexString( bytes ));
 
-        byte bytes[] ={
-                0x03, 0x00,//dataLen
-                0x01, 0x00,//cmdId
-                0x01, 0x00,//devType
-                0x37, 0x39, 0x33, 0x31, 0x39, 0x33, 0x34, 0x34, 0x36, 0x39, 0x35, 0x38, 0x33, 0x37, 0x35, 0x00, 0x00, 0x00, 0x00, 0x00,//devKey 20位  加密
-                0x33, 0x35, 0x39, 0x37, 0x35, 0x39, 0x30, 0x30, 0x32, 0x35, 0x31, 0x33, 0x39, 0x33, 0x31, 0x00, 0x00, 0x00, 0x00, 0x00,//devSN
-                0x05, 0x00,     -120, 0x00, //开灯 --- 值
-                0x01, 0x00,     0x08, 0x00,
-                0x07, 0x00,     0x60, 0x00,
-        };
-        for (int i = 0 ; i < bytes.length;i++){
-            System.out.print(bytes[i]+",");
-        }
+
 
        // System.out.println(bytes1);
 

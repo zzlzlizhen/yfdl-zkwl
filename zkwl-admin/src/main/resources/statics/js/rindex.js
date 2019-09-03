@@ -65,6 +65,8 @@ $(function(){
     //验证码
     $(".r_be,.r_be_a").click(function(){
         $(".r_lay_a,.r_beise_a,.r_lay,.r_beise,.r_be,.r_be_a").hide();
+        // clearTimeout(timer);
+            countdown=0
     })
 
 //我要反馈
@@ -133,8 +135,4 @@ $(function(){
             })
         }
     })
-
-
-//
-
 })

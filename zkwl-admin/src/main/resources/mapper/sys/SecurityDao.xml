@@ -14,10 +14,14 @@
         <result property="content" column="content"/>
         <result property="userId" column="user_id"/>
     </resultMap>
-    <select id="querySecurity" resultType="com.remote.modules.sys.entity.SecurityEntity">
-        select * from security where security_code=#{securityCode} and email = #{email} and user_id = #{userId} and (create_time&gt;date_add(now(),INTERVAL -5 MINUTE))
+    <sql id="column" >
+      id,phone,security_code,type,create_time,email,content,user_id
+    </sql>
+    <select id="queryEmailSecurity" resultType="com.remote.modules.sys.entity.SecurityEntity">
+        select <include refid="column"/> from security where security_code=#{securityCode} and email = #{contact}
+        and user_id = #{userId} and (create_time&gt;date_add(now(),INTERVAL -5 MINUTE))
     </select>
     <select id="querySmsSecurity" resultType="com.remote.modules.sys.entity.SecurityEntity">
-        select * from security where security_code=#{securityCode} and phone = #{mobile} and user_id = #{userId} and (create_time&gt;date_add(now(),INTERVAL -5 MINUTE))
+        select <include refid="column"/> from security where security_code=#{securityCode} and phone = #{mobile} and user_id = #{userId} and (create_time&gt;date_add(now(),INTERVAL -5 MINUTE))
     </select>
 </mapper>

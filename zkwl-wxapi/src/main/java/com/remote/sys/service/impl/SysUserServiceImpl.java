@@ -40,7 +40,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
     private ProjectService projectService;
     @Override
     @DataFilter(subDept = true, user = false)
-    public PageUtils queryPage(Map<String, Object> params) {
+    public PageUtils queryPage(Map<String, Object> params) throws Exception{
         String username = (String)params.get("username");
         String realName = (String) params.get("realName");
         String status = (String)params.get("status");
@@ -68,11 +68,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
     }
 
     @Override
-    public SysUserEntity queryByUnameAndPwd(String username, String password) {
+    public SysUserEntity queryByUnameAndPwd(String username, String password) throws Exception{
         return this.sysUserDao.queryByUnameAndPwd(username,password);
     }
     @Override
-    public SysUserEntity queryByUsername(String username){
+    public SysUserEntity queryByUsername(String username) throws Exception{
         return this.sysUserDao.queryByUname(username);
     }
 
@@ -80,7 +80,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
      * 查询用户名列表
      * */
     @Override
-    public List<SysUserEntity> queryUserList(Map<String, Object> params) {
+    public List<SysUserEntity> queryUserList(Map<String, Object> params) throws Exception{
         String allParentId =(String)params.get("allParentId");
         long userId = Long.parseLong(params.get("curUserId")+"") ;//当前登录用户id
         String realName = (String)params.get("realName");
@@ -106,7 +106,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
      * 通过用户id 删除用户
      * */
     @Override
-    public int removeUser(Long userId) {
+    public int removeUser(Long userId) throws Exception{
         SysUserEntity userEntity = new SysUserEntity();
         userEntity.setFlag(0);
         return this.baseMapper.update(userEntity,
@@ -127,7 +127,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
         return sysUserDao.queryAllChild(sysUserEntity);
     }
     @Override
-    public void saveUser(SysUserEntity user) {
+    public void saveUser(SysUserEntity user) throws Exception{
         user.setCreateTime(new Date());
        /* user.setDeviceCount(0);
         user.setProjectCount(0);*/
@@ -157,21 +157,21 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
      * 通过邮箱查询该用户是否存在
      * */
     @Override
-    public SysUserEntity getByUsername(String username) {
+    public SysUserEntity getByUsername(String username) throws Exception{
         return this.baseMapper.selectOne(new QueryWrapper<SysUserEntity>().eq("flag",1).eq("username",username));
     }
     /**
      * 通过邮箱查询该用户是否存在
      * */
     @Override
-    public SysUserEntity getByEmail(String email) {
+    public SysUserEntity getByEmail(String email) throws Exception{
         return this.baseMapper.selectOne(new QueryWrapper<SysUserEntity>().eq("flag",1).eq("email",email));
     }
     /**
      * 通过邮箱查询该用户是否存在
      * */
     @Override
-    public SysUserEntity getByMobile(String mobile) {
+    public SysUserEntity getByMobile(String mobile) throws Exception{
         return this.baseMapper.selectOne(new QueryWrapper<SysUserEntity>().eq("flag",1).eq("mobile",mobile));
     }
     /**

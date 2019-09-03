@@ -24,7 +24,9 @@ $(function(){
     var pageSize
     var pageNum
     var proid //编辑id
-
+    var sing_id
+    var sing_name
+    var select
     //头部导航
     $("#pa").html(character+">");
     $("#pb").html(groupName);
@@ -32,9 +34,9 @@ $(function(){
 
     //搜索
     $("#proje_search").click(function(){
-        var sing_id=$("#sing_id").val();
-        var sing_name=$("#sing_name").val();
-        var select=$("#sing_se option:selected").text();
+         sing_id=$("#sing_id").val();
+         sing_name=$("#sing_name").val();
+         select=$("#sing_se option:selected").text();
         $("#div").html("");
         form(pageSize,pageNum,sing_id,sing_name,select);
         refresh();
@@ -46,7 +48,7 @@ $(function(){
         if($("#sing_id").val()=="" && $("#sing_name").val()=="" && $("#sing_se").val()=="" ){
             t=setInterval(function(){
                 form(10,1,"","","");
-            }, 60000);
+            }, 50000);
         }else{
             clearInterval(t);
         }
@@ -68,8 +70,6 @@ $(function(){
                 "pageNum": pagesa
             }),
             success: function (res) {
-                console.log("分组下设备");
-                console.log(res);
                 pages = res.data.pages;
                 pageSize = res.data.pageSize;
                 pageNum = res.data.pageNum
@@ -104,7 +104,7 @@ $(function(){
                     }else if(batteryState == 2) {
                         batteryState = "正常";
                     }else if(batteryState == 3) {
-                        batteryState = "限压值";
+                        batteryState = "限压";
                     }else if(batteryState == 4) {
                         batteryState = "超压";
                     }else if(batteryState == 5) {
@@ -224,8 +224,9 @@ $(function(){
                 // 地图定位
                 $(".ma_p").click(function(){
                     var longitude=$(this).attr("id");
-                    var name=$(this).parent().siblings("#r_namem").html()
-                    var searchUrl=encodeURI('../equipment/equipment.html?longitude='+longitude+"&name="+name)
+                    var name=$(this).parent().siblings("#r_namem").html();
+                    var con
+                    var searchUrl=encodeURI('../equipment/equipment.html?longitude='+longitude+"&name="+name+"&state="+3+"&con="+"")
                     location.href =searchUrl;
                 })
                 //控制面板
@@ -236,7 +237,6 @@ $(function(){
                     var name=$(this).parent().siblings("#r_namem").html();
                     var deviceId=$(this).parent().attr("id");
                     var projectId=$(this).parent().siblings(".li_deviceType").attr('id');
-                    console.log(projectId)
                     var searchUrl=encodeURI('../control/control.html?deviceCode='+deviceCode+"&grod="+grod+"&type="+type+"&name="+name+"&deviceId="+deviceId+"&projectId="+projectId)
                     location.href =searchUrl;
                 })
@@ -539,8 +539,6 @@ $(function(){
                             $("#select1,#select1_b").html(html)
                         }
                     })
-                    console.log("12222222222222212121212")
-                    console.log(groupName)
                     $("#select1_b").val(groupName);
                 }
                 //    分页
@@ -557,7 +555,7 @@ $(function(){
                         //当前页数current
                         var pagesb = current
                         $("#div").html("")
-                        form(pageSize, pagesb)
+                        form(pageSize, pagesb,sing_id,sing_name,select)
                     }
                 });
 

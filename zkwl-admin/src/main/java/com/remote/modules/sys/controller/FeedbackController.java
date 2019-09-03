@@ -2,6 +2,7 @@ package com.remote.modules.sys.controller;
 
 import java.util.*;
 
+import com.remote.common.errorcode.ErrorCode;
 import com.remote.common.utils.IdGenerate;
 import com.remote.common.utils.PageUtils;
 import com.remote.common.utils.R;
@@ -14,6 +15,8 @@ import com.remote.modules.sys.service.SysUserService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +38,8 @@ public class FeedbackController extends AbstractController{
     private SysUserService sysUserService;
     @Autowired
     private MsgBackReadedService msgBackReadedService;
+    private String msg = "";
+    Logger logger = LoggerFactory.getLogger(FeedbackController.class);
 
     /**
      * 列表
@@ -83,14 +88,22 @@ public class FeedbackController extends AbstractController{
             return R.error("反馈信息id不能为空");
         }
         FeedbackEntity feedback = feedbackService.getById(backId);
-        SysUserEntity sysUserEntity = sysUserService.queryById(feedback.getUid());
-        if(sysUserEntity != null){
-            feedback.setUsername(sysUserEntity.getUsername());
-            feedback.setHeadUrl(sysUserEntity.getHeadUrl());
-        }else{
-            feedback.setUsername("");
-            feedback.setHeadUrl("");
+        SysUserEntity sysUserEntity = null;
+        try {
+            sysUserEntity = sysUserService.queryById(feedback.getUid());
+            if(sysUserEntity != null){
+                feedback.setUsername(sysUserEntity.getUsername());
+                feedback.setHeadUrl(sysUserEntity.getHeadUrl());
+            }else{
+                feedback.setUsername("");
+                feedback.setHeadUrl("");
+            }
+        }catch (Exception e){
+            msg = "反馈用户信息查询异常";
+            logger.error(ErrorCode.ABNORMAL+msg);
+            e.printStackTrace();
         }
+
         MsgBackReadedEntity msgBackReadedEntity = msgBackReadedService.queryBackIdAndUid(backId,getUserId());
         if(msgBackReadedEntity == null){
             //如果反馈不为空

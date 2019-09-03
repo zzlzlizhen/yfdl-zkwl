@@ -17,6 +17,7 @@ public class RealTimeMap {
         realTimeMap.put(2,"onOff");//开关
         realTimeMap.put(3,"lightingDuration");//亮灯时长
         realTimeMap.put(4,"morningHours");//晨亮时长
+        realTimeMap.put(8,"link");//晨亮时长
         /**
          * 高级设置
          * */

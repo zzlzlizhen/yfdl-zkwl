@@ -20,14 +20,6 @@ public class DeviceEntityApi extends AdvancedSettingEntity{
      */
     private String deviceId;
     /**
-     * gprs 版本号
-     */
-    private Integer gprsVersion;
-    /**
-     * gprs 升级标志
-     */
-    private Integer gprsFlag;
-    /**
      * 设备编号
      */
     private String deviceCode;
@@ -119,8 +111,6 @@ public class DeviceEntityApi extends AdvancedSettingEntity{
      * 修改状态
      */
     private boolean change;
-    //版本号
-    private Integer version;
     //设备编号
     private List<String> deviceCodes;
     //蓄电池余量
@@ -158,4 +148,23 @@ public class DeviceEntityApi extends AdvancedSettingEntity{
     private Integer status;
     //操作版本号
     private Integer deviceVersion;
+
+    //当前版本号
+    private Integer version;
+    //将要升级的版本号
+    private Integer futureVersion;
+    //升级标识  0不升级 1升级
+    private Integer futureFlag;
+    //gprs 将要升级的版本
+    private Integer gprsFutureVersion;
+    /**
+     * gprs版本号
+     */
+    private Integer gprsVersion;
+    /**
+     * gprs 升级标志
+     */
+    private Integer gprsFlag;
+    //连接  0长连接  1短链接
+    private Integer link;
 }

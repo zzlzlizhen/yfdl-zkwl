@@ -41,17 +41,22 @@
         <result property="morningHours" column="morning_hours"/>
         <result property="chargingCapacitySum" column="charging_capacity_sum"/>
         <result property="dischargeCapacitySum" column="discharge_capacity_sum"/>
-        <result property="version" column="version"/>
         <result property="deviceVersion" column="device_version"/>
+
         <result property="gprsVersion" column="gprs_version"/>
         <result property="gprsFlag" column="gprs_flag"/>
+        <result property="gprsFutureVersion" column="gprs_future_version"/>
 
+        <result property="version" column="version"/>
+        <result property="futureVersion" column="future_version"/>
+        <result property="futureFlag" column="future_flag"/>
+        <result property="link" column="link"/>
     </resultMap>
 
     <sql id="Base_Column_List" >
-    device_id, device_code,device_name, group_id, device_type,device_type_name, photocell_state, battery_state,load_state,signal_state,
-    run_state,light,communication_type,on_off,longitude,latitude,is_del,create_user,create_name,create_time,gprs_flag,
-    update_user,update_time,project_id,battery_margin,battery_voltage,photovoltaic_cell_voltage,charging_current,gprs_version,
+    device_id, device_code,device_name, group_id, device_type,device_type_name, photocell_state, battery_state,load_state,signal_state,link,
+    run_state,light,communication_type,on_off,longitude,latitude,is_del,create_user,create_name,create_time,gprs_flag,gprs_version,gprs_future_version,
+    update_user,update_time,project_id,battery_margin,battery_voltage,photovoltaic_cell_voltage,charging_current,future_version,future_flag,
     charging_power,load_voltage,load_power,load_current,lighting_duration,morning_hours,charging_capacity_sum,discharge_capacity_sum,version,device_version
     </sql>
 
@@ -86,6 +91,12 @@
         <set>
             <if test="deviceName != null">
                 device_name = #{deviceName},
+            </if>
+            <if test="gprsFlag != null">
+                gprs_flag = #{gprsFlag},
+            </if>
+            <if test="futureFlag != null">
+                future_flag = #{futureFlag},
             </if>
             <if test="projectId != null">
                 project_id = #{projectId},
@@ -141,9 +152,6 @@
             <if test="latitude != null">
                 latitude = #{latitude},
             </if>
-            <if test="isDel != null">
-                is_del = #{isDel},
-            </if>
             <if test="batteryMargin != null">
                 battery_margin = #{batteryMargin},
             </if>
@@ -176,7 +184,7 @@
             </if>
             update_time = now()
         </set>
-        where device_code = #{deviceCode}
+        where device_code = #{deviceCode} and is_del = 0
     </update>
 
 

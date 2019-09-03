@@ -12,9 +12,34 @@
     <link rel="stylesheet" href="${request.contextPath}/statics/css/main.css">
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <link rel="stylesheet" href="${request.contextPath}/statics/css/layui.css">
-    <script src="${request.contextPath}/statics/js/layui.js"></script>
   </head>
+<style>
+    .rquebei {
+        background: url('/statics/image/sousuo-1.png')no-repeat center;
+        background-size: 100% !important;
+        width: 99px;
+        height: 45px;
+        color: #008E8E !important;
+        float: left;
+        line-height: 48px;
+        text-align: center;
+        background-size: 100%;
+        margin-left: 36%;
+        cursor: pointer;
+    }
+    #btne, #btn {
+        width: 95px;
+        height: 36px;}
+    body .demo-class .layui-layer-btn0 {
+        background: #27E2D4;
+        color: #fff;
+        border: none;
+    }
+    body .demo-class .layui-layer-title {
+        background: #27E2D4;
+        color: #fff;
+    }
+</style>
   <body>
    <div class="retr">
        <div style="margin-top:8%">
@@ -26,14 +51,18 @@
            <input type="text" value=" " id="bta" style="width:124px;">
            <input id="btne" value="获取验证码" onclick="sendemail_a()"></input>
        </div>
-       <button class="Que">确定</button>
+       <button class="Que rquebei">确定</button>
    </div>
    <div class="retr_a">
        <div style="margin-top:10%;">
+           <span>账号：</span>
+           <input type="text" value="" placeholder="请输入账号" id="username">
+       </div>
+       <div>
            <span>新密码：</span>
            <input type="text" placeholder="请输入新密码" id="new">
        </div>
-       <button class="Que_a">确定</button>
+       <button class="Que_a rquebei">确定</button>
    </div>
 
   </body>
@@ -43,6 +72,9 @@
     <script src="${request.contextPath}/statics/libs/jquery.slimscroll.min.js"></script>
     <script src="${request.contextPath}/statics/libs/fastclick.min.js"></script>
     <script src="${request.contextPath}/statics/libs/app.js"></script>
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/layui.css">
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/AdminLTE.min.css">
+    <script src="${request.contextPath}/statics/plugins/layer/layer.js"></script>
     <script type="text/javascript">
          $(function(){
              function getQueryStringByName(name) {
@@ -52,24 +84,34 @@
                  }
                  return result[1];
              }
-             var user=getQueryStringByName("username");
+            // var user=getQueryStringByName("username");
              $(".Que_a").click(function(){
+
+                 var username = $("#username").val()
                  var New=$("#new").val()
                  $.ajax({
-                     url:'http://localhost/remote-admin/sys/user/updatePwd',
+                     url:'http://localhost/sys/user/updatePwd',
                      type: "post",
                      data:
-                         "&username="+user +
+                         "&username="+username +
                          "&password="+ New
                       ,
                      success: function (res) {
-                         console.log(user)
-
+                         // console.log(user)
                          if (res.code == "200") {
-                             console.log("修改成功")
+                             layer.open({
+                                 title: '信息',
+                                 content: '修改成功',
+                                 skin: 'demo-class',
+                                 yes: function(index, layero){
+                                     $(location).attr('href', 'logout');
+                                     // $(".retr").show();
+                                     // $(".retr_a").hide();
+                                 },
+                             });
+
                              console.log(res)
-                             $(".retr").show();
-                             $(".retr_a").hide();
+
                          }
                      }
                  })
@@ -78,7 +120,6 @@
              var countdown=60;
          })
          function sendemail_a() {
-             console.log("111111111")
              var email=$("#email").val();
              var reg = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;
              var Shou=/^1[3456789]\d{9}$/
@@ -95,7 +136,6 @@
          }
          //    验证码
          function yan(contact,fPwdType){
-             console.log("22222")
              var obj = $("#btne");
              countdown=60
              settime(obj);

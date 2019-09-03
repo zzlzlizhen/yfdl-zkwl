@@ -37,15 +37,14 @@
         #qu_a{width:70px;height:33px;border:0;margin:3% 0px 0px 20%;}
         @media screen and (min-width:800px) and (max-width:1400px) {
             .ssde{    padding: 15px 2px 19px 22px!important;;}
-            .g_b{height:176px !important;}
+            .g_b{height:158px !important;}
             .g_b canvas{width:100% !important;height:99% !important;margin-left: 3% !important;}
             .cake_B{height:147px;}
             .g_a{height:95px !important;}
-            .g_c{height:16% !important;}
+            .g_c{height:84px!important;}
             .nhus {margin-top: 0%!important;}
             .cake{height:146px !important;}
             .r_D_a{width:55% !important;}
-            .drawer_img{margin-top:928%;}
             .con_an{height:30px;}
             .con_an_span{line-height: 30px;}
             .form_con_an{line-height:34px; }
@@ -53,7 +52,6 @@
             .slid{margin-top:4%;height:21px;}
             .con_an_a{height:25%;}
             .con_an_a input{height:27px;margin-top:2%;margin-left:10%;}
-            .convention{height:113px;}
             .ri_a{margin-left:0px !important;}
             .con_an_a input,.r_ba_tu_t{background-size: 100% 27px !important;font-size: 12px;}
             .dra_spa,.dra_p{height:27px;line-height: 27px;font-size:12px !important;}
@@ -76,6 +74,11 @@
         .off.btn_fath{background-color: #828282;}
         .btn_fath{width: 79%;}
         .btnSwitch {height: 25px;width: 27px;}
+        .amap-info-content{overflow: hidden;border-radius:8px;width:110px;height:25px;padding: 0;background: 0;border:0;box-shadow:0 0px 0px rgba(0,0,100,0.6);}
+        .amap-info-content>p{width:100%;height: 100%;background: #000;opacity: 0.4; }
+        .amap-info-sharp{display: none}
+        .amap-info-content>div{color: #fff;width: auto;height: 100%;position: absolute;top: 0;line-height: 25px;text-indent: 8px;}
+        .amap-info-contentContainer>a{right:10px !important;}
     </style>
 </head>
 <body>
@@ -138,25 +141,25 @@
               </div>
           </div>
       </div>
-        <div class="convention con_Xu She g_c">
+        <div class="convention con_Gu She g_c">
             <span class="con_span"><p class="con_ys"></p>蓄电池</span>
             <ul>
                 <li>
-                    <img src="${request.contextPath}/statics/image/xudianchi1.png" style="width: 14px;height: 18px;"/>
-                    <span class="r_duan">状态</span>
+                    <img src="${request.contextPath}/statics/image/xudianchi1.png" style="width:14px;height:18px;"/>
+                    <span>状态</span>
                     <p class="battery_a" style="color:#1A6CDE;font-size: 14px; ">正常</p>
                 </li>
                 <li style="border:0;">
                     <img src="${request.contextPath}/statics/image/xudianchi3.png" />
-                    <span class="r_duan r_D_a">电压</span>
-                    <div class="progress">
+                    <span>电压</span>
+                    <div class="progress jins">
                         <div class="progress-bar"  role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100" id="battery_cr"></div>
                     </div>
                 </li>
                 <li>
                     <img src="${request.contextPath}/statics/image/xudianchi2.png" style="width: 12px;height: 18px;"/>
-                    <span class="r_duan">余量</span>
-                    <div class="progress">
+                    <span >余量</span>
+                    <div class="progress jins">
                         <div class="progress-bar"  role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100" id="sser"></div>
                     </div>
                 </li>
@@ -166,9 +169,9 @@
             <span class="con_span"><p class="con_ys"></p>光电池</span>
             <ul>
                 <li>
-                    <img src="${request.contextPath}/statics/image/xudianchi1.png"style="width: 14px;height: 18px;"/>
+                    <img src="${request.contextPath}/statics/image/xudianchi1.png"style="width:14px;height:18px;"/>
                     <span>状态</span>
-                    <p class="battery_d" style="color: #1A6CDE;font-size: 14px;text-indent:21%;">正常</p>
+                    <p class="battery_d" style="color: #1A6CDE;font-size: 14px;">正常</p>
                 </li>
                 <li>
                     <img src="${request.contextPath}/statics/image/xudianchi3.png" />
@@ -199,7 +202,7 @@
                 <li>
                     <img src="${request.contextPath}/statics/image/xudianchi6.png" />
                     <span>状态</span>
-                    <p class="battery_h" style="color: #1A6CDE;font-size: 14px;text-indent: 38%;">正常</p>
+                    <p class="battery_h" style="color:#1A6CDE;font-size:14px;">正常</p>
                 </li>
                 <li>
                     <img src="${request.contextPath}/statics/image/xudianchi3.png" />
@@ -251,10 +254,10 @@
             </div>
         </div>
 
-        <div class="convention She_a">
+        <div class="convention She_a" style="border: none;">
             <span class="con_span nnb"><p class="con_ys"></p>常规设置</span>
             <div class="con_an">
-                <span class="con_an_span">开/关/自动：</span>
+                <span class="con_an_span">负载开关：</span>
                 <div class="form-group form_con_an" id="in_p">
                     <input type="radio" class="control-label in_put" id="richang" style="margin-left:5%" value="1" name="category" checked/>开
                     <input type="radio" class="control-label in_put" id="dae" value="0" name="category" />关
@@ -285,18 +288,16 @@
                 <div class="switch">
                     <div class="btn_fath clearfix off" id="toog">
                         <div class="move" data-state="off"></div>
-                        <div class="btnSwitch btn1">进</div>
-                        <div class="btnSwitch btn2 ">退</div>
+                        <div class="btnSwitch btn1">开</div>
+                        <div class="btnSwitch btn2 ">关</div>
                     </div>
                 </div>
             </div>
 
             <div class="con_an_a ">
                 <input id="confirm" class="r_ba_tu_t sdsb r_ba_tu" type="button" value="确定">
-<!--                <button id="confirm" class="r_ba_tu_t sdsb" ></button>-->
                 <input type="button" value="操作日志" id="operation" class="r_ba_tu">
                 <input type="button" value="控制面板" id="hear_control" class="r_ba_tu_t">
-
             </div>
         </div>
     </div>
