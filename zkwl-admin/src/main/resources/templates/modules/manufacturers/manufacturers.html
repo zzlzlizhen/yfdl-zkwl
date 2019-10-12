@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>厂家</title>
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/css.css">
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/jquery_page.css">
+    <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+    <script src="${request.contextPath}/statics/js/modules/project/jquery_page.js"></script>
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/layui.css">
+    <script src="${request.contextPath}/statics/js/layui.js"></script>
+</head>
+<style>
+    body{overflow: hidden;}
+    .project_he>a{vertical-align:middle}
+    .project_he>a>img{display: inline-block;width: 18px;height: 18px;}
+    @media screen and (min-width:800px) and (max-width:1400px){
+        .table_m table tr td:last-child {width: 23.111%;}
+    }
+    .form-control{height: 35px;}
+    .form-group {margin-bottom: 0px;}
+    .shade_b_project{height: 360px;}
+</style>
+<body>
+    <div class="hear">
+        <img src="${request.contextPath}/statics/image/dingwei.png" alt="">项目管理
+    </div>
+    <div class="project_he" >
+        <span class="hear_w">项目编号：</span>
+        <div class="form-group col-sm-2 form_input">
+            <input type="text" class="form-control" id="serial"  placeholder=" ">
+        </div>
+        <span class="hear_w">项目名称：</span>
+        <div class="form-group col-sm-2 form_input">
+            <input type="text" class="form-control" id="pro_name"  placeholder=" ">
+        </div>
+        <span class="hear_w">用户：</span>
+        <div class="form-group col-sm-2 form_input">
+            <select class="form-control" id="realName">
+                <option></option>
+            </select>
+        </div>
+        <a class="" id="proje_search"><img src="${request.contextPath}/statics/image/r_ssousuo.png" alt="">搜索</a>
+        <a class="" id="proje_add" ><img src="${request.contextPath}/statics/image/tianjia.png" alt="" class="rcxc">新增</a>
+    </div>
+   厂家页面
+
+    <script>
+        document.write('<script src="${request.contextPath}/statics/js/modules/manufacturers/manufacturers.js?v='+Math.random()+'"><\/script>');
+    </script>
+</body>
+</html>

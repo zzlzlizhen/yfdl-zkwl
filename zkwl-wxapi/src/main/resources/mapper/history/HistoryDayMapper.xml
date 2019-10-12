@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.remote.history.dao.HistoryDayMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.remote.history.entity.HistoryDay" id="BaseResultMap">
+        <result property="dayId" column="day_id"/>
+        <result property="deviceCode" column="device_code"/>
+        <result property="dischargeCapacity" column="discharge_capacity"/>
+        <result property="chargingCapacity" column="charging_capacity"/>
+        <result property="chargingCurrent" column="charging_current"/>
+        <result property="dischargeCurrent" column="discharge_current"/>
+        <result property="batteryVoltage" column="battery_voltage"/>
+        <result property="ambientTemperature" column="ambient_temperature"/>
+        <result property="internalTemperature" column="internal_temperature"/>
+        <result property="visitorsFlowrate" column="visitors_flowrate"/>
+        <result property="inductionFrequency" column="induction_frequency"/>
+        <result property="meteorological" column="meteorological"/>
+        <result property="createTime" column="create_time"/>
+        <result property="time" column="time"/>
+        <result property="fillingsNumber" column="fillings_number"/>
+        <result property="dischargeNumber" column="discharge_number"/>
+        <result property="chargingPower" column="charging_power"/>
+        <result property="loadPower" column="load_power"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+    day_id, device_code, discharge_capacity, charging_capacity, charging_current, discharge_current,battery_voltage,ambient_temperature,
+    internal_temperature,visitors_flowrate,induction_frequency,meteorological,create_time,fillings_number,discharge_number,charging_power,load_power
+    </sql>
+
+    <select id="queryHistoryDay" resultMap="BaseResultMap" >
+        SELECT DATE_FORMAT(create_time, '%Y-%m-%d %H:00:00') AS time,
+            sum(discharge_capacity) AS discharge_capacity,
+            sum(charging_capacity) AS charging_capacity,
+            sum(induction_frequency) AS induction_frequency,
+            TRUNCATE(avg(visitors_flowrate),2) AS visitors_flowrate
+        FROM history_day
+        where DATE_FORMAT(create_time,'%Y-%m-%d') = #{time}
+        and device_code = #{deviceCode}
+        GROUP BY time
+        ORDER BY time;
+    </select>
+
+    <select id="queryDeviceByCode" resultMap="BaseResultMap" >
+        SELECT create_time,charging_current,discharge_current,battery_voltage,ambient_temperature,
+        internal_temperature,discharge_capacity,charging_capacity,charging_power,load_power
+        FROM history_day
+        where DATE_FORMAT(create_time,'%Y-%m-%d') = #{time}
+        and device_code = #{deviceCode}
+    </select>
+
+
+    <select id="queryHistoryDayOther" resultMap="BaseResultMap" >
+        SELECT sum(fillings_number) as fillings_number,sum(discharge_number) as discharge_number,device_code
+        FROM history_day
+        where DATE_FORMAT(create_time,'%Y-%m-%d') = #{time}
+        and device_code = #{deviceCode}
+    </select>
+
+    <select id="getTotalDischarge" resultType="java.lang.Double">
+        select sum(discharge_capacity) from history_day where 1=1
+        <if test="deviceCodes !=null and deviceCodes.size()!= 0">
+            and device_code in
+            <foreach collection="deviceCodes" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <delete id="deleteBatchDay">
+        delete from history_day where create_time &lt; date_add(curdate(),INTERVAL -1 month)
+    </delete>
+    <select id="getDischargeCapacity" resultType="java.util.HashMap">
+        SELECT
+            DATE_FORMAT(b.create_time,'%Y-%m') as mouth,
+                SUM(b.discharge_capacity) as totalDC
+            FROM `remote-power`.history_year b
+            WHERE 1=1
+                AND b.create_time BETWEEN YEAR(NOW()) AND NOW()
+            <if test="deviceCodes !=null and deviceCodes.size()!= 0">
+                and b.device_code in
+                <foreach collection="deviceCodes" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            GROUP BY DATE_FORMAT(b.create_time,'%Y-%m');
+    </select>
+</mapper>

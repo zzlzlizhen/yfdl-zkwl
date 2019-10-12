@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.remote.modules.cjdevice.dao.CjDeviceMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.remote.modules.cjdevice.entity.CjDevice" id="BaseResultMap">
+        <result property="cjDeviceId" column="cj_device_id"/>
+        <result property="deviceCode" column="device_code"/>
+        <result property="deviceTypeCode" column="device_type_code"/>
+        <result property="deviceTypeName" column="device_type_name"/>
+        <result property="communicationType" column="communication_type"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="updateTime" column="update_time"/>
+
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+    cj_device_id, device_code,device_type_code, device_type_name, communication_type, create_user, create_time,update_user,update_time
+    </sql>
+
+    <select id="queryCjDeviceByDeviceCode"  resultMap="BaseResultMap" >
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        fun_cj_device
+        <where>
+            device_code = #{deviceCode}
+        </where>
+    </select>
+
+    <select id="queryDeviceByMysql"  resultMap="BaseResultMap" >
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        fun_cj_device
+        <where>
+            create_user = #{userId}
+        </where>
+    </select>
+
+
+    <delete id="deleteCjDeviceByCodes">
+        delete from fun_cj_device where
+        <if test="deviceCodes !=null and deviceCodes.size()!= 0">
+            device_code in
+            <foreach collection="deviceCodes" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </delete>
+
+
+    <update id="updateByDeviceId" parameterType="com.remote.modules.cjdevice.entity.CjDevice">
+        update fun_cj_device
+        <set>
+            <if test="deviceCode != null">
+                device_code = #{deviceCode},
+            </if>
+            <if test="deviceTypeCode != null">
+                device_type_code = #{deviceTypeCode},
+            </if>
+            <if test="deviceTypeName != null">
+                device_type_name = #{deviceTypeName},
+            </if>
+            <if test="communicationType != null">
+                communication_type = #{communicationType},
+            </if>
+            update_user = #{updateUser},
+            update_time = now()
+        </set>
+        where cj_device_id = #{cjDeviceId}
+    </update>
+</mapper>
