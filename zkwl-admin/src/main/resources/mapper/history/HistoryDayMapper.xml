@@ -34,8 +34,8 @@
         SELECT DATE_FORMAT(create_time, '%Y-%m-%d %H:00:00') AS time,
             sum(discharge_capacity) AS discharge_capacity,
             sum(charging_capacity) AS charging_capacity,
-            TRUNCATE(avg(induction_frequency),2) AS induction_frequency,
-            sum(visitors_flowrate) AS visitors_flowrate
+            sum(induction_frequency) AS induction_frequency,
+            TRUNCATE(avg(visitors_flowrate),2) AS visitors_flowrate
         FROM history_day
         where DATE_FORMAT(create_time,'%Y-%m-%d') = #{time}
         and device_code = #{deviceCode}

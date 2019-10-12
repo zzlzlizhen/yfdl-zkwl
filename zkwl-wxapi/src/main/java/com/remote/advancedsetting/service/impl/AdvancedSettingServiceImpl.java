@@ -1,6 +1,7 @@
 package com.remote.advancedsetting.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.remote.advancedsetting.dao.AdvancedSettingDao;
 import com.remote.advancedsetting.entity.AdvancedSettingEntity;
@@ -9,6 +10,8 @@ import com.remote.advancedsetting.service.AdvancedSettingService;
 import com.remote.common.es.utils.ESUtil;
 import com.remote.common.utils.StringUtils;
 
+import com.remote.device.dao.DeviceMapper;
+import com.remote.device.entity.DeviceEntity;
 import com.remote.device.service.DeviceService;
 import com.remote.sys.entity.SysUserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -24,6 +28,8 @@ import java.util.List;
 @Service("advancedSettingService")
 public class AdvancedSettingServiceImpl extends ServiceImpl<AdvancedSettingDao, AdvancedSettingEntity> implements AdvancedSettingService {
 
+    @Autowired
+    private DeviceMapper deviceMapper;
     @Autowired
     AdvancedSettingDao advancedSettingDao;
     @Autowired
@@ -34,7 +40,7 @@ public class AdvancedSettingServiceImpl extends ServiceImpl<AdvancedSettingDao, 
      * 通过组id查询高级设置信息
      * */
     @Override
-    public AdvancedSettingEntity queryByGroupId(String groupId) {
+    public AdvancedSettingEntity queryByGroupId(String groupId) throws Exception {
         return this.queryByDevOrGroupId(groupId,"0");
     }
 
@@ -52,6 +58,14 @@ public class AdvancedSettingServiceImpl extends ServiceImpl<AdvancedSettingDao, 
     public boolean updateAdvance(Long advSetId,AdvancedSettingEntity advancedSettingEntity) {
         return this.update(advancedSettingEntity,new QueryWrapper<AdvancedSettingEntity>().eq("id",advSetId));
     }
+    /**
+     * 通过组id跟设备code更改高级设置信息
+     * */
+    @Override
+    public boolean updateAdvanceByGAndDId(AdvancedSettingEntity advancedSettingEntity) {
+        return this.update(advancedSettingEntity,new QueryWrapper<AdvancedSettingEntity>().eq("group_id",advancedSettingEntity.getGroupId()).eq("device_code","0"));
+    }
+
 
     /**
      * 功能描述：通过组id或者是设备code查询高级设置信息
@@ -60,7 +74,7 @@ public class AdvancedSettingServiceImpl extends ServiceImpl<AdvancedSettingDao, 
      * @return
      */
     @Override
-    public AdvancedSettingEntity queryByDevOrGroupId(String groupId,String deviceCode) {
+    public AdvancedSettingEntity queryByDevOrGroupId(String groupId,String deviceCode) throws Exception{
         return this.baseMapper.selectOne(new QueryWrapper<AdvancedSettingEntity>().eq("group_id",groupId).eq("device_code",deviceCode));
     }
 
@@ -102,7 +116,6 @@ public class AdvancedSettingServiceImpl extends ServiceImpl<AdvancedSettingDao, 
      * 2、如果已经有设置，则更新其原来的设置信息
      * 3、将该组下所有的设备信息对应的高级设置信息，统一修改成和该次变更后的组高级设置一致
      * @date 2019/8/12 19:49
-     * @param
      * @return boolean
      */
     @Override
@@ -115,7 +128,7 @@ public class AdvancedSettingServiceImpl extends ServiceImpl<AdvancedSettingDao, 
             advancedSetting.setUpdateUser(curUser.getUsername());
             advancedSetting.setUid(curUser.getUserId());
             if (advancedSettingEntity != null) {
-               advancedSetting.setUpdateTime(new Date());
+                advancedSetting.setUpdateTime(new Date());
                 updateAdvance(advancedSettingEntity.getId(), advancedSetting);
             } else {
                 advancedSetting.setCreateTime(new Date());
@@ -136,15 +149,35 @@ public class AdvancedSettingServiceImpl extends ServiceImpl<AdvancedSettingDao, 
     @Override
     @Transactional(readOnly = false, isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void addUpdateDevice(AdvancedSettingEntity advancedSetting, SysUserEntity curUser) throws Exception {
+        boolean flag = false;
         advancedSetting.setUid(curUser.getUserId());
         advancedSetting.setUpdateUser(curUser.getUsername());
         AdvancedSettingEntity advancedSettingEntity = queryByDevOrGroupId(advancedSetting.getGroupId(),advancedSetting.getDeviceCode());
         if(advancedSettingEntity != null){
             advancedSetting.setUpdateTime(new Date());
-            updateAdvance(advancedSettingEntity.getId(),advancedSetting);
+            flag = updateAdvance(advancedSettingEntity.getId(),advancedSetting);
         }else{
             advancedSetting.setCreateTime(new Date());
-            save(advancedSetting);
+            flag =  save(advancedSetting);
+        }
+        if(flag){
+            List<String> deviceCodes = new ArrayList<String>();
+            DeviceEntity deviceEntity = new DeviceEntity();
+            if(StringUtils.isNotBlank(advancedSetting.getDeviceCode())){
+                deviceCodes.add(advancedSetting.getDeviceCode());
+                List<DeviceEntity> deviceEntities = deviceMapper.queryDeviceByCodes(deviceCodes);
+                if(CollectionUtils.isNotEmpty(deviceEntities)||deviceEntities.size()>0){
+                    for(DeviceEntity devEntity:deviceEntities){
+                        deviceEntity.setDeviceId(devEntity.getDeviceId());
+                    }
+                }
+            }
+
+            deviceEntity.setUpdateUser(advancedSetting.getUid());
+            deviceEntity.setLightingDuration(initAdv(advancedSetting)+"");
+            deviceEntity.setMorningHours(advancedSetting.getTimeDown()+"");
+            int i = deviceMapper.updateById(deviceEntity);
+            System.out.println("成功"+ i);
         }
     }
     /**
@@ -170,31 +203,27 @@ public class AdvancedSettingServiceImpl extends ServiceImpl<AdvancedSettingDao, 
     }
 
     /**
-     * 功能描述：通过组id跟设备code更新设备高级设置数据
+     * 功能描述：取高级设置亮灯时长，改变实时数据中亮灯时长
      * @param advancedSettingEntity
      * @return
      */
-    @Override
-    public boolean updateAdvSetDev(AdvancedSettingEntity advancedSettingEntity) {
-        return false;
-    }
-
-    /**
-     * 功能描述：查询设备高级设置信息通过组id跟设备code
-     * @return
-     */
-    @Override
-    public AdvancedSettingEntity queryAdvSetDev(String groupId,String deviceCode) {
-        return null;
-    }
-
-    /**
-     * 功能描述：通过设备code查询高级设置信息
-     * @param deviceCode
-     * @return
-     */
-    @Override
-    public AdvancedSettingEntity queryAdvSetDevCode(String deviceCode) {
-        return null;
+    public int initAdv(AdvancedSettingEntity advancedSettingEntity){
+        int sum = 0;
+        if(advancedSettingEntity.getTime1() != null){
+            sum+=advancedSettingEntity.getTime1();
+        }
+        if(advancedSettingEntity.getTime2() != null){
+            sum+=advancedSettingEntity.getTime2();
+        }
+        if(advancedSettingEntity.getTime3() != null){
+            sum+=advancedSettingEntity.getTime3();
+        }
+        if(advancedSettingEntity.getTime4() != null){
+            sum+=advancedSettingEntity.getTime4();
+        }
+        if(advancedSettingEntity.getTime5() != null){
+            sum+=advancedSettingEntity.getTime5();
+        }
+        return sum;
     }
 }

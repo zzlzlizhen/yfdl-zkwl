@@ -42,13 +42,9 @@ public abstract class MqttCallbackAbstract implements MqttCallback {
 
     public void messageArrived(String topic, MqttMessage message) throws Exception {
         try {
-
- /*           System.out.println("接收消息主题 : " + topic);
-            System.out.println("接收消息Qos : " + message.getQos());*/
-            System.out.println("接收消息内容 : " + new String(message.getPayload(),"UTF-8"));
-            byte[] bytes = message.getPayload();
-            String str = toHexString(bytes);
-            System.out.println("接收消息内容 : " + str);
+            System.out.println("接收消息主题 : " + topic);
+            System.out.println("接收消息Qos : " + message.getQos());
+            System.out.println("接收消息内容 : " + new String(message.getPayload()));
             //接受到的消息处理，可以根据不同的topic做不同的处理
             this.exeuteSubMessage(topic,message);
         }catch (Exception e){
@@ -56,17 +52,6 @@ public abstract class MqttCallbackAbstract implements MqttCallback {
         }
     }
 
-    public static String toHexString(byte[] byteArray) {
-        String str = null;
-        if (byteArray != null && byteArray.length > 0) {
-            StringBuffer stringBuffer = new StringBuffer(byteArray.length);
-            for (byte byteChar : byteArray) {
-                stringBuffer.append(String.format("%02X", byteChar));
-            }
-            str = stringBuffer.toString();
-        }
-        return str;
-    }
     public abstract void exeuteSubMessage(String topic,MqttMessage mqttMessage) throws Exception;
 
     public abstract void excutePubMessage(IMqttDeliveryToken token) throws Exception;

@@ -57,7 +57,6 @@ $(function () {
     var motion_a
 //搜索
     $("#seek").click(function(){
-        console.log($("#seek_a").val());
         var SN=$("#seek_a").val();
         $("#nav_a").html("");
         if(SN !=""){
@@ -91,19 +90,23 @@ $(function () {
     function unit(deviceStatus,SN){
         var pro_je
         var groupId
+        var barc=[]
+        var sarc=[];
+        var arra=[];
         $.ajax({
             url: baseURL + 'fun/device/getDeviceByGroupIdNoPageLike?status=' + deviceStatus + "&deviceCode=" + SN,
             contentType: "application/json;charset=UTF-8",
-            type: "get",
             data: {},
             children:{},
             success: function (res) {
                 console.log("设备返回搜索");
                 console.log(res);
-                var arra=[];
                 var html="";
                 var htmla="";
                 var htmll="";
+                var loconL="";
+                var locon="";
+                var locona="";
                 for (var i = 0; i < res.data.length; i++) {
                     var projectStatus=res.data[i].projectStatus;
                     if (projectStatus == null ) {
@@ -114,14 +117,26 @@ $(function () {
                         projectStatus = "停用";
                     }
                     html+="<li class='pro_li' id="+res.data[i].id+">\n" +
-                        "<div class=\"nav_pro_v \" >\n" +
+                        "<div class=\"nav_pro_v nav_pro_v_L\" >\n" +
                         "<div class=\"nav_project\">"+res.data[i].name+"</div>\n" +
                         "<p class=\"nav_pro_p\">运行状态："+projectStatus+"</p>\n" +
                         "</div>\n" +
-                        "<ul class=\"nav_gro\"  id="+res.data[i].id+"1"+"   >\n" +
+                        "<ul class=\"nav_gro nav_gro_"+i+"\"  id="+res.data[i].id+"1"+"   >\n" +
                         "</ul>"
-                    "</li>\n"
-
+                        "</li>\n";
+                    $("#nav_a").append(html);
+                    html = "";
+                    loconL={
+                        y:res.data[i].longitude,
+                        x:res.data[i].latitude,
+                        title:"L",
+                        con:res.data[i].projectStatus,
+                        branch:res.data[i].name,
+                        id:"",
+                        cliId:res.data[i].id,
+                        state:1
+                    };
+                    barc.push(loconL); //push经纬度
                     for(var k = 0; k < res.data[i].children.length; k++){
                         var deviceCount=res.data[i].children[k].deviceNumber;
                         if (deviceCount == null ) {
@@ -130,15 +145,17 @@ $(function () {
                             deviceCount = res.data[i].children[k].deviceNumber;
                         }
                         htmll +="<li class='pro_li_a' id="+res.data[i].children[k].id+">\n" +
-                            "<div class=\"nav_pro_v_b_L\" style='cursor: pointer;height:40px;clear: both' id="+res.data[i].children[k].name+" t=\"0\">\n" +
-                            "<img src='/statics/image/youjianxuan.svg' alt='' class='rllimg' >"+
+                            "<div class=\"nav_pro_v_b_L\" style='cursor: pointer;height:40px;clear: both' pid="+res.data[i].children[k].parentId+" id="+res.data[i].children[k].name+" t=\"0\">\n" +
+                            "<img src='/statics/image/youjianxuan.svg' alt='' class='active' >"+
                             "<div class=\"nav_project nav_pro_fen\" >"+ res.data[i].children[k].name+"分组</div>\n" +
                             "<p class=\"nav_pro_p\">设备数："+ deviceCount+"</p>\n" +
                             "</div>\n" +
-                            "<ul class=\"nav_gro_b_L\" id="+res.data[i].children[k].id+"2"+">\n" +
+                            "<ul class=\"nav_gro_b_L nav_gro_b_L_"+i+k+"\" id="+res.data[i].children[k].id+"2"+">\n" +
                             "</ul>"
-                        "</li>\n"
-                        var locon={
+                            "</li>\n";
+                        $(".nav_gro_"+i).append(htmll);
+                        htmll = "";
+                        locon={
                             y:res.data[i].children[k].longitude,
                             x:res.data[i].children[k].latitude,
                             con:res.data[i].children[k].projectStatus,
@@ -147,10 +164,7 @@ $(function () {
                             cliId:res.data[i].children[k].id,
                             state:2
                         };
-                        arc.push(locon);
-                        pro_je=res.data[i].children[k].parentId;
-                        groupId=res.data[i].children[k].id;
-
+                        sarc.push(locon);
                         for(var v = 0; v < res.data[i].children[k].children.length; v++) {
                             var runState = res.data[i].children[k].children[v].runState
                             if (runState == null) {
@@ -163,72 +177,87 @@ $(function () {
                                 runState = "故障";
                             } else if (runState == 4) {
                                 runState = "离线";
-                            }else if (runState == 5) {
+                            } else if (runState == 5) {
                                 runState = "升级中";
                             }
-                            htmla += "<li class='pro_li_a' name=" + res.data[i].children[k].children[v].deviceName + " type=" +  res.data[i].children[k].children[v].deviceType + " deviceCode=" +res.data[i].children[k].children[v].deviceCode + " id=" + res.data[i].children[k].children[v].id + ">\n" +
-                                "<div class=\"nav_pro_v_ba nav_bb_a\" style='cursor: pointer' title=" +  res.data[i].children[k].children[v].deviceCode + " id=" + res.data[i].children[k].children[v].longitude + ">\n" +
-                                "<div class=\"nav_project nav_pro_she\"  id=" + res.data[i].children[k].children[v].parentId + ">设备名称：" + res.data[i].children[k].children[v].name + "</div>\n" +
+                            htmla += "<li class='pro_li_a' name=" + res.data[i].children[k].children[v].deviceNumber + " type=" + res.data[i].children[k].children[v].deviceType + " deviceCode=" + res.data[i].children[k].children[v].deviceCode + " id=" + res.data[i].children[k].children[v].id + ">\n" +
+                                "<div class=\"nav_pro_v_ba nav_bb_a\" style='cursor: pointer' title=" + res.data[i].children[k].children[v].deviceCode + " id=" + res.data[i].children[k].children[v].longitude + ">\n" +
+                                "<div class=\"nav_project nav_pro_she\"  id=" + res.data[i].children[k].children[v].parentId + " name="+ res.data[i].children[k].children[v].name + ">设备名称：" + res.data[i].children[k].children[v].name + "</div>\n" +
                                 "<p class=\"nav_pro_p\" id=" + res.data[i].children[k].children[v].latitude + ">运行状态：" + runState + "</p>\n" +
-                                "</li>\n"
-                            var locon = {
+                                "</li>\n";
+                            $(".nav_gro_b_L_"+i+k).append(htmla);
+                            htmla = "";
+                            locona = {
                                 y: res.data[i].children[k].children[v].longitude,
                                 x: res.data[i].children[k].children[v].latitude,
-                                branch:res.data[i].children[k].children[v].name,
-                                con:"",
-                                fenId:res.data[i].children[k].children[v].parentId ,
-                                id:"",
-                                cliId:res.data[i].children[k].children[v].id,
-                                state:3,
+                                branch: res.data[i].children[k].children[v].name,
+                                con: "",
+                                fenId: res.data[i].children[k].children[v].parentId,
+                                id: "",
+                                cliId: res.data[i].children[k].children[v].id,
+                                state: 3,
                             };
-                            arra.push(locon);
-
+                            arra.push(locona);
                         }
-
-
                     }
-
                 }
-                console.log(html)
-                console.log(htmll)
-                console.log(htmla)
-                $("#nav_a").append(html);//项目
-                $(".nav_gro_b_L").append(htmla);//分组
-                $(".nav_gro").append(htmll);//设备
-
-                //调用地图
-                m_p(0, arra);
-                var switch_a=1
-                $(".nav_pro_v_b_L").click(function () {
-                    if(switch_a == 1){
-                        $(this).siblings(".nav_gro_b_L").slideUp();
-                        switch_a=2
-                        f_en(pro_je,"");// 分组/项目右侧边栏
-                        m_p(0, arc);
-                        $(".She_a,.ssde").css("display","none");
+                m_p(0, arra);//调用地图搜索设备
+                //点击项目
+                $(".nav_pro_v_L").click(function(){
+                    var  ID=$(this).parent(".pro_li").attr("id")
+                    if($(this).siblings(".nav_gro").is(":visible")){
+                        m_p(0, barc)
+                        Bing(ID,"")
+                        $(this).siblings(".nav_gro").slideUp();
                     }else{
-                        $(this).siblings(".nav_gro_b_L").slideDown();
-                        switch_a=1
-                        $(".She_a,.ssde").css("display","none");
-                        f_en("",groupId);// 分组/项目右侧边栏
+                        $(this).siblings(".nav_gro").hide().slideDown();
                     }
                 })
+                //点击分组
+                $(".nav_pro_v_b_L").click(function () {
+                    if( $(this).find("img").attr("active")=="false"){
+                        $(this).find(".rllimg").removeClass("rllimg").addClass("active");
+                        $(this).find("img").attr("active","true");
+                    }else{
+                        $(this).find("img").removeClass("active").addClass("rllimg");
+                        $(this).find("img").attr("active","false");
+                        $('.nav_pro_v_b_L').unbind('mouseenter').unbind('mouseleave');// 分组移除hover
+                    }
+
+                    if($(this).siblings(".nav_gro_b_L").is(":visible")){
+                        var pid=$(this).attr("pid");
+                        $(this).siblings(".nav_gro_b_L").slideUp();
+                        f_en(pid,"");// 分组/项目右侧边栏
+                        m_p(0, sarc);//调用地图分组位置
+                       $(".She_a,.ssde").css("display","hiden");
+                    }else{
+                        var gid=$(this).parents(".pro_li_a").attr("id");
+                        $(this).siblings(".nav_gro_b_L").hide().slideDown();
+                        $(".She_a,.ssde").css("display","show");
+                        na_me=$(this).attr("id");
+                        deviceCode=""
+                        f_en("",gid);// 分组/项目右侧边栏
+                        m_p(0, arra);//调用地图搜索设备
+                    }
+                })
+
                 $(".She_a,.ssde").css("display","none");
                 f_en("",groupId);// 分组/项目右侧边栏
                 var par_id
-                $(".nav_bb_a").click(function() {
+                //点击设备
+                $(".nav_bb_a").click(function(){
                    $(".ssde").css("display", "block");
                    var pro_je = $(this).parents(".pro_li").attr("id");//项目id
                    var groupId = $(this).parent().attr('id');//设备id
                    var fenId = $(this).children(".nav_pro_she").attr('id');
                    $(this).addClass("nav_bb_color").css({'color': "#fff"});
                    $(this).parents().siblings().children(".nav_bb_a").removeClass("nav_bb_color").css({'background': '', 'color': "#333"});
-                   $(this).parents().parents().parents().siblings(".pro_li_a").children().children().children(".nav_bb_a ").removeClass("nav_bb_color").css({'background': '', 'color': "#333"});
+                   $(this).parents().parents().parents().parents().parents().siblings(".pro_li").children().children().children().children().children(".nav_bb_a ").removeClass("nav_bb_color").css({'background': '', 'color': "#333"});
                    par_id = $(this).parent(".pro_li_a").attr('id');
                    type = $(this).parents().attr('type');
                    deviceCode = $(this).parents().attr('deviceCode');
-                   na_me = $(this).parents().attr('name');
                    groId = $(this).children(".nav_pro_she").attr('id');
+                   na_me = $(this).children(".nav_pro_she").attr('name');//设备名称
                    deviceId = par_id
                    var arrhove = [];
                     for(var i=0;i<arra.length;i++){
@@ -246,61 +275,67 @@ $(function () {
                    fu(par_id, "");
                    //历史数据、高级设置
                })
-
             }
         })
     }
-    $(".D_xuan_a").unbind('click');
-    $(".D_xuan_a").click(function () {
-        var devStaus = $(this).attr('id');
-        var arr=[];
-        if (devStaus == "0") {
-            $(".ra_state_d").css("transform", "rotate(0deg)");
-            $(".ra_state_d").css("left", "40px");
-            $(".ra_state_d").css("top", "40px");
-        } else if (devStaus == "1") {
-            $(".ra_state_d").css("transform", "rotate(-70deg)");
-            $(".ra_state_d").css("top", "39px");
-        } else if (devStaus == "2") {
-            $(".ra_state_d").css("transform", "rotate(70deg)");
-            $(".ra_state_d").css("left", "38px");
-            $(".ra_state_d").css("top", "39px");
-        } else if (devStaus == "3") {
-            $(".ra_state_d").css("transform", "rotate(-145deg)");
-            $(".ra_state_d").css("left", "40px");
-            $(".ra_state_d").css("top", "38px");
-        } else if (devStaus == "4") {
-            $(".ra_state_d").css("transform", "rotate(145deg)");
-            $(".ra_state_d").css("left", "39px");
-            $(".ra_state_d").css("top", "38px");
-        }
-        $.ajax({
-            url: baseURL + 'fun/project/queryProjectNoPage?deviceStatus=' + devStaus,
-            contentType: "application/json;charset=UTF-8",
-            type: "get",
-            data: {},
-            success: function (res) {
-                for (var i = 0; i < res.data.length; i++) {
-                    var locon = {
-                        y: res.data[i].longitude,
-                        x: res.data[i].latitude,
-                        title: "L",
-                        con: res.data[i].sumCount,
-                        branch: res.data[i].projectName,
-                        id: "",
-                        cliId: res.data[i].projectId,
-                        state: 1
-                    };
-                    arr.push(locon); //push经纬度
-                }
-                m_p(devStaus,arr);
-            }
-        })
-    })
 
+    ///////////////////////////////////////////
+    Xiang()
+    var devStaus
+    function Xiang(){
+        $(".D_xuan_a").unbind('click');
+        $(".D_xuan_a").click(function () {
+            console.log("++++++++++++++++++")
+            devStaus = $(this).attr('id');
+            var arr=[];
+            if (devStaus == "0") {
+                $(".ra_state_d").css("transform", "rotate(0deg)");
+                $(".ra_state_d").css("left", "40px");
+                $(".ra_state_d").css("top", "40px");
+            } else if (devStaus == "1") {
+                $(".ra_state_d").css("transform", "rotate(-70deg)");
+                $(".ra_state_d").css("top", "39px");
+            } else if (devStaus == "2") {
+                $(".ra_state_d").css("transform", "rotate(70deg)");
+                $(".ra_state_d").css("left", "38px");
+                $(".ra_state_d").css("top", "39px");
+            } else if (devStaus == "3") {
+                $(".ra_state_d").css("transform", "rotate(-145deg)");
+                $(".ra_state_d").css("left", "40px");
+                $(".ra_state_d").css("top", "38px");
+            } else if (devStaus == "4") {
+                $(".ra_state_d").css("transform", "rotate(145deg)");
+                $(".ra_state_d").css("left", "39px");
+                $(".ra_state_d").css("top", "38px");
+            }
+            $.ajax({
+                url: baseURL + 'fun/project/queryProjectNoPage?deviceStatus=' + devStaus,
+                contentType: "application/json;charset=UTF-8",
+                type: "get",
+                data: {},
+                success: function (res) {
+                    for (var i = 0; i < res.data.length; i++) {
+                        var locon = {
+                            y: res.data[i].longitude,
+                            x: res.data[i].latitude,
+                            title: "L",
+                            con: res.data[i].sumCount,
+                            branch: res.data[i].projectName,
+                            id: "",
+                            cliId: res.data[i].projectId,
+                            state: 1
+                        };
+                        arr.push(locon); //push经纬度
+                    }
+                    m_p(devStaus,arr);
+                }
+            })
+        })
+    }
     function aas(pro_je) {
         $(".D_xuan_a").unbind('click');
         $(".D_xuan_a").click(function () {
+            console.log("-----------------")
             var devStaus = $(this).attr('id');
             var arr=[];
             if (devStaus == "0") {
@@ -345,7 +380,6 @@ $(function () {
     function map(ass) {
         var ass; //跳转
         //全部/经纬度
-
         //项目数据
         $.ajax({
             url:baseURL + 'fun/project/queryProjectNoPage?deviceStatus=' + 0,
@@ -399,10 +433,10 @@ $(function () {
                                 con:arrb[i].con,branch:arrb[i].branch, id:"",cliId:arrb[i].cliId,state:1,})//剩下的
                         }
                     }
-                    m_p(0,arrhove);
+                    m_p(devStaus,arrhove);
                 })
                 $('.nav_pro_v').mouseleave(function(event) {
-                    m_p(0,arrb);
+                    m_p(devStaus,arrb);
                 });
                 //左侧边栏
                 $(".She,.She_a").slideUp();
@@ -412,8 +446,8 @@ $(function () {
                     $(".ssde,.con_Gu,.She_a").css("display","none");
                     $(".con_Xu ").css("display","block");
                     var pro_je=$(this).parents(".pro_li").attr("id");
-                    aas(pro_je)
                     if( $(this).attr("t")=="0"){
+                        aas(pro_je)
                         $(this).parents(".pro_li").siblings().find(".nav_pro_v").attr("t","0");
                         $(this).parents(".pro_li").siblings().find(".nav_gro").slideUp().empty();
                         $.ajax({
@@ -435,7 +469,7 @@ $(function () {
                                         "<div class=\"nav_pro_v_b\" id="+res.data[i].groupName+" t=\"0\">\n" +
                                         "<img src='/statics/image/youjianxuan.svg' alt='' class='rllimg' >"+
                                         "<div class=\"nav_project nav_pro_fen\" >"+ res.data[i].groupName+"分组</div>\n" +
-                                        "<p class=\"nav_pro_p\">设备数："+ deviceCount+"</p>\n" +
+                                        "<p class=\"nav_pro_p\" style='margin-left:3%;'>设备数："+ deviceCount+"</p>\n" +
                                         "</div>\n" +
                                         "<ul class=\"nav_gro_b\" id="+res.data[i].groupId+"2"+">\n" +
                                         "</ul>"
@@ -444,6 +478,7 @@ $(function () {
                                     arc.push(locon); //push经纬度
                                 }
                                 $("#" + pro_je + "1").append(htmla).hide().slideDown();
+                                $("#"+pro_je).css('color','#333').siblings().css('color','#fff');//点击选项改变状态
                                 arrc=arc ;//分组经纬度获取全局变量
                                 m_p(0,arrc);//地图
                                 //鼠标滑过分组改变地图上分组图标状态（hover）
@@ -456,14 +491,17 @@ $(function () {
                                             arrhove.push({y:arrc[i].y,x:arrc[i].x,title:"L",con:arrc[i].con,branch:arrc[i].branch,id:"",cliId:arrc[i].cliId,state:2,})//剩下的
                                         }
                                     }
-                                    m_p(0,arrhove);
+                                    m_p(devStaus,arrhove);
                                 })
                                 $('.nav_pro_v_b').mouseleave(function(event) {
-                                    m_p(0,arrc);
+                                    m_p(devStaus,arrc);
                                 });
-                                //右侧边栏数据.
+                                //右侧边栏数据
                                 Bing(pro_je,"");//控制项目
                                 // 分组下设备
+                                var lindex=localStorage.getItem('key')
+                                var lindexs=localStorage.getItem('keys')
+                                var xindex=localStorage.getItem('key2')
                                 if(sessionStorage.getItem('l')=='1'){
                                     console.log($(".nav_a").find(".pro_li").eq(lindex).find(".pro_li_a").length);
                                     $(".nav_a").find(".pro_li").eq(lindex).find(".pro_li_a").eq(lindexs).find('.nav_pro_v_b').click();
@@ -477,6 +515,8 @@ $(function () {
                     }else{
                         $(this).attr("t","0");
                         $("#" + pro_je + "1").slideUp().empty();
+                        /*轮盘筛选项目*/
+                        Xiang();
                         //右侧边栏
                         $(".She,.She_a").hide();
                         $(".grouping").show();
@@ -509,7 +549,7 @@ $(function () {
 
                $(".nav_pro_v_b").attr('t','0');
                $(document).delegate(".nav_pro_v_b","click",function () {
-                   $(".ssde").css("display","none");
+                    $(".ssde").css("display","none");
                 //    单选
                     if( $(this).find("img").attr("active")=="true"){
                         $(this).find("img").removeClass("active").addClass("rllimg");
@@ -518,6 +558,7 @@ $(function () {
                         m_p(0,arrc);
                         //分组绑定hover事件
                         $('.nav_pro_v_b').mouseenter(function(event) {
+                            console.log("__________9999")
                             var arrhove=[];
                             for(var i=0;i<arrc.length;i++){
                                 if(arrc[i].cliId == $(this).parents(".pro_li_a").attr("id")){
@@ -551,6 +592,8 @@ $(function () {
                         $(this).attr('t','1')
                         $(".D_xuan_a").unbind('click');
                         $(".D_xuan_a").click(function () {
+                            console.log("==================")
+                            console.log("分组下设备")
                             deviceStatus = $(this).attr('id');
                             if(deviceStatus == "0"){
                                 $(".ra_state_d").css("transform","rotate(0deg)");
@@ -577,14 +620,14 @@ $(function () {
                             zu(deviceStatus);
                         });
                         zu(deviceStatus);
-                       $(this).siblings(".nav_gro_b").slideDown()
+                        $(this).siblings(".nav_gro_b").slideDown();
                         function zu(deviceStatus) {
                             $("#" + groupId + "2").html("");
                             $.ajax({
                                 url: baseURL + 'fun/device/getDeviceByGroupIdNoPage?groupId=' + groupId + "&projectId=" + pro_je + "&status=" + deviceStatus ,
                                 contentType: "application/json;charset=UTF-8",
                                 type: "get",
-                                data: { },
+                                data: {},
                                 success: function (res) {
                                     console.log("设备返回");
                                     console.log(res);
@@ -608,8 +651,8 @@ $(function () {
                                         }
                                         htmlb += "<li class='pro_li_a' name=" + res.data[i].deviceName + " type=" + res.data[i].deviceType + " deviceCode=" + res.data[i].deviceCode + " id=" + res.data[i].deviceId + ">\n" +
                                             "<div class=\"nav_pro_v_ba nav_bb\" title="+ res.data[i].deviceCode +" id=" + res.data[i].longitude + ">\n" +
-                                            "<div class=\"nav_project nav_pro_she\"  id=" + res.data[i].groupId + ">设备名称：" + res.data[i].deviceName + "</div>\n" +
-                                            "<p class=\"nav_pro_p\" id=" + res.data[i].latitude + ">运行状态：" + runState + "</p>\n" +
+                                            "<div class=\"nav_project nav_pro_she\"  id=" + res.data[i].groupId + ">" + res.data[i].deviceName + "</div>\n" +
+                                            "<p class=\"nav_pro_p\" id=" + res.data[i].latitude + ">" + runState + "</p>\n" +
                                             "</li>\n"
                                         var locon = {y: res.data[i].longitude, x: res.data[i].latitude, title: "L", con:"", branch: res.data[i].deviceName,fenId:res.data[i].groupId, id:res.data[i].deviceId, cliId:res.data[i].deviceId, state:3}
                                         arr.push(locon); //push经纬度
@@ -620,9 +663,13 @@ $(function () {
                                     f_en(pro_je, groupId);   //控制分组
                                     fu("", groupId);//日志信息
                                     m_p(deviceStatus, arra); //地图
+                                    console.log(sessionStorage.getItem('l'))
+                                    var lindex=localStorage.getItem('key')
+                                    var lindexs=localStorage.getItem('keys')
+                                    var xindex=localStorage.getItem('key2')
                                     if(sessionStorage.getItem('l')=='1'){
                                         console.log( $(".nav_a").find(".pro_li").eq(lindex).find(".pro_li_a").length);
-                                        $(".nav_a").find(".pro_li").eq(lindex).find(".pro_li_a").eq(lindexs).find('li').eq(xindex).find(".nav_bb").click();
+                                        $(".nav_a").find(".pro_li").eq(lindex).find(".pro_li_a").eq(lindexs).find('.nav_gro_b').find(".pro_li_a").eq(xindex).find(".nav_bb").click()
                                     }
                                     $('.nav_bb').mouseenter(function(event) {
                                         var arrhove=[];
@@ -633,21 +680,20 @@ $(function () {
                                                 arrhove.push({y: arra[i].y, x: arra[i].x, title: "L", con:"", branch: arra[i].branch,fenId:arra[i].fenId, id:arra[i].id, cliId:arra[i].cliId, state:3})//剩下的
                                             }
                                         }
-                                        m_p(0,arrhove);
+                                        m_p(deviceStatus,arrhove);
                                     })
                                     $('.nav_bb').mouseleave(function(event) {
-                                        m_p(0,arra);
+                                        m_p(deviceStatus,arra);
                                     });
                                 }
                             });
                         }
                     } else {
                         $("#" + groupId + "2").slideUp().html("");
-                        $(this).attr('t','0')
+                        $(this).attr('t','0');
                         f_en(pro_je, groupId);
                         return
                     }
-
                 })
 
                 //单台设备
@@ -655,7 +701,7 @@ $(function () {
                 var event=event||window.event
                 $(document).delegate(".nav_bb","click",function () {
                     //event.stopPropagation()
-                    $(".ssde").css("display","block")
+                    $(".ssde").css("display","block");
                     var pro_je=$(this).parents(".pro_li").attr("id");//项目id
                     var groupId = $(this).parent().attr('id');//设备id
                     var fenId= $(this).children(".nav_pro_she").attr('id');
@@ -692,9 +738,10 @@ $(function () {
                 if(sessionStorage.getItem('l')=='1'){
                     $("#drawer_img").click();
                     $(".nav_a").find("li").eq(lindex).find(".nav_pro_v").click();
-                    $(".nav_a").find(".pro_li").eq(lindex).find(".pro_li_a").eq(lindexs).find('.nav_pro_v_b').click();
+                    $(".nav_a").find(".pro_li").eq(lindex).find(".pro_li_a").eq(lindexs).find('.nav_pro_v_b').click()
+                    $(".nav_a").find(".pro_li").eq(lindex).find(".pro_li_a").eq(lindexs).find('.nav_pro_v_ba').click();
                 }
-                //    项目下分组
+                //项目下分组
             }
         });
     }
@@ -751,25 +798,25 @@ $(function () {
                 newSize=new AMap.Size(46,46);
                 setLabel= new AMap.Pixel(11,10);
                 if(deviceStatus ==0){
-                    imags= "/statics/image/cbh.png",
+                    imags= "/statics/image/cbcx.png",
                         hov_x()
                 }else if(deviceStatus ==1){
-                    imags= "/statics/image/cch.png",
+                    imags= "/statics/image/cccx.png",
                         hov_x()
                 }else if(deviceStatus ==2){
-                    imags= "/statics/image/cdh.png",
+                    imags= "/statics/image/cdcx.png",
                         hov_x()
                 }else if(deviceStatus ==3){
-                    imags= "/statics/image/cah.png",
+                    imags= "/statics/image/cacx.png",
                         hov_x()
                 }else if(deviceStatus ==4){
-                    imags= "/statics/image/ceh.png",
+                    imags= "/statics/image/cecx.png",
                         hov_x()
                 }
             }else if(arra[i].state == 2){
                 nsize=new AMap.Size(64, 64);
                 newSize=new AMap.Size(36,36);
-                setLabel= new AMap.Pixel(8,7);
+                setLabel= new AMap.Pixel(4,7);
                 if(deviceStatus ==0){
                     imags= "/statics/image/bbh.png",
                         hov_z()
@@ -877,32 +924,31 @@ $(function () {
                     }
                     nsize=new AMap.Size(69, 69)
                     newSize=new AMap.Size(48,48)
-                    setLabel= new AMap.Pixel(14,10);
+                    setLabel= new AMap.Pixel(9,10);
                 }
             }
             //鼠标滑过左侧菜单栏项目地图改变当前鼠标滑过的图标
             function hov_x() {
                 if(arra[i].hover == 1){
                     if(deviceStatus ==0) {
-                        imags= "/statics/image/cbcx.png"
+                        imags= "/statics/image/cbh.png"
                     }else if(deviceStatus ==1){
-                        imags= "/statics/image/cccx.png"
+                        imags= "/statics/image/cch.png"
                     }else if(deviceStatus ==2){
-                        imags= "/statics/image/cdcx.png"
+                        imags= "/statics/image/cdh.png"
                     }else if(deviceStatus ==3){
-                        imags= "/statics/image/cacx.png"
+                        imags= "/statics/image/cah.png"
                     }else if(deviceStatus ==4) {
-                        imags = "/statics/image/cecx.png"
+                        imags = "/statics/image/ceh.png"
                     }
                     nsize=new AMap.Size(70, 70)
                     newSize=new AMap.Size(50,50)
-                    setLabel= new AMap.Pixel(16,13);
+                    setLabel= new AMap.Pixel(12,11);
                 }
             }
         }
     }
-
-
+    //鼠标划入
     function infoClose(e) {
         infoWindow.close(map, e.target.getPosition());
     }
@@ -971,7 +1017,6 @@ $(function () {
                 size: new AMap.Size(64, 64),  //图标大小
                 imageSize: new AMap.Size(41,41)
             });
-
             e.target.setIcon(clickIcon);
         }else if(this.state === 2){
             $("#"+cliId).css('color','#000').siblings().css('color','#333');
@@ -1050,7 +1095,7 @@ $(function () {
             content:'<div>'+ e.name +'</div>'
         });
     });
-    //地图结束
+    /////////////////////////////地图结束
 
     //日志方法
     function fu(par_id,groupId){
@@ -1086,11 +1131,11 @@ $(function () {
     $(".shade_add_project").click(function(){
         $(".shade_project,.shade_b_project").css("display","none")
     })
+    //控制面板
     $("#hear_control").click(function(){
-        localStorage.setItem("key",$(".nav_pro_v[t='1']").parent().index());
+        localStorage.setItem("key",$(".nav_pro_v[t='1']").parent('.pro_li').index());
         localStorage.setItem("keys",$(".nav_pro_v_b[t='1']").parent('.pro_li_a').index());
         localStorage.setItem("key2",$(".nav_bb_color").parent('.pro_li_a').index());
-        console.log("控制面板");
         console.log($(".nav_pro_v[t='1']").parent().index());
         console.log($(".nav_pro_v_b[t='1']").parent('.pro_li_a').index());
         console.log($(".nav_bb_color").parent('.pro_li_a').index());

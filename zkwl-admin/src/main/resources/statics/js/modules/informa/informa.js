@@ -77,7 +77,6 @@ $(function() {
         function(){
             empty()
             r_ffye(10,1)
-            console.log("pp")
         }, 60000);
   function r_ffye(pageSizea, pagesa){
       $.ajax({
@@ -93,8 +92,6 @@ $(function() {
               pageSize = res.page.pageSize;//每页条数
               pageNum = res.page.totalPage;  //总页数
               var html="";
-              console.log(res)
-              console.log(";;;;;;;;;;;;;;;;;;;;;;")
               for (var i = 0; i < res.page.list.length; i++) {
                   if( res.page.list[i].uid==null){
                       res.page.list[i].uid=""
@@ -152,7 +149,6 @@ $(function() {
               setInterval(
                   function(){
                       weidu()
-                      console.log("vvvv")
                   }, 60000);
               function weidu(){
                   $.ajax({
@@ -162,7 +158,7 @@ $(function() {
                           var r_num_in = res.queryCount;
                           $("#r_num_in").html(r_num_in)
                           if(res.code == "200"){
-                              console.log(res)
+
                           }else{
                               alert("失败")
                           }
@@ -195,7 +191,6 @@ $(function() {
                           "&uid=" + uid +
                           "&answerContent=" + rcon ,
                       success: function (res) {
-                          console.log(res)
                           if(res.code == "200"){
                               $(".shade_project").css("display","none")
                               $(".roi").css("display","none")
@@ -212,9 +207,7 @@ $(function() {
                   })
               })
 
-
               function rdele(backId){
-                  console.log(backId)
                   $.ajax({
                       url: baseURL + 'sys/feedback/info/'+backId,
                       type: "GET",
@@ -278,7 +271,6 @@ $(function() {
     //回复
     $('.sha_buttom').find('div').click(function(){
         var index = $(this).index();
-        // $(this).addClass('active').siblings().removeClass('active');
         $('.r_xc').find('.rionbo').eq(index).show().siblings().hide();
     })
 

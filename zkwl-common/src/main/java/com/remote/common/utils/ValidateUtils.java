@@ -20,7 +20,7 @@ public class ValidateUtils {
 
     /**
      * @description:(单个对象的属性校验-无提示信息)
-     * @author:gjz
+     * @author:zhangwenping
      * @param:[parameterList, object]
      * @date:18/9/8
      */
@@ -33,7 +33,7 @@ public class ValidateUtils {
     }
     /**
      * @description:(单个对象的属性校验-有提示信息)
-     * @author:gjz
+     * @author:zhangwenping
      * @param:[parameterList, object]
      * @date:18/9/8
      */
@@ -46,7 +46,7 @@ public class ValidateUtils {
     }
     /**
      * @description:(多个对象校验--有提示语)
-     * @author:gjz
+     * @author:zhangwenping
      * @param:[map]
      * @date:18/9/8
      */
@@ -59,7 +59,7 @@ public class ValidateUtils {
     }
     /**
      * @description:(都对象多属性校验)
-     * @author:gjz
+     * @author:zhangwenping
      * @param:[parentList, childrenMap, messageMap]
      * @date:18/9/8
      */

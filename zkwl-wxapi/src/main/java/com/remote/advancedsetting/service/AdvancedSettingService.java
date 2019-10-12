@@ -16,10 +16,10 @@ import java.util.List;
  */
 public interface AdvancedSettingService extends IService<AdvancedSettingEntity> {
 
-    AdvancedSettingEntity queryByGroupId(String groupId);
+    AdvancedSettingEntity queryByGroupId(String groupId) throws Exception;
     List<AdvancedSettingEntity> queryByDeviceCode(List<String> deviceCode);
-    boolean updateAdvance(Long advSetId, AdvancedSettingEntity advancedSettingEntity);
-    AdvancedSettingEntity queryByDevOrGroupId(String groupId, String deviceCode);
+    boolean updateAdvance(Long advSetId,AdvancedSettingEntity advancedSettingEntity);
+    AdvancedSettingEntity queryByDevOrGroupId(String groupId,String deviceCode) throws Exception;
     /*
      * @Author zhangwenoping
      * @Description 通过设备codes修改高级设置信息
@@ -27,7 +27,7 @@ public interface AdvancedSettingService extends IService<AdvancedSettingEntity> 
      * @Param deviceIds
      * @return List<AdvancedSettingEntity>
      **/
-    int updateAdvancedByDeviceCodes(List<String> deviceCodes, String groupId, String oldGroupId);
+    int updateAdvancedByDeviceCodes(List<String> deviceCodes,String groupId,String oldGroupId);
     /*
      * @Author zhangwenping
      * @Description 删除高级设置信息
@@ -35,25 +35,20 @@ public interface AdvancedSettingService extends IService<AdvancedSettingEntity> 
      * @Param deviceCode groupId
      * @return  int
      **/
-    int deleteAdvancedByDeviceCode(String deviceCode, String groupId);
+    int deleteAdvancedByDeviceCode(String deviceCode,String groupId);
 
     /**
      *
      * @param advancedSettingEntity
      * @param
-     *
-     *
      * @throws Exception
      */
 
     void addUpdateGroup(AdvancedSettingEntity advancedSettingEntity, SysUserEntity curUser) throws Exception;
 
-    void addUpdateDevice(AdvancedSettingEntity advancedSettingEntity, SysUserEntity curUser) throws Exception;
+    void addUpdateDevice(AdvancedSettingEntity advancedSettingEntity,SysUserEntity curUser) throws Exception;
     AdvancedSettingResult queryVol(String deviceCode);
     boolean saveAdvSetDev(AdvancedSettingEntity advancedSettingEntity);
-    boolean updateAdvSetDev(AdvancedSettingEntity advancedSettingEntity);
-    AdvancedSettingEntity queryAdvSetDev(String groupId, String deviceCode);
-    AdvancedSettingEntity queryAdvSetDevCode(String deviceCode);
 
     /**
      *功能描述：通过设备code修改组id
@@ -62,8 +57,8 @@ public interface AdvancedSettingService extends IService<AdvancedSettingEntity> 
      * @param oldGroupId
      * @return
      */
-    int updateAdvancedByDeviceCode(String deviceCode, String groupId, String oldGroupId);
+    int updateAdvancedByDeviceCode(String deviceCode,String groupId,String oldGroupId);
     boolean deleteAdvSet(List<String> deviceCode);
-
+    boolean updateAdvanceByGAndDId(AdvancedSettingEntity advancedSettingEntity);
 }
 

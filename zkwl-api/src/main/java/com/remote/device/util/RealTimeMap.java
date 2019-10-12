@@ -74,5 +74,6 @@ public class RealTimeMap {
         realTimeMap.put(63,"iCharge");//充电电流
         realTimeMap.put(64,"tempCharge");//充电温度范围
         realTimeMap.put(65,"tempDisCharge");//放电温度范围
+        realTimeMap.put(66,"lowPowerConsumption");//放电温度范围
     }
 }

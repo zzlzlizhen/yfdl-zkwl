@@ -14,10 +14,10 @@ import org.springframework.stereotype.Service;
  * @description:
  */
 @Service
-public class SubTopicCallBack extends MqttCallbackAbstract {
+public class SubTopicCallBack01 extends MqttCallbackAbstract {
 
     @Autowired(required = false)
-    @Qualifier("mqttSubClient")
+    @Qualifier("mqttSubClient01")
     private MqttClient mqttSubClient;
 
     @Override

@@ -102,6 +102,24 @@ public class ESUtil {
         return null;
     }
 
+
+
+    public RestStatus addListES(List<Map<String,Object>> temp,String indexName) {
+        try{
+            BulkRequest request = new BulkRequest();
+            for (Map<String,Object> map : temp){
+                String deviceId = map.get("deviceId").toString();
+                request.add(new IndexRequest(indexName).id(deviceId).opType("create").source(map));
+            }
+            request.setRefreshPolicy(WriteRequest.RefreshPolicy.WAIT_UNTIL);
+            BulkResponse bulk = restHighLevelClient.bulk(request,RequestOptions.DEFAULT);
+            return bulk.status();
+        }catch (Exception e){
+            log.error("批量更新es失败:",e);
+        }
+        return null;
+    }
+
     public RestStatus updateListES(List<Map<String,Object>> temp,String indexName,String indexId) {
         try{
             BulkRequest request = new BulkRequest();

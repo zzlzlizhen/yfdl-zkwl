@@ -13,7 +13,7 @@ spring:
   thymeleaf:
     prefix: classpath:/templates/
   profiles:
-    active: dev
+    active: prod
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
@@ -39,9 +39,6 @@ spring:
           starttls:
             enable: true
             required: true
-  messages:
-    basename: il8n/messages
-    encoding: UTF-8
 renren:
   cluster: false  #集群配置  true集群环境   false单机环境，还需打开pom.xml里的spring-session-data-redis注释
   globalSessionTimeout: 3600   #单机环境，session过期时间为60分钟

@@ -3,9 +3,10 @@ package com.remote.group.service;
 import com.github.pagehelper.PageInfo;
 import com.remote.group.entity.GroupEntity;
 import com.remote.group.entity.GroupQuery;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
+@Transactional
 public interface GroupService {
     /*
      * @Author zhangwenping

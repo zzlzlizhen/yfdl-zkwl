@@ -9,11 +9,12 @@ import com.remote.modules.device.entity.DeviceResult;
 import com.remote.modules.device.entity.DeviceTree;
 import com.remote.modules.sys.entity.SysUserEntity;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.LongSummaryStatistics;
 import java.util.Map;
-
+@Transactional
 public interface DeviceService {
     /*
      * @Author zhangwenping
@@ -39,6 +40,7 @@ public interface DeviceService {
      * @Param deviceEntity
      * @return boolean
      **/
+
     boolean addDevice(DeviceEntity deviceEntity) throws Exception;
     /*
      * @Author zhangwenping
@@ -217,4 +219,12 @@ public interface DeviceService {
      **/
     boolean deleteDeviceCj(List<String> list);
 
+    /*
+     * @Author zhangwenping
+     * @Description 批量添加设备
+     * @Date 17:06 2019/10/10
+     * @Param  list
+     * @return  boolean
+     **/
+    boolean insertList(List<DeviceEntity> list);
 }

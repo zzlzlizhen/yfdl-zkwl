@@ -16,8 +16,6 @@ $(function () {
         type:"get",
         data:{},
         success: function(res) {
-            console.log("用户信息")
-            console.log(res.user)
             var html=""
             for( var i=0 ;i< res.user.length;i++){
                 html+="<option id="+res.user[i].userId+">"+res.user[i].realName+"</option>"

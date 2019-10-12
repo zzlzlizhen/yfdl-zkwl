@@ -108,7 +108,6 @@ var vm = new Vue({
                                 });
 
 							}else{
-								//layer.alert(result.msg);
                                 layer.open({
                                     title: '信息',
                                     content: result.msg,

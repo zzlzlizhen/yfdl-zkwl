@@ -9,6 +9,7 @@ import com.remote.common.validator.Assert;
 import com.remote.common.validator.ValidatorUtils;
 import com.remote.common.validator.group.AddGroup;
 import com.remote.common.validator.group.UpdateGroup;
+import com.remote.modules.project.service.ProjectService;
 import com.remote.modules.sys.entity.SysUserEntity;
 import com.remote.modules.sys.service.SysUserRoleService;
 import com.remote.modules.sys.service.SysUserService;
@@ -29,6 +30,8 @@ public class SysUserController extends AbstractController {
 	private SysUserService sysUserService;
 	@Autowired
 	private SysUserRoleService sysUserRoleService;
+	@Autowired
+	private ProjectService projectService;
 	private Class suc = SysUserController.class;
 	/**
      * 获取所有的用户名
@@ -138,6 +141,7 @@ public class SysUserController extends AbstractController {
 	@RequestMapping(value = "/save",method = RequestMethod.POST)
 /*	@RequiresPermissions("sys:user:save")*/
 	public R save(SysUserEntity user){
+		ErrorMsg.rightMsg(suc,ErrorCode.LOGGER,user.toString());
 		Assert.isBlank(user.getPassword(), "密码不为能空");
 		ValidatorUtils.validateEntity(user, AddGroup.class);
 		if(StringUtils.isNotBlank(user.getUsername())){
@@ -206,10 +210,27 @@ public class SysUserController extends AbstractController {
 	@RequestMapping("/update")
 /*	@RequiresPermissions("sys:user:update")*/
 	public R update(SysUserEntity user){
+		ErrorMsg.rightMsg(suc,ErrorCode.LOGGER,user.toString());
 		ValidatorUtils.validateEntity(user, UpdateGroup.class);
 		List<SysUserEntity> sysUserEntities = new ArrayList<SysUserEntity>();
+		if(StringUtils.isNotBlank(user.getUsername())){
+			SysUserEntity sysUserEntity = null;
+			try {
+				SysUserEntity sue = sysUserService.queryById(user.getUserId());
+				if(sue != null){
+					if(!user.getUsername().equals(sue.getUsername())){
+						sysUserEntity = sysUserService.getByUsername(user.getUsername());
+						if(sysUserEntity != null){
+							return ErrorMsg.errorMsg(suc,ErrorCode.DATA_QUERY_CHECKING,"该用户名已存在");
+						}
+					}
+				}
+			}catch (Exception e){
+				e.printStackTrace();
+				return ErrorMsg.errorMsg(suc,ErrorCode.ABNORMAL,"用户名查询异常");
+			}
+		}
 		if(StringUtils.isNotBlank(user.getEmail())&&user.getUserId()!=null){
-
 			try{
 				sysUserEntities = sysUserService.getByEmailAndUid(user.getEmail(),user.getUserId());
 				if(CollectionUtils.isNotEmpty(sysUserEntities)||sysUserEntities.size()>0){
@@ -243,6 +264,7 @@ public class SysUserController extends AbstractController {
 		}
 		user.setDeadline(d);
 		user.setFlag(1);
+		user.setUpdateUser(getUserId());
 		try {
 			sysUserService.update(user);
 		}catch (Exception e){
@@ -260,6 +282,7 @@ public class SysUserController extends AbstractController {
 	@RequestMapping("/delete")
 /*	@RequiresPermissions("sys:user:delete")*/
 	public R delete(String ids){
+		ErrorMsg.rightMsg(suc,ErrorCode.LOGGER,ids);
 		if(StringUtils.isEmpty(ids)){
 			return ErrorMsg.errorMsg(suc,ErrorCode.NOT_EMPTY,"数据不能为空");
 		}
@@ -267,11 +290,22 @@ public class SysUserController extends AbstractController {
 		if(ArrayUtils.contains(userIds, 1L)){
 			return ErrorMsg.errorMsg(suc,ErrorCode.DATA_QUERY_CHECKING,"系统管理员不能删除");
 		}
-
 		if(ArrayUtils.contains(userIds, getUserId())){
 			return ErrorMsg.errorMsg(suc,ErrorCode.DATA_QUERY_CHECKING,"当前用户不能删除");
 		}
+		SysUserEntity sysUserEntity = new SysUserEntity();
 		for(Long id:userIds){
+			sysUserEntity.setUserId(id);
+			List<SysUserEntity> userList  = sysUserService.queryChild(sysUserEntity);
+			if(CollectionUtils.isNotEmpty(userList)||userList.size()>0){
+				if(userList.size() > 1){
+					return ErrorMsg.errorMsg(suc,ErrorCode.DATA_QUERY_CHECKING,"当前用户有下级用户，不能删除");
+				}
+			}
+			int proCount = projectService.queryProjectByUserCount(id);
+			if(proCount != 0){
+				return ErrorMsg.errorMsg(suc,ErrorCode.DATA_QUERY_CHECKING,"当前用户以及下级用户有项目，不能删除");
+			}
 			try {
 				int i = sysUserService.removeUser(id);
 				if(i == 0){
@@ -284,7 +318,6 @@ public class SysUserController extends AbstractController {
 		}
 		return R.ok();
 	}
-
 	/**
 	 * 通过当前用户id查询用户信息
 	 * */
@@ -310,8 +343,26 @@ public class SysUserController extends AbstractController {
 	@RequestMapping(value = "/updateBaseInfo",method = RequestMethod.POST)
 /*	@RequiresPermissions("sys:user:update")*/
 	public R updateBaseInfo(SysUserEntity user){
+		ErrorMsg.rightMsg(suc,ErrorCode.LOGGER,user.toString());
 		ValidatorUtils.validateEntity(user, UpdateGroup.class);
 		List<SysUserEntity> sysUserEntities = new ArrayList<SysUserEntity>();
+		if(StringUtils.isNotBlank(user.getUsername())){
+			SysUserEntity sysUserEntity = null;
+			try {
+				SysUserEntity sue = sysUserService.queryById(user.getUserId());
+				if(sue != null){
+					if(!user.getUsername().equals(sue.getUsername())){
+						sysUserEntity = sysUserService.getByUsername(user.getUsername());
+						if(sysUserEntity != null){
+							return ErrorMsg.errorMsg(suc,ErrorCode.DATA_QUERY_CHECKING,"该用户名已存在");
+						}
+					}
+				}
+			}catch (Exception e){
+				e.printStackTrace();
+				return ErrorMsg.errorMsg(suc,ErrorCode.ABNORMAL,"用户名查询异常");
+			}
+		}
 		if(StringUtils.isNotBlank(user.getEmail())&&user.getUserId()!=null){
 			try{
 				sysUserEntities = sysUserService.getByEmailAndUid(user.getEmail(),user.getUserId());

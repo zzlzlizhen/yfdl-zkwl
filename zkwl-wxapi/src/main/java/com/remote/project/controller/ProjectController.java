@@ -66,9 +66,13 @@ public class ProjectController extends AbstractController {
     public R queryProject(@RequestParam(required = false,defaultValue="10") Integer pageSize,
                           @RequestParam(required = false,defaultValue="1") Integer pageNum,
                           @RequestParam(required = false,defaultValue="") String projectName,
+                          @RequestParam(required = false,defaultValue="") String projectCode,
+                          @RequestParam(required = false,defaultValue="") String userName,
                           @RequestParam(required = false,defaultValue="") long userId,
                           @RequestParam(required = false,defaultValue="") String parentId){
         ProjectQuery projectQuery = new  ProjectQuery(pageSize,pageNum,projectName);
+        projectQuery.setUserName(userName);
+        projectQuery.setProjectCode(projectCode);
         projectQuery.setUserId(userId);
         projectQuery.setParentId(parentId);
         PageInfo<ProjectEntity> proPage = projectService.queryProjectByUserIds(projectQuery);

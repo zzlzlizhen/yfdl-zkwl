@@ -28,6 +28,15 @@ public interface GroupMapper extends BaseMapper<GroupEntity> {
     int queryByName(@Param("projectId") String projectId,@Param("groupName") String groupName);
     /*
      * @Author zhangwenping
+     * @Description 根据名称和项目查询分组信息
+     * @Date 16:26 2019/10/10
+     * @Param  projectId groupName
+     * @return GroupEntity
+     **/
+    GroupEntity selectGroupByName(@Param("projectId") String projectId,@Param("groupName") String groupName);
+
+    /*
+     * @Author zhangwenping
      * @Description 根据id查询
      * @Date 14:43 2019/6/5
      * @Param groupId

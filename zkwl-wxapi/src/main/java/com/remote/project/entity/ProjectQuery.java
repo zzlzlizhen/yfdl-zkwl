@@ -19,7 +19,11 @@ public class ProjectQuery {
 
     private Integer pageSize;
 
+    private String projectCode;
+
     private String projectName;
+
+    private String userName;
 
     private Integer pageNum;
 

@@ -26,8 +26,7 @@
     </script>
     <!--<script src="${request.contextPath}/statics/js/modules/control/lc_switch.js"></script>-->
     <style>
-        .rquebei{margin: 1.7% 0px 0px 1%;}
-        .rquebei{line-height: 36px;color: #008E8E;}
+        .rquebei{line-height: 36px;color: #008E8E;margin: 1.7% 0px 0px 1%;}
         .de_i input[type=radio],input[type=checkbox]  {display: inline-block;vertical-align: middle;width: 10px;height: 10px;-margin-left: 5px;
             -webkit-appearance: none;background-color: transparent;border-radius: 50%;border:1px solid #ccc;outline: 0 !important;line-height: 10px;color: #d8d8d8;}
         .de_i input[type=checkbox]:after  {content: "";display:block;width: 10px;height: 10px;text-align: center;line-height: 14px;font-size: 16px;color: #fff;
@@ -39,22 +38,12 @@
         #select1_b{width:48%;padding:0;float:left;margin-top:1%;margin-left: 1%;}
         #chong{float: left;line-height:28px;margin-top:1%;width: 49%;border-radius: 4px;border: 1px solid #ccc;height: 70%;}
         .fan_h{padding:0px; float:right;width: 80px;height: 35px;text-align: center;font-size:12px;cursor: pointer;text-indent: 0;}
-
         .kai_b{width:50% !important;}
         .WdateDiv #dpTime .tE:last-child{display: none!important;}
         .WdateDiv #dpTime .tm:last-child{display: none!important;}
         #hardware,#hardware_a{display: none;}
         .hardware,.hardware_a{width:70px;height:35px;float:left;}
         #upgrade,#upgrade_a{width:10%;float: left;}
-        .switch {width: 80px;height: 30px;float: left;}
-        .off.btn_fath {background-color: #828282;}
-        .on.btn_fath {background-color: #5281cd;}
-        .btn2 {float: right;}
-        .btn_fath {width: 79%;margin-top: 0px;position: relative;border-radius: 20px;border: 1px solid #E6E6E6;}
-        .move{z-index: 100;width: 25px;border-radius: 20px;top: 0;left: 1%;height: 25px;position: absolute;cursor: pointer;border: 1px solid #828282;
-            background-color: #f1eff0;box-shadow: 1px 2px 2px 1px #fff inset, 0 0 5px 1px #999;}
-        .btnSwitch {height: 25px;width:28px;border: none;color: #fff;line-height: 25px;font-size: 13px;text-align: center;z-index: 1;}
-        .btn1 {float: left;}
         @media screen and (max-width:1100px) {
             .con_Gu ul img {margin-left: 0%;}
             .con_Xu ul span, .con_Gu ul span {width: 66%;}
@@ -71,6 +60,7 @@
             .dkuang > div {float: left;width: 79%;margin: 43px auto;}
         }
         @media screen and (min-width:800px) and (max-width:1400px) {
+            .minr_ja{width: 42%!important;}
             .htn{margin: 5.5% 0 0 -1%!important;}
             .sp_a{margin-top: 9%;}
             .con_Gu ul img {margin-left: 0%;}
@@ -83,9 +73,11 @@
                 padding: 25px 19px;float: left;color: #fff;text-align: center;line-height: 1px;}
             .kuang > div > div > p {float: left;display: inline-block;width: 53%;background: #ccc;}
             .kuang > div > div > span {float: left;display: inline-block;width: 47%;}
-            .tnslo{width: 100%;margin-top: 103px;}
+            .tnslo{width: 100%;}
             .r-Battery{margin-top: 0;}
         }
+
+
     </style>
 </head>
 <body>
@@ -136,7 +128,7 @@
                       <p class="r-bt" id="r_btn_l" style="margin: 0;">
                           <span>负载工作模式</span>
                           <select class="form-control in_dent" id="select1_b">
-                              <option class="5">测试</option>
+                              <option class="5 ">测试</option>
                               <option class="0">定时模式</option>
                               <option class="1">光控模式</option>
                               <option class="3">常开</option>
@@ -148,11 +140,11 @@
                           <input type="text" class="Wdate wd_hang" value="18:00" id="d414" onclick="WdatePicker({autoShowQS:false,qsEnabled:false,
                         isShowClear:false,isShowOK:false,isShowToday:false,dateFmt:'H:mm',minDate:'0:00',maxDate:'23:59'})"/>
                       </div>
-                      <div class="mositn">
+                      <div class="mositn" >
                           <span>光控电压(v)</span>
                           <div class="container" style="width:48%;margin:1.7% 0px 0px 1%;">
                               <div class="input-group spinner">
-                                  <input type="text"  class="form-control in_dent" value="5" id="r_teml_tgl" oninput="value=value.replace(/[^\d]/g,'')">
+                                  <input type="text"  class="form-control in_dent" value="5" id="r_teml_tgl" oninput="value=value.replace(/[^\d.]/g,'')">
                                   <div class="input-group-btn-vertical">
                                       <button class="btn btn-default" type="button" style="padding: 8.3px 7px !important;"><i class="fa fa-caret-up" style="top: 2px !important;
 left: 3px !important;"></i></button>
@@ -192,8 +184,8 @@ left: 3px !important;"></i></button>
                       <div class="mositn">
                           <p class="r-bt" id="r_btl_th" style="width: 100%;">
                               <span >光控关灯开关</span>
-                              <input name="sexa4" type="radio"  class="che_gua r_btl_th"  value="1" checked/>开
-                              <input name="sexa4" type="radio" class="che_gua r_btl_th" value="0"/>关
+                              <input name="sexa4" type="radio"  class="che_gua r_btl_th" id="sexa4" value="1" checked/>开
+                              <input name="sexa4" type="radio" class="che_gua r_btl_th" id="sexa4_a" value="0"/>关
                           </p>
                       </div>
                   </div>
@@ -417,7 +409,7 @@ left: 3px !important;"></i></button>
                         </div>
                     </div>
                     <div>
-                        <span class="sdsds" style="width:36%">感应亮灯时长(s)</span>
+                        <span class="sdsds" style="width:43%">感应亮灯时长(s)</span>
                         <div class="container" style="width:20%;margin:2.1% 0px 0px 1.4%;">
                             <div class="input-group spinner nbo">
                                 <input type="text"  class="form-control" value="1" id="r_teml_ma" oninput="value=value.replace(/[^\d]/g,'')" style="padding-left: 13%;outline: none;box-shadow: none;border: 1px solid #ccc;">
@@ -449,16 +441,15 @@ left: 3px !important;"></i></button>
                         <span>电池串数</span>
                         <div class="container" style="width:49%;margin-top:2%;">
                             <div class="input-group spinner">
-                                <input type="text"  class="form-control in_dent" value="3" id="r_teml_forl" oninput="value=value.replace(/[^\d]/g,'')">
+                                <input type="text"  class="form-control in_dent" value="3" id="r_teml_forl" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
                                 <div class="input-group-btn-vertical">
-                                    <button class="btn btn-default" type="button" style="padding: 8.4px 7px!important;"><i class="fa fa-caret-up" style="top: 2px!important;left: 3px!important;"></i></button>
-                                    <button class="btn btn-default" type="button" style="padding: 8.4px 7px!important;"><i class="fa fa-caret-down" style="top: 2px!important;left: 3px!important;"></i></button>
+                                    <button class="btn btn-default jiaba" value="+" type="button" style="padding: 8.4px 7px!important;"><i class="fa fa-caret-up" style="top: 2px!important;left: 3px!important;"></i></button>
+                                    <button class="btn btn-default jiaba" value="-" type="button" style="padding: 8.4px 7px!important;"><i class="fa fa-caret-down" style="top: 2px!important;left: 3px!important;"></i></button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             <!--最新改版-->
                 <div class="snds">
                     <p class="r-bt" id="r_btl_th0">
@@ -540,7 +531,7 @@ left: 3px !important;"></i></button>
             <div class="r-heade"><img src="${request.contextPath}/statics/image/jiengnshep.png" alt="" style="margin-top: -3px;width: 14px;display: inline-block;height: 21px;margin-right: 6px;">节能设置</div>
             <div class="r-content" style="padding: 0 3%;padding-bottom: 5%;">
                 <div class="form-group col-sm-2 " style="width:50%;padding:0;margin:0;margin-top: 20px;">
-                    <span style="width:24%;height:100%;float: left;line-height:34px;font-size:12px;color:#333">节能智能开关</span>
+                    <span style="width:29%;height:100%;float: left;line-height:34px;font-size:12px;color:#333">节能智能开关</span>
                     <select class="form-control"  id="custom" style="width:50%;" >
                         <option class="2">智能1级</option>
                         <option class="0">关</option>
@@ -588,23 +579,23 @@ left: 3px !important;"></i></button>
             </div>
         </div>
 
-        <div class="r-Battery tnslo" style="">
+        <div class=" tnslo">
             <div class="r-heade" style="border: none;"><img src="${request.contextPath}/statics/image/qitashep.png" alt="" style="width: 20px;margin-right: 8px;margin-top: -3px;height: 15px;">其他设置</div>
             <div class=" sndsa"  style="padding-left: 3%;margin-top: 12px;">
                 <div style="width: 49.33%;">
-                    <span style="float: left;width: 37%!important;">负载手动控制生效时长</span>
+                    <span style="float: left;" class="minr_ja">负载手动控制生效时长(min)</span>
                     <input type="text" value="15" id="chong3" class="in_dent mms" placeholder="2.5~40"   onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')" style="width: 48%;">
                 </div>
                 <div style="width: 49.33%;">
-                    <span>自动休眠时间</span>
+                    <span>自动休眠时间(min)</span>
                     <input type="text"  value="0" placeholder="1~120"  class="m_in in_dent"  id="r_inpl_one2" onkeyup="value=value.replace(/^(-1+)|[^\d]+/g,'')">
                 </div>
             </div>
             <div class=" sndsa"   style="padding-left: 3%;">
-                <div>
+                <div style="width: 49.33%;">
                     <div style="line-height: 34px;clear: both;">
-                        <span>巡检时间</span>
-                        <div class="form-group col-sm-2 " style="width:49%;padding:0;margin:0;margin-top: 2%;">
+                        <span style="width: 43%;">巡检时间(min)</span>
+                        <div class="form-group col-sm-2 " style="width:48%;padding:0;margin:0;margin-top: 2%;">
                             <select class="form-control" id="r_teml_thgl">
                                 <option class="5">5分钟</option>
                                 <option class="1">1分钟</option>
@@ -613,6 +604,13 @@ left: 3px !important;"></i></button>
                             </select>
                         </div>
                     </div>
+                </div>
+                <div>
+                    <p class="r-bt" id="r_btl_thr" style="display: flex;line-height: 42px;">
+                        <span style="width: 58%;">低功耗</span>
+                        <input name="sexdg" type="radio"  class="che_guad r_btl_th " id="sexdg" value="1" checked/>开
+                        <input name="sexdg" type="radio" class="che_guad r_btl_th " id="sexdg_a" value="0"/>关
+                    </p>
                 </div>
             </div>
         </div>
@@ -671,7 +669,7 @@ left: 3px !important;"></i></button>
                         <div>
                             <span>余量：</span>
                             <p>
-                                <span id="yula">106</span>
+                                <span id="yula" >106</span>
                             </p>
                         </div>
                         <div>
@@ -695,7 +693,7 @@ left: 3px !important;"></i></button>
                         <div>
                             <span>光电池电压(v)：</span>
                             <p>
-                                <span id="rya">12.2</span>
+                                <span id="rya" style="width: 0;">12.2</span>
                             </p>
                         </div>
                         <div>
@@ -747,8 +745,8 @@ left: 3px !important;"></i></button>
                         <div  class="slds">
                             <div style="float: left;width: 50%;">
                                 <span class="con_an_span" style="width:32%;">负载开关：</span>
-                                <div class="form-group form_con_an" id="in_p">
-                                    <input type="radio" class="control-label in_put" id="richang" style="margin-left:5%" value="1" name="category" />开
+                                <div class="form-group form_con_an" id="in_p" style="margin:5px 0px 10px 0px;">
+                                    <input type="radio" class="control-label in_put" id="richang" style="margin-left:6%" value="1" name="category" />开
                                     <input type="radio" class="control-label in_put" id="dae" value="0" name="category" />关
                                     <input type="radio" class="control-label in_put" id="dae_a" value="2" name="category" checked/>自动
                                 </div>
@@ -762,23 +760,21 @@ left: 3px !important;"></i></button>
                         </div>
                         <div style="clear: both">
                             <div  style="width: 50%;float: left">
-                                <span style="float:left;width: 35%;">亮灯时长：</span>
+                                <span style="float:left;width: 35%;">亮灯时长(min)：</span>
                                 <input type="text" placeholder="亮灯时间" id="rzyb" class="bs" oninput="value=value.replace(/[^\d]/g,'')">
                             </div>
                             <div  style="width: 50%;float: left">
-                                <span style="float:left;width: 35%;">晨亮时长：</span>
+                                <span style="float:left;width: 35%;">晨亮时长(min)：</span>
                                 <input type="text" placeholder="晨亮时长" id="rac" class="bs" oninput="value=value.replace(/[^\d]/g,'')" >
                             </div>
                         </div>
                         <div style="clear: both">
                             <div  style="width: 50%;float: left">
                                 <span style="float:left;width: 35%;margin-top:1%;">运输：</span>
-                                <div class="switch">
-                                    <div class="btn_fath clearfix off" id="toog">
-                                        <div class="move" data-state="off"></div>
-                                        <div class="btnSwitch btn1">开</div>
-                                        <div class="btnSwitch btn2">关</div>
-                                    </div>
+                                <div class="form-group form_con_an" id="transport" style="margin: 4px 0px;">
+                                    <input type="radio" class="control-label in_put"  value="1" name="tran" />开
+                                    <input type="radio" class="control-label in_put"  value="0" name="tran" checked/>关
+
                                 </div>
                             </div>
                         </div>
@@ -787,7 +783,7 @@ left: 3px !important;"></i></button>
             </div>
             <div class="sha_buttom" style="width:100%;border: none;background: #fff;">
                 <div id="confirm_Z" class="rquebei" style="margin:0;line-height: 36px;line-height: 48px;margin-top: 0!important;">确定</div>
-                <div  class="sha_cancel_new rqubtn"style="margin:0;margin-left: 120px;line-height: 48px;" >取消</div>
+                <div class="sha_cancel_new rqubtn"style="margin:0;margin-left: 120px;line-height: 48px;" >取消</div>
             </div>
         </div>
 
@@ -978,7 +974,7 @@ left: 3px !important;"></i></button>
         slider.render({
             elem: '#slideTest_m'
             ,theme: '#1E9FFF' //主题色
-            ,value:[5]
+            ,value:5
             ,min: 5
             ,max:120
         });

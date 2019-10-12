@@ -1,5 +1,6 @@
 package com.remote.modules.devicetype.entity;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 /**
@@ -9,6 +10,7 @@ import lombok.Data;
  **/
 
 @Data
+@TableName("fun_device_type")
 public class DeviceTypeEntity {
 
     private Long deviceTypeId;

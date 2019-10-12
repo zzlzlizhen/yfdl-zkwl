@@ -1,4 +1,6 @@
 $(function(){
+
+
     //    数值增殖期
     (function ($) {
         $("#r_inpl_one").keyup(function(){
@@ -14,7 +16,18 @@ $(function(){
                 $this.val(40)
             }
         })
-
+        $("#r_teml_forl").keyup(function(){
+            var $this = $(this);
+            if($this.val()>8){
+                $this.val(8)
+            }
+        })
+        $("#chong3").keyup(function(){
+            var $this = $(this);
+            if($this.val()>120){
+                $this.val(120)
+            }
+        })
         $("#r_inpl_tw").keyup(function(){
             var $this = $(this);
             if($this.val()>40){
@@ -33,7 +46,6 @@ $(function(){
                 $this.val(30)
             }
         })
-
         $(".rrjia").click(function () {
             if($(this).parent().siblings(".form-control").val()<=38){
                 $(this).parent().siblings(".form-control").val($(this).parent().siblings(".form-control").val(), 0 + 1);
@@ -41,7 +53,6 @@ $(function(){
                 $(this).parent().siblings(".form-control").val("39")
             }
         })
-
         $("#r_teml_thglte,#r_teml_thglt,#r_teml_thete,#r_teml_thet").keyup(function(){
             var $this = $(this);
             $this.val($this.val().replace(/[^\-?\d.]/g,'')); //输入负数或正数
@@ -50,7 +61,6 @@ $(function(){
                 $this.val(-40)
             }
         });
-
         $("#r_teml_thglte").keyup(function(){
             var $this = $(this);
             if($this.val()>99){
@@ -92,6 +102,29 @@ $(function(){
                 $(this).parent().siblings(".form-control").val("99")
             }
         })
+
+        //电池串数参数限制1--8
+        $(".jiaba").click(function(){
+            var add
+            var symbol=$(this).attr("value");
+            var bunch=$(this).parent().siblings(".form-control").val();
+            var th=$(this).parent().siblings(".form-control");
+            if(symbol == "+"){
+               add=bunch++;
+               if(add >= 8){
+                   th.val("8");
+                   return
+               }
+            }
+            else if(symbol == "-"){
+                add=bunch--;
+                if(add <= 1){
+                    th.val("1");
+                    return
+                }
+            }
+            th.val(add);
+        })
     })(jQuery);
     //获取上一个页面参数
     function showWindowHref(){
@@ -108,19 +141,14 @@ $(function(){
         }
         return obj;
     }
+
     var href = showWindowHref();
-    //设备编号
-    var deviceCode=href['deviceCode'];
-    //项目id
-    var projectId=href['projectId'];
-    //分组id
-    var grod=href['grod'];
-    //设备id
-    var deviceId=href['deviceId'];
-    //设备类型
-    var type=href['type'];
-    //设备名称
-    var name=href['name'];
+    var deviceCode=href['deviceCode'];//设备编号
+    var projectId=href['projectId'];//项目id
+    var grod=href['grod'];//分组id
+    var deviceId=href['deviceId'];//设备id
+    var type=href['type'];//设备类型
+    var name=href['name'];//设备名称
     var disabled  //人体感应开关
     var t; //定时刷新
     var sffd=""
@@ -141,7 +169,7 @@ $(function(){
         contentType: "application/json;charset=UTF-8",
         type: "get",
         success: function (res) {
-            if (res.data.username == "admin" || res.data.username == "test01") {
+            if (res.data.username == "admin" || res.data.username == "test01" || res.data.username == "yfdl_cs"|| res.data.username == "yfdl_cj") {
                 $("#hardware").show();
             }
         }
@@ -292,7 +320,7 @@ $(function(){
             }
         })
     }
-
+    ////////////////////////////////渲染年月日数据完成
     //实时数据
     function shuju(deviceId,deviceCode){
         var volCharge;
@@ -418,56 +446,66 @@ $(function(){
                     loadState = "关";
                 }
 
-                $("#rzhuan").html(batteryState);
-                $("#yula").css("width",parseInt(sslo9)+"%");
+                $("#rzhuan").html(batteryState);//蓄电池状态
+                $("#yula").css("width",parseInt(1*sslo9)+"%");//蓄电池电池余量
                 $("#yula").html(sslo9+"%");
-                $("#rdiay").css("width",parseInt(sslo1/((volCharge-volOverDisCharge)/100))+"%");
+                $("#rdiay").css("width",parseInt(sslo1/((volCharge-volOverDisCharge)/100))+"%");//蓄电池电池电压
                 $("#rdiay").html(sslo1+"V");
                 $("#rguang").html(photocellState);//光电池状态
-                var asa = sslo1/100;
-                $("#rya").css("width",parseInt(sslo2/asa)+"%");
-                $("#rya").html(sslo2+"V");
-                $("#rliu").css("width",parseInt(sslo3/(10/100))+"%");
+                var asa = (1*sslo1)/100;
+                $("#rya").css("width",parseInt(1*(sslo2/asa))+"%");//光电池电压
+                $("#rya").html(sslo2+"V");//光电池电压
+                $("#rliu").css("width",parseInt(sslo3/(10/100))+"%");//光电池充电电流
                 $("#rliu").html(sslo3+"A");
-                $("#rdianl").css("width",parseInt(sslo4/(220/100))+"%");
+                $("#rdianl").css("width",parseInt(sslo4/(220/100))+"%");//光电池充电功率
                 $("#rdianl").html(sslo4+"W");
                 $("#rzhun").html(loadState);//负载状态
-                $("#rfu").css("width",parseInt(sslo5/(60/100))+"%");
+                $("#rfu").css("width",parseInt(sslo5/(60/100))+"%");//负载电压
                 $("#rfu").html(sslo5+"V");
-                $("#rful").css("width",parseInt(sslo6/(2/100))+"%");
+                $("#rful").css("width",parseInt(sslo6/(2/100))+"%");//负载电流
                 $("#rful").html(sslo6+"A");
-                $("#rfugon").css("width",parseInt(sslo7/(40/100))+"%");
+                $("#rfugon").css("width",parseInt(sslo7/(40/100))+"%");//负载功率
                 $("#rfugon").html(sslo7+"W");
-                var ele_a = $("#toog").children(".move");
-                var apply = res.data.transport;
-                if(apply== 0){
-                    ele_a.animate({left: "0"}, 300, function(){
-                        ele_a.attr("data-state", "off");
-                    });
-                    $("#toog").removeClass("on").addClass("off");
-                }else if(apply == 1){
-                    ele_a.animate({left: '35'}, 300, function(){
-                        $("#toog").attr("data-state", "on");
-                    });
-                    $("#toog").removeClass("off").addClass("on");
-                }
+
                 var on0f=res.data.onOff
                 var luminance=res.data.light;
                 var lian_g=res.data.lightingDuration;
                 var chen_g=res.data.morningHours;
-                $('#in_p>input[name="category"]' == on0f).each(function(){
-                    $(this).prop("checked",true);
-                });
-                $('#in_p>input[name="category"]' != on0f).each(function(){
-                    $(this).prop("checked",false);
-                });
+                //实时数据负载开关
+                // $('#in_p>input[name="category"]' == on0f).each(function(){
+                //     console.log("333")
+                //     $(this).prop("checked",true);
+                //     clearInterval(t);
+                // });
+                // $('#in_p>input[name="category"]' != on0f).each(function(){
+                //     console.log("4444")
+                //     $(this).prop("checked",false);
+                //     clearInterval(t);
+                // });
                 var youVal = res.data.onOff; // 1,2 把拿到的开关灯值赋给单选按钮
-
                 $("input[name='category']").each(function(index) {
                     if ($("input[name='category']").get(index).value == youVal) {
                         $("input[name='category']").get(index).checked = true;
                     }
                 });
+                // //运输模式
+                // $('#transport>input[name="tran"]' == on0f).each(function(){
+                //     console.log("1111")
+                //     $(this).prop("checked",true);
+                //     clearInterval(t);
+                // });
+                // $('#transport>input[name="tran"]' != on0f).each(function(){
+                //     console.log("2222")
+                //     $(this).prop("checked",false);
+                //     clearInterval(t);
+                // });
+                var tran_a = res.data.transport; // 1,2 把拿到的运输值赋给单选按钮
+                $("input[name='tran']").each(function(index) {
+                    if ($("input[name='tran']").get(index).value == tran_a) {
+                        $("input[name='tran']").get(index).checked = true;
+                    }
+                });
+                //实时数据亮度赋值
                 $("#slideTest_r ").children().children(".layui-slider-bar").width((luminance/$(".progres").width()*$(".progres").width())+"%");
                 layui.use('slider', function() {
                     var $ = layui.$
@@ -492,52 +530,40 @@ $(function(){
                 var lian3f = Number($("#r_teml_for").val());
                 var lian4f = Number($("#r_teml_te").val());
                 var lian5f = Number($("#r_teml_six").val());
-
-                $("#rzyb").val(lian1s+lian2s+lian3s+lian4s+lian5s+lian1f+lian2f+lian3f+lian4f+lian5f);
-                //晨亮时长
-                var chenshir =Number ($("#r_teml_el").val()*60);
-                var chenfenr = Number($("#r_teml_egl").val());
-                $("#rac").val(chenshir+chenfenr);
-                // 运输
-                $("#toog").click(function(){
-                    clearInterval(t);
-                    var ele = $(this).children(".move");
-                    if(ele.attr("data-state") == "on"){
-                        ele.animate({left: "0"}, 300, function(){
-                            ele.attr("data-state", "off");
-                        });
-                        $(this).removeClass("on").addClass("off");
-                    }else if(ele.attr("data-state") == "off"){
-                        ele.animate({left: '35'}, 300, function(){
-                            $(this).attr("data-state", "on");
-                        });
-                        $(this).removeClass("off").addClass("on");
-                    }
-                })
+                $("#rzyb").val(res.data.lightingDuration)
+                $("#rac").val(res.data.morningHours);//晨亮时长
             }
-
         })
     }
-
-    $("#confirm_Z").click(function(){
-        var category = parseInt($('input:radio[name="category"]:checked').val());
-        var r_wena =parseInt($("#slideTest_r").children().children(".layui-slider-bar").width()/$("#slideTest_r").children(".layui-slider").width()*100);
-        var r_wen_a = Math.ceil(r_wena);
-        var r_wenb = $('#rzyb').val();
-        var r_wen_b = Math.ceil(r_wenb);
-        var r_wenc =  $('#rac').val();
-        var r_wen_c = Math.ceil(r_wenc);
-        var s_witch
-        s_witch=$(".move").attr("data-state");
-        if(s_witch == "on"){
-            s_witch=1
-        }else if(s_witch == "off"){
-            s_witch=0
+    $(".mositn").css("display","none");
+    $("#select1_b").click(function(){
+        var sele=$("#select1_b option:selected").attr("class");
+        console.log($("#select1_b option:selected"))
+        if(sele == "1"){
+            console.log(sele)
+            console.log("kkkkkkkkkkkkkkkkkkk")
+            $(".dinstn").css("display","none");
+            $(".mositn").css("display","block");
+            $("#d414").css("margin-top","2%!important")
+        }else{
+            $(".dinstn").css("display","block");
+            $(".mositn").css("display","none");
+            $(".kai_b").css("margin","5% 0px 0px 3%!important")
         }
-        equipment_b(category,r_wen_a,r_wen_b,r_wen_c,s_witch);
-        t=setInterval(function(){
-            shuju(deviceId,deviceCode)
-        }, 6000);
+    })
+
+
+    //实时数据操作点击确定
+    $("#confirm_Z").click(function(){
+        var category = parseInt($('input:radio[name="category"]:checked').val());//实时数据负载开关
+        var r_wena =parseInt($("#slideTest_r").children().children(".layui-slider-bar").width()/$("#slideTest_r").children(".layui-slider").width()*100);//亮度
+        var r_wen_a = Math.ceil(r_wena);
+        var r_wenb = $('#rzyb').val();//亮度时长
+        var r_wen_b = Math.ceil(r_wenb);
+        var r_wenc =  $('#rac').val();//晨亮时长
+        var r_wen_c = Math.ceil(r_wenc);
+        var s_witch= parseInt($('input:radio[name="tran"]:checked').val());//运输开关
+        equipment_b(category,r_wen_a,r_wen_b,r_wen_c,s_witch);//调用上传实时数据
     })
     //实时数据简易操作上传数据
     function equipment_b(category,r_wen_a,r_wen_b,r_wen_c,s_witch) {
@@ -555,10 +581,9 @@ $(function(){
         data["morningHours"] = r_wen_c;
         data["light"] = r_wen_a;
         data["transport"] = s_witch;
-
         data1["qaKey"] = ["onOff","lightingDuration","morningHours","light","transport"]
         data1["value"] = [category,r_wen_b,r_wen_c,r_wen_a,s_witch]
-
+        //简易操作后台接口传输数据
         $.ajax({
             url: baseURL + 'fun/device/updateOnOffByIds',
             contentType: "application/json;charset=UTF-8",
@@ -644,6 +669,9 @@ $(function(){
 
     var vpv//光控电压
     var pvSwitch //光控关灯开灯
+    var customeSwitch// 自定义
+    var temControlSwitch //温控开关
+    var lowPowerConsumption//低功耗
     var batType// 电池类型
     var ligntOnDuration//光控延迟时间长度
     var batStringNum//电池串数
@@ -682,7 +710,7 @@ $(function(){
         $("#custom").click(function(){
             var select=$("#custom option:selected").attr("class");
             if(select == "1"){
-                $(".shade_project,.shade_b_project,.Bian_j").show()
+                $(".shade_project,.shade_b_project,.Bian_j").show();
             }else{
                 $(".shade_project,.shade_b_project,.Bian_j").hide();
             }
@@ -741,16 +769,18 @@ $(function(){
                     return
                 }
                 uploading()
+                console.log("lllllllll")
+                console.log(lowPowerConsumption)
                 var qaKey=["loadWorkMode","powerLoad","timeTurnOn","timeTurnOff","time1",
                     "time2","time3","time4","time5","timeDown","powerPeople1","powerPeople2","powerPeople3","powerPeople4","powerPeople5",
                     "powerDawnPeople","powerSensor1","powerSensor2","powerSensor3","powerSensor4","powerSensor5","powerSensorDown","autoSleepTime","vpv",
                     "pvSwitch","batType","batStringNum","volOverDisCharge","volCharge","tempCharge","tempDisCharge","inspectionTime","iCharge","switchDelayTime","firDownPower",
-                    "twoDownPower","threeDownPower","firReducAmplitude","twoReducAmplitude","threeReducAmplitude","ligntOnDuration","savingSwitch","inductionLightOnDelay","inductionSwitch"];
+                    "twoDownPower","threeDownPower","firReducAmplitude","twoReducAmplitude","threeReducAmplitude","ligntOnDuration","savingSwitch","inductionLightOnDelay","inductionSwitch","lowPowerConsumption"];
                 var value=[loadWorkMode,powerLoad,timeTurnON_b,timeTurnOff_b,time1,
                     time2,time3,time4,time5,timeDown,powerPeople1,powerPeople2,powerPeople3,powerPeople4,powerPeople5,
                     powerDawnPeople,powerSensor1,powerSensor2,powerSensor3,powerSensor4,powerSensor5,powerSensorDown,autoSleepTime,vpv,
                     pvSwitch,batType,batStringNum,volOverDisCharge,volCharge,newTempCharge,newTempDisCharge,inspectionTime,icharge,switchDelayTime,firDownPower,
-                    twoDownPower,threeDownPower,firReducAmplitude,twoReducAmplitude,threeReducAmplitude,ligntOnDuration,savingSwitch,inductionLightOnDelay,inductionSwitch];
+                    twoDownPower,threeDownPower,firReducAmplitude,twoReducAmplitude,threeReducAmplitude,ligntOnDuration,savingSwitch,inductionLightOnDelay,inductionSwitch,lowPowerConsumption];
                 $.ajax({
                     url:baseURL + 'advancedsetting/updateDevice',
                     type:"POST",
@@ -783,6 +813,9 @@ $(function(){
                         "&autoSleepTime="+ autoSleepTime + //自动休眠时间长度
                         "&vpv="+ vpv + //光控电压
                         "&pvSwitch="+ pvSwitch +//光控关灯开灯
+                        "&lowPowerConsumption="+lowPowerConsumption+
+                        "&customeSwitch="+ customeSwitch +//温控开关
+                        "&temControlSwitch="+ temControlSwitch +//自定义
                         "&ligntOnDuration="+ ligntOnDuration +//光控延迟时间长度
                         "&batType="+ batType + // 电池类型 0:未设置；1：胶体电池；2：铅酸电池； 3磷酸铁锂电池；4：三元锂电池
                         "&batStringNum="+batStringNum +//电池串数
@@ -857,12 +890,12 @@ $(function(){
                     "time2","time3","time4","time5","timeDown","powerPeople1","powerPeople2","powerPeople3","powerPeople4","powerPeople5",
                     "powerDawnPeople","powerSensor1","powerSensor2","powerSensor3","powerSensor4","powerSensor5","powerSensorDown","autoSleepTime","vpv",
                     "pvSwitch","batType","batStringNum","volOverDisCharge","volCharge","tempCharge","tempDisCharge","inspectionTime","iCharge","switchDelayTime","firDownPower",
-                    "twoDownPower","threeDownPower","firReducAmplitude","twoReducAmplitude","threeReducAmplitude","ligntOnDuration","savingSwitch","inductionLightOnDelay","inductionSwitch"];
+                    "twoDownPower","threeDownPower","firReducAmplitude","twoReducAmplitude","threeReducAmplitude","ligntOnDuration","savingSwitch","inductionLightOnDelay","inductionSwitch","lowPowerConsumption"];
                 var value=[loadWorkMode,powerLoad,timeTurnON_b,timeTurnOff_b,time1,
                     time2,time3,time4,time5,timeDown,powerPeople1,powerPeople2,powerPeople3,powerPeople4,powerPeople5,
                     powerDawnPeople,powerSensor1,powerSensor2,powerSensor3,powerSensor4,powerSensor5,powerSensorDown,autoSleepTime,vpv,
                     pvSwitch,batType,batStringNum,volOverDisCharge,volCharge,newTempCharge,newTempDisCharge,inspectionTime,icharge,switchDelayTime,firDownPower,
-                    twoDownPower,threeDownPower,firReducAmplitude,twoReducAmplitude,threeReducAmplitude,ligntOnDuration,savingSwitch,inductionLightOnDelay,inductionSwitch];
+                    twoDownPower,threeDownPower,firReducAmplitude,twoReducAmplitude,threeReducAmplitude,ligntOnDuration,savingSwitch,inductionLightOnDelay,inductionSwitch,lowPowerConsumption];
                 $.ajax({
                     url:baseURL + 'advancedsetting/updateGroup',
                     type:"POST",
@@ -894,6 +927,9 @@ $(function(){
                         "&autoSleepTime="+ autoSleepTime + //自动休眠时间长度
                         "&vpv="+ vpv + //光控电压
                         "&pvSwitch="+ pvSwitch +//光控关灯开灯
+                        "&lowPowerConsumption="+lowPowerConsumption+
+                        "&temControlSwitch="+ temControlSwitch +//光控关灯开灯
+                        "&customeSwitch="+ customeSwitch +//光控关灯开灯
                         "&ligntOnDuration="+ ligntOnDuration +//光控延迟时间长度
                         "&batType="+ batType + // 电池类型 0:未设置；1：胶体电池；2：铅酸电池； 3磷酸铁锂电池；4：三元锂电池
                         "&batStringNum="+batStringNum +//电池串数
@@ -977,11 +1013,17 @@ $(function(){
              savingSwitch=parseInt($("#custom option:selected").attr("class"));//智能节能开关
              inductionLightOnDelay = parseInt($("#r_teml_ma").val());//感应亮灯时长
              switchDelayTime = Number($("#chong3").val());//负载手动控制生效时长
-            //蓄电池
+             //蓄电池
              vpv=parseInt($("#r_teml_tgl").val()*100);//光控电压
-             pvSwitch=parseInt($("#r_btl_th>.r_btl_th[type='radio']:checked").val()); //光控关灯开灯
+             pvSwitch=parseInt($("#r_btl_th>.r_btl_th[name='sexa4']:checked").val()); //光控关灯开灯
+             temControlSwitch=parseInt($("#r_btl_th1>.r_btl_th[name='sexa2']:checked").val()); //温控开关
+
+            lowPowerConsumption=parseInt($("#r_btl_thr>.r_btl_th[name='sexdg']:checked").val()); //低功耗
+            console.log("++++++++++++++")
+            console.log(temControlSwitch)
+             customeSwitch=parseInt($("#r_btl_th0>.r_btl_th[name='sexa1']:checked").val()); //自定义
              batType=parseInt($("#r_select_b option:selected").attr("class"));// 电池类型
-             ligntOnDuration=parseInt($("#slideTest_m").children().children(".layui-slider-bar").width()/$("#slideTest_m").children(".layui-slider").width()*100)//光控延迟时间长度
+             ligntOnDuration=parseInt($("#slideTest_m").children().children(".layui-slider-tips").html())//光控延迟时间长度
              if(isNaN(ligntOnDuration)){
                 ligntOnDuration=5
              }
@@ -1049,6 +1091,15 @@ $(function(){
                 se_f=0
             }
             inductionSwitch=se_a+se_b+se_c+se_d+se_e+se_f
+            var sex = "";
+            $.each($("input[name='sexa']"),function(i,n){//参数i为遍历索引值，n为当前的遍历对象.
+                if($(this).is(":checked")){
+                    sex = $(this).val();
+                }
+            });
+            if(sex == 0){
+                inductionSwitch=0
+            }
         }
         //渲染高级设置数据
         function url(ur){
@@ -1078,8 +1129,8 @@ $(function(){
                         }
                         $("#select1_b").val(loadWorkMode);//负载工作模式
                         if(loadWorkMode =="光控模式"){
-                            $(".dinstn").css("display"," none");
-                            $(".mositn").css("display"," block");
+                            $(".dinstn").css("display","none");
+                            $(".mositn").css("display","block");
                         }
                         $("#r_Load_power").val(res.info.powerLoad/100);// 负载功率
                         var turnon=parseInt(res.info.timeTurnOn/60);
@@ -1138,7 +1189,6 @@ $(function(){
                             savingSwitch="智能3级"
                         }
                         $("#custom").val(savingSwitch);//智能节能开关
-
                         $("#r_inpl_one").val(res.info.volOverDisCharge/100);//过放电压
                         $("#r_inpl_tw").val(res.info.icharge/100);//充电电流
                         $("#chong").val(res.info.volCharge/100);//充电电压
@@ -1146,12 +1196,41 @@ $(function(){
                         var inspectionTime=res.info.inspectionTime+"分钟";
                         $("#r_teml_thgl").val(inspectionTime);//巡检
                         var pvSwitch=res.info.pvSwitch;
-                        $('#r_btl_th input[name="sexa"]' == pvSwitch).each(function(){
-                            $(this).prop("checked",true);
-                        });
-                        $('#r_btl_th input[name="sexa"]' != pvSwitch).each(function(){
-                            $(this).prop("checked",false);
-                        });
+                        var customeSwitch=res.info.customeSwitch;
+                        var temControlSwitch=res.info.temControlSwitch;
+                         if(pvSwitch ==1 ){
+                             $("#sexa4").attr("checked",true);
+                             $("#sexa4_a").attr("checked",false);
+                         }else{
+                             $("#sexa4_a").attr("checked",true);
+                             $("#sexa4").attr("checked",false);
+                         }
+                         var lowPowerConsumption = res.info.lowPowerConsumption;//低功耗
+
+                        if(lowPowerConsumption ==1 ){
+                            $("#sexdg").attr("checked",true);
+                            $("#sexdg_a").attr("checked",false);
+                        }else{
+                            $("#sexdg_a").attr("checked",true);
+                            $("#sexdg").attr("checked",false);
+                        }
+                         if(customeSwitch==0){
+                             $(".nqd").trigger('click');
+                             $(".nqd").attr("checked",true);
+                             $(".nqde").attr("checked",false);
+                         }else{
+                             $(".nqde").attr("checked",true);
+                             $(".nqd").attr("checked",false);
+                         }
+
+                        if(temControlSwitch==0){
+                            $(".kudxe").trigger('click');
+                            $(".kudxe").attr("checked",true);
+                            $(".kudx").attr("checked",false);
+                        }else{
+                            $(".kudx").attr("checked",true);
+                            $(".kudxe").attr("checked",false);
+                        }
 
                         var tempCharge=parseInt(res.info.tempCharge/60);
                         var tempCharge_a=res.info.tempCharge-(tempCharge*60);
@@ -1185,6 +1264,7 @@ $(function(){
                         $("#r_teml_thete").val(newTempCharge1);
                         $("#r_teml_thglt").val(newTempDisCharge2);
                         $("#r_teml_thet").val(newTempDisCharge1);
+                        //有人无人功率
                         var a=res.info.inductionSwitch
                         var c=a.toString(2);
                         var b ="";
@@ -1262,7 +1342,6 @@ $(function(){
                         $("#slideTest_a").val(res.info.firDownPower/100);//一阶前
                         $("#slideTest_b").children().children(".layui-slider-bar").css("width",res.info.firReducAmplitude+"%");//一阶后
                         $("#slideTest_b").children().children(".layui-slider-wrap").css("left",res.info.firReducAmplitude+"%");
-                        // $("#slideTest_b").children().children(".layui-slider-tips").html(res.info.firReducAmplitude)
 
                         $("#slideTest_c").val(res.info.twoDownPower/100);//2阶前
                         $("#slideTest_d").children().children(".layui-slider-bar").css("width",res.info.twoReducAmplitude+"%");//2阶后
@@ -1275,16 +1354,7 @@ $(function(){
                         $("#chong3").val(res.info.switchDelayTime);
                         $("#slideTest_m").children().children(".layui-slider-bar").css("width",res.info.ligntOnDuration+"%");//光控延时时间
                         $("#slideTest_m").children().children(".layui-slider-wrap").css("left",res.info.ligntOnDuration+"%");
-                        // layui.use('slider', function() {
-                        //     var $ = layui.$
-                        //         , slider = layui.slider;
-                        //     slider.render({
-                        //         elem: '#slideTest_b'
-                        //         , theme: '#1E9FFF' //主题色
-                        //         , value: res.info.firReducAmplitude
-                        //     });
-                        //
-                        // })
+
                         var powerPeople1=res.info.powerPeople1;
                         var powerSensor1=res.info.powerSensor1;
                         var powerPeople2=res.info.powerPeople2;
@@ -1301,6 +1371,15 @@ $(function(){
                         var ligntOnDuration=res.info.ligntOnDuration;
                         laiui(powerPeople1,powerSensor1,powerPeople2,powerSensor2,powerPeople3,powerSensor3,powerPeople4,powerSensor4,powerPeople5,powerSensor5,
                             powerDawnPeople,powerSensorDown,switchDelayTime,ligntOnDuration)
+                        //判断人体感应开关是否开关
+                        if(a == 0){
+                            $(".sdke").trigger('click');
+                            $(".sdk").attr("checked",false);
+                            $(".sdke").attr("checked",true);
+                        }else if(a != 0){
+                            $(".sdk").attr("checked",true);
+                            $(".sdke").attr("checked",false);
+                        }
                     }
                 }
             });
@@ -1313,7 +1392,7 @@ $(function(){
                     $(".nbo").css("pointer-events","none");
                     $(".nbo input").attr("readonly","readonly");
                     $(".progres input").prop("checked",false);
-                    $(".progres input").attr("disabled","disabled")
+                    $(".progres input").attr("disabled","disabled");
                     $("#r_teml_ma").val("30");
                     disabled=true
                     layui.use('slider', function(){
@@ -1394,6 +1473,7 @@ $(function(){
                         slider.render({
                             elem: '#slideTest_m'
                             , theme: '#1E9FFF' //主题色
+                            , min: 5
                             , value: ligntOnDuration //初始值
                         });
                     })
@@ -1402,7 +1482,7 @@ $(function(){
                     $(".progres,.sdsds,.nbo input").css("color","");
                     $(".nbo").css("pointer-events","");
                     $(".nbo input").removeAttr("readonly","readonly");
-                    $(".progres input").prop("checked",true);
+                    // $(".progres input").prop("checked",true);
                     $(".progres input").removeAttr("disabled","disabled")
                     disabled=false
                     layui.use('slider', function(){
@@ -1483,6 +1563,7 @@ $(function(){
                         slider.render({
                             elem: '#slideTest_m'
                             , theme: '#1E9FFF' //主题色
+                            , min: 5
                             , value: ligntOnDuration //初始值
                         });
                     })
@@ -1565,6 +1646,7 @@ $(function(){
                     slider.render({
                         elem: '#slideTest_m'
                         , theme: '#1E9FFF' //主题色
+                        , min: 5
                         , value: ligntOnDuration //初始值
                     });
                 });
@@ -1599,8 +1681,12 @@ $(function(){
                         "status":1
                     }),
                     success: function(res) {
+                        console.log("11111")
+                        console.log(res)
                         loadIndex_a(1)
                         if(res.code == "200"){
+
+                        }else{
                             layer.open({
                                 title: '信息',
                                 content: "硬件正在升级",
@@ -1614,15 +1700,19 @@ $(function(){
             $(".hardware_a").click(function(){
                 var sele=$("#upgrade_a option:selected").html();
                 var sele_s=sele.toString()
-                    sele_s= sele_s.slice(4)
+                sele_s= sele_s.slice(4)
                 $.ajax({
                     url:baseURL + 'fun/device/updateGprsVersion?deviceId='+deviceId+"&groupId="+""+"&version="+sele_s,
                     contentType: "application/json;charset=UTF-8",
                     type:"get",
                     data:{},
                     success: function(res) {
+                        console.log("22222")
+                        console.log(res)
                         gprs(1)
                         if(res.code == "200"){
+
+                        }else{
                             layer.open({
                                 title: '信息',
                                 content: "GPRS正在升级",
@@ -1631,6 +1721,7 @@ $(function(){
                         }
                     }
                 })
+
             })
         }else{
             url=baseURL + 'fun/device/version?deviceId='+ "" +"&groupId="+grod,
@@ -1640,21 +1731,25 @@ $(function(){
             gprs(0)
             $(".hardware").unbind('click');
             $(".hardware").click(function(){
-                var sele=Number($("#upgrade option:selected").html());
+                var sele = Number($("#upgrade option:selected").html());
                 $.ajax({
-                    url:baseURL + 'fun/device/updateVersion',
+                    url: baseURL + 'fun/device/updateVersion',
                     contentType: "application/json;charset=UTF-8",
-                    type:"POST",
+                    type: "POST",
                     data: JSON.stringify({
-                        "deviceCodes":[] ,
-                        "version":sele,//数值
-                        "groupId":grod,
-                        "deviceType":1,
-                        "status":1
+                        "deviceCodes": [],
+                        "version": sele,//数值
+                        "groupId": grod,
+                        "deviceType": 1,
+                        "status": 1
                     }),
-                    success: function(res) {
+                    success: function (res) {
+                        console.log("3333")
+                        console.log(res)
                         loadIndex_a(1)
-                        if(res.code == "200"){
+                        if (res.code == "200") {
+
+                        } else {
                             layer.open({
                                 title: '信息',
                                 content: "硬件正在升级",
@@ -1663,20 +1758,25 @@ $(function(){
                         }
                     }
                 })
+
             })
             $(".hardware_a").unbind('click');
             $(".hardware_a").click(function(){
-                var sele=$("#upgrade_a option:selected").html();
-                var sele_s=sele.toString();
-                sele_s= sele_s.slice(4)
+                var sele = $("#upgrade_a option:selected").html();
+                var sele_s = sele.toString();
+                sele_s = sele_s.slice(4)
                 $.ajax({
-                    url:baseURL + 'fun/device/updateGprsVersion?deviceId='+""+"&groupId="+grod+"&version="+sele_s,
+                    url: baseURL + 'fun/device/updateGprsVersion?deviceId=' + "" + "&groupId=" + grod + "&version=" + sele_s,
                     contentType: "application/json;charset=UTF-8",
-                    type:"get",
-                    data:{},
-                    success: function(res) {
+                    type: "get",
+                    data: {},
+                    success: function (res) {
+                        console.log("4444")
+                        console.log(res)
                         gprs(1)
-                        if(res.code == "200"){
+                        if (res.code == "200") {
+
+                        } else {
                             layer.open({
                                 title: '信息',
                                 content: "GPRS正在升级",
@@ -1685,6 +1785,7 @@ $(function(){
                         }
                     }
                 })
+
             })
         }
         //升级回调
@@ -1694,6 +1795,8 @@ $(function(){
             type:"get",
             data:{},
             success: function(res) {
+                console.log("5555")
+                console.log(res)
                 var html
                 var htmlv
                 for(var i=0;i<res.data.gprsList.length;i++){
@@ -1717,17 +1820,18 @@ $(function(){
                 type:"get",
                 data:{},
                 success: function(res) {
+                    console.log("66666")
+                    console.log(res)
                     if(res.code == 200){
-
+                        $(".hardware").removeAttr("disabled");
                     }else{
                         layer.open({
                             title: '信息',
                             content: res.msg,
                             skin: 'demo-class'
                         });
-                        $(".hardware").attr("disabled", "disabled");
+                        $(".hardware").attr({"disabled":"disabled"});
                     }
-
                 }
             })
         }
@@ -1741,20 +1845,22 @@ $(function(){
                 type:"get",
                 data:{},
                 success: function(res) {
+                    console.log("7777")
+                    console.log(res)
                     if(res.code == 200){
-
+                        $(".hardware_a").removeAttr("disabled");
                     }else{
                         layer.open({
                             title: '信息',
                             content: res.msg,
                             skin: 'demo-class'
                         });
-                        $(".hardware_a").attr("disabled", "disabled");
+                        $(".hardware_a").attr({"disabled":"disabled"});
                     }
-
                 }
             })
         }
+        //状态提示框
         function add_z() {
             loadIndex=layer.load(0, { //icon支持传入0-2
                 shade: [0.3, 'gray'], //0.5透明度的灰色背景
@@ -1770,7 +1876,6 @@ $(function(){
                 layer.close(loadIndex);
             }, 2000);
         }
-
     }
 
 //input输入框只能输入数字和 小数点后两位
@@ -1804,28 +1909,16 @@ $(function(){
         }
     }
 
-    $(".mositn").css("display"," none");
-    $("#select1_b").click(function(){
-        var sele=$("#select1_b option:selected").attr("class");
-        if(sele == "1"){
-            $(".dinstn").css("display"," none");
-            $(".mositn").css("display"," block");
-            $("#d414").css("margin-top","2%!important")
-        }else{
-            $(".dinstn").css("display"," block");
-            $(".mositn").css("display"," none");
-            $(".kai_b").css("margin","5% 0px 0px 3%!important")
-        }
-    })
+
+
     $("#custom").click(function(){
         var selesl=$("#custom option:selected").attr("class");
         if(selesl=="1"){
-            $(".ndey").css("display"," block");
+            $(".ndey").css("display","block");
         }else {
-            $(".ndey").css("display"," none");
+            $(".ndey").css("display","none");
         }
     })
-    
 
     $(".nqd").click(function(){
         $(".snds input").attr("readonly","readonly");
@@ -1848,7 +1941,7 @@ $(function(){
         fAng_d=$("#r_teml_thglt").val();
         fAng_g=$("#r_teml_thet").val();
         $(".nqq,.sndsm input").css("color","#ccc");
-        $(".btn").css("pointer-events","none" );
+        $(".nqiu,.jianr").css("pointer-events","none" );
         $(".sndsm input").attr("readonly","readonly");
         $("#r_teml_thete,#r_teml_thet").val("99");
         $("#r_teml_thglte,#r_teml_thglt").val("-40");
@@ -1856,7 +1949,7 @@ $(function(){
     $(".kudx").click(function(){
         $(".sndsm input").removeAttr("readonly","readonly");
         $(".nqq,.sndsm input").css("color","");
-        $(".btn").css("pointer-events","" );
+        $(".nqiu,.jianr").css("pointer-events","" );
         $("#r_teml_thglte").val(chOn_d);
         $("#r_teml_thete").val(chOn_g);
         $("#r_teml_thglt").val(fAng_d);
@@ -1864,8 +1957,6 @@ $(function(){
     })
 
 })
-
-
 
 function  f(hours,newHours,newH,dischargeCapacityList,chargingCapacityList,chargingCurrentList,dischargeCurrentList,batteryVoltageList,ambientTemperatureList,internalTemperatureList,visitorsFlowrateList,inductionFrequencyList,meteorologicalList) {
     var time =hours
@@ -1955,15 +2046,15 @@ function  f(hours,newHours,newH,dischargeCapacityList,chargingCapacityList,charg
     var app_z = {};
     option_z = null;
     option_z = {
-        color: ['#27e2d4', '#508fea'],
+        color: ['#27e2d4','#508fea'],
         title: {
-            text: '充电电流/放电电流'
+            text: '放电电流/充电电流'
         },
         tooltip: {
             trigger: 'axis'
         },
         legend: {
-            data:['充电电流','放电电流']
+            data:['放电电流','充电电流']
         },
         grid: {
             left: '3%',

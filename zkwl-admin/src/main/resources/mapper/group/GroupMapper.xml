@@ -38,6 +38,11 @@
         select count(1) from fun_group where group_name = #{groupName} and project_id = #{projectId}
     </select>
 
+
+    <select id="selectGroupByName"  resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from fun_group where group_name = #{groupName} and project_id = #{projectId}
+    </select>
+
     <select id="queryGroupById" resultMap="BaseResultMap">
         select  <include refid="Base_Column_List"/> from fun_group where group_id = #{groupId}
     </select>

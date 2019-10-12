@@ -39,4 +39,6 @@ public interface AdvancedSettingDao extends BaseMapper<AdvancedSettingEntity> {
     AdvancedSettingResult queryVol(@Param("deviceCode")String deviceCode);
     int updateAdvancedByDeviceCode(@Param("deviceCode")String deviceCode,@Param("groupId")String groupId,@Param("oldGroupId")String oldGroupId);
     boolean deleteAdvSet(@Param("deviceCodes")List<String> deviceCodes);
+    boolean saveAdvanceSetting(@Param("aseList")List<AdvancedSettingEntity> aseList);
+
 }

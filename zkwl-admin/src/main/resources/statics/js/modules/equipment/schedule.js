@@ -15,7 +15,7 @@ function  zhuang(pro_je,groupId,par_id,deviceCode) {
             var result=res.result;
             if(result == null){
                 volOverDisCharge=250
-                volCharge=40000.
+                volCharge=40000
             }else{
                 volOverDisCharge =res.result.volOverDisCharge;
                 volCharge = res.result.volCharge;
@@ -42,7 +42,7 @@ function  zhuang(pro_je,groupId,par_id,deviceCode) {
             }
             $("#Yx_b").html(communicationType);
             $("#Yx_c").html("1.0");
-            $("#Yx_d").html(res.data.version)
+            $("#Yx_d").html(res.data.version);
             var batteryState=res.data.batteryState;
             if (batteryState == null ) {
                 batteryState = "--";
@@ -149,6 +149,7 @@ function  zhuang(pro_je,groupId,par_id,deviceCode) {
             var chen_g=res.data.morningHours;
             var deviceCode=res.data.deviceCode;
             var on0f=res.data.onOff;
+            //负载开关
             $('#in_p>input[name="category"]' == on0f).each(function(){
                 $(this).prop("checked",true);
             });
@@ -157,7 +158,6 @@ function  zhuang(pro_je,groupId,par_id,deviceCode) {
             });
 
             $("#slideTest1").children().children(".layui-slider-bar").width((luminance/$(".progres").width()*$(".progres").width())+"%");
-            // $("#slideTest1").children().children(".layui-slider-tips").html(luminance)
             layui.use('slider', function() {
                 var $ = layui.$
                     , slider = layui.slider;
@@ -170,12 +170,16 @@ function  zhuang(pro_je,groupId,par_id,deviceCode) {
             $("#slideTest1 .layui-slider-wrap").css('left', luminance/$(".progres").width()*$(".progres").width() + '%');
             $("#slideTest2").val(lian_g);
             $("#slideTest3").val(chen_g);
-
             var youVal = res.data.onOff; // 1,2 把拿到的开关灯值赋给单选按钮
-
             $("input[name='category']").each(function(index) {
                 if ($("input[name='category']").get(index).value == youVal) {
                     $("input[name='category']").get(index).checked = true;
+                }
+            });
+            var tran_a = res.data.transport; // 1,2 把拿到的运输值赋给单选按钮
+            $("input[name='tran']").each(function(index) {
+                if ($("input[name='tran']").get(index).value == tran_a) {
+                    $("input[name='tran']").get(index).checked = true;
                 }
             });
             $("#confirm").unbind('click');
@@ -184,13 +188,7 @@ function  zhuang(pro_je,groupId,par_id,deviceCode) {
                 var r_wen_a = parseInt($("#slideTest1").children().children(".layui-slider-bar").width()/$("#slideTest1").children(".layui-slider").width()*100);
                 var r_wen_b = $('#slideTest2').val();
                 var r_wen_c = $('#slideTest3').val();
-                var s_witch
-                s_witch=$(".move").attr("data-state");
-                if(s_witch == "on"){
-                    s_witch=1
-                }else if(s_witch == "off"){
-                    s_witch=0
-                }
+                var s_witch =parseInt($('input:radio[name="tran"]:checked').val());//运输开关
                 equipment_b(pro_je,groupId,par_id,s_witch,category,r_wen_a,r_wen_b,r_wen_c,deviceCode,1)
             })
         }
@@ -210,13 +208,7 @@ function  f_en(pro_je,groupId) {
         var r_wen_a = parseInt($("#slideTest1").children().children(".layui-slider-bar").width()/$("#slideTest1").children(".layui-slider").width()*100);
         var r_wen_b =$('#slideTest2').val();
         var r_wen_c = $('#slideTest3').val();
-        var s_witch
-            s_witch=$(".move").attr("data-state");
-        if(s_witch == "on"){
-            s_witch=1
-        }else if(s_witch == "off"){
-            s_witch=0
-        }
+        var s_witch=parseInt($('input:radio[name="tran"]:checked').val());//运输开关
         equipment_b(pro_je,groupId,"",s_witch,category,r_wen_a,r_wen_b,r_wen_c,0,0)
     })
 }

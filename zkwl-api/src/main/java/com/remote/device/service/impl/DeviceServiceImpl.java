@@ -142,8 +142,8 @@ public class DeviceServiceImpl implements DeviceService {
             }
             faultlogService.addFaultlog(faultlogEntity);
         }
-        String deviceCode = deviceEntity.getDeviceCode();
-        DeviceTypeEntity deviceTypeByCode = deviceTypeService.getDeviceTypeByCode(deviceCode,2);
+        String deviceType = deviceEntity.getDeviceType();
+        DeviceTypeEntity deviceTypeByCode = deviceTypeService.getDeviceTypeByCode(deviceType,2);
         if(deviceTypeByCode != null){
             deviceEntity.setDeviceTypeName(deviceTypeByCode.getDeviceTypeName());
         }

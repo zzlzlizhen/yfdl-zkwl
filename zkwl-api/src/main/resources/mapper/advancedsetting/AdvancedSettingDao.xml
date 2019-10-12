@@ -53,7 +53,8 @@
         fir_reduc_amplitude as firReducAmplitude,
         two_reduc_amplitude as twoReducAmplitude,
         three_reduc_amplitude as threeDownPower,
-        switch_delay_time as switchDelayTime
+        switch_delay_time as switchDelayTime,
+        low_power_consumption as lowPowerConsumption
     </sql>
 
     <select id="queryByDeviceCode" resultType="com.remote.advancedsetting.entity.AdvancedSettingEntity">

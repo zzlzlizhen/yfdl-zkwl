@@ -269,4 +269,19 @@ public class AdvancedSettingEntity implements Serializable {
 	 * */
 	@NotNull(message="开关灯延时时间不能为空", groups = AddGroup.class)
 	private Integer switchDelayTime;
+	/**
+	 * 温控开关 0关 1开
+	 */
+	@NotNull(message="温控开关不能为空", groups = AddGroup.class)
+	private Integer temControlSwitch;
+	/**
+	 * 自定义开关
+	 */
+	@NotNull(message="自定义开关不能为空", groups = AddGroup.class)
+	private Integer customeSwitch;
+	/**
+	 * 低功耗
+	 * */
+	/*@NotNull(message="低功耗不能为空", groups = AddGroup.class)*/
+	private Integer lowPowerConsumption;
 }

@@ -42,6 +42,12 @@
             <if test="projectQuery.projectName !=null and projectQuery.projectName!=''">
                 AND project_name LIKE CONCAT('%', #{projectQuery.projectName}, '%')
             </if>
+            <if test="projectQuery.projectCode !=null and projectQuery.projectCode!=''">
+                AND project_code LIKE CONCAT('%', #{projectQuery.projectCode}, '%')
+            </if>
+            <if test="projectQuery.userName !=null and projectQuery.userName!=''">
+                AND exclusive_user LIKE CONCAT('%', #{projectQuery.userName}, '%')
+            </if>
         </where>
     </select>
 

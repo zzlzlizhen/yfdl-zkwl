@@ -6,6 +6,8 @@ import com.remote.modules.devicetype.service.DeviceTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @Author zhangwenping
  * @Date 2019/8/21 10:17
@@ -20,5 +22,15 @@ public class DeviceTypeServiceImpl implements DeviceTypeService {
     @Override
     public DeviceTypeEntity getDeviceTypeByCode(String deviceTypeCode, Integer type) {
         return deviceTypeMapper.getDeviceTypeByCode(deviceTypeCode,type);
+    }
+
+    @Override
+    public boolean addDeviceType(DeviceTypeEntity deviceTypeEntity) {
+        return deviceTypeMapper.insert(deviceTypeEntity) > 0 ? true : false;
+    }
+
+    @Override
+    public List<DeviceTypeEntity> getDeviceType(Integer type) {
+        return deviceTypeMapper.getDeviceType(type);
     }
 }

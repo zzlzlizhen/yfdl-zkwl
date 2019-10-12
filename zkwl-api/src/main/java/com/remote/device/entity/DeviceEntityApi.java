@@ -111,6 +111,10 @@ public class DeviceEntityApi extends AdvancedSettingEntity{
      * 修改状态
      */
     private boolean change;
+    /**
+     * 运输模式   0退出休眠  1进入休眠
+     */
+    private Integer transport;
     //设备编号
     private List<String> deviceCodes;
     //蓄电池余量

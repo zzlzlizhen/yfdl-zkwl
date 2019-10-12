@@ -75,5 +75,6 @@ public class MapUtils {
         map.put("iCharge",63);//充电电流
         map.put("tempCharge",64);//充电温度范围
         map.put("tempDisCharge",65);//放电温度范围
+        map.put("lowPowerConsumption",66);//低功耗
     }
 }

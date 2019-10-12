@@ -32,7 +32,7 @@ public class UserRealm extends AuthorizingRealm {
     private SysUserDao sysUserDao;
     @Autowired
     private SysMenuDao sysMenuDao;
-
+    
     /**
      * 授权(验证权限时调用)
      */

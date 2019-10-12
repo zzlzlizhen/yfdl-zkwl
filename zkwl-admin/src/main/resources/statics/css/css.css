@@ -285,9 +285,9 @@ thead>th{text-align: center !important;}
 /*.r_col_shu{font-size:16px !important;color: #fff; }*/
 
 .pro_li_a{width: 100%;margin: 0;list-style:none;}
-.nav_pro_fen,.nav_pro_she{width:46%;margin-right:3%;font-size:12px;text-indent:8px; overflow: hidden;text-overflow: ellipsis;}
+.nav_pro_fen,.nav_pro_she{width:41%;margin:0px 3% 0px 5%;font-size:12px;text-indent:8px; overflow: hidden;text-overflow: ellipsis;}
 .nav_pro_fen,.nav_pro_she{white-space: nowrap;}
-.nav_pro_she{font-weight: 500;font-size: 12px;text-indent:33px;}
+.nav_pro_she{font-weight: 500;font-size: 12px;text-indent:18px;width:55%;}
 /*地图侧边抽屉*/
 .drawer{width:500px;height:82%;position: absolute;right:-475px;bottom:0%; transition: all 1.5s ease-in;z-index: 9;}
 .dra_zhao{width:95%;height:100%;background: #fff;opacity: 0.8;float:right;}
@@ -347,7 +347,7 @@ thead>th{text-align: center !important;}
 }
 .facility{width:100%;height:55px;border-bottom:1px dashed #ccc;float:left; }
 .facility span{width:40%;height:25px;line-height:36px;text-indent:10px;font-size:14px;color:#333;float: left}
-.facility p{width:24%;height:25px;line-height: 29px;float:right;color:#ccc;margin-right:3%;}
+.facility p{width:50%;height:25px;line-height: 29px;float:right;color:#ccc;margin-right:3%;text-align: right}
 .facility div{width:96%;height:30px;line-height:27px;margin:0px 0% ;float: left;color:#ccc;text-indent: 10px}
 
 /*项目管理顶部*/
@@ -437,7 +437,17 @@ thead>th{text-align: center !important;}
     background-size: 100% 34px !important ;
     cursor: pointer;
 }
-
+.nav_pro_v_b_L img.active {
+    -webkit-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+    width: 15px;
+    height: 15px;
+    margin-top: 12px;
+    margin-right: 20px;
+    float: right;
+}
 .r_chakan{display: inline-block;background: #27E2D4;   width: 70px;height:29px;border-radius: 11px;color: #ffffff;line-height: 29px;'><i style='font-style:normal}
 .r_chakan_img{margin-left: 8px;display: inline-block;width: 13px;height: 13px;}
 .content_Y,.hear{background:#ffffff !important;}
@@ -487,6 +497,10 @@ thead>th{text-align: center !important;}
     .She_a{height: 181px!important;}
     .con_an {height: 20%;}
     .nnb{margin-bottom: 1%;}
+    .r-Battery-tw{margin-top: 36px;}
+    /*.r-content{*/
+        /*margin-bottom: 3%;*/
+    /*}*/
 }
 @media only screen and (min-width:320px)and(max-width:768px){
     .table_m {height:50%;}

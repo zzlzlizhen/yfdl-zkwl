@@ -29,9 +29,9 @@ spring:
       url: jdbc:mysql://39.97.169.198:3306/remote-power?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
       username: root
       password: YFDL_zkwl_123
-      initial-size: 10
-      max-active: 100
-      min-idle: 10
+      initial-size: 20
+      max-active: 200
+      min-idle: 50
       max-wait: 60000
       pool-prepared-statements: true
       max-pool-prepared-statement-per-connection-size: 20

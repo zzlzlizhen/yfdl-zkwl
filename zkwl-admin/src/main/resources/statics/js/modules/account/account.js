@@ -12,7 +12,6 @@ $(function () {
         var acc_hao = $("#acc_hao").val();
         var acc_name = $("#acc_name").val();
         var select = $("#sele_ht option:selected").attr("class");
-        console.log("===="+select)
         $("#div").html("");
         pageNum = 1;
         form(pageSize, pageNum, acc_id, acc_hao, acc_name, select)
@@ -33,8 +32,6 @@ $(function () {
                 "page": pagesa
             },
             success: function (res) {
-                console.log("数据1")
-                console.log(res)
                 pages = res.page.currPage;  //第几页
                 pageSize = res.page.pageSize;//每页条数
                 pageNum = res.page.totalPage;  //总页数
@@ -135,7 +132,7 @@ $(function () {
                         "&userId=" + Id_a +
                         "&status=" + state,
                         success: function (res) {
-                            console.log(res)
+
                         }
                     })
                 }
@@ -203,35 +200,24 @@ $(function () {
                         //    账号
                         if (!patrn3.exec(na_ma_mod)) {
                             $(".rrbol").html("账号错误");
-                            console.log("账号错误")
                             $(".mistake").css("display","block");
                             return false;
                         }
                         //    用户名
                         if (!patrn4.exec(r_user_mod)) {
                             $(".rrbol").html("用户名错误");
-                            console.log("用户名错误")
                             $(".mistake").css("display","block");
                             return false;
                         }
-                        //    密码
-                        // if (!patrn5.exec(r_pw_mod)) {
-                        //     $(".rrbol").html("密码错误");
-                        //     console.log("密码错误")
-                        //     $(".shade_b").css("display","block");
-                        //     return false;
-                        // }
                         // 邮箱
                         if (!patrn2.exec(r_emal_mod)) {
                             $(".rrbol").html("邮箱错误");
-                            console.log("邮箱错误")
                             $(".mistake").css("display","block");
                             return false;
                         }
                         //手机号错误
                         if (!patrn1.exec(r_typ_mod)){
                             $(".rrbol").html("手机号错误");
-                            console.log("手机号错误")
                             $(".rrbol").html("手机号错误");
                             $(".mistake").css("display","block");
                             return false;
@@ -472,8 +458,6 @@ $(".wrong").click(function(){
         },
         onComplete : function(file, r){
             if(r.code == 200){
-                console.log("lololo");
-                console.log(r.url)
                 $("#headUrl").val(r.url);
                 $("#pic").attr("src","https://guangxun-wulian.com"+r.url);
             }else{

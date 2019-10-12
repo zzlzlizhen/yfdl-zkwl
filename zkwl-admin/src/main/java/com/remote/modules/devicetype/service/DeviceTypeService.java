@@ -3,6 +3,8 @@ package com.remote.modules.devicetype.service;
 
 import com.remote.modules.devicetype.entity.DeviceTypeEntity;
 
+import java.util.List;
+
 public interface DeviceTypeService {
     /*
      * @Author zhangwenping
@@ -12,4 +14,21 @@ public interface DeviceTypeService {
      * @return DeviceTypeEntity
      **/
     DeviceTypeEntity getDeviceTypeByCode(String deviceTypeCode, Integer type);
+
+    /*
+     * @Author zhangwenping
+     * @Description 添加设备类型
+     * @Date 14:54 2019/9/19
+     * @Param deviceTypeEntity
+     * @return boolean
+     **/
+    boolean addDeviceType(DeviceTypeEntity deviceTypeEntity);
+    /*
+     * @Author zhangwenping
+     * @Description 查询所有设备类型
+     * @Date 14:56 2019/9/19
+     * @Param type
+     * @return  List<DeviceTypeEntity>
+     **/
+    List<DeviceTypeEntity> getDeviceType(Integer type);
 }

@@ -23,6 +23,7 @@ $(function(){
     var pages
     var pageSize
     var pageNum
+    var J_t
     var proid //编辑id
     var sing_id
     var sing_name
@@ -32,11 +33,27 @@ $(function(){
     $("#pb").html(groupName);
     var $color = localStorage.getItem("mycolor");
 
+    $.ajax({
+        url:baseURL + 'fun/deviceType/getDeviceType',
+        contentType: "application/json;charset=UTF-8",
+        type:"get",
+        data:{},
+        success: function(res) {
+            var html=""
+            for (var i = 0; i < res.data.length; i++) {
+                html += "<option class='option opti_a' id="+res.data[i].deviceTypeCode+">"+res.data[i].deviceTypeName+"</option>\n"
+            }
+            $("#sing_se").append(html)
+        }
+    });
+
+
+
     //搜索
     $("#proje_search").click(function(){
          sing_id=$("#sing_id").val();
          sing_name=$("#sing_name").val();
-         select=$("#sing_se option:selected").text();
+        select=$("#sing_se option:selected").attr("id")
         $("#div").html("");
         form(pageSize,pageNum,sing_id,sing_name,select);
         refresh();
@@ -72,7 +89,8 @@ $(function(){
             success: function (res) {
                 pages = res.data.pages;
                 pageSize = res.data.pageSize;
-                pageNum = res.data.pageNum
+                pageNum = res.data.pageNum;
+                J_t=res.data.list.length;
                 var html="";
                 var offClass = "";
                 for (var i = 0; i < res.data.list.length; i++) {
@@ -233,7 +251,7 @@ $(function(){
                 $(".particulars_a").click(function(){
                     var deviceCode=$(this).parent().siblings(".li_deviceCode").html();
                     var grod=$(this).parent().siblings(".grod").attr('id');
-                    var type=$(this).parent().siblings(".li_deviceType").html();
+                    var type=$(this).parent().siblings(".li_deviceCode").attr("id");
                     var name=$(this).parent().siblings("#r_namem").html();
                     var deviceId=$(this).parent().attr("id");
                     var projectId=$(this).parent().siblings(".li_deviceType").attr('id');
@@ -269,26 +287,33 @@ $(function(){
                 $(".checkbox_i").click(function () {
                     var che_c=$(this).prop('checked');
                     if(che_c == true){
-                        $("#checkbox[name=all]:checkbox").prop('checked', true);
-                        var devId=$(this).parent().attr('id')
-                        arr.push(devId)
+                        $(this).parents("li").siblings("li").each(function() {
+                            $("#checkbox[name=all]:checkbox").prop('checked', true);
+                        })
+                        var devId=$(this).parent().attr('id');
+                        arr.push(devId);
                         var len=arr.length;
-                        $("#mo_sp").html(len+"项")
-                        $(".move_a").show()
+                        $("#mo_sp").html(len+"项");
+                        $(".move_a").show();
+                        if(len == J_t){
+                            $("#checkbox[name=all]:checkbox").prop('checked', true);
+                        }
                     }
                     else if(che_c == false){
-                        if($(".checkbox_i").prop('checked') == true){
-                            $("#checkbox[name=all]:checkbox").prop('checked', true);
-                            $(".move_a").show()
-                        }else{
-                            $("#checkbox[name=all]:checkbox").prop('checked', false);
-                            $(".move_a").hide()
-                        }
+                        $("#checkbox[name=all]:checkbox").prop('checked', false);
                         var devId=$(this).parent().attr('id');
                         var index = arr.indexOf(devId);
                         arr.splice(index, 1);
                         var len=arr.length;
-                        $("#mo_sp").html(len+"项")
+                        $("#mo_sp").html(len+"项");
+                        if(len < J_t){
+                            $("#checkbox[name=all]:checkbox").prop('checked', false);
+                        }
+                    }
+                    if($(".checkbox_i[name=clk]:checkbox:checked").length>0){
+                        $(".move_a").show();
+                    }else{
+                        $(".move_a").hide();
                     }
                 })
                 // 批量删除
@@ -553,6 +578,9 @@ $(function(){
                     nextPageText: "下一页",
                     callback: function (current) {
                         //当前页数current
+                        $("#checkbox[name=all]:checkbox").prop('checked', false);
+                        $(".move_a").hide();
+                        $("#mo_sp").html("");
                         var pagesb = current
                         $("#div").html("")
                         form(pageSize, pagesb,sing_id,sing_name,select)

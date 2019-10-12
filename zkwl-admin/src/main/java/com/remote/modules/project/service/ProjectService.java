@@ -5,6 +5,8 @@ import com.remote.modules.project.entity.ProjectEntity;
 import com.remote.modules.project.entity.ProjectQuery;
 import com.remote.modules.project.entity.ProjectResult;
 import com.remote.modules.sys.entity.SysUserEntity;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -13,6 +15,7 @@ import java.util.List;
  * @Description 项目信息
  * @Date 14:20 2019/5/31
  **/
+@Transactional
 public interface ProjectService {
 
     /*
@@ -94,5 +97,23 @@ public interface ProjectService {
      * 通过项目ids查询所属人ids
      * */
     List<Long> queryExclusiveIds(List<String> proOrDevIds);
+
+    /*
+     * @Author zhangwenping
+     * @Description 根据项目名称查询项目详情
+     * @Date 16:06 2019/10/10
+     * @Param userId projectName
+     * @return ProjectEntity
+     **/
+    ProjectEntity queryProjectExcel(Long userId,String projectName);
+
+    /*
+     * @Author zhangwenping
+     * @Description 根据项目编号查询项目信息
+     * @Date 10:53 2019/10/11
+     * @Param projectCode
+     * @return ProjectEntity
+     **/
+    ProjectEntity queryProjectByCode(String projectCode);
 
 }

@@ -2,12 +2,11 @@ package com.remote.modules.device.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
-import com.remote.common.enums.AllEnum;
-import com.remote.common.enums.DeviceEnum;
-import com.remote.common.enums.RunStatusEnum;
-import com.remote.common.enums.TransportEnum;
+import com.remote.common.enums.*;
 import com.remote.common.redis.CacheUtils;
 import com.remote.common.utils.*;
+import com.remote.modules.cjdevice.entity.CjDevice;
+import com.remote.modules.cjdevice.service.CjDeviceService;
 import com.remote.modules.device.entity.DeviceEntity;
 import com.remote.modules.device.entity.DeviceQuery;
 import com.remote.modules.device.entity.DeviceResult;
@@ -54,6 +53,9 @@ public class DeviceController extends AbstractController {
     @Autowired
     private DeviceTypeService deviceTypeService;
 
+    @Autowired
+    private CjDeviceService cjDeviceService;
+
     @RequestMapping(value = "/queryDevice", method= RequestMethod.POST)
     public R queryDevice(@RequestBody DeviceQuery deviceQuery) throws Exception {
         String esFlag = cacheUtils.get("ES_FLAG").toString();
@@ -66,13 +68,13 @@ public class DeviceController extends AbstractController {
             }
         }else{
             // 1 代表 查询es
-            if(esFlag.equals(esFlag)){
+            if("1".equals(esFlag)){
                 Pager<Map<String, Object>> mapPager = deviceService.queryDevice(deviceQuery);
                 if(mapPager != null){
                     return R.ok(mapPager);
                 }
                 //2 代表 查询 mysql
-            }else if(esFlag.equals(esFlag)){
+            }else if("2".equals(esFlag)){
                 PageInfo<DeviceEntity> pageInfo = deviceService.queryDeviceByMysql(deviceQuery);
                 if(pageInfo != null){
                     return R.ok(pageInfo);
@@ -144,6 +146,10 @@ public class DeviceController extends AbstractController {
         if(StringUtils.isEmpty(deviceEntity.getDeviceCode())){
             return R.error(201,"设备编号不能为空");
         }
+        CjDevice cjDevice = cjDeviceService.queryCjDeviceByDeviceCode(deviceEntity.getDeviceCode());
+        if(cjDevice == null){
+            return R.error(201,"查无此设备，请检查设备编号是否填写正确！");
+        }
         SysUserEntity user = getUser();
         deviceEntity.setUsrUser(user.getUserId()); // 创建人 和 使用人 存反
         deviceEntity.setIsDel(AllEnum.NO.getCode());
@@ -168,6 +174,11 @@ public class DeviceController extends AbstractController {
             sysUserService.updateDevCount(deviceEntity.getCreateUser(),1);
         }
         return R.ok();
+    }
+
+    @RequestMapping(value = "/getCommunicationType", method= RequestMethod.GET)
+    public R getCommunicationType(){
+        return R.ok(CommunicationTypeEnum.toList());
     }
 
     @RequestMapping(value = "/deleteDeviceCj", method= RequestMethod.GET)
@@ -292,18 +303,7 @@ public class DeviceController extends AbstractController {
     }
 
 
-    @RequestMapping(value = "/getDeviceType", method= RequestMethod.GET)
-    public R getDeviceType(){
-        Set<Map.Entry<String, String>> entries = DeviceTypeMap.DEVICE_TYPE.entrySet();
-        List<DeviceEntity> list = new ArrayList<>();
-        for(Map.Entry<String, String> entry : entries){
-            DeviceEntity deviceEntity = new DeviceEntity();
-            deviceEntity.setDeviceType(entry.getKey());
-            deviceEntity.setDeviceTypeName(entry.getValue());
-            list.add(deviceEntity);
-        }
-        return R.ok(list);
-    }
+
 
 
     @RequestMapping(value = "/updateEsFlag", method= RequestMethod.GET)
@@ -364,8 +364,10 @@ public class DeviceController extends AbstractController {
         logger.info("版本路径："+path+"type-"+type);
         File file = new File(path+"type-"+type);
         String[] list = file.list();
-        for (String str : list){
-            resultList.add(str.substring(0,str.lastIndexOf(".")));
+        if(list != null && list.length > 0){
+            for (String str : list){
+                resultList.add(str.substring(0,str.lastIndexOf(".")));
+            }
         }
         return resultList;
     }

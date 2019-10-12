@@ -129,7 +129,11 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                             value.add(Integer.valueOf(cacheUtils.get("LIVE").toString()));
                         }
                         if(deviceEntityApi != null){
-                            value.add(deviceEntityApi.getLink());
+                            if(deviceEntityApi.getTransport() != null){
+                                value.add(deviceEntityApi.getTransport());
+                            }else{
+                                value.add(0);
+                            }
                         }
                         result.setKey(list);
                         result.setValue(value);
@@ -389,7 +393,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                 //转换成数组
                 Byte [] newBytes = bytes1.toArray(new Byte[1024]);
                 result.setBin(newBytes);
-                log.info(deviceInfo.getDevSN()+"升级设备数据信息"+result.getNextCmdID());
+                log.info(deviceInfo.getDevSN()+"升级设备数据信息"+result.getNextCmdID()+"。共"+lists.size()+"份");
                 //转换成字节
                 byte[] bytes = HexConvert.updateVersionToBytes(result);
                 ByteBuf byteBuf = Unpooled.copiedBuffer(bytes);
@@ -442,8 +446,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                 index ++;
             }
         }
-
-        log.info("实时JSON数据："+JSONObject.toJSONString(common));
+        log.info(deviceInfo.getDevSN()+"：实时nextId："+deviceInfo.getNextCmdID());
+        log.info(deviceInfo.getDevSN()+"：实时JSON数据："+JSONObject.toJSONString(common));
 
 
 
@@ -523,7 +527,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     }
 
     private void refreshDevice(CommonEntity common, DeviceEntityApi deviceEntity,ChannelHandlerContext ctx) throws Exception {
-        if(common.getDeviceVersion() != deviceEntity.getDeviceVersion()){
+        if(!common.getDeviceVersion().equals(deviceEntity.getDeviceVersion())){
             Thread.sleep(1000);
             SetUp setUp = new SetUp();
             log.info(deviceEntity.getDeviceCode() + "设备没有操作成功，重新下发数据");

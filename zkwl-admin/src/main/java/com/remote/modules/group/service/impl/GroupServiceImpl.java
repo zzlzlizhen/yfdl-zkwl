@@ -4,17 +4,17 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.remote.common.enums.DeviceEnum;
-import com.remote.common.utils.DeviceTypeMap;
 import com.remote.modules.advancedsetting.entity.AdvancedSettingEntity;
 import com.remote.modules.advancedsetting.service.AdvancedSettingService;
 import com.remote.modules.device.entity.DeviceEntity;
 import com.remote.modules.device.entity.DeviceQuery;
 import com.remote.modules.device.service.DeviceService;
+import com.remote.modules.devicetype.entity.DeviceTypeEntity;
+import com.remote.modules.devicetype.service.DeviceTypeService;
 import com.remote.modules.group.dao.GroupMapper;
 import com.remote.modules.group.entity.GroupEntity;
 import com.remote.modules.group.entity.GroupQuery;
 import com.remote.modules.group.service.GroupService;
-import com.remote.modules.project.entity.ProjectEntity;
 import com.remote.modules.sys.service.SysUserService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -46,6 +46,9 @@ public class GroupServiceImpl implements GroupService {
     private DeviceService deviceService;
     @Autowired
     private AdvancedSettingService advancedSettingService;
+
+    @Autowired
+    private DeviceTypeService deviceTypeService;
 
     @Override
     public boolean addGroup(GroupEntity group) {
@@ -85,7 +88,8 @@ public class GroupServiceImpl implements GroupService {
                 groupEntity.setFaultCount(0);
                 DeviceEntity deviceEntity = deviceService.queryDeviceByGroupIdTopOne(groupId);
                 if(deviceEntity != null){
-                    groupEntity.setDeviceTypeName(DeviceTypeMap.DEVICE_TYPE.get(deviceEntity.getDeviceType()));
+                    DeviceTypeEntity deviceType = deviceTypeService.getDeviceTypeByCode(deviceEntity.getDeviceType(), 1);
+                    groupEntity.setDeviceTypeName(deviceType.getDeviceTypeName());
                 }else{
                     groupEntity.setDeviceTypeName("");
                 }
@@ -207,9 +211,15 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public List<GroupEntity> queryGroupIdNoPage(String projectId,Integer deviceStatus) {
+        if(deviceStatus == null){
+            deviceStatus = 1;
+        }
         GroupQuery groupQuery = new GroupQuery();
         groupQuery.setProjectId(projectId);
         List<GroupEntity> list = groupMapper.queryGroupByName(groupQuery);
+        if(deviceStatus.equals(8)){
+            return list;
+        }
         if(CollectionUtils.isNotEmpty(list)){
             for (GroupEntity groupEntity : list){
                 groupEntity.setDeviceCount(0);
@@ -327,12 +337,16 @@ public class GroupServiceImpl implements GroupService {
         return groupMapper.queryGroupByName(groupQuery);
     }
 
+    @Override
+    public GroupEntity selectGroupByName(String projectId, String groupName) {
+        return groupMapper.selectGroupByName(projectId,groupName);
+    }
+
     /**
      * 功能描述：初始化组高级设置参数
      * @param advancedSettingEntity
      */
     public void initAdvSet(AdvancedSettingEntity advancedSettingEntity){
-
         advancedSettingEntity.setLoadWorkMode(5);
         advancedSettingEntity.setPowerLoad(500);
         advancedSettingEntity.setTimeTurnOn(1080);
@@ -377,6 +391,9 @@ public class GroupServiceImpl implements GroupService {
         advancedSettingEntity.setTwoReducAmplitude(40);
         advancedSettingEntity.setThreeReducAmplitude(20);
         advancedSettingEntity.setSwitchDelayTime(15);
+        advancedSettingEntity.setCustomeSwitch(0);
+        advancedSettingEntity.setTemControlSwitch(0);
+        advancedSettingEntity.setLowPowerConsumption(0);
     }
 
 }

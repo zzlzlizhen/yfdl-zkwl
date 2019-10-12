@@ -24,6 +24,7 @@ $(function () {
     var pages
     var pageSize
     var pageNum
+    var J_t
     var select //组名
     var $color = localStorage.getItem("mycolor");
     //搜索
@@ -47,11 +48,10 @@ $(function () {
                 "pageNum": pagesa
             }),
             success: function (res) {
-                console.log("分组1111")
-                console.log(res)
                 pages = res.data.pages;
                 pageSize = res.data.pageSize;
-                pageNum = res.data.pageNum
+                pageNum = res.data.pageNum;
+                J_t=res.data.list.length;
                 var html=""
                 for (var i = 0; i < res.data.list.length; i++) {
                     //设备数量
@@ -142,26 +142,33 @@ $(function () {
                 $(".checkbox_i").click(function () {
                     var che_c=$(this).prop('checked');
                     if(che_c == true){
-                        $("#checkbox[name=all]:checkbox").prop('checked', true);
+                        $(this).parents("li").siblings("li").each(function() {
+                            $("#checkbox[name=all]:checkbox").prop('checked', true);
+                        })
                         var devId=$(this).parent().attr('id');
                         arr.push(devId);
                         var len=arr.length;
                         $("#mo_sp").html(len+"项");
                         $(".move_a").show();
+                        if(len == J_t){
+                            $("#checkbox[name=all]:checkbox").prop('checked', true);
+                        }
                     }
                     else if(che_c == false){
-                        if($(".checkbox_i").prop('checked') == true){
-                            $("#checkbox[name=all]:checkbox").prop('checked', true);
-                            $(".move_a").show();
-                        }else{
-                            $("#checkbox[name=all]:checkbox").prop('checked', false);
-                            $(".move_a").hide();
-                        }
+                        $("#checkbox[name=all]:checkbox").prop('checked', false);
                         var devId=$(this).parent().attr('id');
                         var index = arr.indexOf(devId);
                         arr.splice(index, 1);
                         var len=arr.length;
                         $("#mo_sp").html(len+"项");
+                        if(len < J_t){
+                            $("#checkbox[name=all]:checkbox").prop('checked', false);
+                        }
+                    }
+                    if($(".checkbox_i[name=clk]:checkbox:checked").length>0){
+                        $(".move_a").show();
+                    }else{
+                        $(".move_a").hide();
                     }
                 })
 
@@ -283,6 +290,9 @@ $(function () {
                     nextPageText: "下一页",
                     callback: function (current) {
                         //当前页数current
+                        $("#checkbox[name=all]:checkbox").prop('checked', false);
+                        $(".move_a").hide();
+                        $("#mo_sp").html("");
                         var pagesb = current
                         $("#div").html("");
                         form(pageSize, pagesb,select);

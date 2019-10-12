@@ -1,4 +1,3 @@
-
 $(function() {
     $(window).on('resize', function () {
         var $content = $('#larry-tab .layui-tab-content');
@@ -98,11 +97,9 @@ var vm = new Vue({
         this.getMenuList();
         this.getUser();
     },updated:function(){
-
         if($("#larry-side .layui-nav-item>a").length==0 || !isquery){
             return;
         }
-        console.log("执行")
         isquery=false;
         layui.config({
             base: 'statics/js/',
@@ -117,7 +114,6 @@ var vm = new Vue({
             $('#larry-nav-side').children('ul').find('li').each(function () {
                 var $this = $(this);
                 if ($this.find('dl').length > 0) {
-
                     var $dd = $this.find('dd').each(function () {
                         $(this).on('click', function () {
                             var $a = $(this).children('a');
@@ -133,7 +129,6 @@ var vm = new Vue({
                         });
                     });
                 } else {
-
                     $this.on('click', function () {
                         var $a = $(this).children('a');
                         var href = $a.data('url');

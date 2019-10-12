@@ -2,10 +2,15 @@
 package com.remote.sys.controller;
 
 import com.remote.common.errorcode.ErrorCode;
-import com.remote.common.utils.DateUtils;
-import com.remote.common.utils.PageUtils;
-import com.remote.common.utils.R;
-
+import com.remote.common.errorcode.ErrorMsg;
+import com.remote.common.utils.*;
+import com.remote.oss.entity.SysOssEntity;
+import com.remote.oss.service.SysOssService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import org.springframework.beans.factory.annotation.Value;
 
 
 import com.remote.device.service.DeviceService;
@@ -20,11 +25,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -35,6 +38,8 @@ import java.util.Map;
 public class SysUserController extends AbstractController {
 	@Autowired
 	private SysUserService sysUserService;
+	@Autowired
+	private SysOssService sysOssService;
 	@Autowired
 	private ProjectService projectService;
 	@Autowired
@@ -74,7 +79,7 @@ public class SysUserController extends AbstractController {
 			msg = "用户信息查询异常";
 			logger.error(ErrorCode.X_ABNORMAL + msg);
 			e.printStackTrace();
-			return R.ok(msg);
+			return R.error(msg);
 		}
 	/*	List<String> realName = new ArrayList<String>();
         for(SysUserEntity sysUserEntity:sysUserEntities){
@@ -102,7 +107,7 @@ public class SysUserController extends AbstractController {
 			msg = "用户信息列表查询异常";
 			logger.error(ErrorCode.X_ABNORMAL + msg);
 			e.printStackTrace();
-			return R.ok(msg);
+			return R.error(msg);
 		}
 		return R.ok().put("page", page);
 	}
@@ -111,7 +116,7 @@ public class SysUserController extends AbstractController {
 	 */
 	@RequestMapping(value = "/save",method = RequestMethod.POST)
 	public R save(SysUserEntity user){
-
+		logger.info("小程序保存用户入参:" + user.toString());
 		if(StringUtils.isNotBlank(user.getUsername())){
 			SysUserEntity sysUserEntity =null;
 			try {
@@ -125,7 +130,7 @@ public class SysUserController extends AbstractController {
 				msg = "用户信息查询异常";
 				logger.error(ErrorCode.X_ABNORMAL + msg);
 				e.printStackTrace();
-				return R.ok(msg);
+				return R.error(msg);
 			}
 
 		}
@@ -143,7 +148,7 @@ public class SysUserController extends AbstractController {
 				msg = "用户信息查询异常";
 				logger.error(ErrorCode.X_ABNORMAL + msg);
 				e.printStackTrace();
-				return R.ok(msg);
+				return R.error(msg);
 			}
 		}
 		if(StringUtils.isNotBlank(user.getMobile())){
@@ -159,7 +164,7 @@ public class SysUserController extends AbstractController {
 				msg = "用户信息查询异常";
 				logger.error(ErrorCode.X_ABNORMAL + msg);
 				e.printStackTrace();
-				return R.ok(msg);
+				return R.error(msg);
 			}
 		}
 		if(user.getTermOfValidity()==null){
@@ -176,7 +181,7 @@ public class SysUserController extends AbstractController {
 			d = DateUtils.addDateMonths(new Date(),6);
 		}
 		user.setFlag(1);
-
+		user.setUpdateUser(user.getCurUid());
 		user.setDeadline(d);
 		try {
 			sysUserService.saveUser(user);
@@ -192,8 +197,9 @@ public class SysUserController extends AbstractController {
 	/**
 	 * 删除用户
 	 */
-	@RequestMapping(value = "/delete" ,method = RequestMethod.POST)
+	@RequestMapping(value = "/delete" ,method = RequestMethod.GET)
 	public R delete(Long userId,Long curUserId){
+		logger.info("小程序删除用户入参" + userId + "---" + curUserId );
 		if(userId==null){
 			msg = "数据不能为空";
 			logger.error(ErrorCode.X_NOT_EMPTY + msg);
@@ -210,7 +216,23 @@ public class SysUserController extends AbstractController {
 			return R.error(msg);
 		}
 		int falg = 0;
+		SysUserEntity sysUserEntity = new SysUserEntity();
 		try {
+			sysUserEntity.setUserId(userId);
+			List<SysUserEntity> userList  = sysUserService.queryChild(sysUserEntity);
+			if(CollectionUtils.isEmpty(userList)||userList.size()>0){
+				if(userList.size() > 1){
+					msg = "当前用户有下级用户，不能删除";
+					logger.error(ErrorCode.X_ABNORMAL+msg);
+					return R.error(msg);
+				}
+			}
+			int proCount = projectService.queryProjectByUserCount(userId);
+			if(proCount != 0){
+				msg = "当前用户以及下级用户有项目，不能删除";
+				logger.error(ErrorCode.X_ABNORMAL+msg);
+				return R.error(msg);
+			}
 			falg = sysUserService.removeUser(userId);
 			if(falg <= 0){
 				msg = "删除失败";
@@ -224,5 +246,50 @@ public class SysUserController extends AbstractController {
 		}
 		return R.ok();
 	}
+	@Value("${server.file.path}")
+	private String fileSpace;
 
+	@ApiOperation(value="用户上传头像",notes="用户上传头像的接口")
+	@PostMapping(value="/uploadFace")
+	public R uploadFace(@ApiParam(value="图片",required=true) MultipartFile file) {
+	/*	if (userId == null) {
+			return R.error("用户id不能为空...");
+		}*/
+		// 文件保存的命名空间
+		String fileName = file.getOriginalFilename();
+		// 保存到数据库中的相对路径
+		String path = "";
+		try {
+			path = FileUtil.uploadFile(file.getBytes(), fileSpace, FileUtil.renameToUUID(fileName));
+		} catch (Exception e) {
+			e.getStackTrace();
+			return R.error(e.getMessage());
+		}
+		SysOssEntity sysOssEntity = new SysOssEntity();
+		sysOssEntity.setCreateDate(new Date());
+		sysOssEntity.setUrl(path);
+		boolean falg = sysOssService.save(sysOssEntity);
+		if(!falg){
+			return R.error("图片保存失败");
+		}
+		return R.ok().put("path",path);
+	}
+	/**
+	 * 用户信息
+	 */
+	@RequestMapping("/info/{userId}")
+/*	@RequiresPermissions("sys:user:info")*/
+	public R info(@PathVariable("userId") Long userId){
+		if(userId == null){
+			return R.error("用户id不能为空");
+		}
+		SysUserEntity user = sysUserService.getById(userId);
+		if(user == null){
+			return R.error("用户不存在");
+		}
+		//获取用户所属的角色列表
+		/*List<Long> roleIdList = sysUserRoleService.queryRoleIdList(userId);
+		user.setRoleIdList(roleIdList);*/
+		return R.ok().put("user", user);
+	}
 }

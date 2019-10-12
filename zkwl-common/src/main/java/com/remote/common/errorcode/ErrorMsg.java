@@ -12,4 +12,10 @@ public class ErrorMsg {
         logger.error(stringBuffer.toString());
         return R.error(msg);
     }
+    public static R rightMsg(Class cl,String errorType,String msg){
+        Logger  logger = LoggerFactory.getLogger(cl);
+        StringBuffer stringBuffer = new StringBuffer("类名:").append(cl.getName()).append(";-----日志码:").append(errorType).append(";-----日志信息:").append(msg);
+        logger.error(stringBuffer.toString());
+        return R.error(msg);
+    }
 }

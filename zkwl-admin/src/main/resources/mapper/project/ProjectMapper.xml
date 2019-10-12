@@ -37,6 +37,17 @@
         </where>
     </select>
 
+
+    <select id="queryProjectByCode" resultMap="BaseResultMap" >
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        fun_project
+        <where>
+            is_del = 0 and project_code = #{projectCode}
+        </where>
+    </select>
+
     <select id="queryProjectByUserIds" parameterType="com.remote.modules.project.entity.ProjectQuery" resultMap="BaseResultMap" >
         SELECT
         <include refid="Base_Column_List"/>
@@ -57,12 +68,31 @@
                 AND project_name LIKE CONCAT('%', #{projectQuery.projectName}, '%')
             </if>
             <if test="projectQuery.userName !=null and projectQuery.userName!=''">
-                AND exclusive_user LIKE CONCAT('%', #{projectQuery.userName}, '%')
+                AND exclusive_user = #{projectQuery.userName}
             </if>
         </where>
         order by create_time desc
     </select>
 
+
+    <select id="queryProjectExcel" parameterType="com.remote.modules.project.entity.ProjectQuery" resultMap="BaseResultMap" >
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        fun_project
+        <where>
+            is_del = 0
+            <if test="userIds !=null and userIds.size()!= 0">
+                AND exclusive_user in
+                <foreach collection="userIds" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="projectName !=null and projectName!=''">
+                AND project_name = #{projectName}
+            </if>
+        </where>
+    </select>
 
     <update id="delProject">
         update fun_project set is_del = 1,update_user = #{updateUser},update_time = #{updateTime}

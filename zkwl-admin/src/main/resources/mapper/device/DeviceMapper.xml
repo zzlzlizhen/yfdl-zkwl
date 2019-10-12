@@ -57,8 +57,8 @@
 
     <sql id="Base_Column_List" >
     device_id, device_code,device_name, group_id, device_type, photocell_state, battery_state,load_state,signal_state,transport,gprs_flag,link,
-    run_state,light,communication_type,on_off,longitude,latitude,is_del,create_user,create_name,create_time,gprs_version,gprs_future_version
-    update_user,update_time,project_id,battery_margin,battery_voltage,photovoltaic_cell_voltage,charging_current,future_version,future_flag
+    run_state,light,communication_type,on_off,longitude,latitude,is_del,create_user,create_name,create_time,gprs_version,gprs_future_version,
+    update_user,update_time,project_id,battery_margin,battery_voltage,photovoltaic_cell_voltage,charging_current,future_version,future_flag,
     charging_power,load_voltage,load_power,load_current,lighting_duration,morning_hours,city_name,version,group_name,device_type_name,usr_user
     </sql>
 
@@ -216,6 +216,22 @@
             </if>
         </where>
     </update>
+
+    <insert id="insertList" parameterType="java.util.List" >
+        insert into fun_device (device_id, device_code,device_name, group_id, device_type, signal_state,
+        transport,run_state,light,communication_type,on_off,is_del,create_user,create_name,create_time,
+        project_id,city_name,group_name,device_type_name,usr_user)
+        values
+        <foreach collection="list" item="item" index="index" separator="," >
+            (
+            #{item.deviceId}, #{item.deviceCode}, #{item.deviceName},#{item.groupId},#{item.deviceType},#{item.signalState},
+            #{item.transport}, #{item.runState}, #{item.light},#{item.communicationType}, #{item.onOff},#{item.isDel}, #{item.createUser}, #{item.createName}, #{item.createTime},
+            #{item.projectId},#{item.cityName},#{item.groupName},#{item.deviceTypeName},#{item.usrUser}
+            )
+        </foreach>
+
+    </insert>
+
 
     <update id="updateDeviceRunStatus">
         update fun_device set

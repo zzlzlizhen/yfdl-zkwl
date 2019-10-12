@@ -177,6 +177,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	public int removeUser(Long uid) throws Exception{
 		SysUserEntity userEntity = new SysUserEntity();
 		userEntity.setFlag(0);
+		userEntity.setUpdateUser(uid);
+		userEntity.setUpdateTime(new Date());
 		return this.baseMapper.update(userEntity,
 				new QueryWrapper<SysUserEntity>().eq("user_id", uid));
 	}
@@ -203,7 +205,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 		return sysUserDao.queryByEmailAndUid(email,userId);
 	}
 	/**
-	 * 通过邮箱查询该用户是否存在
+	 * 通过用户名查询该用户是否存在
 	 * */
 	@Override
 	public SysUserEntity getByUsername(String username) throws Exception{

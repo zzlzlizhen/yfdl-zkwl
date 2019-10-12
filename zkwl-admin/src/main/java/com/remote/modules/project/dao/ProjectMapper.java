@@ -67,4 +67,20 @@ public interface ProjectMapper extends BaseMapper<ProjectEntity> {
      * */
     List<Long> queryExclusiveIds(@Param("projectIds")List<String> projectIds);
 
+    /*
+     * @Author zhangwenping
+     * @Description 根据项目名称查询项目详情
+     * @Date 16:06 2019/10/10
+     * @Param userIds projectName
+     * @return ProjectEntity
+     **/
+    ProjectEntity queryProjectExcel(@Param("userIds") List<Long> userIds,@Param("projectName")String projectName);
+    /*
+     * @Author zhangwenping
+     * @Description 根据项目编号查询项目信息
+     * @Date 10:53 2019/10/11
+     * @Param projectCode
+     * @return ProjectEntity
+     **/
+    ProjectEntity queryProjectByCode(@Param("projectCode")String projectCode);
 }

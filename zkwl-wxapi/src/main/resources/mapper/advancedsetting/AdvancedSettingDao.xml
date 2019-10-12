@@ -53,13 +53,16 @@
         fir_reduc_amplitude as firReducAmplitude,
         two_reduc_amplitude as twoReducAmplitude,
         three_reduc_amplitude as threeDownPower,
-        switch_delay_time as switchDelayTime
+        switch_delay_time as switchDelayTime,
+        tem_control_switch as temControlSwitch,
+        custome_switch as customeSwitch,
+        low_power_consumption as lowPowerConsumption
     </sql>
     <select id="queryByGroupId" resultType="com.remote.advancedsetting.entity.AdvancedSettingEntity">
-          select <include refid="colums"/> from advanced_setting where 1=1
-          <if test="groupId!= '' and groupId!=null">
-              and group_id=#{groupId}
-          </if>
+        select <include refid="colums"/> from advanced_setting where 1=1
+        <if test="groupId!= '' and groupId!=null">
+            and group_id=#{groupId}
+        </if>
     </select>
     <select id="queryByDeviceCode" resultType="com.remote.advancedsetting.entity.AdvancedSettingEntity">
         select <include refid="colums"/> from advanced_setting where 1=1

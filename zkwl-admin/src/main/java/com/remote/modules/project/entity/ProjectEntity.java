@@ -44,5 +44,4 @@ public class ProjectEntity {
     private String latitude;
     //使用者姓名
     private String exclusiveUserName;
-
 }

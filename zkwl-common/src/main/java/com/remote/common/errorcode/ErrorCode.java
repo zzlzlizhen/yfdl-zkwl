@@ -34,7 +34,10 @@ public class ErrorCode {
      * 6结束代表对数据库增删改查发生异常
      */
     public static final String ABNORMAL = "10006";
-
+    /**
+     * 7只用于打印普通日志
+     */
+    public static final String LOGGER="1007";
     /**
      * 1结束的代表数据的合法性和必要性检查
      * 非空

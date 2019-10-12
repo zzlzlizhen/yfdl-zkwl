@@ -1,11 +1,12 @@
 package com.remote.modules.history.service;
 
 import com.remote.modules.history.entity.QueryHistory;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
 
-
+@Transactional
 public interface HistoryService {
     /*
      * @Author zhangwenping

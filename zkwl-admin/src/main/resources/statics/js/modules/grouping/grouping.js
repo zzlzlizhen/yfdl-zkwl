@@ -46,14 +46,10 @@ $(function(){
 
     //项目id
     var  Id=href['projectId'];
-    console.log(projectStatus)
-    console.log(faultCount)
-    console.log(gatewayCount)
-    console.log(sumCount)
-    console.log(Id)
     var pages
     var pageSize
     var pageNum
+    var J_t
     var $color = localStorage.getItem("mycolor");
     $.ajax({
         url:baseURL + 'fun/group/queryGroupNoPage?projectId='+Id,
@@ -69,14 +65,14 @@ $(function(){
         }
     })
     $.ajax({
-        url:baseURL + 'fun/device/getDeviceType',
+    url:baseURL + 'fun/deviceType/getDeviceType',
         contentType: "application/json;charset=UTF-8",
         type:"get",
         data:{},
         success: function(res) {
             var html=""
             for (var i = 0; i < res.data.length; i++) {
-                html += "<option class='option opti_a' id="+res.data[i].deviceType+">"+res.data[i].deviceTypeName+"</option>\n"
+                html += "<option class='option opti_a' id="+res.data[i].deviceTypeCode +">"+res.data[i].deviceTypeName+"</option>\n"
             }
             $("#se_fora").append(html)
         }
@@ -135,11 +131,10 @@ $(function(){
                 "groupId":selectr//分组id
             }),
             success: function (res) {
-                console.log("项目下设备数据")
-                console.log(res)
                 pages=res.data.pages;
                 pageSize=res.data.pageSize;
-                pageNum=res.data.pageNum
+                pageNum=res.data.pageNum;
+                J_t=res.data.list.length;
                 var html=""
                 for (var i = 0; i < res.data.list.length; i++) {
                     //光电池状态
@@ -288,7 +283,6 @@ $(function(){
                     var name=$(this).parent().siblings(".r_name").html();
                     var deviceId=$(this).parent().attr("id");
                     var projectId=$(this).parent().attr("projectId");
-
                     var searchUrl=encodeURI('../control/control.html?deviceCode='+deviceCode+"&grod="+grod+"&type="+type+"&name="+name+"&deviceId="+deviceId+"&projectId="+projectId)
                     location.href =searchUrl;
                 })
@@ -318,33 +312,41 @@ $(function(){
                         });
                     }
                 });
-                //单选
+               // 单选
                 $('.checkbox_i[name="clk"]').click(function () {
-                    var che_c=$(this).prop('checked');
-                    if(che_c == true){
-                        $("#checkbox[name=all]:checkbox").prop('checked', true);
-                        var devId=$(this).parent().attr('id');
-                            arr.push(devId)
-                        var len=arr.length;
-                        $("#mo_sp").html(len+"项");
-                        $(".move_a").show();
-                    }
-                    else if(che_c == false){
-                        if($(".checkbox_i").prop('checked') == true){
+                    var che_c = $(this).prop('checked');
+                    if (che_c == true) {
+                        $(this).parents("li").siblings("li").each(function() {
                             $("#checkbox[name=all]:checkbox").prop('checked', true);
-                            $(".move_a").show();
-
-                        }else{
-                            $("#checkbox[name=all]:checkbox").prop('checked', false);
-                            $(".move_a").hide();
+                        })
+                        var devId = $(this).parent().attr('id');
+                        arr.push(devId)
+                        var len = arr.length;
+                        $("#mo_sp").html(len + "项");
+                        $(".move_a").show();
+                        if(len == J_t){
+                            $("#checkbox[name=all]:checkbox").prop('checked', true);
                         }
-                        var devId=$(this).parent().attr('id');
+                    }
+                    else if (che_c == false) {
+                        $("#checkbox[name=all]:checkbox").prop('checked', false);
+                        var devId = $(this).parent().attr('id');
                         var index = arr.indexOf(devId);
-                            arr.splice(index, 1);
-                        var len=arr.length;
-                        $("#mo_sp").html(len+"项")
+                        arr.splice(index, 1);
+                        var len = arr.length;
+                        $("#mo_sp").html(len + "项")
+                        if(len < J_t){
+                           $("#checkbox[name=all]:checkbox").prop('checked', false);
+                        }
+                    }
+                    if($(".checkbox_i[name=clk]:checkbox:checked").length>0){
+                        clearInterval(t);
+                        $(".move_a").show();
+                    }else{
+                        $(".move_a").hide();
                     }
                 })
+
 
                 // 批量删除
                 $("#deleteAll").unbind('click');
@@ -541,6 +543,9 @@ $(function(){
                     nextPageText: "下一页",
                     callback: function(current) {
                         //当前页数current
+                        $("#checkbox[name=all]:checkbox").prop('checked', false);
+                        $(".move_a").hide();
+                        $("#mo_sp").html("");
                         var pagesb = current
                         $("#div").html("");
                         form(pageSize, pagesb,Se_id,Se_name,select,selecta,selectr);
@@ -677,8 +682,6 @@ $(function(){
             var cut_a=Cheng_s.substring(1);
             var cut_b=cut_a.substring(0,cut_a.length-2);
             $('#weather').html(cut_b);
-            console.log("城市");
-            console.log(data);
             //天气
             $.ajax({
                 url:'http://wthrcdn.etouch.cn/weather_mini?city='+cut_b,
@@ -709,28 +712,6 @@ $(function(){
                                 $("#img").attr("src","/statics/image/rbingbao.svg");
                             }
                         }
-
-
-                    // if(data.data.forecast[0].type== "多云"){
-                    //     // console.log(data.data.forecast[0].type)
-                    //     $("#img").attr("src","/statics/image/duoyun.svg");
-                    // }else if(data.data.forecast[0].type== "晴"){
-                    //     $("#img").attr("src","/statics/image/qing.svg");
-                    // }else if(data.data.forecast[0].type== "雨"){
-                    //     $("#img").attr("src","/statics/image/yu.svg");
-                    // }else if(data.data.forecast[0].type== "小雨"){
-                    //     $("#img").attr("src","/statics/image/xiaoyu.svg");
-                    // }else if(data.data.forecast[0].type== "阵雨"){
-                    //     $("#img").attr("src","/statics/image/zhenyu.svg");
-                    // }else if(data.data.forecast[0].type== "雪"){
-                    //     $("#img").attr("src","/statics/image/xue.svg");
-                    // }else if(data.data.forecast[0].type== "阴"){
-                    //     $("#img").attr("src","/statics/image/yintian.svg");
-                    // }else if(data.data.forecast[0].type== "雨夹雪"){
-                    //     $("#img").attr("src","/statics/image/yujiaxue.svg");
-                    // }else if(data.data.forecast[0].type== "雷阵雨"){
-                    //     $("#img").attr("src","/statics/image/zhenyu.svg");
-                    // }
                     $("#T_an").html(T_an);
                 }
             })

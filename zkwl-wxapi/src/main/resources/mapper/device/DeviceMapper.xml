@@ -47,10 +47,10 @@
     </resultMap>
 
     <sql id="Base_Column_List" >
-    device_id, device_code,device_name, group_id, device_type, photocell_state, battery_state,load_state,signal_state,transport,
-    run_state,light,communication_type,on_off,longitude,latitude,is_del,create_user,create_name,create_time,
-    update_user,update_time,project_id,battery_margin,battery_voltage,photovoltaic_cell_voltage,charging_current,
-    charging_power,load_voltage,load_power,load_current,lighting_duration,morning_hours,city_name,group_name,device_type_name,usr_user
+        device_id, device_code,device_name, group_id, device_type, photocell_state, battery_state,load_state,signal_state,transport,
+        run_state,light,communication_type,on_off,longitude,latitude,is_del,create_user,create_name,create_time,
+        update_user,update_time,project_id,battery_margin,battery_voltage,photovoltaic_cell_voltage,charging_current,
+        charging_power,load_voltage,load_power,load_current,lighting_duration,morning_hours,city_name,group_name,device_type_name,usr_user
     </sql>
     <select id="queryDevice" parameterType="com.remote.device.entity.DeviceQuery" resultMap="BaseResultMap" >
         SELECT
@@ -87,6 +87,16 @@
             AND device_id =#{deviceId}
         </where>
     </select>
+
+    <delete id="deleteDeviceCj">
+        delete from fun_device where cj_flag = 1
+        <if test="deviceList !=null and deviceList.size()!= 0">
+            and device_id in
+            <foreach collection="deviceList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </delete>
 
     <select id="queryDeviceByProjectCount" resultMap="BaseResultMap" >
         select
@@ -154,7 +164,18 @@
             </if>
         </where>
     </update>
-
+    <select id="queryDeviceByCodes" resultMap="BaseResultMap" >
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        fun_device
+        <where>
+            device_code in
+            <foreach collection="deviceCodes" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </where>
+    </select>
 
     <update id="updateById" parameterType="com.remote.device.entity.DeviceEntity">
         update fun_device
@@ -237,6 +258,9 @@
             <if test="lightingDuration != null">
                 lighting_duration = #{lightingDuration},
             </if>
+            <if test="transport != null">
+                transport = #{transport},
+            </if>
             <if test="morningHours != null">
                 morning_hours = #{morningHours},
             </if>
@@ -254,6 +278,9 @@
         </if>
         <if test="deviceQuery.light != null">
             light = #{deviceQuery.light},
+        </if>
+        <if test="deviceQuery.transport != null">
+            transport = #{deviceQuery.transport},
         </if>
         <if test="deviceQuery.lightingDuration != null">
             lighting_duration = #{deviceQuery.lightingDuration},

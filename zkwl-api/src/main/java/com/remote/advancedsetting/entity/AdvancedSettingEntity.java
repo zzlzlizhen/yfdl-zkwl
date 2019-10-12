@@ -219,4 +219,8 @@ public class AdvancedSettingEntity{
 	 * 开关灯延时时间
 	 * */
 	private Integer switchDelayTime;
+	/**
+	 * 低功耗
+	 * */
+	private Integer lowPowerConsumption;
 }

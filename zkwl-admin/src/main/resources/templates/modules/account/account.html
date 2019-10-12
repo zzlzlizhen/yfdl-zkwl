@@ -1,4 +1,3 @@
-<#import "/spring.ftl" as spring/>
 <!DOCTYPE html>
 <html>
 <head>
@@ -64,7 +63,7 @@
 <div class="table_m table_m_Z">
     <ul>
         <li>账号ID</li>
-        <li><@spring.message code="message.login.username"/></li>
+        <li>账号</li>
         <li>用户名</li>
         <li>项目数</li>
         <li>设备数</li>
@@ -96,7 +95,7 @@
             <span class="glyphicon glyphicon-remove wrong"></span>
         </div>
         <span class="sha_span">
-            <p> <span  style="color: red">*</span><@spring.message code="message.login.username"/>：</p>
+            <p> <span  style="color: red">*</span>账号：</p>
             <input type="text" placeholder="请填写" id="acc_number">
         </span>
         <span class="sha_span">

@@ -29,4 +29,14 @@
         </where>
     </select>
 
+
+    <select id="getDeviceType"  resultMap="BaseResultMap" >
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        fun_device_type
+        <where>
+            file_type = #{type}
+        </where>
+    </select>
 </mapper>

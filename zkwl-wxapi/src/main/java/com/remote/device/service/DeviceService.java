@@ -1,11 +1,14 @@
 package com.remote.device.service;
 
 import com.github.pagehelper.PageInfo;
+import com.remote.common.utils.R;
 import com.remote.device.entity.DeviceEntity;
 import com.remote.device.entity.DeviceQuery;
+import com.remote.device.entity.DeviceResult;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
+@Transactional
 public interface DeviceService {
 
     /*
@@ -66,7 +69,7 @@ public interface DeviceService {
      * @Param deviceEntity
      * @return boolean
      **/
-    boolean updateById(DeviceEntity deviceEntity);
+    R updateById(DeviceEntity deviceEntity);
 
     /*
      * @Author chengpunan
@@ -110,4 +113,20 @@ public interface DeviceService {
      * @return
      */
     String queryByDevCode(String deviceCode);
+    /*
+ * @Author zhangwenping
+ * @Description 查询分组详情
+ * @Date 17:26 2019/6/19
+ * @Param deviceId
+ * @return DeviceEsEntity
+ **/
+    DeviceResult queryDeviceByDeviceId(String deviceId);
+    /*
+     * @Author zhangwenping
+     * @Description 厂家删除设备
+     * @Date 17:33 2019/8/31
+     * @Param list
+     * @return boolean
+     **/
+    boolean deleteDeviceCj(List<String> list);
 }

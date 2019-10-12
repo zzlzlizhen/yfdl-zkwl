@@ -39,7 +39,7 @@ public class AdvancedSettingController extends AbstractController{
         }
         AdvancedSettingEntity advancedSettingEntity = null;
         try {
-            advancedSettingEntity = advancedSettingService.queryByDevOrGroupId(groupId.trim(),deviceCode.trim());
+            advancedSettingEntity = advancedSettingService.queryByDevOrGroupId(groupId,deviceCode);
             if(advancedSettingEntity == null){
                 ErrorMsg.errorMsg(asc,ErrorCode.DATA_QUERY_CHECKING,"查询设备高级设置信息为空");
             }

@@ -186,6 +186,13 @@ public interface DeviceMapper extends BaseMapper<DeviceEntity> {
      * @return int
      **/
     int deleteDeviceCj(@Param("deviceList")List<String> deviceList);
-
+    /*
+     * @Author zhangwenping
+     * @Description 批量添加
+     * @Date 17:07 2019/10/10
+     * @Param list
+     * @return int
+     **/
+    int insertList(@Param("list")List<DeviceEntity> list);
 }
 

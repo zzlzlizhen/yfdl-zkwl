@@ -109,6 +109,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
     public int removeUser(Long userId) throws Exception{
         SysUserEntity userEntity = new SysUserEntity();
         userEntity.setFlag(0);
+        userEntity.setUpdateUser(userId);
         return this.baseMapper.update(userEntity,
                 new QueryWrapper<SysUserEntity>().eq("user_id", userId));
     }

@@ -3,9 +3,11 @@ package com.remote.modules.group.service;
 import com.github.pagehelper.PageInfo;
 import com.remote.modules.group.entity.GroupEntity;
 import com.remote.modules.group.entity.GroupQuery;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
+@Transactional
 public interface GroupService {
     /*
      * @Author zhangwenping
@@ -90,4 +92,14 @@ public interface GroupService {
      * @return List<GroupEntity>
      **/
     List<GroupEntity> queryGroup(String projectId, String groupName);
+
+
+    /*
+     * @Author zhangwenping
+     * @Description 根据名称和项目查询分组信息
+     * @Date 16:26 2019/10/10
+     * @Param  projectId groupName
+     * @return GroupEntity
+     **/
+    GroupEntity selectGroupByName(String projectId, String groupName);
 }

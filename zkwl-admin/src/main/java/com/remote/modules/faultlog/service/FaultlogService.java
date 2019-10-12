@@ -1,6 +1,7 @@
 package com.remote.modules.faultlog.service;
 
 import com.remote.modules.faultlog.entity.FaultlogEntity;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,5 +21,6 @@ public interface FaultlogService {
      * @Param faultlogEntity
      * @return boolean
      **/
+    @Transactional
     boolean addFaultlog(FaultlogEntity faultlogEntity);
 }

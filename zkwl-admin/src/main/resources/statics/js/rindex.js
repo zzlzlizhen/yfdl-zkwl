@@ -9,8 +9,6 @@ $(function(){
             url:  'sys/user/baseInfo',
             type: "POST",
             success: function (res) {
-                console.log("修改账户信息")
-                console.log(res);
                 if (res.code == "200") {
                     // var r_header_img = res.user.headUrl;
                     // 图片
@@ -46,7 +44,7 @@ $(function(){
                     }
 
                 } else {
-                    console.log(res.msg);
+
                 }
             }
         })
@@ -87,14 +85,12 @@ $(function(){
             // 邮箱
             if (!patrn2.exec(r_eml_fan)) {
                 $(".rrbol").html("邮箱错误");
-                console.log("邮箱错误");
                 $(".mistake").css("display","block");
                 return false;
             }
             //手机号错误
             if (!patrn1.exec(r_ph_fan)){
                 $(".rrbol").html("手机号错误");
-                console.log("手机号错误");
                 $(".rrbol").html("手机号错误");
                 $(".mistake").css("display","block");
                 return false;
@@ -109,9 +105,7 @@ $(function(){
                 "&mobile=" + r_ph_fan +
                 "&title=" + rTitle,
                 success: function (res) {
-                    console.log(JSON.stringify(res));
                     if (res.code == "200") {
-                       // alert('提交成功');
                         $(".mistake").hide();
                         layer.open({
                             title: '信息',
@@ -124,7 +118,6 @@ $(function(){
                         $("#r_wen_fan").val("");
                         $(".JI_b_a,.nei_r_a,.shade_a").hide();
                     } else {
-                        //alert(res.msg);
                         layer.open({
                             title: '信息',
                             content: 'res.msg',

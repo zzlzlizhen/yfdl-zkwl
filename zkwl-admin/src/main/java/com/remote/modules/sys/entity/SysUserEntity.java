@@ -107,7 +107,7 @@ public class SysUserEntity implements Serializable {
 
 	private Date updateTime;
 
-	private Integer updateUser;
+	private Long updateUser;
 
 	private String realName;//真实姓名
 

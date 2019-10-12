@@ -212,6 +212,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public List<ProjectEntity> queryProjectNoPage(Long userId,Integer deviceStatus) {
         List<SysUserEntity> userList = sysUserService.queryAllLevel(userId);
+
         if(CollectionUtils.isNotEmpty(userList)){
             List<Long> transform = userList.parallelStream().map(sysUserEntity -> sysUserEntity.getUserId()).collect(Collectors.toCollection(ArrayList::new));
             ProjectQuery projectQuery = new ProjectQuery();
@@ -400,6 +401,19 @@ public class ProjectServiceImpl implements ProjectService {
     public List<Long> queryExclusiveIds(List<String> projectIds) {
         return projectMapper.queryExclusiveIds(projectIds);
     }
+
+    @Override
+    public ProjectEntity queryProjectExcel(Long userId, String projectName) {
+        List<SysUserEntity> userList = sysUserService.queryAllLevel(userId);
+        List<Long> userIds = userList.parallelStream().map(sysUserEntity -> sysUserEntity.getUserId()).collect(Collectors.toCollection(ArrayList::new));
+        return projectMapper.queryProjectExcel(userIds,projectName);
+    }
+
+    @Override
+    public ProjectEntity queryProjectByCode(String projectCode) {
+        return projectMapper.queryProjectByCode(projectCode);
+    }
+
 
     @Override
     public ProjectResult queryProjectById(String projectId,String groupId) {

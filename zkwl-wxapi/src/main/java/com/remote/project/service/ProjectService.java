@@ -4,6 +4,7 @@ package com.remote.project.service;
 import com.github.pagehelper.PageInfo;
 import com.remote.project.entity.ProjectEntity;
 import com.remote.project.entity.ProjectQuery;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import java.util.List;
  * @Description 项目信息
  * @Date 14:20 2019/5/31
  **/
+@Transactional
 public interface ProjectService {
     /*
      * @Author zhangwenping

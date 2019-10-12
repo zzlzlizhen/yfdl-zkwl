@@ -104,5 +104,29 @@ public interface DeviceMapper extends BaseMapper<DeviceEntity> {
  * @return  List<DeviceEsEntity>
  **/
     List<DeviceEntity> queryDeviceByDeviceIds(@Param("deviceIds") List<String> deviceIds);
+    /*
+ * @Author zhangwenping
+ * @Description 查询分组详情
+ * @Date 17:26 2019/6/19
+ * @Param deviceId
+ * @return DeviceEsEntity
+ **/
+    DeviceEntity queryDeviceByDeviceId(@Param("deviceId")String deviceId);
+    /*
+     * @Author zhangwenpiung
+     * @Description 厂家删除设备
+     * @Date 17:34 2019/8/31
+     * @Param deviceList
+     * @return int
+     **/
+    int deleteDeviceCj(@Param("deviceList")List<String> deviceList);
+    /*
+ * @Author zhangwenping
+ * @Description 通过code获取设备
+ * @Date 10:18 2019/8/27
+ * @Param deviceCodes
+ * @return  List<DeviceEntity>
+ **/
+    List<DeviceEntity> queryDeviceByCodes(@Param("deviceCodes") List<String> deviceCodes);
 }
 

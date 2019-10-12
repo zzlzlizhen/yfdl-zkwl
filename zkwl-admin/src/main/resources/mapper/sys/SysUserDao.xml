@@ -73,7 +73,7 @@
 	</select>-->
 	<!-- 查询用户自身和子用户信息 -->
 	<select id="queryChild" resultType="com.remote.modules.sys.entity.SysUserEntity">
-		select <include refid="columns"/> from sys_user where flag = 1
+		select <include refid="columns"/> from sys_user where flag = 1  and status = 1
 		<if test="userId != null">
 			and parent_id = #{userId}
 			or user_id = #{userId}
@@ -82,7 +82,7 @@
 	</select>
 	<!-- 查询用户的自身或者子用户信息 -->
 	<select id="queryAllChild" resultType="com.remote.modules.sys.entity.SysUserEntity">
-		select <include refid="columns"/> from sys_user where flag = 1
+		select <include refid="columns"/> from sys_user where flag = 1 and status = 1
 		<if test="allParentId != null">
 			and all_parent_id like concat(#{allParentId},',%')
 		</if>

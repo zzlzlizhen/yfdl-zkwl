@@ -9,6 +9,8 @@ import com.remote.common.es.utils.ESUtil;
 import com.remote.common.utils.*;
 import com.remote.modules.advancedsetting.entity.AdvancedSettingEntity;
 import com.remote.modules.advancedsetting.service.AdvancedSettingService;
+import com.remote.modules.cjdevice.entity.CjDevice;
+import com.remote.modules.cjdevice.service.CjDeviceService;
 import com.remote.modules.device.dao.DeviceMapper;
 import com.remote.modules.device.entity.DeviceEntity;
 import com.remote.modules.device.entity.DeviceQuery;
@@ -93,6 +95,9 @@ public class DeviceServiceImpl implements DeviceService {
     @Autowired
     private ESUtil esUtil;
 
+    @Autowired
+    private CjDeviceService cjDeviceService;
+
     @Override
     public PageInfo<DeviceEntity> queryDeviceByMysql(DeviceQuery deviceQuery) throws Exception {
         logger.info("查询MYSQL设备信息："+JSONObject.toJSONString(deviceQuery));
@@ -110,9 +115,6 @@ public class DeviceServiceImpl implements DeviceService {
         if(CollectionUtils.isNotEmpty(list)){
             for(DeviceEntity deviceEntity : list){
                 deviceEntity.setGroupName(map.get(deviceEntity.getGroupId()));
-                if(DeviceTypeMap.DEVICE_TYPE.get(deviceEntity.getDeviceType()) != null){
-                    deviceEntity.setDeviceTypeName(DeviceTypeMap.DEVICE_TYPE.get(deviceEntity.getDeviceType()));
-                }
             }
         }
         PageInfo<DeviceEntity> pageInfo = new PageInfo<>(list);
@@ -169,9 +171,6 @@ public class DeviceServiceImpl implements DeviceService {
         if(CollectionUtils.isNotEmpty(page)){
             for(Map<String, Object> map1 : page){
                 map1.put("groupName",map.get(map1.get("groupId")));
-                if(DeviceTypeMap.DEVICE_TYPE.get(map1.get("deviceType")) != null){
-                    map1.put("deviceTypeName",DeviceTypeMap.DEVICE_TYPE.get(map1.get("deviceType")));
-                }
                 if(map1.get("updateTime") != null){
                     String updateTime = map1.get("updateTime").toString();
                     Date parse = sdf1.parse(updateTime);
@@ -191,25 +190,53 @@ public class DeviceServiceImpl implements DeviceService {
         logger.info("添加设备信息："+JSONObject.toJSONString(deviceEntity));
         ValidateUtils.validate(deviceEntity,Arrays.asList("deviceCode","deviceName"));
         AdvancedSettingEntity advancedSettingEntity = new AdvancedSettingEntity();
-        //目前只有一种产品，2G 日后在添加其他产品
-        deviceEntity.setCommunicationType(CommunicationEnum.NORMAL.getCode());
+
         ProjectEntity projectEntity = projectMapper.queryProjectMap(deviceEntity.getProjectId());
         if(projectEntity.getCityId() == null){
-            logger.info("所属项目没有城市");
+            logger.info(deviceEntity.getDeviceCode()+"：所属项目没有城市");
         }else{
             DistrictEntity districtEntity = districtService.queryDistrictById(projectEntity.getCityId());
             deviceEntity.setCityName(districtEntity.getDistrictName());
         }
+        CjDevice cjDevice = cjDeviceService.queryCjDeviceByDeviceCode(deviceEntity.getDeviceCode());
+        if(cjDevice != null){
+            //添加设备分类名称
+            deviceEntity.setDeviceType(cjDevice.getDeviceTypeCode());
+            deviceEntity.setDeviceTypeName(cjDevice.getDeviceTypeName());
+            //目前只有一种产品，2G 日后在添加其他产品
+            deviceEntity.setCommunicationType(cjDevice.getCommunicationType());
+        }
         deviceEntity.setCreateUser(projectEntity.getExclusiveUser());
-        //添加设备分类名称
-        deviceEntity.setDeviceType("1");
-        deviceEntity.setDeviceTypeName(DeviceTypeMap.DEVICE_TYPE.get("1"));
+
         //添加分组名称
         String groupId = deviceEntity.getGroupId();
         GroupEntity groupEntity = groupService.queryGroupById(groupId);
         deviceEntity.setGroupName(groupEntity.getGroupName());
 
         int insert = deviceMapper.insert(deviceEntity);
+
+        if(StringUtils.isNotBlank(groupId)||!("undefined").equals(groupId)){
+            advancedSettingEntity.setCreateTime(new Date());
+            advancedSettingEntity.setGroupId(groupId);
+            advancedSettingEntity.setDeviceCode(deviceEntity.getDeviceCode());
+            advancedSettingEntity.setUid(deviceEntity.getCreateUser());
+            advancedSettingEntity.setUpdateUser(deviceEntity.getUpdateUserName());
+            if(deviceEntity.getDeviceType().equals("1")){
+                initAdvSet(advancedSettingEntity,1);
+            }else if(deviceEntity.getDeviceType().equals("2")){
+                initAdvSet(advancedSettingEntity,2);
+            }
+           boolean falg =  advancedSettingService.saveAdvSetDev(advancedSettingEntity);
+            if(falg){
+                List<String> deviceCodes = deviceMapper.queryByGroupId(groupId);
+                if(CollectionUtils.isNotEmpty(deviceCodes)&&deviceCodes.size() > 0){
+                    if(deviceCodes.size() == 1){
+                        advancedSettingEntity.setDeviceCode("0");
+                        advancedSettingService.updateAdvanceByGAndDId(advancedSettingEntity);
+                    }
+                }
+            }
+        }
         if(deviceEntity.getCjFlag().equals(new Integer(0))){
             if(insert > 0){
                 //添加es start
@@ -217,15 +244,6 @@ public class DeviceServiceImpl implements DeviceService {
                 RestStatus restStatus = esUtil.addES(stringObjectMap,"device_index",deviceEntity.getDeviceId());
                 //添加es end
             }
-        }
-        if(StringUtils.isNotBlank(groupId)||!("undefined").equals(groupId)){
-            advancedSettingEntity.setCreateTime(new Date());
-            advancedSettingEntity.setGroupId(groupId);
-            advancedSettingEntity.setDeviceCode(deviceEntity.getDeviceCode());
-            advancedSettingEntity.setUid(deviceEntity.getCreateUser());
-            advancedSettingEntity.setUpdateUser(deviceEntity.getUpdateUserName());
-            initAdvSet(advancedSettingEntity);
-            advancedSettingService.saveAdvSetDev(advancedSettingEntity);
         }
         return insert > 0 ? true : false;
     }
@@ -339,6 +357,17 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public List<DeviceEntity> queryDeviceNoPage(DeviceQuery deviceQuery) {
+        List<DeviceEntity> list = deviceMapper.queryDevice(deviceQuery);
+        if(CollectionUtils.isNotEmpty(list)){
+            for(DeviceEntity deviceEntity : list){
+                if(deviceEntity.getLatitude() == null){
+                    deviceEntity.setLatitude("0");
+                }
+                if(deviceEntity.getLongitude() == null){
+                    deviceEntity.setLongitude("0");
+                }
+            }
+        }
         return deviceMapper.queryDevice(deviceQuery);
     }
 
@@ -360,6 +389,12 @@ public class DeviceServiceImpl implements DeviceService {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             DeviceEntity deviceEntity = deviceMapper.queryDeviceByDeviceId(deviceId);
+            if(deviceEntity.getLongitude() == null){
+                deviceEntity.setLongitude("0");
+            }
+            if(deviceEntity.getLatitude() == null){
+                deviceEntity.setLatitude("0");
+            }
             if(StringUtils.isNotEmpty(deviceEntity.getLightingDuration())){
                 deviceEntity.setLightingDuration(Integer.valueOf(deviceEntity.getLightingDuration()).toString());
             }
@@ -369,6 +404,7 @@ public class DeviceServiceImpl implements DeviceService {
             String startTime = sdf.format(deviceEntity.getCreateTime());
             String endTime = sdf.format(new Date());
             long day = (sdf.parse(endTime).getTime() - sdf.parse(startTime).getTime()) /(24*60*60*1000);
+
             BeanUtils.copyProperties(deviceEntity, resut);
             resut.setRunDay(day);
         } catch (ParseException e) {
@@ -418,7 +454,32 @@ public class DeviceServiceImpl implements DeviceService {
             logger.error(ErrorCode.ABNORMAL+msg);
             e.printStackTrace();
         }
-
+        StringBuffer sb = new StringBuffer();
+        if(StringUtils.isNotEmpty(deviceQuery.getDeviceId())){
+            if(oldDeviceEntity.getLightingDuration() == null || (deviceQuery.getLightingDuration() != null && !oldDeviceEntity.getLightingDuration().equals(deviceQuery.getLightingDuration()))){
+                sb.append("亮灯时长,");
+                if(Integer.valueOf(deviceQuery.getLightingDuration()) > sum){
+                    deviceQuery.setLightingDuration(sum.toString());
+                }
+            }
+            if(oldDeviceEntity.getTransport() == null || (deviceQuery.getTransport() != null && !oldDeviceEntity.getTransport().equals(deviceQuery.getTransport()))){
+                sb.append("运输模式,");
+            }
+            if(oldDeviceEntity.getMorningHours() == null || (deviceQuery.getMorningHours() != null && !oldDeviceEntity.getMorningHours().equals(deviceQuery.getMorningHours()))){
+                sb.append("晨亮时长,");
+                if(advancedSettingEntity != null && advancedSettingEntity.getTimeDown() != null){
+                    if(Integer.valueOf(deviceQuery.getMorningHours()) > advancedSettingEntity.getTimeDown()){
+                        deviceQuery.setMorningHours(advancedSettingEntity.getTimeDown().toString());
+                    }
+                }
+            }
+            if(oldDeviceEntity.getLight() == null || (deviceQuery.getLight() != null && !oldDeviceEntity.getLight().equals(deviceQuery.getLight()))){
+                sb.append("亮度,");
+            }
+            if(oldDeviceEntity.getOnOff() == null || (deviceQuery.getOnOff() != null && !oldDeviceEntity.getOnOff().equals(deviceQuery.getOnOff()))){
+                sb.append("开关,");
+            }
+        }
 
         List<DeviceEntity> deviceEntityList = new ArrayList<>();
         //代表操作单个设备开关
@@ -454,32 +515,7 @@ public class DeviceServiceImpl implements DeviceService {
                 deviceEntity.setMorningHours(deviceQuery.getMorningHours());
             }
         }
-        StringBuffer sb = new StringBuffer();
-        if(StringUtils.isNotEmpty(deviceQuery.getDeviceId())){
-            if(oldDeviceEntity.getLightingDuration() == null || (deviceQuery.getLightingDuration() != null && !oldDeviceEntity.getLightingDuration().equals(deviceQuery.getLightingDuration()))){
-                sb.append("亮灯时长,");
-                if(Integer.valueOf(deviceQuery.getLightingDuration()) > sum){
-                    deviceQuery.setLightingDuration(sum.toString());
-                }
-            }
-            if(oldDeviceEntity.getTransport() == null || (deviceQuery.getTransport() != null && !oldDeviceEntity.getTransport().equals(deviceQuery.getTransport()))){
-                sb.append("运输模式,");
-            }
-            if(oldDeviceEntity.getMorningHours() == null || (deviceQuery.getMorningHours() != null && !oldDeviceEntity.getMorningHours().equals(deviceQuery.getMorningHours()))){
-                sb.append("晨亮时长,");
-                if(advancedSettingEntity != null && advancedSettingEntity.getTimeDown() != null){
-                    if(Integer.valueOf(deviceQuery.getMorningHours()) > advancedSettingEntity.getTimeDown()){
-                        deviceQuery.setMorningHours(advancedSettingEntity.getTimeDown().toString());
-                    }
-                }
-            }
-            if(oldDeviceEntity.getLight() == null || (deviceQuery.getLight() != null && !oldDeviceEntity.getLight().equals(deviceQuery.getLight()))){
-                sb.append("亮度,");
-            }
-            if(oldDeviceEntity.getOnOff() == null || (deviceQuery.getOnOff() != null && !oldDeviceEntity.getOnOff().equals(deviceQuery.getOnOff()))){
-                sb.append("开关,");
-            }
-        }
+
         List<String> deviceList = new ArrayList<>();
         List<Map<String,Object>> temp = new ArrayList<>();
         String userName = deviceQuery.getUpdateUserName();
@@ -517,7 +553,9 @@ public class DeviceServiceImpl implements DeviceService {
 
                 }
             }
-            esUtil.updateListES(temp,"device_index","deviceId");
+            if(!"".equals(sb.toString())){
+                esUtil.updateListES(temp,"device_index","deviceId");
+            }
         }
         deviceQuery.setDeviceList(deviceList);
         return deviceMapper.updateOnOffByIds(deviceQuery);
@@ -645,9 +683,10 @@ public class DeviceServiceImpl implements DeviceService {
             deviceTree.setDeviceCode(deviceEntity.getDeviceCode());
             deviceTree.setDeviceType(deviceEntity.getDeviceType());
             deviceTree.setRunState(deviceEntity.getRunState());
-            deviceTree.setLongitude(deviceEntity.getLongitude() == null ? "" : deviceEntity.getLongitude());
-            deviceTree.setLatitude(deviceEntity.getLatitude() == null ? "" : deviceEntity.getLatitude());
+            deviceTree.setLongitude(deviceEntity.getLongitude() == null ? "0" : deviceEntity.getLongitude());
+            deviceTree.setLatitude(deviceEntity.getLatitude() == null ? "0" : deviceEntity.getLatitude());
             list.add(deviceTree);
+
         }
         if(CollectionUtils.isNotEmpty(deviceList)){
             List<String> groupIds = deviceList.parallelStream().map(deviceEntity -> deviceEntity.getGroupId()).collect(Collectors.toCollection(ArrayList::new));
@@ -734,13 +773,17 @@ public class DeviceServiceImpl implements DeviceService {
         return deviceMapper.deleteDeviceCj(list) > 0 ? true : false;
     }
 
+    @Override
+    public boolean insertList(List<DeviceEntity> list) {
+        return deviceMapper.insertList(list) > 0 ? true : false;
+    }
+
 
     /**
      * 功能描述：初始化设备高级设置参数
      * @param advancedSettingEntity
      */
-    public void initAdvSet(AdvancedSettingEntity advancedSettingEntity){
-
+    public void initAdvSet(AdvancedSettingEntity advancedSettingEntity,int n){
         advancedSettingEntity.setLoadWorkMode(5);
         advancedSettingEntity.setPowerLoad(500);
         advancedSettingEntity.setTimeTurnOn(1080);
@@ -765,14 +808,10 @@ public class DeviceServiceImpl implements DeviceService {
         advancedSettingEntity.setPowerSensorDown(0);
         advancedSettingEntity.setSavingSwitch(2);
         advancedSettingEntity.setAutoSleepTime(0);
-        advancedSettingEntity.setVpv(500);
+
         advancedSettingEntity.setLigntOnDuration(5);
         advancedSettingEntity.setPvSwitch(1);
-        advancedSettingEntity.setBatType(4);
-        advancedSettingEntity.setBatStringNum(3);
-        advancedSettingEntity.setVolOverDisCharge(900);
-        advancedSettingEntity.setVolCharge(1260);
-        advancedSettingEntity.setICharge(2000);
+
         advancedSettingEntity.setTempCharge(55395);
         advancedSettingEntity.setTempDisCharge(55395);
         advancedSettingEntity.setInspectionTime(5);
@@ -785,5 +824,23 @@ public class DeviceServiceImpl implements DeviceService {
         advancedSettingEntity.setTwoReducAmplitude(40);
         advancedSettingEntity.setThreeReducAmplitude(20);
         advancedSettingEntity.setSwitchDelayTime(15);
+        advancedSettingEntity.setCustomeSwitch(0);
+        advancedSettingEntity.setTemControlSwitch(0);
+        if(n == 1){
+            advancedSettingEntity.setVpv(500);
+            advancedSettingEntity.setBatType(4);
+            advancedSettingEntity.setBatStringNum(3);
+            advancedSettingEntity.setVolOverDisCharge(900);
+            advancedSettingEntity.setVolCharge(1260);
+            advancedSettingEntity.setICharge(2000);
+        }else if(n == 2){
+            advancedSettingEntity.setVpv(200);
+            advancedSettingEntity.setBatType(3);
+            advancedSettingEntity.setBatStringNum(1);
+            advancedSettingEntity.setVolOverDisCharge(280);
+            advancedSettingEntity.setVolCharge(360);
+            advancedSettingEntity.setICharge(1500);
+            advancedSettingEntity.setLowPowerConsumption(0);
+        }
     }
 }
